@@ -9,7 +9,7 @@ set nocompatible
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': './install --clang-completer --js-completer'}
+  Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --js-completer'}
   Plug 'lervag/vimtex', { 'for': 'latex' }
   Plug 'vim-syntastic/syntastic'
   Plug 'ctrlpvim/ctrlpvim'
