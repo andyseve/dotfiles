@@ -4,14 +4,16 @@
 set nocompatible
 
 " vim-plug {{{
-  if !exitst("g:bundle_path")
+  " change installation paths based on os
+  if !exists("g:bundle_path")
     if has("win64") || has("win32")
       let g:bundle_path = '~/vimfiles/bundle'
     else
       let g:bundle_path = '~/.vim/bundle'
     endif
   endif
-  call plug#begin(g:bundle_path)
+
+  call plug#begin(bundle_path)
   Plug 'junegunn/vim-plug'
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -31,6 +33,7 @@ set nocompatible
 " }}}
 " Core Settings {{{
   syntax enable
+  set encoding=utf-8
   filetype plugin indent on
   if(has("gui_running"))
     " Set colorscheme to solarized dark
