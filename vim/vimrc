@@ -176,7 +176,6 @@ set nocompatible
   
   " Airline Configuration
   let g:airline_solarized_bg='dark'
-" }}}
 " Functions {{{
   
 " }}}
