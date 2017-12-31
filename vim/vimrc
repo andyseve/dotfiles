@@ -19,9 +19,9 @@ set nocompatible
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --js-completer'}
-  Plug 'lervag/vimtex', { 'for': 'latex' }
+  Plug 'lervag/vimtex'
   Plug 'vim-syntastic/syntastic'
-  Plug 'ctrlpvim/ctrlpvim'
+  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'vim-airline/vim-airline'
@@ -126,6 +126,15 @@ set nocompatible
 
   " Backspace to delete words
   inoremap <c-backspace> <c-o>dF
+
+" }}}
+" Plugin Configuration {{{
+  
+" }}}
+" Functions {{{
+  
+" }}}
+" Autocommands {{{
 
 " }}}
 
