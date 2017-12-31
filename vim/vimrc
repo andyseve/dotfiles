@@ -148,7 +148,11 @@ set nocompatible
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1
-  let g:ycm_server_python_interpreter = '/usr/bin/python2'
+  if has("win64") || has("win32")
+    let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
+  else
+    let g:ycm_server_python_interpreter = '/usr/bin/python2'
+  endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
   endif
@@ -168,7 +172,6 @@ set nocompatible
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
   if has("win64") || has("win32")
-    let g:vimtex_view_method = 'default'
   else
     let g:vimtex_view_method = 'zathura'
   endif
@@ -176,6 +179,7 @@ set nocompatible
   
   " Airline Configuration
   let g:airline_solarized_bg='dark'
+" }}}
 " Functions {{{
   
 " }}}
