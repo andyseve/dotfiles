@@ -4,7 +4,16 @@
 set nocompatible
 
 " vim-plug {{{
-  call plug#begin('~/.vim/bundle')
+  " change installation paths based on os
+  if !exists("g:bundle_path")
+    if has("win64") || has("win32")
+      let g:bundle_path = '~/vimfiles/bundle'
+    else
+      let g:bundle_path = '~/.vim/bundle'
+    endif
+  endif
+
+  call plug#begin(bundle_path)
   Plug 'junegunn/vim-plug'
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -24,6 +33,7 @@ set nocompatible
 " }}}
 " Core Settings {{{
   syntax enable
+  set encoding=utf-8
   filetype plugin indent on
   if(has("gui_running"))
     " Set colorscheme to solarized dark
@@ -157,12 +167,21 @@ set nocompatible
   " vimtex configuration
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
-  let g:vimtex_view_method = 'zathura'
-
+  if has("win64") || has("win32")
+    let g:vimtex_view_method = 'default'
+  else
+    let g:vimtex_view_method = 'zathura'
+  endif
   " Syntastic Configuration
   
   " Airline Configuration
   let g:airline_solarized_bg='dark'
+" }}}
+" Functions {{{
+  
+" }}}
+" Autocommands {{{
+
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
