@@ -1,0 +1,282 @@
+\ProvidesPackage{anishs}
+% Last Modified: Tuesday 14 November 2017 05:05:14 PM EST
+% This is based on Even Chen's even.sty
+\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
+\usepackage{nameref,hyperref,cleveref} % for better referencing systems
+
+%TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
+%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
+
+%arguments
+\newif\ifanishssetup\anishssetuptrue%Setup the page
+\newif\ifanishspkg\anishspkgtrue%Add small packages
+\newif\ifanishsfancy\anishsfancytrue%fancy page setup
+\newif\ifanishsthm\anishsthmtrue%Theorem Defs
+\newif\ifanishspage\anishspagefalse%Margins
+
+\newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
+\newif\ifanishsfancythm\anishsfancythmfalse%fancy thm setup
+
+\newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
+\newif\ifanishsnicelinks\anishsnicelinkstrue%Colored Links instead of Box
+\newif\ifanishseuler\anishseulerfalse%Euler font for Math
+
+\newif\ifanishsasy\anishsasyfalse%Asymptote support
+
+%Recieving arguments
+\DeclareOption{setup}{\anishssetuptrue}
+\DeclareOption{nosetup}{\anishssetupfalse}
+\DeclareOption{pkg}{\anishspkgtrue}
+\DeclareOption{nopkg}{\anishspkgfalse}
+\DeclareOption{fancy}{\anishsfancytrue}
+\DeclareOption{nofancy}{\anishsfancyfalse}
+\DeclareOption{savepaper}{\anishspagetrue}
+\DeclareOption{nothm}{\anishsthmfalse}
+
+\DeclareOption{secthm}{\anishssecthmtrue}
+\DeclareOption{fancythm}{\anishsfancythmtrue}
+
+\DeclareOption{tikz}{\anishstikztrue}
+\DeclareOption{boxlinks}{\anishsnicelinksfalse}
+\DeclareOption{colorlinks}{\anishsnicelinkstrue}
+\DeclareOption{noeuler}{\anishseulerfalse}
+\DeclareOption{euler}{\anishseulertrue}
+
+\DeclareOption{asy}{\anishsasytrue}
+
+\ProcessOptions\relax
+
+% Custom commands
+% Common Math Constructs
+\newcommand\quotient[2]{
+  \ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}%
+}
+\newcommand\gen[1]{
+  \text{$\left\langle #1 \right\rangle$} %
+}
+\newcommand\abs[1]{
+  \ensuremath{\left\lvert #1 \right\rvert} %
+}
+\newcommand\norm[1]{
+  \ensuremath{\left\Vert #1 \right\Vert}%
+}
+\newcommand\ex[1]{%
+  \ensuremath{\mathbb{E}\left[#1\right]}
+}
+\newcommand\pr[1]{
+  \ensuremath{\mathbb{P}\left[#1\right]}
+}
+\newcommand\var[1]{
+  \ensuremath{\textbf{Var}\left[ #1 \right]}
+}
+\newcommand\inprod[1]{
+  \ensuremath{\left\langle #1 \right\rangle}
+}
+\renewcommand{\iff}{\ensuremath{\Leftrightarrow}}
+\newcommand{\ubar}[1]{\text{\underbar{$#1$}}}
+\renewcommand\emptyset\varnothing% Slightly better symbol
+\newcommand{\nref}[1]{\ref{#1}~\nameref{#1}}
+
+\newcommand{\OhStar}{\ensuremath{\mathcal{O}^{\star}}}
+\newcommand{\Oh}{\ensuremath{\mathcal{O}}}
+\newcommand{\oh}{\scalebox{0.7}{$\mathcal{O}$}}
+
+% Common Text Constructs
+\newcommand{\thmicro}{\ensuremath{^{\text{th}}}}
+\newcommand{\inv}{\ensuremath{^{-1}}}
+\newcommand\rem{
+  \textbf{\underline{Remark}} %
+}
+\newcommand\question{
+  \textbf{\underline{Question}} %
+}
+\newcommand\textbu[1]{
+  \text{\textbf{\underline{#1}}} %
+}
+\newcommand\set[1]{
+  \ensuremath{\left\{#1\right\}} %
+}
+%Operators
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator{\sgn}{sgn} % sign function
+\DeclareMathOperator{\img}{Im} % image
+\DeclareMathOperator{\rank}{rank} % rank
+\DeclareMathOperator{\Spec}{Spec} % spectrum
+\DeclareMathOperator{\Nil}{Nil} % nilradical
+\DeclareMathOperator{\Tr}{Tr} % trace
+\DeclareMathOperator{\pred}{pred} % predecessor
+\DeclareMathOperator{\dom}{dom} % domain
+\DeclareMathOperator{\ran}{ran} % range
+\DeclareMathOperator{\Hom}{Hom} % homomorphism
+\DeclareMathOperator{\End}{End} % endomorphism
+\DeclareMathOperator{\res}{res} % resultant
+\DeclareMathOperator{\Int}{Int} % interior
+\DeclareMathOperator{\Adj}{Adj} % adjoint
+\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
+\DeclareMathOperator{\sing}{Sing} % Singularities
+\DeclareMathOperator{\nnz}{nnz} % Non zero entries
+\DeclareMathOperator{\poly}{poly} % Polynomial
+
+% Page Setup and Environments etc
+\ifanishssetup%
+  \ifanishspkg%
+    \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
+    \usepackage{listings}
+    \usepackage{mathrsfs}
+    \usepackage{textcomp}
+    % listings allows to convert source codes into latex
+    \lstset{basicstyle=\footnotesize\ttfamily,
+      numbers=left,
+      numbersep=5pt,
+      numberstyle=\tiny,
+      keywordstyle=\bfseries,
+      % title=\lstname,
+      showstringspaces=false,
+      tabsize=4,
+      frame=single,
+      keywordstyle=\bfseries\color{blue},
+      commentstyle=\color{green!70!black},
+      identifierstyle=\color{green!20!black},
+      stringstyle=\color{orange},
+      breaklines=true,
+      breakatwhitespace=true,
+      frame=none
+    }
+    \usepackage[shortlabels]{enumitem}
+    \usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
+    \usepackage{mathtools}
+    \usepackage{microtype}
+    \ifanishseuler%Euler and baton fonts from Knuths book
+      \usepackage{euler}
+    \fi
+    \usepackage{upgreek}
+    \usepackage{import}
+    \usepackage{graphicx} % for small tweaks
+    \usepackage{bbm} % for better mathbb symbols
+  \fi
+  \ifanishspage% Geometry of the Page
+    \setlength{\topmargin}{0pt}
+    \setlength{\topmargin}{\topmargin minus \headheight}
+    \setlength{\topmargin}{\topmargin minus \headsep}
+    \setlength{\oddsidemargin}{0in}
+    \setlength{\evensidemargin}{\oddsidemargin}
+    \setlength{\textheight}{8.9in}
+    \setlength{\textwidth}{6.5in}
+    \setlength{\marginparwidth}{0.5in}
+    \setlength{\parskip}{1.5ex}
+    \setlength{\parindent}{0in}
+  \fi
+  \ifanishsfancy%Fancy Page Setup
+    \usepackage{titling}
+    \usepackage{fancyhdr}
+    \renewcommand{\headrulewidth}{0.5pt}
+    \renewcommand{\footrulewidth}{0.0pt}
+    \pagestyle{fancy}
+    \lhead{\thetitle}
+    \chead{}
+    \lfoot{}
+    \cfoot{\thepage}
+    \rfoot{}
+    \fancypagestyle{plain}{%
+      \fancyhead{}
+      \renewcommand{\headrulewidth}{0pt}
+    }
+  \ifanishsthm%Theorem settings
+    \ifanishsfancythm%
+      \usepackage{thmtools}
+      \usepackage[framemethod=TikZ]{mdframed}
+    \else
+      \usepackage{thmtools}
+      \usepackage[framemethod=TikZ]{mdframed}
+      \mdfdefinestyle{mdproblemlines}{%
+        linecolor=black,
+        linewidth=0.5pt,
+        skipabove=1ex,
+	innertopmargin = 1.5ex,
+        rightline=false,leftline=false,
+        frametitlefont=\bfseries,
+        frametitlerule=true
+      }
+      \declaretheoremstyle[
+        headfont=\bfseries,
+        notefont=\bfseries,
+        notebraces=\empty,
+	headpunct=\empty,
+        mdframed={style=mdproblemlines},
+        bodyfont=\normalfont%
+      ]{problemlines}
+      \declaretheorem[style=problemlines,name=Problem]{asgnproblem}
+      \newtheorem*{asgnproblem*}{asgnproblem}
+      \ifanishssecthm%index theorem by section
+        \newtheorem{theorem}{Theorem}[section]
+      \else
+        \newtheorem{theorem}{Theorem}
+      \fi
+      \theoremstyle{plain}
+        \newtheorem{lemma}[theorem]{Lemma}
+        \newtheorem{proposition}[theorem]{Proposition}
+        \newtheorem{corollary}[theorem]{Corollary}
+        \newtheorem*{theorem*}{theorem}
+        \newtheorem*{lemma*}{Lemma}
+        \newtheorem*{proposition*}{Proposition}
+        \newtheorem*{corollary*}{Corollary}
+      %Def-style theorems
+      \theoremstyle{definition}
+        \newtheorem{claim}[theorem]{Claim}
+        \newtheorem{conjecture}[theorem]{Conjecture}
+        \newtheorem{definition}[theorem]{Definition}
+        \newtheorem{fact}[theorem]{Fact}
+        \newtheorem{answer}[theorem]{Answer}
+        \newtheorem{case}[theorem]{Case
+	}
+        \newtheorem{ques}[theorem]{Question}
+        \newtheorem{exercise}[theorem]{Exercise}
+        \newtheorem{problem}[theorem]{Problem}
+        \newtheorem*{answer*}{Answer}
+        \newtheorem*{case*}{Case}
+        \newtheorem*{claim*}{Claim}
+        \newtheorem*{conjecture*}{Conjecture}
+        \newtheorem*{definition*}{Definition}
+        \newtheorem*{fact*}{Fact}
+        \newtheorem*{joke*}{Joke}
+        \newtheorem*{ques*}{Question}
+        \newtheorem*{exercise*}{Exercise}
+        \newtheorem*{problem*}{Problem}
+        \newtheorem{example}[theorem]{Example}
+        \newtheorem*{example*}{Example}
+      % Remark-style theorems
+      \theoremstyle{remark}
+        \newtheorem{note}[theorem]{Note}
+        \newtheorem{remark}[theorem]{Remark}
+        \newtheorem*{note*}{Note}
+        \newtheorem*{remark*}{Remark}
+      \newenvironment{subproof}[1][Proof]{%
+      \begin{proof}[#1] \renewcommand{\qedsymbol}{$\blacksquare$}}%
+      {\end{proof}} %From Math 55 and Math 145 at Harvard; SubProofs
+      \newenvironment{solution}[1][Proof]{%
+      \begin{proof}[Solution] }%
+      {\end{proof}} %Solutions
+    \fi
+  \fi
+  \ifanishstikz%TikZ for diagrams
+    \usepackage{tikz}
+    \usepackage{tikz-cd}
+    \usetikzlibrary{calc}
+  \fi
+  \ifanishsnicelinks%setting up nice looking links
+    \hypersetup{%
+      colorlinks   = true, %Colours links instead of ugly boxes
+      urlcolor     = blue, %Colour for external hyperlinks
+      linkcolor    = blue, %Colour of internal links
+      citecolor    = red %Colour of citations
+    }
+  \fi
+  \ifanishsasy%Asymptote Setup
+    \usepackage{asymptote}
+    \usepackage{asycolors}
+    % Add other useful asymptote functions
+  \fi
+\fi
+
+% vim:foldmethod=marker

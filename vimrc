@@ -10,9 +10,9 @@ set nocompatible
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --js-completer'}
-  Plug 'lervag/vimtex', { 'for': 'latex' }
+  Plug 'lervag/vimtex'
   Plug 'vim-syntastic/syntastic'
-  Plug 'ctrlpvim/ctrlpvim'
+  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'vim-airline/vim-airline'
@@ -96,8 +96,13 @@ set nocompatible
   nnoremap :Q :q
 
   " Quick open files
-  nnoremap <leader>ev :!gvim ~/.vimrc<CR>
-  nnoremap <leader>eb :!gvim ~/.bashrc<CR> 
+  if(has("gui_running"))
+    nnoremap <leader>ev :!gvim ~/.vimrc<CR>
+    nnoremap <leader>eb :!gvim ~/.bashrc<CR>
+  else
+    nnoremap <leader>ev :vsplit ~/.vimrc<CR>
+    nnoremap <leader>eb :vsplit ~/.vimrc<CR>
+  endif
   nnoremap <leader>sv :source ~/.vimrc<CR>
   "nnoremap <leader>es :UltiSnipsEdit<CR>
 
@@ -117,6 +122,47 @@ set nocompatible
   " Backspace to delete words
   inoremap <c-backspace> <c-o>dF
 
+" }}}
+" Plugin Configurations {{{ 
+  " Ultisnips Configuration
+  set rtp+=~/.vim "Adding .vim to runtime path
+  let g:UltiSnipsExpandTrigger="<c-j>"
+  let g:UltiSnipsJumpForwardTrigger="<c-j>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+  let g:UltiSnipsListSnippets="<c-l>"
+
+  let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+  let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
+
+  " YouCompleteMe Configuration
+  let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
+  let g:ycm_collect_identifiers_from_tag_files = 1
+  let g:ycm_seed_identifier_with_syntax = 1
+  let g:ycm_server_python_interpreter = '/usr/bin/python2'
+  if !exists('g:ycm_sematics_triggers')
+    let g:ycm_semantic_triggers = {}
+  endif
+  let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
+  let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+
+  " Gundo Configuration
+  let g:gundo_prefer_python3 = 1
+  nnoremap <leader>u :GundoToggle<CR>
+
+  " NERDTree Configuration
+  let g:NERDTreeQuitOnOpen = 1
+  nnoremap <M-\> :NERDTreeToggle<CR>
+  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
+
+  " vimtex configuration
+  let g:vimtex_enabled = 1
+  let g:vimtex_view_automatic = 1
+  let g:vimtex_view_method = 'zathura'
+
+  " Syntastic Configuration
+  
+  " Airline Configuration
+  let g:airline_solarized_bg='dark'
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
