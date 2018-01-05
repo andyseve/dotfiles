@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated:
+" Last Updated: 12/31/2017 9:02:14 PM
 
 set nocompatible
 
@@ -39,7 +39,11 @@ set nocompatible
     " Set colorscheme to solarized dark
     set background=dark
     colorscheme solarized
-    set guifont=ubuntu\ Mono\ 12
+    if has("win64") || has("win32")
+      set guifont=Consolas:h10:cANSI
+    else
+      set guifont=ubuntu\ Mono\ 12
+    endif
   else
     colorscheme desert
   endif
@@ -77,6 +81,7 @@ set nocompatible
   set mouse=a
   set textwidth=0 " Textwidth to infinite
   set spell spelllang=en_us " Set US English for spellchecking
+  set nospell
 " }}}
 " Tab settings {{{
   set autoindent
@@ -106,15 +111,25 @@ set nocompatible
   nnoremap :Q :q
 
   " Quick open files
-  if(has("gui_running"))
-    nnoremap <leader>ev :!gvim ~/.vimrc<CR>
-    nnoremap <leader>eb :!gvim ~/.bashrc<CR>
+  if has("win64") || has("win32")
+    if(has("gui_running"))
+      nnoremap <leader>ev :!gvim ~/_vimrc<CR>
+    else
+      nnoremap <leader>ev :vsplit ~/_vimrc<CR>
+    endif
+    nnoremap <leader>sv :source ~/_vimrc<CR>
+    nnoremap <leader>es :UltiSnipsEdit<CR>
   else
-    nnoremap <leader>ev :vsplit ~/.vimrc<CR>
-    nnoremap <leader>eb :vsplit ~/.vimrc<CR>
+    if(has("gui_running"))
+      nnoremap <leader>ev :!gvim ~/.vimrc<CR>
+      nnoremap <leader>eb :!gvim ~/.bashrc<CR>
+    else
+      nnoremap <leader>ev :vsplit ~/.vimrc<CR>
+      nnoremap <leader>eb :vsplit ~/.bashrc<CR>
+    endif
+    nnoremap <leader>sv :source ~/.vimrc<CR>
+    nnoremap <leader>es :UltiSnipsEdit<CR>
   endif
-  nnoremap <leader>sv :source ~/.vimrc<CR>
-  "nnoremap <leader>es :UltiSnipsEdit<CR>
 
   " Hotkeys for saving in gvim
   if(has("gui_running"))
@@ -132,6 +147,17 @@ set nocompatible
   " Backspace to delete words
   inoremap <c-backspace> <c-o>dF
 
+  " Enter to expand snippets when possible
+  let g:ulti_expand_or_jump_res = 0
+  function! ExpandSnippetOrCarriageReturn()
+    let tmp = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+      return tmp
+    else
+      return "\<CR>"
+    endif
+  endfunc
+  inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
 " }}}
 " Plugin Configurations {{{ 
   " Ultisnips Configuration
@@ -151,7 +177,7 @@ set nocompatible
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
-    let g:ycm_server_python_interpreter = '/usr/bin/python2'
+    let g:ycm_server_python_interpreter = '/usr/bin/python3'
   endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
@@ -181,10 +207,35 @@ set nocompatible
   let g:airline_solarized_bg='dark'
 " }}}
 " Functions {{{
-  
+  " Update last modified entries
+  function! UpdateLastModified()
+    " TODO: Delete the update search
+    let b:cur_window = winsaveview()
+    let b:last_line = line('$')
+    if(b:last_line > 20)
+      let b:last_line = 20
+    endif
+    let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
+    echo cmd
+    execute cmd
+    :nohlsearch
+    call winrestview(b:cur_window)
+  endfunc
 " }}}
 " Autocommands {{{
-
+  augroup Anishs
+    autocmd!
+    " Preserve cursor position on opening the file
+    autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \	  exe "normal! g`\"" |
+      \ endif
+    " Update last modified tags at start of the file
+    autocmd BufWritePre * silent! call UpdateLastModified() | redraw
+    " Close if only windows present is NERDTree
+    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+    autocmd BufEnter * :nohlsearch
+  augroup END
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
