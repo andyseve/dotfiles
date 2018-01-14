@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: 12/31/2017 9:02:14 PM
+" Last Updated: Sun 14 Jan 2018 01:34:29 PM EST
 
 set nocompatible
 
@@ -177,7 +177,7 @@ set nocompatible
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
-    let g:ycm_server_python_interpreter = '/usr/bin/python3'
+    let g:ycm_server_python_interpreter = '/usr/bin/python2'
   endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
