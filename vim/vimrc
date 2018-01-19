@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: 12/31/2017 9:02:14 PM
+" Last Updated: Fri 05 Jan 2018 06:06:13 PM +0530
 
 set nocompatible
 
@@ -14,11 +14,11 @@ set nocompatible
   endif
 
   call plug#begin(bundle_path)
-  Plug 'junegunn/vim-plug'
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --js-completer'}
+  " TODO: Write a function that compiles ycm only if needed
   Plug 'lervag/vimtex'
   Plug 'vim-syntastic/syntastic'
   Plug 'ctrlpvim/ctrlp.vim'
@@ -177,7 +177,7 @@ set nocompatible
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
-    let g:ycm_server_python_interpreter = '/usr/bin/python3'
+    let g:ycm_server_python_interpreter = '/usr/bin/python2'
   endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
