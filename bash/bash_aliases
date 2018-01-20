@@ -1,0 +1,5 @@
+# ~/.bash_aliases for creating quick commands
+
+# aliases for fast ssh
+alias cmussh='ssh -p 2718 asevekarlaptop.math.cmu.edu'
+
