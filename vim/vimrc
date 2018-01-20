@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sat 20 Jan 2018 04:07:26 PM EST
+" Last Updated: Sat 20 Jan 2018 05:36:07 PM EST
 
 set nocompatible
 
@@ -94,7 +94,8 @@ set nocompatible
 " Search settings {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
-  nnoremap <leader><space> :nohlsearch<CR> " Clear out search highlights
+  " Clear out search highlights
+  nnoremap <leader><space> :nohlsearch<CR> 
 " }}}
 " Fold Settings {{{
   set foldenable
@@ -177,7 +178,7 @@ set nocompatible
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
-    let g:ycm_server_python_interpreter = '/usr/bin/python2'
+    let g:ycm_server_python_interpreter = '/usr/bin/python3'
   endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
