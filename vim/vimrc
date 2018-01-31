@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 30 Jan 2018 10:04:02 PM EST
+" Last Updated: Tue 30 Jan 2018 10:35:49 PM EST
 
 set nocompatible
 
@@ -225,13 +225,11 @@ set nocompatible
   let g:airline_powerline_fonts = 1
   let g:airline_inactive_collapse = 0
   let g:airline_skip_empty_sections = 1
+  let g:airline#extensions#whitespace#enabled = 0
 
-<<<<<<< HEAD
   " Solarized Config for Terminal
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
-=======
->>>>>>> 533c62ad8d267f26b707853c851af01119eb9c7c
 " }}}
 " Functions {{{
   " Update last modified entries
