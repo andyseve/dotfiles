@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 30 Jan 2018 07:46:31 PM EST
+" Last Updated: Tue 30 Jan 2018 07:55:28 PM EST
 
 set nocompatible
 
@@ -182,7 +182,7 @@ set nocompatible
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1
   if has("win64") || has("win32")
-    let g:ycm_server_python_interpreter = 'C:\Python\Python27\python2.exe'
+    let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
     let g:ycm_server_python_interpreter = '/usr/bin/python2'
   endif
@@ -205,6 +205,15 @@ set nocompatible
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
   if has("win64") || has("win32")
+    let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
+    let g:vimtex_view_general_options
+      \ = ' -forward-search @tex @line @pdf'
+      \ . ' -inverse-search "gvim --servername ' . v:servername
+      \ . ' --remote-send \"^<C-\^>^<C-n^>'
+      \ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
+      \ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
+      \ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
+      \ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
   else
     let g:vimtex_view_method = 'zathura'
   endif
