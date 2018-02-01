@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 30 Jan 2018 10:35:49 PM EST
+" Last Updated: Wed 31 Jan 2018 07:12:45 PM EST
 
 set nocompatible
 
@@ -48,10 +48,11 @@ set nocompatible
     if has("win64") || has("win32")
       set guifont=Consolas:h10:cANSI
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=ubuntu\ Mono\ 14
     endif
   else
-    colorscheme desert
+    set background=dark
+    colorscheme solarized
   endif
   set backspace=indent,eol,start
   set ruler " Display cursor position
@@ -226,10 +227,17 @@ set nocompatible
   let g:airline_inactive_collapse = 0
   let g:airline_skip_empty_sections = 1
   let g:airline#extensions#whitespace#enabled = 0
+  
+  " Airline symbols
+  if !exists('g:airline_symbols')
+    let g:airline_symbols ={}
+  endif
+  let g:airline_symbols.space = "\u3000"
 
   " Solarized Config for Terminal
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
+  let g:solarized_contrast = 'normal'
 " }}}
 " Functions {{{
   " Update last modified entries
