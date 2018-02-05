@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Wed 31 Jan 2018 07:12:45 PM EST
+" Last Updated: 2/5/2018 3:39:01 PM
 
 set nocompatible
 
@@ -233,6 +233,10 @@ set nocompatible
     let g:airline_symbols ={}
   endif
   let g:airline_symbols.space = "\u3000"
+  if has("win32") || has("win64")
+    let g:airline_powerline_fonts = 0
+    let g:airline_symbols.space = "\u0020"
+  endif
 
   " Solarized Config for Terminal
   let g:solarized_termtrans = 1
