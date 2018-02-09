@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: 2/5/2018 3:39:01 PM
+" Last Updated: Fri 09 Feb 2018 09:31:20 AM EST
 
 set nocompatible
 
@@ -96,6 +96,7 @@ set nocompatible
 
   set shiftwidth=2
   set softtabstop=2
+  set tabstop=2
   set noexpandtab
 " }}}
 " Search settings {{{
