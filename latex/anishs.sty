@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tuesday 14 November 2017 05:05:14 PM EST
+% Last Modified: Fri 09 Feb 2018 09:39:24 AM EST
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -117,6 +117,7 @@
 \DeclareMathOperator{\sing}{Sing} % Singularities
 \DeclareMathOperator{\nnz}{nnz} % Non zero entries
 \DeclareMathOperator{\poly}{poly} % Polynomial
+\DeclareMathOperator{\Conv}{Conv} % Convex Hulls
 
 % Page Setup and Environments etc
 \ifanishssetup%
@@ -143,7 +144,7 @@
       breakatwhitespace=true,
       frame=none
     }
-    \usepackage[shortlabels]{enumitem}
+    \usepackage[shortlabels]{enumitem} % for better lists
     \usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
     \usepackage{mathtools}
     \usepackage{microtype}
@@ -161,7 +162,6 @@
     \setlength{\topmargin}{\topmargin minus \headsep}
     \setlength{\oddsidemargin}{0in}
     \setlength{\evensidemargin}{\oddsidemargin}
-    \setlength{\textheight}{8.9in}
     \setlength{\textwidth}{6.5in}
     \setlength{\marginparwidth}{0.5in}
     \setlength{\parskip}{1.5ex}
