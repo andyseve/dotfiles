@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Fri 26 Jan 2018 09:44:04 AM EST
+" Last Updated: Sun 11 Feb 2018 11:24:35 PM EST
 
 set nocompatible
 
@@ -13,21 +13,27 @@ set nocompatible
     endif
   endif
 
+  function! BuildYCM(info)
+    " Builds ycm only when forced
+    if a:info.status == 'installed' || a:info.force
+      !./install.py --clang-completer --js-completer
+    endif
+  endfunc
+
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --js-completer'}
-  " TODO: Write a function that compiles ycm only if needed
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
   Plug 'vim-syntastic/syntastic'
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
   Plug 'jiangmiao/auto-pairs'
 
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
   call plug#end()
 " }}}
@@ -42,10 +48,11 @@ set nocompatible
     if has("win64") || has("win32")
       set guifont=Consolas:h10:cANSI
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=ubuntu\ Mono\ 14
     endif
   else
-    colorscheme desert
+    set background=dark
+    colorscheme solarized
   endif
   set backspace=indent,eol,start
   set ruler " Display cursor position
@@ -89,6 +96,7 @@ set nocompatible
 
   set shiftwidth=2
   set softtabstop=2
+  set tabstop=2
   set noexpandtab
 " }}}
 " Search settings {{{
@@ -177,7 +185,7 @@ set nocompatible
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1
   if has("win64") || has("win32")
-    let g:ycm_server_python_interpreter = 'C:\Python\Python27\python2.exe'
+    let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
     let g:ycm_server_python_interpreter = '/usr/bin/python2'
   endif
@@ -200,13 +208,42 @@ set nocompatible
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
   if has("win64") || has("win32")
+    let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
+    let g:vimtex_view_general_options
+      \ = ' -forward-search @tex @line @pdf'
+      \ . ' -inverse-search "gvim --servername ' . v:servername
+      \ . ' --remote-send \"^<C-\^>^<C-n^>'
+      \ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
+      \ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
+      \ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
+      \ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
   else
     let g:vimtex_view_method = 'zathura'
   endif
   " Syntastic Configuration
   
   " Airline Configuration
-  let g:airline_solarized_bg='dark'
+  let g:airline_theme = 'solarized'
+  let g:airline_solarized_bg = 'dark'
+  let g:airline_powerline_fonts = 1
+  let g:airline_inactive_collapse = 0
+  let g:airline_skip_empty_sections = 1
+  let g:airline#extensions#whitespace#enabled = 0
+  
+  " Airline symbols
+  if !exists('g:airline_symbols')
+    let g:airline_symbols ={}
+  endif
+  let g:airline_symbols.space = "\u3000"
+  if has("win64") || has("win32")
+    let g:airline_powerline_fonts = 0
+    let g:airline_symbols.space = "\u0020"
+  endif
+
+  " Solarized Config for Terminal
+  let g:solarized_termtrans = 1
+  let g:solarized_termcolors = 256
+  let g:solarized_contrast = 'normal'
 " }}}
 " Functions {{{
   " Update last modified entries
