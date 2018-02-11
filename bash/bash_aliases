@@ -1,6 +1,0 @@
-# bash aliases
-# Author: Anish Sevekari
-# Last Updated: Mon 22 Jan 2018 09:54:00 AM EST
-
-# common ssh targets
-alias cmussh='ssh -p 2718 stranger@asevekarlaptop.math.cmu.edu'
