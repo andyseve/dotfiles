@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: 2/14/2018 8:39:52 AM
+" Last Updated: Wed, Feb 14, 2018  8:49:21 AM
 
 set nocompatible
 
@@ -181,6 +181,7 @@ set nocompatible
 
   let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
+  let g:UltiSnipsEditSplit="horizontal"
 
   " YouCompleteMe Configuration
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
