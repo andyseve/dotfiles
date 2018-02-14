@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 09 Feb 2018 09:39:24 AM EST
+% Last Modified: 2/13/2018 10:47:31 AM
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -95,6 +95,12 @@
 }
 \newcommand\set[1]{
   \ensuremath{\left\{#1\right\}} %
+}
+\newcommand\floor[1]{
+	\ensuremath{\left\lfloor #1 \right\rfloor}%
+}
+\newcommand\ceil[1]{
+	\ensuremath{\left\lceil #1 \right\rceil}%
 }
 %Operators
 \DeclareMathOperator*{\argmin}{argmin}
