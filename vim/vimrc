@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sun 11 Feb 2018 11:24:35 PM EST
+" Last Updated: Wed 14 Feb 2018 09:00:01 AM EST
 
 set nocompatible
 
@@ -89,6 +89,9 @@ set nocompatible
   set textwidth=0 " Textwidth to infinite
   set spell spelllang=en_us " Set US English for spellchecking
   set nospell
+	
+	" Turning off scrollbars
+	set guioptions-=L
 " }}}
 " Tab settings {{{
   set autoindent
