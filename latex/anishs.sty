@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 09 Feb 2018 09:39:47 AM EST
+% Last Modified: Thu 15 Feb 2018 05:42:08 AM EST
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -96,6 +96,16 @@
 \newcommand\set[1]{
   \ensuremath{\left\{#1\right\}} %
 }
+<<<<<<< HEAD
+\newcommand\dsum{\displaystyle\sum}
+=======
+\newcommand\floor[1]{
+	\ensuremath{\left\lfloor #1 \right\rfloor}%
+}
+\newcommand\ceil[1]{
+	\ensuremath{\left\lceil #1 \right\rceil}%
+}
+>>>>>>> fecf5ffb7d72914ecf8837337d7cd9b04aef8f7a
 %Operators
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}

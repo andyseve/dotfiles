@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Fri 09 Feb 2018 09:31:20 AM EST
+" Last Updated: Thu 15 Feb 2018 04:00:50 AM EST
 
 set nocompatible
 
@@ -31,6 +31,7 @@ set nocompatible
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'jiangmiao/auto-pairs'
+	Plug 'hecal3/vim-leader-guide'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
@@ -89,6 +90,9 @@ set nocompatible
   set textwidth=0 " Textwidth to infinite
   set spell spelllang=en_us " Set US English for spellchecking
   set nospell
+	
+	" Turning off scrollbars
+	set guioptions-=L
 " }}}
 " Tab settings {{{
   set autoindent
@@ -178,6 +182,7 @@ set nocompatible
 
   let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
+  let g:UltiSnipsEditSplit="horizontal"
 
   " YouCompleteMe Configuration
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
@@ -234,7 +239,7 @@ set nocompatible
     let g:airline_symbols ={}
   endif
   let g:airline_symbols.space = "\u3000"
-  if has("win32") || has("win64")
+  if has("win64") || has("win32")
     let g:airline_powerline_fonts = 0
     let g:airline_symbols.space = "\u0020"
   endif
