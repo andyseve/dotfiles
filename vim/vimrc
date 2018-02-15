@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sun 11 Feb 2018 10:10:08 AM EST
+" Last Updated: Wed 14 Feb 2018 07:47:42 PM EST
 
 set nocompatible
 
@@ -31,6 +31,7 @@ set nocompatible
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
   Plug 'jiangmiao/auto-pairs'
+	Plug 'hecal3/vim-leader-guide'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
