@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Wed 14 Feb 2018 07:47:42 PM EST
+" Last Updated: Thu 15 Feb 2018 04:00:50 AM EST
 
 set nocompatible
 
@@ -90,6 +90,9 @@ set nocompatible
   set textwidth=0 " Textwidth to infinite
   set spell spelllang=en_us " Set US English for spellchecking
   set nospell
+	
+	" Turning off scrollbars
+	set guioptions-=L
 " }}}
 " Tab settings {{{
   set autoindent
@@ -236,7 +239,7 @@ set nocompatible
     let g:airline_symbols ={}
   endif
   let g:airline_symbols.space = "\u3000"
-  if has("win32") || has("win64")
+  if has("win64") || has("win32")
     let g:airline_powerline_fonts = 0
     let g:airline_symbols.space = "\u0020"
   endif
