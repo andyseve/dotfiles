@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Thu 15 Feb 2018 04:00:50 AM EST
+" Last Updated: Sat 17 Feb 2018 08:51:47 PM EST
 
 set nocompatible
 
@@ -32,6 +32,7 @@ set nocompatible
   Plug 'tpope/vim-fugitive'
   Plug 'jiangmiao/auto-pairs'
 	Plug 'hecal3/vim-leader-guide'
+	Plug 'w0rp/ale'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
@@ -186,8 +187,11 @@ set nocompatible
 
   " YouCompleteMe Configuration
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
+	let g:ycm_confirm_extra_conf = 0
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1
+	let g:ycm_complete_in_comments = 1
+	let g:ycm_cache_omnifunc = 0
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
   else
@@ -224,7 +228,14 @@ set nocompatible
   else
     let g:vimtex_view_method = 'zathura'
   endif
+
   " Syntastic Configuration
+	let g:syntastic_mode_map = { 'mode': 'passive' } " Passive: Disable syntastic by default
+
+	" Ale Configuration
+
+
+	" Vim Leader Guide Configuration
   
   " Airline Configuration
   let g:airline_theme = 'solarized'
