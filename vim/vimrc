@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 20 Feb 2018 05:01:04 PM EST
+" Last Updated: Tue 20 Feb 2018 05:19:36 PM EST
 
 set nocompatible
 
@@ -174,13 +174,18 @@ set nocompatible
 " }}}
 " Plugin Configurations {{{ 
   " Ultisnips Configuration
-  set rtp+=~/.vim "Adding .vim to runtime path
+	if has("win64") || has("win32")
+		set rtp+=~/vimfiles 
+		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
+	else
+		set rtp+=~/.vim
+		let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+	endif
   let g:UltiSnipsExpandTrigger="<c-j>"
   let g:UltiSnipsJumpForwardTrigger="<c-j>"
   let g:UltiSnipsJumpBackwardTrigger="<c-h>"
   let g:UltiSnipsListSnippets="<c-l>"
 
-  let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
   let g:UltiSnipsEditSplit="horizontal"
 
