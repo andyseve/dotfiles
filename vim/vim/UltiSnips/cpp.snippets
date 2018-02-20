@@ -38,7 +38,7 @@ bool miller_rabin(${1:int} p){
 }
 endsnippet
 snippet mod "Global mod functions" b
-${1:int} mod = 256;
+${1:int} mod = ${2:1000000007};
 inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % mod);}
 inline $1 mul($1 a, $1 b) { return ($1) ((1ll * a * b) % mod); }
 $1 pow($1 x, $1 a){
