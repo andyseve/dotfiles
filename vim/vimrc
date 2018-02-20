@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sat 17 Feb 2018 08:51:47 PM EST
+" Last Updated: Tue 20 Feb 2018 05:01:04 PM EST
 
 set nocompatible
 
@@ -26,7 +26,6 @@ set nocompatible
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
-  Plug 'vim-syntastic/syntastic'
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
@@ -228,9 +227,6 @@ set nocompatible
   else
     let g:vimtex_view_method = 'zathura'
   endif
-
-  " Syntastic Configuration
-	let g:syntastic_mode_map = { 'mode': 'passive' } " Passive: Disable syntastic by default
 
 	" Ale Configuration
 
