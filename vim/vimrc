@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Thu 15 Feb 2018 04:00:50 AM EST
+" Last Updated: Fri 16 Feb 2018 12:48:54 PM EST
 
 set nocompatible
 
@@ -208,9 +208,15 @@ set nocompatible
   nnoremap <M-\> :NERDTreeToggle<CR>
   inoremap <M-\> <c-o>:NERDTreeToggle<CR>
 
-  " vimtex configuration
+  " Vimtex configuration
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
+	let g:vimtex_toc_enabled = 1
+	let g:vimtex_toc_depth = 1
+	let g:vimtex_toc_show_included_files = 1
+	let g:vimtex_toc_fold = 1
+	"TODO: Add additional matchers for vimtex.
+	
   if has("win64") || has("win32")
     let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
     let g:vimtex_view_general_options
@@ -224,6 +230,7 @@ set nocompatible
   else
     let g:vimtex_view_method = 'zathura'
   endif
+
   " Syntastic Configuration
   
   " Airline Configuration
