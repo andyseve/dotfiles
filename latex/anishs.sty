@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Sat 17 Feb 2018 04:51:24 PM EST
+% Last Modified: 2/26/2018 10:05:00 PM
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -125,6 +125,7 @@
 \DeclareMathOperator{\nnz}{nnz} % Non zero entries
 \DeclareMathOperator{\poly}{poly} % Polynomial
 \DeclareMathOperator{\Conv}{Conv} % Convex Hulls
+\DeclareMathOperator{\proj}{\proj} % projections
 
 % Page Setup and Environments etc
 \ifanishssetup%
@@ -224,7 +225,7 @@
         \newtheorem{lemma}[theorem]{Lemma}
         \newtheorem{proposition}[theorem]{Proposition}
         \newtheorem{corollary}[theorem]{Corollary}
-        \newtheorem*{theorem*}{theorem}
+        \newtheorem*{theorem*}{Theorem}
         \newtheorem*{lemma*}{Lemma}
         \newtheorem*{proposition*}{Proposition}
         \newtheorem*{corollary*}{Corollary}
