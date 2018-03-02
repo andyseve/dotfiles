@@ -80,6 +80,12 @@ endsnippet
 snippet ld "ldots"
 \ldots
 endsnippet
+snippet cd "cdot"
+\cdot
+endsnippet
+snippet cds "cdots"
+\cdots
+endsnippet
 snippet th "thmicro"
 \thmicro
 endsnippet
@@ -97,4 +103,23 @@ snippet mf "mathfrak"
 endsnippet
 snippet cal "mathcal"
 \mathcal{$1}$0
+endsnippet
+snippet inf "infinity"
+\infty
+endsnippet
+
+# LP snippets
+snippet primal-dual "Primal and Dual LP" b
+\[\begin{array}{cc}
+	\begin{array}{ccc}
+		\text{Primal:} & & \\\\
+		               & ${1:obj} & \\\\
+		               & ${2:Constraints} & ${3:conditions}
+	\end{array}
+	\begin{array}{ccc}
+		\text{Dual:} & & \\\\
+		             & ${4:obj} & \\\\
+		             & ${5:Constraints} & ${6:conditions}
+	\end{array}
+\end{array}\]
 endsnippet

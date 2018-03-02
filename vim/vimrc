@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Thu 22 Feb 2018 10:00:58 PM EST
+" Last Updated: 3/2/2018 7:51:57 AM
 
 set nocompatible
 
@@ -89,7 +89,6 @@ set nocompatible
   set mouse=a
   set textwidth=0 " Textwidth to infinite
   set spell spelllang=en_us " Set US English for spellchecking
-  set nospell
 	
 	" Turning off scrollbars
 	set guioptions-=L
