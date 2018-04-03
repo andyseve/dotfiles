@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Mon 26 Mar 2018 11:40:11 AM EDT
+" Last Updated: Mon 26 Mar 2018 06:43:11 PM EDT
 
 set nocompatible
 
@@ -14,8 +14,8 @@ set nocompatible
   endif
 
   function! BuildYCM(info)
-    " Builds ycm only when forced
-    if a:info.status == 'installed' || a:info.force
+    " Builds ycm only when forced, installed or updated
+    if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
       !./install.py --clang-completer --js-completer
     endif
   endfunc

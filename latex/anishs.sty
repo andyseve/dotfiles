@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: 3/4/2018 11:44:51 PM
+% Last Modified: Fri 23 Mar 2018 06:45:50 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -69,7 +69,7 @@
 \newcommand\var[1]{
   \ensuremath{\textbf{Var}\left[ #1 \right]}
 }
-\newcommand\inprod[1]{
+\newcommand\inprod[1]{% Inner Product
   \ensuremath{\left\langle #1 \right\rangle}
 }
 \renewcommand{\iff}{\ensuremath{\Leftrightarrow}}
@@ -181,9 +181,13 @@
     \usepackage{fancyhdr}
     \renewcommand{\headrulewidth}{0.5pt}
     \renewcommand{\footrulewidth}{0.0pt}
+		% This fancy page style is mainly for assignments and homeworks.
+		% Configures others manually since those occurrences are rare.
+		% Might have to branch this in future
     \pagestyle{fancy}
     \lhead{\thetitle}
     \chead{}
+		\rhead{\theauthor}
     \lfoot{}
     \cfoot{\thepage}
     \rfoot{}
