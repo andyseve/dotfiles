@@ -1,4 +1,21 @@
-# Common functions {{{
+# Templates {{{
+snippet temp "Basic Template"
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	$0
+}
+endsnippet
+snippet freopen "freopen line" b
+freopen("${1:in}", "r", stdin); freopen("${2:out}", "w", stdout);
+$0
+endsnippet
+snippet cin "optimized cin" b
+ios_base::sync_with_stdio(false);
+$0
+endsnippet
+# Common functions 
 snippet forg  "General for loop"
 for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$2}){
 	$0
@@ -14,8 +31,7 @@ for(int ${1:i} = ${2:a}; $1 < ${3:b}; ++$2){
 	$0
 }
 endsnippet
-# }}}
-# Number Theory {{{
+# Number Theory
 snippet miller_rabin "Miller Rabin Primality Test" b
 bool miller_rabin(${1:int} p){
 	$1 s = 0; $1 r = p-1;
@@ -66,8 +82,7 @@ $1 inv($1 x, $1 mod){
 	return pow(x, mod - 1, mod);
 }
 endsnippet
-# }}}
-# Geometry {{{
+# Geometry
 snippet 3dvec "3D vectors" b
 // 3d vector (can degenerate to 2d when z=0)
 #define T ${1:long double}
@@ -107,10 +122,9 @@ ostream& operator<<(ostream& out, const vec& v) {
 }
 #undef T
 endsnippet
-# }}}
-# Debug
+# Debug 
 snippet debug "basic debug" b
 cout << "debug-------------: " << $1 << endl;
 $0
 endsnippet
-# vim ts=4 sts=4 foldmethod=marker foldlevel=0 noexpandtab
+# vim ts=4 sts=4 foldmethod=auto foldlevel=0 noexpandtab
