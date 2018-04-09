@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Fri 06 Apr 2018 07:25:30 PM EDT
+" Last Updated: Sun 08 Apr 2018 07:11:12 PM EDT
 
 set nocompatible
 
@@ -158,6 +158,7 @@ set nocompatible
 
   " Enter to expand snippets when possible
   let g:ulti_expand_or_jump_res = 0
+	" TODO: Fix behaviour of this function in c++ files
   function! ExpandSnippetOrCarriageReturn()
     let tmp = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
@@ -301,7 +302,6 @@ set nocompatible
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
 	" }}}
-	
 " }}}
 " Functions {{{
   " Update last modified entries
@@ -336,5 +336,3 @@ set nocompatible
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
-
-
