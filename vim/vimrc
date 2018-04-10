@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 10 Apr 2018 04:57:31 PM EDT
+" Last Updated: Tue 10 Apr 2018 04:58:32 PM EDT
 
 set nocompatible
 
@@ -252,10 +252,10 @@ set nocompatible
   " Global Copy and Paste
 	noremap <Plug>(global-paste) "+gP
 	noremap <Plug>(global-copy) "+y
-  nnoremap <leader>p <Plug>(global-paste)
-  vnoremap <leader>p <Plug>(global-paste)
-  nnoremap <leader>y <Plug>(global-copy)
-  vnoremap <leader>y <Plug>(global-copy)
+  nmap <leader>p <Plug>(global-paste)
+  vmap <leader>p <Plug>(global-paste)
+  nmap <leader>y <Plug>(global-copy)
+  vmap <leader>y <Plug>(global-copy)
 
 	"Vimtex
 	let g:lmap.l = {
