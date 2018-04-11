@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Mon 09 Apr 2018 09:19:28 PM EDT
+" Last Updated: Wed 11 Apr 2018 04:53:37 PM EDT
 
 set nocompatible
 
@@ -90,7 +90,8 @@ set nocompatible
   set nomousehide " To fix a bug that causes cursor to dissapear
   set mouse=a
   set textwidth=0 " Textwidth to infinite
-  set spell spelllang=en_us " Set US English for spellchecking
+  set spelllang=en_us " Set US English for spellchecking
+	set nospell
 
 	let mapleader = "\\"
 	
