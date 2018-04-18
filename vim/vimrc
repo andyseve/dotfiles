@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Mon 26 Mar 2018 06:43:11 PM EDT
+" Last Updated: Sat 07 Apr 2018 08:25:12 PM EDT
 
 set nocompatible
 
@@ -90,7 +90,6 @@ set nocompatible
   set nomousehide " To fix a bug that causes cursor to dissapear
   set mouse=a
   set textwidth=0 " Textwidth to infinite
-  set spell spelllang=en_us " Set US English for spellchecking
 
 	let mapleader = "\\"
 	
@@ -248,12 +247,12 @@ set nocompatible
 	let g:lmap = {}
 	
   " Global Copy and Paste
-	noremap <Plug>(global-paste) "+gP
-	noremap <Plug>(global-copy) "+y
-  nnoremap <leader>p <Plug>(global-paste)
-  vnoremap <leader>p <Plug>(global-paste)
-  nnoremap <leader>y <Plug>(global-copy)
-  vnoremap <leader>y <Plug>(global-copy)
+  nnoremap <leader>p "+gP
+  vnoremap <leader>p "+gP
+  nnoremap <leader>y "+y
+  vnoremap <leader>y "+y
+	let g:lmap.p = ["\\\"+gP", 'Paste']
+	let g:lmap.y = ["\\\"+y", 'Yank']
 
 	"Vimtex
 	let g:lmap.l = {
@@ -336,5 +335,3 @@ set nocompatible
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
-
-
