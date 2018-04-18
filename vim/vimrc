@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sat 07 Apr 2018 08:25:12 PM EDT
+" Last Updated: Tue 17 Apr 2018 11:33:50 PM EDT
 
 set nocompatible
 
@@ -90,6 +90,8 @@ set nocompatible
   set nomousehide " To fix a bug that causes cursor to dissapear
   set mouse=a
   set textwidth=0 " Textwidth to infinite
+  set spelllang=en_us " Set US English for spellchecking
+	set nospell
 
 	let mapleader = "\\"
 	
@@ -157,6 +159,7 @@ set nocompatible
 
   " Enter to expand snippets when possible
   let g:ulti_expand_or_jump_res = 0
+	" TODO: Fix behaviour of this function in c++ files
   function! ExpandSnippetOrCarriageReturn()
     let tmp = UltiSnips#ExpandSnippetOrJump()
     if g:ulti_expand_or_jump_res > 0
@@ -247,12 +250,12 @@ set nocompatible
 	let g:lmap = {}
 	
   " Global Copy and Paste
-  nnoremap <leader>p "+gP
-  vnoremap <leader>p "+gP
-  nnoremap <leader>y "+y
-  vnoremap <leader>y "+y
-	let g:lmap.p = ["\\\"+gP", 'Paste']
-	let g:lmap.y = ["\\\"+y", 'Yank']
+	noremap <Plug>(global-paste) "+gP
+	noremap <Plug>(global-copy) "+y
+  nmap <leader>p <Plug>(global-paste)
+  vmap <leader>p <Plug>(global-paste)
+  nmap <leader>y <Plug>(global-copy)
+  vmap <leader>y <Plug>(global-copy)
 
 	"Vimtex
 	let g:lmap.l = {
@@ -300,7 +303,6 @@ set nocompatible
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
 	" }}}
-	
 " }}}
 " Functions {{{
   " Update last modified entries
