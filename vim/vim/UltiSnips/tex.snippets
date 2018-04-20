@@ -74,7 +74,8 @@ def add_leavevmode(snip):
 	begin_line = snip.snippet_start[0] - 1
 	line = snip.buffer[begin_line].strip()
 	pattern_begin = re.compile("\\\\begin\{(.*)\}")
-	if(pattern_begin.match(line)):
+	pattern_leavevmode = re.compile("\\\\leavevmode")
+	if(pattern_begin.match(line) and (not pattern_leavevmode.search(line))):
 		snip.buffer[begin_line] += " \\leavevmode"
 endglobal
 
