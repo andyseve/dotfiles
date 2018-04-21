@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Tue 17 Apr 2018 11:33:50 PM EDT
+" Last Updated: 4/21/2018 4:11:11 AM
 
 set nocompatible
 
@@ -16,7 +16,11 @@ set nocompatible
   function! BuildYCM(info)
     " Builds ycm only when forced, installed or updated
     if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
-      !./install.py --clang-completer --js-completer
+			if has("win64") || has("win32")
+				!python ~\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+			else
+				!./install.py --clang-completer --js-completer
+			endif
     endif
   endfunc
 
@@ -178,9 +182,9 @@ set nocompatible
 	let g:ycm_complete_in_comments = 1
 	let g:ycm_cache_omnifunc = 0
   if has("win64") || has("win32")
-    let g:ycm_server_python_interpreter = 'C:\Python\Python36\python3.exe'
+    let g:ycm_server_python_interpreter = 'python'
   else
-    let g:ycm_server_python_interpreter = '/usr/bin/python2'
+    let g:ycm_server_python_interpreter = 'python3'
   endif
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
