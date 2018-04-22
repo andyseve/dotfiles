@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sun 22 Apr 2018 12:07:50 AM EDT
+" Last Updated: Sun 22 Apr 2018 01:56:50 PM EDT
 
 set nocompatible
 
@@ -19,7 +19,7 @@ set nocompatible
 			if has("win64") || has("win32")
 				!python ~\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
 			else
-				!./install.py --clang-completer --js-completer
+				!python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer
 			endif
     endif
   endfunc
@@ -261,23 +261,21 @@ set nocompatible
   nmap <leader>y <Plug>(global-copy)
   vmap <leader>y <Plug>(global-copy)
 
-	"Vimtex
+	" Vimtex
 	let g:lmap.l = {
 				\'name': 'Latex',
 				\}
 
-	"Quick Edits
+	" Quick Edits
 	let g:lmap.e = {
 				\'name': 'Quick Edit',
 				\'s':['UltiSnipsEdit', 'Snippets'],
-				\'v':['e ~/dotfiles/vim/vimrc','Vimrc'],
-				\'l':['e ~/dotfiles/latex/anishs.sty', 'Latex'],
+				\'v':['vsplit ~/dotfiles/vim/vimrc','Vimrc'],
+				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
 				\}
-  if(has("gui_running"))
-    nnoremap <leader>ev :!gvim ~/dotfiles/vim/vimrc<CR>
-  else
-    nnoremap <leader>ev :vsplit ~/dotfiles/vim/vimrc<CR>
-  endif
+  nnoremap <leader>ev :vsplit ~/dotfiles/vim/vimrc<CR>
+
+	" Quick Source
 	if(has("win64") || has("win32"))
 		nnoremap <leader>sv :source ~/_vimrc<CR>
 	else
