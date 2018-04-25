@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Sun 22 Apr 2018 01:56:50 PM EDT
+" Last Updated: Tue 24 Apr 2018 09:35:45 PM EDT
 
 set nocompatible
 
@@ -52,9 +52,9 @@ set nocompatible
     set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
-      set guifont=Consolas:h10:cANSI
+      set guifont=Consolas:h12:cANSI
     else
-      set guifont=ubuntu\ Mono\ 14
+      set guifont=ubuntu\ Mono\ 12
     endif
   else
     set background=dark
