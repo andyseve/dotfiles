@@ -1,5 +1,5 @@
 " Maintained by Anish Sevekari
-" Last Updated: Wed 25 Apr 2018 05:22:27 PM EDT
+" Last Updated: Tue 01 May 2018 01:22:11 AM EDT
 
 set nocompatible
 
@@ -101,6 +101,11 @@ set nocompatible
 	
 	" Turning off scrollbars
 	set guioptions-=L
+
+	" Back up directories
+	set undodir=~/.vim/.undo//
+	set backupdir=~/.vim/.backup//
+	set directory=~/.vim/.swp//
 " }}}
 " Tab settings {{{
   set autoindent
