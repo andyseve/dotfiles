@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 10 Apr 2018 11:02:52 AM EDT
+% Last Modified: Fri 04 May 2018 05:06:18 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
 \usepackage{nameref,hyperref,cleveref} % for better referencing systems
@@ -15,6 +15,7 @@
 \newif\ifanishspage\anishspagefalse%Margins
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
+\newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
 \newif\ifanishsfancythm\anishsfancythmfalse%fancy thm setup
 
 \newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
@@ -34,6 +35,7 @@
 \DeclareOption{nothm}{\anishsthmfalse}
 
 \DeclareOption{secthm}{\anishssecthmtrue}
+\DeclareOption{subsecthm}{\anishssubsecthmtrue}
 \DeclareOption{fancythm}{\anishsfancythmtrue}
 
 \DeclareOption{tikz}{\anishstikztrue}
@@ -207,7 +209,7 @@
         linecolor=black,
         linewidth=0.5pt,
         skipabove=1ex,
-	innertopmargin = 1.5ex,
+				innertopmargin = 1.5ex,
         rightline=false,leftline=false,
         frametitlefont=\bfseries,
         frametitlerule=true
@@ -216,7 +218,7 @@
         headfont=\bfseries,
         notefont=\bfseries,
         notebraces=\empty,
-	headpunct=\empty,
+				headpunct=\empty,
         mdframed={style=mdproblemlines},
         bodyfont=\normalfont%
       ]{problemlines}
@@ -224,9 +226,12 @@
       \newtheorem*{asgnproblem*}{asgnproblem}
       \ifanishssecthm%index theorem by section
         \newtheorem{theorem}{Theorem}[section]
-      \else
-        \newtheorem{theorem}{Theorem}
-      \fi
+      \else\ifanishssubsecthm
+				\newtheorem{theorem}{Theorem}[subsection]
+			\else
+				\newtheorem{theorem}{Theorem}
+			\fi
+
       \theoremstyle{plain}
         \newtheorem{lemma}[theorem]{Lemma}
         \newtheorem{proposition}[theorem]{Proposition}
