@@ -1,5 +1,5 @@
-" Maintained by Anish Sevekari
-" Last Updated: Fri 04 May 2018 05:10:09 PM EDT
+" Author: Anish Sevekari
+" Last Updated: Tue 08 May 2018 08:12:45 PM EDT
 
 set nocompatible
 
@@ -33,7 +33,7 @@ set nocompatible
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
-  Plug 'jiangmiao/auto-pairs'
+	Plug 'tpope/vim-surround'
 	Plug 'hecal3/vim-leader-guide'
 	Plug 'w0rp/ale'
 	Plug 'scrooloose/nerdcommenter'
@@ -99,8 +99,9 @@ set nocompatible
 
 	let mapleader = "\\"
 	
-	" Turning off scrollbars
-	set guioptions-=L
+	" Gui Options
+	set guioptions-=L " Remove left scrollbar
+	set guioptions-=T " Remove Toolbar
 
 	" Back up directories
 	set undodir=~/.vim/.undo//
@@ -110,6 +111,7 @@ set nocompatible
 " Tab settings {{{
   set autoindent
   set smartindent
+	set breakindent
 
   set shiftwidth=2
   set softtabstop=2
@@ -146,8 +148,8 @@ set nocompatible
   endif
 
   " Backspace to delete words
-  imap <c-backspace> <c-o>dF<space> 
-	nmap <c-backspace> dF<space>
+  imap <c-backspace> :normal dF<space>x
+	nmap <c-backspace> dF<space>x
 " }}}
 " Plugin Configurations and Bindings {{{ 
   " Ultisnips Configuration {{{
@@ -181,6 +183,7 @@ set nocompatible
 	" }}}
   " YouCompleteMe Configuration {{{
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 	let g:ycm_confirm_extra_conf = 0
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1
