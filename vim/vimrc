@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 08 May 2018 09:51:12 PM EDT
+" Last Updated: Wed 09 May 2018 06:25:50 PM EDT
 
 set nocompatible
 
@@ -27,6 +27,7 @@ set nocompatible
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'francoiscabrol/ranger.vim'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
@@ -167,19 +168,6 @@ set nocompatible
 
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
   let g:UltiSnipsEditSplit="horizontal"
-
-  " Enter to expand snippets when possible
-  let g:ulti_expand_or_jump_res = 0
-	" TODO: Fix behaviour of this function in c++ files
-  function! ExpandSnippetOrCarriageReturn()
-    let tmp = UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res > 0
-      return tmp
-    else
-      return "\<CR>"
-    endif
-  endfunc
-  inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
 	" }}}
   " YouCompleteMe Configuration {{{
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
