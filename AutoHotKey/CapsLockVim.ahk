@@ -13,6 +13,11 @@ keystate = ""
     SetCapsLockState, Off
     Send, {ESC}
   }
+  else if (classname = "Command Prompt")
+  {
+    SetCapsLockState, Off
+    Send, {ESC}
+  }
   else
   {
     GetKeyState, keystate, CapsLock, T

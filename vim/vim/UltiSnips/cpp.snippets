@@ -82,6 +82,13 @@ $1 inv($1 x, $1 mod){
 	return pow(x, mod - 1, mod);
 }
 endsnippet
+snippet gcd "Euclid's Algorithm" b
+${1:long long} gcd($1 a, $1 b){
+	if(b == 0) return a;
+	else return gcd(b, a % b);
+}
+$0
+endsnippet
 # Geometry
 snippet 3dvec "3D vectors" b
 // 3d vector (can degenerate to 2d when z=0)
