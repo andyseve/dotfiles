@@ -1,5 +1,5 @@
-" Maintained by Anish Sevekari
-" Last Updated: 4/26/2018 11:28:00 PM
+" Author: Anish Sevekari
+" Last Updated: 5/14/2018 8:34:11 PM
 
 set nocompatible
 
@@ -27,13 +27,14 @@ set nocompatible
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'francoiscabrol/ranger.vim'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
-  Plug 'jiangmiao/auto-pairs'
+	Plug 'tpope/vim-surround'
 	Plug 'hecal3/vim-leader-guide'
 	Plug 'w0rp/ale'
 	Plug 'scrooloose/nerdcommenter'
@@ -54,7 +55,7 @@ set nocompatible
     if has("win64") || has("win32")
       set guifont=Consolas:h12:cANSI
     else
-      set guifont=ubuntu\ Mono\ 14
+      set guifont=ubuntu\ Mono\ 12
     endif
   else
     set background=dark
@@ -99,12 +100,25 @@ set nocompatible
 
 	let mapleader = "\\"
 	
-	" Turning off scrollbars
-	set guioptions-=L
+	" Gui Options
+	set guioptions-=L " Remove left scrollbar
+	set guioptions-=T " Remove Toolbar
+
+	" Back up directories
+	if has("win64") || has("win32")
+		set undodir=~/vimfiles/.undo//
+		set backupdir=~/vimfiles/.backup//
+		set directory=~/vimfiles/.swp//
+	else
+		set undodir=~/.vim/.undo//
+		set backupdir=~/.vim/.backup//
+		set directory=~/.vim/.swp//
+	endif
 " }}}
 " Tab settings {{{
   set autoindent
   set smartindent
+	set breakindent
 
   set shiftwidth=2
   set softtabstop=2
@@ -141,8 +155,8 @@ set nocompatible
   endif
 
   " Backspace to delete words
-  imap <c-backspace> <c-o>dF<space> 
-	nmap <c-backspace> dF<space>
+  imap <c-backspace> :normal dF<space>x
+	nmap <c-backspace> dF<space>x
 " }}}
 " Plugin Configurations and Bindings {{{ 
   " Ultisnips Configuration {{{
@@ -160,22 +174,10 @@ set nocompatible
 
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
   let g:UltiSnipsEditSplit="horizontal"
-
-  " Enter to expand snippets when possible
-  let g:ulti_expand_or_jump_res = 0
-	" TODO: Fix behaviour of this function in c++ files
-  function! ExpandSnippetOrCarriageReturn()
-    let tmp = UltiSnips#ExpandSnippetOrJump()
-    if g:ulti_expand_or_jump_res > 0
-      return tmp
-    else
-      return "\<CR>"
-    endif
-  endfunc
-  inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
 	" }}}
   " YouCompleteMe Configuration {{{
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 	let g:ycm_confirm_extra_conf = 0
   let g:ycm_collect_identifiers_from_tag_files = 1
   let g:ycm_seed_identifier_with_syntax = 1

@@ -1,4 +1,4 @@
-# Templates {{{
+# Templates
 snippet temp "Basic Template"
 #include<bits/stdc++.h>
 using namespace std;
@@ -15,7 +15,7 @@ snippet cin "optimized cin" b
 ios_base::sync_with_stdio(false);
 $0
 endsnippet
-# Common functions 
+# Common functions
 snippet forg  "General for loop"
 for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$1}){
 	$0
@@ -122,9 +122,9 @@ ostream& operator<<(ostream& out, const vec& v) {
 }
 #undef T
 endsnippet
-# Debug 
+# Debug
 snippet debug "basic debug" b
 cout << "debug-------------: " << $1 << endl;
 $0
 endsnippet
-# vim ts=4 sts=4 foldmethod=auto foldlevel=0 noexpandtab
+# vim:ts=4:sts=4:foldmethod=syntax:foldlevel=0:noexpandtab
