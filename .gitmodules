@@ -1,0 +1,3 @@
+[submodule "zsh/prompts/agnoster"]
+	path = zsh/prompts/agnoster
+	url = https://github.com/agnoster/agnoster-zsh-theme.git
