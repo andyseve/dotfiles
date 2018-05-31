@@ -1,0 +1,6 @@
+[submodule "zsh/agnoster"]
+	path = zsh/agnoster
+	url = https://github.com/agnoster/agnoster-zsh-theme.git
+[submodule "zsh/themes/agnoster"]
+	path = zsh/themes/agnoster
+	url = https://github.com/agnoster/agnoster-zsh-theme.git

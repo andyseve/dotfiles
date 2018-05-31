@@ -16,19 +16,14 @@ First Year PhD Student,
 Carnegie Mellon University
 endsnippet
 
-# Date and Time insertions
-snippet gitsig
-Anish Sevekari<anish.sevekari@gmail.com> [`date`]:
+snippet stamp
+[Anish Sevekari<anish.sevekari@gmail.com> `!v strftime("%F %T %z")`]:$0
 endsnippet
 
 snippet date
-[`date +%Y-%m-%d`]:$0
+[`!v strftime("%F")`]:$0
 endsnippet
 
 snippet time
-[`date`]:$0
-endsnippet
-
-snippet stamp
-[`whoami`@`hostname`:`date`]:$0
+[`!v strftime("%F %T %z")`]:$0
 endsnippet
