@@ -3,8 +3,25 @@
 # This zshrc is greatly inspired by oh-my-zsh
 
 # Adding global variables and function path
-ZSH=$HOME/dotfiles/zsh
-fpath=($ZSH/functions $ZSH/completions $fpath)
+ZSH_HOME=$HOME/.zsh
+ZPLUG_HOME=$HOME/.zsh/zplug
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+
+source $ZPLUG_HOME/init.zsh
+# Packages and themes
+zplug "zplug/zplug", hook-build:"zplug --self-manage"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "voronkovich/apache2.plugin.zsh"
+zplug "wting/autojump"
+zplug "hlissner/zsh-autopair"
+zplug "jeffwalter/zsh-plugin-cd-ssh"
+zplug "arzzen/calc.plugin.zsh"
+zplug "zdharma/fast-syntax-highlighting"
+zplug "rcruzper/zsh-git-plugin"
+zplug "plugins/taskworrior", from:oh-my-zsh
+
+zplug "fsegouin/oh-my-zsh-agnoster-mod-theme", as:theme
+
 
 setopt histignorealldups sharehistory
 
@@ -18,7 +35,6 @@ HISTFILE=~/.zsh_history
 
 # Use modern completion system
 autoload -Uz compinit
-compinit
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -40,20 +56,4 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 if [ -f "~/.zsh_aliases" ]; then
 	source ~/.zsh_aliases
-fi
-
-# import bash_aliases if it exist. Will stop using this if there are conflicts.
-if [ -f "~/.bash_aliases" ]; then
-	source ~/.bash_aliases
-fi
-
-# Theme
-ZSH_THEME=agnoster
-
-if [ ! "$ZSH_THEME" = "" ]; then
-	if [ -f "$ZSH/themes/$ZSH_THEME.zsh-theme" ]; then
-		source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-	elif [ -f "$ZSH/themes/$ZSH_THEME/$ZSH_THEME.zsh-theme" ]; then
-		source "$ZSH/themes/$ZSH_THEME/$ZSH_THEME.zsh-theme"
-	fi
 fi
