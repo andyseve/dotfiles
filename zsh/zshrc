@@ -1,4 +1,4 @@
-# Last Updated: Fri 01 Jun 2018 07:35:37 AM EDT
+# Last Updated: Wed 06 Jun 2018 09:48:43 PM DST
 # Author: Anish Sevekari
 # This zshrc is greatly inspired by oh-my-zsh
 
@@ -10,23 +10,32 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 source $ZPLUG_HOME/init.zsh
 # Packages and themes
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "zsh-users/zsh-history-substring-search"
 zplug "voronkovich/apache2.plugin.zsh"
 zplug "wting/autojump"
 zplug "hlissner/zsh-autopair"
 zplug "jeffwalter/zsh-plugin-cd-ssh"
 zplug "arzzen/calc.plugin.zsh"
-zplug "zdharma/fast-syntax-highlighting"
-zplug "rcruzper/zsh-git-plugin"
-zplug "plugins/taskworrior", from:oh-my-zsh
+zplug "zsh-users/zsh-history-substring-search"
 
+# load  syntax highlighting after everything else has loaded.
+zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "fsegouin/oh-my-zsh-agnoster-mod-theme", as:theme
 
+# Install uninstalled plugins
+if ! zplug check --verbose; then
+	printf "Install? [y/n]: "
+	if read -q; then
+		echo; zplug install
+	fi
+fi
+
+# Source plugins and add commands to path
+zplug load 
 
 setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
-bindkey -e
+bindkey -v
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
@@ -54,6 +63,29 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# use colored versions of commands by default
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions
 if [ -f "~/.zsh_aliases" ]; then
 	source ~/.zsh_aliases
 fi
+
