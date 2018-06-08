@@ -1,4 +1,4 @@
-# Last Updated: Wed 06 Jun 2018 09:50:25 PM DST
+# Last Updated: Thu 07 Jun 2018 11:25:21 PM DST
 # Author: Anish Sevekari
 # This zshrc is greatly inspired by oh-my-zsh
 
@@ -16,6 +16,9 @@ zplug "hlissner/zsh-autopair"
 zplug "jeffwalter/zsh-plugin-cd-ssh"
 zplug "arzzen/calc.plugin.zsh"
 zplug "zsh-users/zsh-history-substring-search"
+zplug "junegunn/fzf-bin", from:gh-r, as:command
+zplug "zsh-users/zsh-autosuggestions"
+zplug "srijanshetty/zsh-pip-completion"
 
 # load  syntax highlighting after everything else has loaded.
 zplug "zdharma/fast-syntax-highlighting", defer:2
@@ -83,6 +86,21 @@ alias l='ls -CF'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Better fzf function
+# Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
+function fzf(){
+	if [ -n $1 ]; then
+		# If the first arguement does not start with - then pipe through
+		if [[ $1 == -* ]]; then
+			fzf-bin ${@:1}
+		else
+			$1 "$(fzf-bin --height 40% --reverse ${@:2})" # setting height to 40% makes it less distracting
+		fi
+	else
+		fzf-bin --height 40% --reverse
+	fi
+}
 
 # Alias definitions
 if [ -f "~/.zsh_aliases" ]; then
