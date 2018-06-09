@@ -1,3 +1,6 @@
-[submodule "zsh/prompts/agnoster"]
-	path = zsh/prompts/agnoster
+[submodule "zsh/themes/agnoster"]
+	path = zsh/themes/agnoster
 	url = https://github.com/agnoster/agnoster-zsh-theme.git
+[submodule "zsh/zsh/zplug"]
+	path = zsh/zsh/zplug
+	url = https://github.com/zplug/zplug
