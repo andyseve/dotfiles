@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 09 Jun 2018 02:08:56 AM DST
+# Last Edited: Wed 20 Jun 2018 02:51:51 PM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -65,7 +65,11 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+
 # Keybindings
+# Search
+bindkey -M vicmd '?' history-incremental-search-backward
+bindkey -M vicmd '/' history-incremental-search-forward
 # history search keybindings
 bindkey "${key[Up]}" history-substring-search-up
 bindkey "${key[Down]}" history-substring-search-down
@@ -76,7 +80,6 @@ zplug load
 
 # Importing functions and commands
 source $ZSH_HOME/functions/*
-source $ZSH_HOME/completions/*
 
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
