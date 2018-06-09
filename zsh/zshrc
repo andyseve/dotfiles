@@ -1,0 +1,120 @@
+# Last Updated: Sat 09 Jun 2018 01:27:15 AM DST
+# Author: Anish Sevekari
+# This zshrc is greatly inspired by oh-my-zsh
+
+# Adding global variables and function path
+ZSH_HOME=$HOME/.zsh
+ZPLUG_HOME=$HOME/.zsh/zplug
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+
+source $ZPLUG_HOME/init.zsh
+# Packages and themes
+zplug "zplug/zplug", hook-build:"zplug --self-manage"
+zplug "voronkovich/apache2.plugin.zsh"
+zplug "wting/autojump"
+zplug "hlissner/zsh-autopair"
+zplug "jeffwalter/zsh-plugin-cd-ssh"
+zplug "arzzen/calc.plugin.zsh"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "junegunn/fzf-bin", from:gh-r, as:command
+zplug "zsh-users/zsh-autosuggestions"
+zplug "srijanshetty/zsh-pip-completion"
+
+# load  syntax highlighting after everything else has loaded.
+zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "fsegouin/oh-my-zsh-agnoster-mod-theme", as:theme
+
+# Install uninstalled plugins
+if ! zplug check --verbose; then
+	printf "Install? [y/n]: "
+	if read -q; then
+		echo; zplug install
+	fi
+fi
+
+# Source plugins and add commands to path
+#zplug load
+
+setopt histignorealldups sharehistory
+
+# Use emacs keybindings even if our EDITOR is set to vi
+bindkey -v
+
+# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.zsh_history
+
+# Use modern completion system
+autoload -Uz compinit
+
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select=2
+eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# use colored versions of commands by default
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Better fzf function
+# Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
+function fzf(){
+	if [ -n $1 ]; then
+		# If the first arguement does not start with - then pipe through
+		if [[ $1 == -* ]]; then
+			fzf-bin ${@:1}
+		else
+			$1 "$(fzf-bin --height 40% --reverse ${@:2})" # setting height to 40% makes it less distracting
+		fi
+	else
+		fzf-bin --height 40% --reverse
+	fi
+}
+
+# Keybindings
+# history search keybindings
+bindkey "${key[Up]}" history-substring-search-up
+bindkey "${key[Down]}" history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+# Alias definitions
+if [ -f "~/.zsh_aliases" ]; then
+	source ~/.zsh_aliases
+fi
+
+# Turning the beep sound off for Windows
+unsetopt beep
+
+zplug load
