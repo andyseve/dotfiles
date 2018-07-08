@@ -1,0 +1,1 @@
+add unsetopt BG_NICE /usr/etc/zshenv
