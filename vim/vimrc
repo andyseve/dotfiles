@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: 5/14/2018 8:34:11 PM
+" Last Updated: Tue 28 Aug 2018 02:03:27 PM EDT
 
 set nocompatible
 
@@ -155,7 +155,7 @@ set nocompatible
   endif
 
   " Backspace to delete words
-  imap <c-backspace> :normal dF<space>x
+  imap <c-backspace> <c-o>:normal dF<space>x<CR>
 	nmap <c-backspace> dF<space>x
 " }}}
 " Plugin Configurations and Bindings {{{ 
