@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 11 Aug 2018 10:18:00 AM EDT
+# Last Edited: Thu 30 Aug 2018 12:28:38 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -80,6 +80,11 @@ zplug load
 
 # Importing functions and commands
 source $ZSH_HOME/functions/*
+
+# Prompt line modifications
+prompt_dir() {
+	prompt_segment blue black "%$(( $COLUMNS - 70 ))<...<%3~%<<"
+}
 
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
