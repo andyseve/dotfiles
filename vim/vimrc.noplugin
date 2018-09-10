@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 06 Jun 2018 09:15:00 PM DST
+" Last Updated: Mon 10 Sep 2018 11:20:36 AM DST
 
 set nocompatible
 
@@ -115,8 +115,8 @@ set nocompatible
   endif
 
   " Backspace to delete words
-  imap <c-backspace> :normal dF<space>x
-	nmap <c-backspace> dF<space>x
+  imap <c-backspace> :normal dbx
+	nmap <c-backspace> dbx
 " }}}
 " Functions {{{
   " Update last modified entries
