@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 08 May 2018 09:03:57 PM EDT
+% Last Modified: Thu 13 Sep 2018 11:02:03 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -21,7 +21,6 @@
 
 \newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
 \newif\ifanishsnicelinks\anishsnicelinkstrue%Colored Links instead of Box
-\newif\ifanishseuler\anishseulerfalse%Euler font for Math
 
 \newif\ifanishsasy\anishsasyfalse%Asymptote support
 
@@ -42,8 +41,6 @@
 \DeclareOption{tikz}{\anishstikztrue}
 \DeclareOption{boxlinks}{\anishsnicelinksfalse}
 \DeclareOption{colorlinks}{\anishsnicelinkstrue}
-\DeclareOption{noeuler}{\anishseulerfalse}
-\DeclareOption{euler}{\anishseulertrue}
 
 \DeclareOption{asy}{\anishsasytrue}
 
@@ -166,13 +163,14 @@
     \usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
     \usepackage{mathtools}
     \usepackage{microtype}
-    \ifanishseuler%Euler and baton fonts from Knuths book
-      \usepackage{euler}
-    \fi
     \usepackage{upgreek}
     \usepackage{import}
     \usepackage{graphicx} % for small tweaks
     \usepackage{bbm} % for better mathbb symbols
+
+		% Better Tables
+		\usepackage{tabularx, booktabs}
+		\newcolumntype{X}{>{\centering\arraybackslash}x}
   \fi
   \ifanishspage% Geometry of the Page
     \setlength{\topmargin}{0pt}
