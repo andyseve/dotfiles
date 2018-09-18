@@ -1,26 +1,33 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 09 Jun 2018 01:57:48 AM DST
+# Last Edited: Mon 17 Sep 2018 10:30:22 PM EDT
 # Better fzf function
 # Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
+# We prefer setting height to 40% for better readability
+
 function fzf(){
-	if [ -n $1 ]; then
-		# If the first arguement does not start with - then pipe through
-		if [[ $1 == -* ]]; then
-			fzf-bin ${@:1}
-		else
-			if [ -n $2 ]; then
-				if [[ $2 == -* ]]; then
-					$1 "$(fzf-bin --height 40% --reverse ${@:2})"	# setting height to 40% makes it less distracting
-
-				else
-					$1 "$(fzf-bin -q $2 --height 40% --reverse ${@:3})"
-				fi
-			else
-				$1 "$(fzf-bin --height 40% --reverse)"
-			fi
+	file=""
+	if [[ -z "$1" ]]; then
+		file="$(fzf-bin --height 40% --reverse)"
+	elif (( $+commands[$1] )); then
+		if [[ -z "$2" ]]; then
+			file="$(fzf-bin --height 40% --reverse)"
+		elif [[ $2 == -* ]]; then
+			file="$(fzf-bin ${@:2})"
+		else 
+			file="$(fzf-bin --height 40% --reverse -q ${@:2})"
 		fi
+		if [[ ! -z $file ]]; then
+			$1 "$file"
+			return 0
+		fi
+	elif [[ $1 == -* ]]; then
+		file="$(fzf-bin ${@:1})"
 	else
-		fzf-bin --height 40% --reverse
+		file="$(fzf-bin --height 40% --reverse -q ${@:1})"
 	fi
+	if [[ ! -z $file ]]; then
+		echo "$file"
+		return 0
+	fi
+	return 0
 }
-
