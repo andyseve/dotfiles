@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 13 Sep 2018 11:02:03 PM EDT
+% Last Modified: Mon 01 Oct 2018 01:54:35 AM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -82,7 +82,7 @@
 \newcommand{\oh}{\scalebox{0.7}{$\mathcal{O}$}}
 
 % Common Text Constructs
-\newcommand{\thmicro}{\ensuremath{^{\text{th}}}}
+\newcommand{\thmicro}{\ensuremath{^{th}}} % Using snippet instead is better. Keeping the micro to support old documents.
 \newcommand{\inv}{\ensuremath{^{-1}}}
 \newcommand\rem{
   \textbf{\underline{Remark}} %
@@ -104,6 +104,7 @@
 \newcommand\ceil[1]{
 	\ensuremath{\left\lceil #1 \right\rceil}%
 }
+\newcommand\tensor{\otimes} % I don't like to remember things.
 %Operators
 \DeclareMathOperator*{\argmin}{argmin}
 \DeclareMathOperator*{\argmax}{argmax}
