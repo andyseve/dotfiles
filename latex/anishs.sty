@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Mon 01 Oct 2018 11:21:03 PM EDT
+% Last Modified: Wed 03 Oct 2018 03:17:41 AM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -46,103 +46,143 @@
 
 \ProcessOptions\relax
 
-% Custom commands
-% Common Math Constructs
-\newcommand\quotient[2]{
-  \ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}%
-}
-\newcommand\gen[1]{
-  \text{$\left\langle #1 \right\rangle$} %
-}
-\newcommand\abs[1]{
-  \ensuremath{\left\lvert #1 \right\rvert} %
-}
-\newcommand\norm[1]{
-  \ensuremath{\left\Vert #1 \right\Vert}%
-}
-\newcommand\ex[1]{%
-  \ensuremath{\mathbb{E}\left[#1\right]}
-}
-\newcommand\pr[1]{
-  \ensuremath{\mathbb{P}\left[#1\right]}
-}
-\newcommand\var[1]{
-  \ensuremath{\textbf{Var}\left[ #1 \right]}
-}
-\newcommand\inprod[1]{% Inner Product
-  \ensuremath{\left\langle #1 \right\rangle}
-}
-\renewcommand{\iff}{\ensuremath{\Leftrightarrow}}
-\newcommand{\ubar}[1]{\text{\underbar{$#1$}}}
-\renewcommand\emptyset\varnothing% Slightly better symbol
-\newcommand{\nref}[1]{\ref{#1}~\nameref{#1}}
-
-\newcommand{\OhStar}{\ensuremath{\mathcal{O}^{\star}}}
-\newcommand{\Oh}{\ensuremath{\mathcal{O}}}
-\newcommand{\oh}{\scalebox{0.7}{$\mathcal{O}$}}
-
-% Common Text Constructs
-\newcommand{\thmicro}{\ensuremath{^{th}}} % Using snippet instead is better. Keeping the micro to support old documents.
-\newcommand{\inv}{\ensuremath{^{-1}}}
-\newcommand\rem{
-  \textbf{\underline{Remark}} %
-}
-\newcommand\question{
-  \textbf{\underline{Question}} %
-}
-\newcommand\textbu[1]{
-  \text{\textbf{\underline{#1}}} %
-}
-\newcommand\set[1]{
-  \ensuremath{\left\{#1\right\}} %
-}
-\newcommand\ds{\displaystyle}
-\newcommand\dsum{\displaystyle\sum}
-\newcommand\floor[1]{
-	\ensuremath{\left\lfloor #1 \right\rfloor}%
-}
-\newcommand\ceil[1]{
-	\ensuremath{\left\lceil #1 \right\rceil}%
-}
-\newcommand\tensor{\otimes} % I don't like to remember things.
-%Operators
-\DeclareMathOperator*{\argmin}{argmin}
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator{\sgn}{sgn} % sign function
-\DeclareMathOperator{\img}{Im} % image
-\DeclareMathOperator{\rank}{rank} % rank
-\DeclareMathOperator{\Spec}{Spec} % spectrum
-\DeclareMathOperator{\Nil}{Nil} % nilradical
-\DeclareMathOperator{\Tr}{Tr} % Trace
-\DeclareMathOperator{\pred}{pred} % Predecessor
-\DeclareMathOperator{\dom}{dom} % domain
-\DeclareMathOperator{\ran}{ran} % range
-\DeclareMathOperator{\Hom}{Hom} % homomorphism
-\DeclareMathOperator{\End}{End} % endomorphism
-\DeclareMathOperator{\res}{res} % resultant
-\DeclareMathOperator{\Int}{Int} % interior
-\DeclareMathOperator{\Adj}{Adj} % Adjoint
-\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
-\DeclareMathOperator{\sing}{Sing} % Singularities
-\DeclareMathOperator{\nnz}{nnz} % Non zero entries
-\DeclareMathOperator{\poly}{poly} % Polynomial
-\DeclareMathOperator{\conv}{Conv} % Convex Hulls
-\DeclareMathOperator{\proj}{proj} % Projections
-\DeclareMathOperator{\dist}{dist} % Distance
-\DeclareMathOperator{\diam}{diam} % Diameter
-
-\DeclareMathOperator{\sininv}{\sin\inv} % Better Trig Inverses
-\DeclareMathOperator{\cosinv}{\cos\inv}
-\DeclareMathOperator{\taninv}{\tan\inv}
-
 % Page Setup and Environments etc
 \ifanishssetup%
+	% Common Micros
+	\newcommand\ds{\displaystyle} 
+	\newcommand\dsum{\displaystyle\sum}
+	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
+	\newcommand\nref[1]{\ref{#1}~\nameref{#1}}
+	\newcommand\thmicro{\ensuremath{^{th}}} % Using snippet instead is better. Keeping the micro to support old documents.
+	\newcommand\inv{\ensuremath{^{-1}}} % Inverses - slightly easier to type.
+	\newcommand\rem{\textbf{\underline{Remark}}}
+	\newcommand\question{\textbf{\underline{Question}}}
+	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
+	\renewcommand\emptyset{\varnothing} % Slightly better symbol
+	\renewcommand\iff{\ensuremath{\Leftrightarrow}}
+
+	% Better symbols and renamings
+	\newcommand\OhStar{\ensuremath{\mathcal{O}^{\star}}}
+	\newcommand\Oh{\ensuremath{\mathcal{O}}}
+	\newcommand\oh{\scalebox{0.7}{$\mathcal{O}$}}
+	\newcommand\xor{\oplus}
+	\newcommand\tensor{\otimes} % I don't like to remember things.
+	\newcommand\directsum{\oplus}
+	\newcommand\conj[1]{\overline{#1}}
+
+	% Common Math Constructs
+	\newcommand\quotient[2]{\ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}} % Quotient of spaces
+	\newcommand\ex[1]{%
+		\ensuremath{\mathbb{E}\left[#1\right]}
+	}
+	\newcommand\pr[1]{
+		\ensuremath{\mathbb{P}\left[#1\right]}
+	}
+	\newcommand\var[1]{
+		\ensuremath{\textbf{Var}\left[ #1 \right]}
+	}
+
+	%\newcommand\setof[2]{
+		%\ensuremath{\left\{ #1 \mathrel{}\middle\vert\mathrel{} #2 \right\}} %
+	%}
+
+	% Common symbols
+
+	% Delimiters: Based on mathtools
+	% Declaring paired delimiters like this provides better spacing.
+	% Normal versions are normal sized delimiters, starred versions are sized delimiters
+	\usepackage{mathtools}
+	\usepackage{etoolbox}
+
+	% Toggling stared function mapping: https://tex.stackexchange.com/questions/278382/cause-declarepaireddelimiter-to-switch-starred-and-nonstarred-versions 
+	% Tells DeclarePairedDelimiter to create functions that are automatically sized.
+	% Starred version is not automatically sized. Both version allow an overriding input.
+	% Auto sizing:  \abs{x}
+	% Override:     \abs[\big]{x}
+	% Not sized:    \abs*{x}
+	% Override:     \abs*[\big]{x}
+	%
+	% Defines two commands, for example: PAIREDabs, abs
+	% abs checks for a star or options and then calles the right version of PAIREDabs
+	\def\DeclarePairedDelimiterStar#1#2#3{%
+		\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
+		\newcommand#1{%
+			\@ifstar{\csname PAIRED\string#1\endcsname}
+							{\@ifnextchar[{\csname PAIRED\string#1\endcsname}
+														{\csname PAIRED\string#1\endcsname*}%
+							}%
+		}%
+	}
+	\def\DeclarePairedDelimiterStarX#1[#2]#3#4#5{%
+		\expandafter\DeclarePairedDelimiterX\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}%
+		\newcommand#1[#2]{%
+			\@ifstar{\csname PAIREDX\string#1\endcsname}
+							{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
+														{\csname PAIREDX\string#1\endcsname*}%
+							}%
+		}%
+	}
+	\def\DeclarePairedDelimiterStarXPP#1[#2]#3#4#5#6#7{%
+		\expandafter\DeclarePairedDelimiterXPP\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}{#6}{#7}%
+		\newcommand#1[#2]{%
+			\@ifstar{\csname PAIREDX\string#1\endcsname}
+							{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
+														{\csname PAIREDX\string#1\endcsname*}%
+							}%
+		}%
+	}
+	% Not really sure that the micro modification always works.
+	% Not using modifications below
+	% TODO this breaks certain things, which I should replace.
+
+	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
+	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
+	\DeclarePairedDelimiterX\set[1]{\{}{\}}{#1} % Sets
+	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{#1 \mathrel{} \delimsize\vert \mathrel{} #2}
+	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
+	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
+	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{
+		\ifblank{#1}{\:\cdot\:}{#1}
+	} % Norm
+	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
+
+	%Operators
+	\DeclareMathOperator*{\argmin}{argmin}
+	\DeclareMathOperator*{\argmax}{argmax}
+	\DeclareMathOperator{\sgn}{sgn} % sign function
+	\DeclareMathOperator{\img}{Im} % image
+	\DeclareMathOperator{\rank}{rank} % rank
+	\DeclareMathOperator{\Spec}{Spec} % spectrum
+	\DeclareMathOperator{\Nil}{Nil} % nilradical
+	\DeclareMathOperator{\Tr}{Tr} % Trace
+	\DeclareMathOperator{\pred}{pred} % Predecessor
+	\DeclareMathOperator{\dom}{dom} % domain
+	\DeclareMathOperator{\ran}{ran} % range
+	\DeclareMathOperator{\Hom}{Hom} % homomorphism
+	\DeclareMathOperator{\End}{End} % endomorphism
+	\DeclareMathOperator{\res}{res} % resultant
+	\DeclareMathOperator{\Int}{Int} % interior
+	\DeclareMathOperator{\Adj}{Adj} % Adjoint
+	\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
+	\DeclareMathOperator{\sing}{Sing} % Singularities
+	\DeclareMathOperator{\nnz}{nnz} % Non zero entries
+	\DeclareMathOperator{\poly}{poly} % Polynomial
+	\DeclareMathOperator{\conv}{Conv} % Convex Hulls
+	\DeclareMathOperator{\proj}{proj} % Projections
+	\DeclareMathOperator{\dist}{dist} % Distance
+	\DeclareMathOperator{\diam}{diam} % Diameter
+
+	\DeclareMathOperator{\sininv}{\sin\inv} % Better Trig Inverses
+	\DeclareMathOperator{\cosinv}{\cos\inv}
+	\DeclareMathOperator{\taninv}{\tan\inv}
+	
+	% Setting up commonly used packages
   \ifanishspkg%
     \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
-    \usepackage{listings}
+    \usepackage{listings} % listings allows to convert source codes into latex
+		% TODO Listings support
     \usepackage{mathrsfs}
     \usepackage{textcomp}
-    % listings allows to convert source codes into latex
     \lstset{basicstyle=\footnotesize\ttfamily,
       numbers=left,
       numbersep=5pt,
@@ -167,7 +207,7 @@
     \usepackage{upgreek}
     \usepackage{import}
     \usepackage{graphicx} % for small tweaks
-    \usepackage{bbm} % for better mathbb symbols
+		\usepackage{bbm} % Adding support for \mathbbm{1}
 
 		% Better Tables
 		\usepackage{tabularx, booktabs}
@@ -252,8 +292,7 @@
         \newtheorem{definition}[theorem]{Definition}
         \newtheorem{fact}[theorem]{Fact}
         \newtheorem{answer}[theorem]{Answer}
-        \newtheorem{case}[theorem]{Case
-	}
+        \newtheorem{case}[theorem]{Case}
         \newtheorem{ques}[theorem]{Question}
         \newtheorem{exercise}[theorem]{Exercise}
         \newtheorem{problem}[theorem]{Problem}
