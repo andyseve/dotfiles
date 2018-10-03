@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Mon 01 Oct 2018 01:54:35 AM EDT
+% Last Modified: Mon 01 Oct 2018 11:21:03 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -257,6 +257,7 @@
         \newtheorem{ques}[theorem]{Question}
         \newtheorem{exercise}[theorem]{Exercise}
         \newtheorem{problem}[theorem]{Problem}
+				\newtheorem{subproblem}{Part}[problem]
         \newtheorem*{answer*}{Answer}
         \newtheorem*{case*}{Case}
         \newtheorem*{claim*}{Claim}
@@ -267,6 +268,7 @@
         \newtheorem*{ques*}{Question}
         \newtheorem*{exercise*}{Exercise}
         \newtheorem*{problem*}{Problem}
+				\newtheorem*{subproblem*}{Part}
         \newtheorem{example}[theorem]{Example}
         \newtheorem*{example*}{Example}
       % Remark-style theorems
