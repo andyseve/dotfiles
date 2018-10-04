@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 04 Oct 2018 12:17:10 PM EDT
+" Last Updated: Thu 04 Oct 2018 12:39:47 PM EDT
 
 set nocompatible
 
@@ -30,8 +30,9 @@ set nocompatible
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
-  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
+	Plug 'junegunn/fzf', {'do':'./install --bin'}
+	Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
 	Plug 'tpope/vim-surround'
 	Plug 'tpope/vim-repeat'
