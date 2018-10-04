@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 04 Oct 2018 11:23:38 AM EDT
+" Last Updated: Thu 04 Oct 2018 12:17:10 PM EDT
 
 set nocompatible
 
@@ -27,7 +27,6 @@ set nocompatible
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
-	Plug 'francoiscabrol/ranger.vim'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
@@ -35,10 +34,12 @@ set nocompatible
   Plug 'sjl/gundo.vim'
   Plug 'tpope/vim-fugitive'
 	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-repeat'
 	Plug 'hecal3/vim-leader-guide'
 	Plug 'w0rp/ale'
 	Plug 'scrooloose/nerdcommenter'
 	Plug 'godlygeek/tabular'
+	Plug 'mileszs/ack.vim'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
@@ -246,8 +247,11 @@ set nocompatible
 	" }}}
 	" Ale Configuration {{{
 	let g:ale_enabled = 1
-	let g:ale_max_signs = 50
+	let g:ale_max_signs = 50 " Saves rendering time in files with lots of errors
 	let g:ale_open_list = 'on_save'
+	
+	let g:ale_lint_on_text_changed = 0 " Don't lint with every text change by default
+	let g:ale_lint_on_enter = 0 " Lint on save (Less distracting)
 	" Automatically close loclist
   augroup AnishsAle
     autocmd!
@@ -331,6 +335,13 @@ set nocompatible
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
+	" }}}
+	" Ag configuration {{{
+	if executable('ag')
+		set grepprg=ag\ --vimgrep
+		let g:ackprg='ag --vimgrep'
+		let g:ctrlp_user_command='ag --vimgrep -g'
+	endif
 	" }}}
 " }}}
 " Functions {{{
