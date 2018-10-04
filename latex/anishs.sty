@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 03 Oct 2018 04:32:22 PM EDT
+% Last Modified: Thu 04 Oct 2018 03:20:53 AM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -72,15 +72,6 @@
 
 	% Common Math Constructs
 	\newcommand\quotient[2]{\ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}} % Quotient of spaces
-	\newcommand\ex[1]{%
-		\ensuremath{\mathbb{E}\left[#1\right]}
-	}
-	\newcommand\pr[1]{
-		\ensuremath{\mathbb{P}\left[#1\right]}
-	}
-	\newcommand\var[1]{
-		\ensuremath{\textbf{Var}\left[ #1 \right]}
-	}
 
 	% Common symbols
 
@@ -100,6 +91,7 @@
 	%
 	% Defines two commands, for example: PAIREDabs, abs
 	% abs checks for a star or options and then calles the right version of PAIREDabs
+
 	\def\DeclarePairedDelimiterStar#1#2#3{%
 		\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
 		\newcommand#1{%
@@ -130,17 +122,45 @@
 	% Not really sure that the micro modification always works.
 	% Not using modifications below
 	% TODO this breaks certain things, which I should replace.
-
+	\DeclarePairedDelimiterStar\paren{(}{)} % Resizable paranthesis
 	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
 	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
-	\DeclarePairedDelimiterX\set[1]{\{}{\}}{#1} % Sets
-	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{#1 \mathbin{} \delimsize\vert \mathbin{} #2}
 	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
 	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
-	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{
-		\ifblank{#1}{\:\cdot\:}{#1}
-	} % Norm
+	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Norm
+	\DeclarePairedDelimiterXPP\normp[2]{}{\lVert}{\rVert}{\ifblank{#2}{}{_{#2}}}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
 	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
+
+	% Defining such that symbol. Most of this is picked up from mathtoold documentation.
+	% I don't really understand why this works, just some parts of it.
+	% We define another local function called given which places this symbol whenever needed.
+	\providecommand\given{}
+	\newcommand\st[1][]{
+		\nonscript\:#1\vert
+		\allowbreak
+		\nonscript\:
+		\mathopen{}
+	}
+	\DeclarePairedDelimiterX\set[1]{\{}{\}}{ % Sets
+		\renewcommand\given{\st[\delimsize]}
+		#1
+	}
+	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{
+		\renewcommand\given{\st[\delimsize]}
+		#1 \given #2
+	}
+	\DeclarePairedDelimiterXPP\pr[1]{\mathbb{P}}{[}{]}{}{ % Probability
+		\renewcommand\given{\st[\delimsize]}
+		#1
+	}
+	\DeclarePairedDelimiterXPP\ex[1]{\mathbb{E}}{[}{]}{}{ % Expectation
+		\renewcommand\given{\st[\delimsize]}
+		#1
+	}
+	\DeclarePairedDelimiterXPP\var[1]{\textbf{Var}}{[}{]}{}{ % Variance
+		\renewcommand\given{\st[\delimsize]}
+		#1
+	}
 
 	%Operators
 	\DeclareMathOperator*{\argmin}{argmin}
