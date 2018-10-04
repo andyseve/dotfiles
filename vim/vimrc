@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sat 15 Sep 2018 11:57:37 AM EDT
+" Last Updated: Wed 03 Oct 2018 04:40:56 PM EDT
 
 set nocompatible
 
@@ -36,7 +36,7 @@ set nocompatible
   Plug 'tpope/vim-fugitive'
 	Plug 'tpope/vim-surround'
 	Plug 'hecal3/vim-leader-guide'
-	Plug 'w0rp/ale'
+"	Plug 'w0rp/ale'
 	Plug 'scrooloose/nerdcommenter'
 
   Plug 'vim-airline/vim-airline'

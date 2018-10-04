@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 03 Oct 2018 03:17:41 AM EDT
+% Last Modified: Wed 03 Oct 2018 04:32:22 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -82,10 +82,6 @@
 		\ensuremath{\textbf{Var}\left[ #1 \right]}
 	}
 
-	%\newcommand\setof[2]{
-		%\ensuremath{\left\{ #1 \mathrel{}\middle\vert\mathrel{} #2 \right\}} %
-	%}
-
 	% Common symbols
 
 	% Delimiters: Based on mathtools
@@ -138,7 +134,7 @@
 	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
 	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
 	\DeclarePairedDelimiterX\set[1]{\{}{\}}{#1} % Sets
-	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{#1 \mathrel{} \delimsize\vert \mathrel{} #2}
+	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{#1 \mathbin{} \delimsize\vert \mathbin{} #2}
 	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
 	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
 	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{
