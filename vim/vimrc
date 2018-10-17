@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sat 15 Sep 2018 11:57:37 AM EDT
+" Last Updated: 10/17/2018 3:43:41 PM
 
 set nocompatible
 
@@ -17,7 +17,7 @@ set nocompatible
     " Builds ycm only when forced, installed or updated
     if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
 			if has("win64") || has("win32")
-				!python ~\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+				!python "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
 			else
 				!python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer
 			endif
@@ -27,17 +27,20 @@ set nocompatible
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
-	Plug 'francoiscabrol/ranger.vim'
   Plug 'SirVer/ultisnips'
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex'
-  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'sjl/gundo.vim'
+	Plug 'junegunn/fzf', {'do':'./install --bin'}
+	Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
 	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-repeat'
 	Plug 'hecal3/vim-leader-guide'
 	Plug 'w0rp/ale'
 	Plug 'scrooloose/nerdcommenter'
+	Plug 'godlygeek/tabular'
+	Plug 'mileszs/ack.vim'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
@@ -155,8 +158,8 @@ set nocompatible
   endif
 
   " Backspace to delete words
-  imap <c-backspace> <c-o>:normal dF<space>x<CR>
-	nmap <c-backspace> dF<space>x
+  imap <c-backspace> <c-o>:normal dbx<CR>
+	nmap <c-backspace> dbx
 " }}}
 " Plugin Configurations and Bindings {{{ 
   " Ultisnips Configuration {{{
@@ -214,7 +217,11 @@ set nocompatible
   let g:NERDTreeQuitOnOpen = 1
   nnoremap <M-\> :NERDTreeToggle<CR>
   inoremap <M-\> <c-o>:NERDTreeToggle<CR>
-		" There is an autocmd to close NERDTree window on exit, configured below
+	" Close if only windows present is NERDTree
+	augroup AnishsNerdTree
+		autocmd!
+		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	augroup END
 	" }}}
   " Vimtex configuration {{{
   let g:vimtex_enabled = 1
@@ -240,6 +247,19 @@ set nocompatible
   endif
 	" }}}
 	" Ale Configuration {{{
+	let g:ale_enabled = 1
+	let g:ale_max_signs = 50 " Saves rendering time in files with lots of errors
+	let g:ale_open_list = 'on_save'
+	
+	let g:ale_lint_on_text_changed = 0 " Don't lint with every text change by default
+	let g:ale_lint_on_enter = 0 " Lint on save (Less distracting)
+
+	let g:ale_cursor_detail = 0 " Fixing some random bug in windows
+	" Automatically close loclist
+  augroup AnishsAle
+    autocmd!
+    autocmd QuitPre * if empty(&buftype) | lclose | endif
+  augroup END
 	" }}}
   " Airline Configuration {{{
   let g:airline_theme = 'solarized'
@@ -319,6 +339,13 @@ set nocompatible
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
 	" }}}
+	" Ag configuration {{{
+	if executable('ag')
+		set grepprg=ag\ --vimgrep
+		let g:ackprg='ag --vimgrep'
+		let g:ctrlp_user_command='ag --vimgrep -g'
+	endif
+	" }}}
 " }}}
 " Functions {{{
   " Update last modified entries
@@ -346,8 +373,6 @@ set nocompatible
       \ endif
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
-    " Close if only windows present is NERDTree
-    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
     autocmd BufEnter * :nohlsearch
   augroup END
 " }}}
