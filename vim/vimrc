@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 04 Oct 2018 12:39:47 PM EDT
+" Last Updated: 10/4/2018 5:34:37 PM
 
 set nocompatible
 
@@ -17,7 +17,7 @@ set nocompatible
     " Builds ycm only when forced, installed or updated
     if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
 			if has("win64") || has("win32")
-				!python ~\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+				!python "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
 			else
 				!python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer
 			endif
@@ -253,6 +253,8 @@ set nocompatible
 	
 	let g:ale_lint_on_text_changed = 0 " Don't lint with every text change by default
 	let g:ale_lint_on_enter = 0 " Lint on save (Less distracting)
+
+	let g:ale_cursor_detail = 0 " Fixing some random bug in windows
 	" Automatically close loclist
   augroup AnishsAle
     autocmd!

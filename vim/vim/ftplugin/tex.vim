@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 08 May 2018 08:12:11 PM EDT
+" Last Updated: 10/4/2018 5:34:17 PM
 " tex specific vim settings
 
 " Tabstops {{{
