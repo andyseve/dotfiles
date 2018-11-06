@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 23 Oct 2018 11:08:52 PM EDT
+" Last Updated: Thu 01 Nov 2018 11:37:46 AM EDT
 
 set nocompatible
 
@@ -306,6 +306,7 @@ set nocompatible
 				\'s':['UltiSnipsEdit', 'Snippets'],
 				\'v':['vsplit ~/dotfiles/vim/vimrc','Vimrc'],
 				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
+				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
 				\}
   nnoremap <leader>ev :vsplit ~/dotfiles/vim/vimrc<CR>
 
@@ -339,12 +340,13 @@ set nocompatible
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
 	" }}}
-	" Ag configuration {{{
+	" FZF and Ag configuration {{{
 	if executable('ag')
 		set grepprg=ag\ --vimgrep
 		let g:ackprg='ag --vimgrep'
 		let g:ctrlp_user_command='ag --vimgrep -g'
 	endif
+	noremap <c-p> :FZF<CR>
 	" }}}
 " }}}
 " Functions {{{
