@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Mon 17 Sep 2018 10:30:22 PM EDT
+# Last Edited: Thu 01 Nov 2018 11:18:28 AM EDT
 # Better fzf function
 # Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
 # We prefer setting height to 40% for better readability
@@ -7,14 +7,14 @@
 function fzf(){
 	file=""
 	if [[ -z "$1" ]]; then
-		file="$(fzf-bin --height 40% --reverse)"
+		file="$(fzf-bin)"
 	elif (( $+commands[$1] )); then
 		if [[ -z "$2" ]]; then
-			file="$(fzf-bin --height 40% --reverse)"
+			file="$(fzf-bin)"
 		elif [[ $2 == -* ]]; then
 			file="$(fzf-bin ${@:2})"
 		else 
-			file="$(fzf-bin --height 40% --reverse -q ${@:2})"
+			file="$(fzf-bin -q ${@:2})"
 		fi
 		if [[ ! -z $file ]]; then
 			$1 "$file"
@@ -23,7 +23,7 @@ function fzf(){
 	elif [[ $1 == -* ]]; then
 		file="$(fzf-bin ${@:1})"
 	else
-		file="$(fzf-bin --height 40% --reverse -q ${@:1})"
+		file="$(fzf-bin -q ${@:1})"
 	fi
 	if [[ ! -z $file ]]; then
 		echo "$file"

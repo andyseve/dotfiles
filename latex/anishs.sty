@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 07 Nov 2018 05:04:02 PM EST
+% Last Modified: Thu 08 Nov 2018 01:18:20 AM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -67,7 +67,10 @@
 	\newcommand\oh{\scalebox{0.7}{$\mathcal{O}$}}
 	\newcommand\xor{\oplus}
 	\newcommand\tensor{\otimes} % I don't like to remember things.
+	\newcommand\transpose{\intercal} % Much better
 	\newcommand\directsum{\oplus}
+	\newcommand\iso{\cong}
+	\newcommand\del{\partial}
 	\newcommand\conj[1]{\overline{#1}}
 
 	% Common Math Constructs
@@ -190,6 +193,7 @@
 	\DeclareMathOperator{\Int}{Int} % interior
 	\DeclareMathOperator{\Adj}{Adj} % Adjoint
 	\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
+	\DeclareMathOperator{\wt}{wt} %weight
 	\DeclareMathOperator{\sing}{Sing} % Singularities
 	\DeclareMathOperator{\nnz}{nnz} % Non zero entries
 	\DeclareMathOperator{\poly}{poly} % Polynomial
@@ -197,6 +201,7 @@
 	\DeclareMathOperator{\proj}{proj} % Projections
 	\DeclareMathOperator{\dist}{dist} % Distance
 	\DeclareMathOperator{\diam}{diam} % Diameter
+	\DeclareMathOperator{\supp}{Supp} % Support
 
 	\DeclareMathOperator{\sininv}{\sin\inv} % Better Trig Inverses
 	\DeclareMathOperator{\cosinv}{\cos\inv}

@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Wed 09 May 2018 09:41:14 AM EDT
+" Last Modified: 10/17/2018 3:44:59 PM
 " Cpp specific vim settings
 
 " Core Settings {{{
@@ -7,9 +7,9 @@
 	setlocal foldnestmax=3
 " }}}
 " Tabstops {{{
-	set tabstop=2
-	set softtabstop=2
-	set shiftwidth=2
+	set tabstop=4
+	set softtabstop=4
+	set shiftwidth=4
 	set noexpandtab
 " }}}
 " Mappings {{{
