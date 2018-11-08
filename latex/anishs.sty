@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 04 Oct 2018 03:20:53 AM EDT
+% Last Modified: Wed 07 Nov 2018 05:04:02 PM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -153,9 +153,19 @@
 		\renewcommand\given{\st[\delimsize]}
 		#1
 	}
+	\DeclarePairedDelimiterXPP\prob[2]{
+		\underset{#1}{\mathbb{P}}}{[}{]}{}{
+		\renewcommand\given{\st[\delimsize]}
+		#2
+	}
 	\DeclarePairedDelimiterXPP\ex[1]{\mathbb{E}}{[}{]}{}{ % Expectation
 		\renewcommand\given{\st[\delimsize]}
 		#1
+	}
+	\DeclarePairedDelimiterXPP\expt[2]{
+		\underset{#1}{\mathbb{E}}}{[}{]}{}{
+		\renewcommand\given{\st[\delimsize]}
+		#2
 	}
 	\DeclarePairedDelimiterXPP\var[1]{\textbf{Var}}{[}{]}{}{ % Variance
 		\renewcommand\given{\st[\delimsize]}
