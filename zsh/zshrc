@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 19 Sep 2018 10:18:41 PM EDT
+# Last Edited: Thu 01 Nov 2018 11:19:39 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -65,6 +65,14 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# Helper function
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $( whence $1 >/dev/null )
+}
+_color() {
+  return $( [ -z "$INSIDE_EMACS" ] )
+}
 
 # Keybindings
 # Search
@@ -86,6 +94,17 @@ prompt_dir() {
 	prompt_segment blue black "%$(( $COLUMNS - 70 ))<...<%3~%<<"
 }
 
+# FZF config
+if _has fzf; then
+	if _has ag; then
+		export FZF_DEFAULT_COMMAND='ag -g ""' # Use Ag if it exists
+		export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+		export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+	fi
+  export FZF_DEFAULT_OPTS='
+		--height 40% --reverse
+  '
+fi
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
