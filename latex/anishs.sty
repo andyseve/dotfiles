@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 08 Nov 2018 03:33:37 AM EST
+% Last Modified: Fri 09 Nov 2018 05:09:24 PM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -53,8 +53,6 @@
 	\newcommand\dsum{\displaystyle\sum}
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
 	\newcommand\nref[1]{\ref{#1}~\nameref{#1}}
-	\newcommand\thmicro{\ensuremath{^{th}}} % Using snippet instead is better. Keeping the micro to support old documents.
-	\newcommand\inv{\ensuremath{^{-1}}} % Inverses - slightly easier to type.
 	\newcommand\rem{\textbf{\underline{Remark}}}
 	\newcommand\question{\textbf{\underline{Question}}}
 	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
@@ -74,7 +72,7 @@
 	\newcommand\conj[1]{\overline{#1}}
 
 	% Common Math Constructs
-	\newcommand\quotient[2]{\ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}} % Quotient of spaces
+	\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
 
 	% Common symbols
 
