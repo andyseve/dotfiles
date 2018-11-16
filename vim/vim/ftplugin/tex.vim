@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 15 Nov 2018 09:18:06 AM EST
+" Last Updated: Thu 15 Nov 2018 11:57:27 PM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -19,7 +19,7 @@
 	let b:ale_open_list = 0
 " }}}
 " functions {{{
-	function ImprortPreemble()
+	function! ImprortPreemble()
 		" Preemble function.
 		" Includes appropriate lines from anishs.sty into the latex file
 
