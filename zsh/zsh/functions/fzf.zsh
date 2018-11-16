@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 01 Nov 2018 11:18:28 AM EDT
+# Last Edited: Tue 13 Nov 2018 11:21:18 PM EST
 # Better fzf function
 # Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
 # We prefer setting height to 40% for better readability
@@ -18,6 +18,8 @@ function fzf(){
 		fi
 		if [[ ! -z $file ]]; then
 			$1 "$file"
+			return 0
+		else
 			return 0
 		fi
 	elif [[ $1 == -* ]]; then

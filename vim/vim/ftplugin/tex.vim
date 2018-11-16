@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 09 Nov 2018 05:31:58 PM EST
+" Last Updated: Mon 12 Nov 2018 11:46:29 AM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -19,11 +19,7 @@
 	let b:ale_open_list = 0
 " }}}
 " functions {{{
-<<<<<<< HEAD
-	function! ImprortPreemble()
-=======
 	function ImprortPreemble()
->>>>>>> 5627994b1bb88ef127120cd83cdc3c0aefee51e7
 		" Preemble function.
 		" Includes appropriate lines from anishs.sty into the latex file
 
@@ -36,9 +32,6 @@
 			" Need not support more complicated commands!
 			" Do a search over all the commands and import these commands.
 			" autocmd to check for new commands in anishs.sty
-<<<<<<< HEAD
 	endfunction
-=======
->>>>>>> 5627994b1bb88ef127120cd83cdc3c0aefee51e7
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell
