@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 14 Oct 2018 06:17:26 PM EDT
+" Last Updated: Thu 27 Dec 2018 09:29:07 PM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -15,7 +15,23 @@
 
 " }}}
 " Ale config {{{
-	let l:ale_max_signs = 20
-	let l:ale_open_list = 0
+	let b:ale_max_signs = 20
+	let b:ale_open_list = 0
+" }}}
+" functions {{{
+	function! ImprortPreemble()
+		" Preemble function.
+		" Includes appropriate lines from anishs.sty into the latex file
+
+		" Sanity check: Is the position outside begin document or not.
+		" Import common packages (Can create a seperate micro for this)
+		" Import function and operator definitions based on usage.
+			" Maintain a list of commands which anishs.sty provides.
+			" For each command, keep numbers of lines to import.
+			" Exploit structure to automate this process.
+			" Need not support more complicated commands!
+			" Do a search over all the commands and import these commands.
+			" autocmd to check for new commands in anishs.sty
+	endfunction
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell

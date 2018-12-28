@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Sun 14 Oct 2018 07:25:02 PM EDT
+% Last Modified: Thu 27 Dec 2018 09:30:52 PM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -53,8 +53,6 @@
 	\newcommand\dsum{\displaystyle\sum}
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
 	\newcommand\nref[1]{\ref{#1}~\nameref{#1}}
-	\newcommand\thmicro{\ensuremath{^{th}}} % Using snippet instead is better. Keeping the micro to support old documents.
-	\newcommand\inv{\ensuremath{^{-1}}} % Inverses - slightly easier to type.
 	\newcommand\rem{\textbf{\underline{Remark}}}
 	\newcommand\question{\textbf{\underline{Question}}}
 	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
@@ -67,11 +65,14 @@
 	\newcommand\oh{\scalebox{0.7}{$\mathcal{O}$}}
 	\newcommand\xor{\oplus}
 	\newcommand\tensor{\otimes} % I don't like to remember things.
+	\newcommand\transpose{\intercal} % Much better
 	\newcommand\directsum{\oplus}
+	\newcommand\iso{\cong}
+	\newcommand\del{\partial}
 	\newcommand\conj[1]{\overline{#1}}
 
 	% Common Math Constructs
-	\newcommand\quotient[2]{\ensuremath{\raise1ex\hbox{#1}\Big/\lower1ex\hbox{#2}}} % Quotient of spaces
+	\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
 
 	% Common symbols
 
@@ -153,9 +154,19 @@
 		\renewcommand\given{\st[\delimsize]}
 		#1
 	}
+	\DeclarePairedDelimiterXPP\prob[2]{
+		\underset{#1}{\mathbb{P}}}{[}{]}{}{
+		\renewcommand\given{\st[\delimsize]}
+		#2
+	}
 	\DeclarePairedDelimiterXPP\ex[1]{\mathbb{E}}{[}{]}{}{ % Expectation
 		\renewcommand\given{\st[\delimsize]}
 		#1
+	}
+	\DeclarePairedDelimiterXPP\expt[2]{
+		\underset{#1}{\mathbb{E}}}{[}{]}{}{
+		\renewcommand\given{\st[\delimsize]}
+		#2
 	}
 	\DeclarePairedDelimiterXPP\var[1]{\textbf{Var}}{[}{]}{}{ % Variance
 		\renewcommand\given{\st[\delimsize]}
@@ -166,6 +177,7 @@
 	\DeclareMathOperator*{\argmin}{argmin}
 	\DeclareMathOperator*{\argmax}{argmax}
 	\DeclareMathOperator{\sgn}{sgn} % sign function
+	\DeclareMathOperator{\sign}{sign} % same thing as above
 	\DeclareMathOperator{\img}{Im} % image
 	\DeclareMathOperator{\rank}{rank} % rank
 	\DeclareMathOperator{\Spec}{Spec} % spectrum
@@ -180,6 +192,7 @@
 	\DeclareMathOperator{\Int}{Int} % interior
 	\DeclareMathOperator{\Adj}{Adj} % Adjoint
 	\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
+	\DeclareMathOperator{\wt}{wt} %weight
 	\DeclareMathOperator{\sing}{Sing} % Singularities
 	\DeclareMathOperator{\nnz}{nnz} % Non zero entries
 	\DeclareMathOperator{\poly}{poly} % Polynomial
@@ -187,6 +200,7 @@
 	\DeclareMathOperator{\proj}{proj} % Projections
 	\DeclareMathOperator{\dist}{dist} % Distance
 	\DeclareMathOperator{\diam}{diam} % Diameter
+	\DeclareMathOperator{\supp}{Supp} % Support
 
 	\DeclareMathOperator{\sininv}{\sin\inv} % Better Trig Inverses
 	\DeclareMathOperator{\cosinv}{\cos\inv}
