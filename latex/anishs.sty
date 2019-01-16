@@ -1,38 +1,6 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 16 Nov 2018 12:23:33 AM EST
-% This is based on Even Chen's even.sty
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-\usepackage{nameref,hyperref,cleveref} % for better referencing systems
-
-%TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
-%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
-
-%arguments
-\newif\ifanishssetup\anishssetuptrue%Setup the page
-\newif\ifanishspkg\anishspkgtrue%Add small packages
-\newif\ifanishsfancy\anishsfancytrue%fancy page setup
-\newif\ifanishsthm\anishsthmtrue%Theorem Defs
-\newif\ifanishspage\anishspagefalse%Margins
-
-\newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
-\newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
-\newif\ifanishsfancythm\anishsfancythmfalse%fancy thm setup
-
-\newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
-\newif\ifanishsnicelinks\anishsnicelinkstrue%Colored Links instead of Box
-
-\newif\ifanishsasy\anishsasyfalse%Asymptote support
-
-%Recieving arguments
-\DeclareOption{setup}{\anishssetuptrue}
-\DeclareOption{nosetup}{\anishssetupfalse}
-\DeclareOption{pkg}{\anishspkgtrue}
-\DeclareOption{nopkg}{\anishspkgfalse}
-\DeclareOption{fancy}{\anishsfancytrue}
-\DeclareOption{nofancy}{\anishsfancyfalse}
-\DeclareOption{savepaper}{\anishspagetrue}
-\DeclareOption{nothm}{\anishsthmfalse}
+% Author: Anish Sevekari
+% Last Modified: Wed 16 Jan 2019 10:10:20 AM EST
 
 \DeclareOption{secthm}{\anishssecthmtrue}
 \DeclareOption{subsecthm}{\anishssubsecthmtrue}
