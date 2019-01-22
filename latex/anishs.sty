@@ -1,38 +1,6 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 15 Nov 2018 01:39:19 PM EST
-% This is based on Even Chen's even.sty
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-\usepackage{nameref,hyperref,cleveref} % for better referencing systems
-
-%TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
-%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
-
-%arguments
-\newif\ifanishssetup\anishssetuptrue%Setup the page
-\newif\ifanishspkg\anishspkgtrue%Add small packages
-\newif\ifanishsfancy\anishsfancytrue%fancy page setup
-\newif\ifanishsthm\anishsthmtrue%Theorem Defs
-\newif\ifanishspage\anishspagefalse%Margins
-
-\newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
-\newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
-\newif\ifanishsfancythm\anishsfancythmfalse%fancy thm setup
-
-\newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
-\newif\ifanishsnicelinks\anishsnicelinkstrue%Colored Links instead of Box
-
-\newif\ifanishsasy\anishsasyfalse%Asymptote support
-
-%Recieving arguments
-\DeclareOption{setup}{\anishssetuptrue}
-\DeclareOption{nosetup}{\anishssetupfalse}
-\DeclareOption{pkg}{\anishspkgtrue}
-\DeclareOption{nopkg}{\anishspkgfalse}
-\DeclareOption{fancy}{\anishsfancytrue}
-\DeclareOption{nofancy}{\anishsfancyfalse}
-\DeclareOption{savepaper}{\anishspagetrue}
-\DeclareOption{nothm}{\anishsthmfalse}
+% Author: Anish Sevekari
+% Last Modified: Wed 16 Jan 2019 10:10:20 AM EST
 
 \DeclareOption{secthm}{\anishssecthmtrue}
 \DeclareOption{subsecthm}{\anishssubsecthmtrue}
@@ -49,6 +17,7 @@
 % Page Setup and Environments etc
 \ifanishssetup%
 	% Common Micros
+	\newcommand\ts{\textstyle}
 	\newcommand\ds{\displaystyle} 
 	\newcommand\dsum{\displaystyle\sum}
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
@@ -163,7 +132,7 @@
 		\renewcommand\given{\st[\delimsize]}
 		#1
 	}
-	\DeclarePairedDelimiterXPP\expt[2]{
+	\DeclarePairedDelimiterXPP\expect[2]{
 		\underset{#1}{\mathbb{E}}}{[}{]}{}{
 		\renewcommand\given{\st[\delimsize]}
 		#2

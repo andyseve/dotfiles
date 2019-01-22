@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 01 Nov 2018 11:19:39 AM EDT
+# Last Edited: Wed 12 Dec 2018 02:02:01 AM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -133,3 +133,7 @@ if [ -f "~/.zsh_aliases" ]; then
 else
 	source ~/.bash_aliases
 fi
+
+# Path Changes
+# Conda
+PATH="$PATH:/home/stranger/bin/miniconda3/bin"
