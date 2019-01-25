@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 22 Jan 2019 05:05:56 PM EST
+" Last Updated: Wed 23 Jan 2019 11:53:10 AM EST
 
 set nocompatible
 
@@ -23,12 +23,14 @@ set nocompatible
 			endif
     endif
   endfunc
-
   call plug#begin(bundle_path)
   Plug 'scrooloose/nerdtree'
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
+	Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
+	"Plug 'Shougo/deoplete.nvim'
+  "Plug 'roxma/nvim-yarp'
+  "Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'lervag/vimtex'
   Plug 'sjl/gundo.vim'
 	Plug 'junegunn/fzf', {'do':'./install --bin'}
@@ -168,12 +170,16 @@ set nocompatible
 	let g:lmap = {}
 	
   " Global Copy and Paste
-	noremap <Plug>(global-paste) "+gP
-	noremap <Plug>(global-copy) "+y
-  vmap <leader>p <Plug>(global-paste)
-  vmap <leader>y <Plug>(global-copy)
-	let g:lmap.p = ['<Plug>(global-paste)','Paste']
-	let g:lmap.y = ['<Plug>(global-copy)','Copy']
+	noremap <plug>(global-paste) "+gP
+	noremap <plug>(global-copy) "+y
+	nmap <leader>p <plug>(global-paste)
+	nmap <leader>y <plug>(global-copy)
+  vmap <leader>p <plug>(global-paste)
+  vmap <leader>y <plug>(global-copy)
+	let g:lmap = {
+				\'p': ['<plug>(global-paste)','Paste'],
+				\'y': ['<plug>(global-copy)','Copy'],
+				\}
 
 
 	" Quick Edits
@@ -288,6 +294,10 @@ set nocompatible
 	let g:vimtex_toc_show_included_files = 1
 	let g:vimtex_toc_fold = 1
 
+	call deoplete#custom#var('omni', 'input_patterns', {
+		\ 'tex': g:vimtex#re#deoplete
+		\})
+	
 	" LeaderGuide
 	let g:lmap.l = {
 				\'name': 'Latex',
@@ -339,6 +349,9 @@ set nocompatible
 	endif
 	noremap <c-p> :FZF<CR>
 	" }}}
+	" Testing {{{
+	let g:deoplete#enable_at_startup = 1
+	" }}}
 " }}}
 " Functions {{{
   " Update last modified entries
@@ -371,3 +384,4 @@ set nocompatible
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
+
