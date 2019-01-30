@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 15 Nov 2018 01:39:19 PM EST
+% Last Modified: Wed 30 Jan 2019 05:17:23 PM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -44,11 +44,13 @@
 
 \DeclareOption{asy}{\anishsasytrue}
 
+
 \ProcessOptions\relax
 
 % Page Setup and Environments etc
 \ifanishssetup%
 	% Common Micros
+	\newcommand\ts{\textstyle}
 	\newcommand\ds{\displaystyle} 
 	\newcommand\dsum{\displaystyle\sum}
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
@@ -163,7 +165,7 @@
 		\renewcommand\given{\st[\delimsize]}
 		#1
 	}
-	\DeclarePairedDelimiterXPP\expt[2]{
+	\DeclarePairedDelimiterXPP\expect[2]{
 		\underset{#1}{\mathbb{E}}}{[}{]}{}{
 		\renewcommand\given{\st[\delimsize]}
 		#2
@@ -279,26 +281,26 @@
       \usepackage[framemethod=TikZ]{mdframed}
     \else
       \usepackage{thmtools}
-      \usepackage[framemethod=TikZ]{mdframed}
-      \mdfdefinestyle{mdproblemlines}{%
-        linecolor=black,
-        linewidth=0.5pt,
-        skipabove=1ex,
-				innertopmargin = 1.5ex,
-        rightline=false,leftline=false,
-        frametitlefont=\bfseries,
-        frametitlerule=true
-      }
-      \declaretheoremstyle[
-        headfont=\bfseries,
-        notefont=\bfseries,
-        notebraces=\empty,
-				headpunct=\empty,
-        mdframed={style=mdproblemlines},
-        bodyfont=\normalfont%
-      ]{problemlines}
-      \declaretheorem[style=problemlines,name=Problem]{asgnproblem}
-      \newtheorem*{asgnproblem*}{asgnproblem}
+      %\usepackage[framemethod=TikZ]{mdframed}
+      %\mdfdefinestyle{mdproblemlines}{%
+        %linecolor=black,
+        %linewidth=0.5pt,
+        %skipabove=1ex,
+				%innertopmargin = 1.5ex,
+        %rightline=false,leftline=false,
+        %frametitlefont=\bfseries,
+        %frametitlerule=true
+      %}
+      %\declaretheoremstyle[
+        %headfont=\bfseries,
+        %notefont=\bfseries,
+        %notebraces=\empty,
+				%headpunct=\empty,
+        %mdframed={style=mdproblemlines},
+        %bodyfont=\normalfont%
+      %]{problemlines}
+      %\declaretheorem[style=problemlines,name=Problem]{asgnproblem}
+      %\newtheorem*{asgnproblem*}{asgnproblem}
       \ifanishssecthm%index theorem by section
         \newtheorem{theorem}{Theorem}[section]
       \else\ifanishssubsecthm
@@ -359,6 +361,11 @@
     \usepackage{tikz-cd}
     \usetikzlibrary{calc}
   \fi
+  \ifanishsasy%Asymptote Setup
+    \usepackage{asymptote}
+    \usepackage{asycolors}
+    % Add other useful asymptote functions
+  \fi
   \ifanishsnicelinks%setting up nice looking links
     \hypersetup{%
       colorlinks   = true, %Colours links instead of ugly boxes
@@ -366,11 +373,6 @@
       linkcolor    = blue, %Colour of internal links
       citecolor    = red %Colour of citations
     }
-  \fi
-  \ifanishsasy%Asymptote Setup
-    \usepackage{asymptote}
-    \usepackage{asycolors}
-    % Add other useful asymptote functions
   \fi
 \fi
 
