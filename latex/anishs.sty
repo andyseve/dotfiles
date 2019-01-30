@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 09 Nov 2018 05:09:24 PM EST
+% Last Modified: 11/20/2018 11:13:10 PM
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -49,6 +49,7 @@
 % Page Setup and Environments etc
 \ifanishssetup%
 	% Common Micros
+	\newcommand\ts{\textstyle}
 	\newcommand\ds{\displaystyle} 
 	\newcommand\dsum{\displaystyle\sum}
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
@@ -163,7 +164,7 @@
 		\renewcommand\given{\st[\delimsize]}
 		#1
 	}
-	\DeclarePairedDelimiterXPP\expt[2]{
+	\DeclarePairedDelimiterXPP\expect[2]{
 		\underset{#1}{\mathbb{E}}}{[}{]}{}{
 		\renewcommand\given{\st[\delimsize]}
 		#2
@@ -176,7 +177,7 @@
 	%Operators
 	\DeclareMathOperator*{\argmin}{argmin}
 	\DeclareMathOperator*{\argmax}{argmax}
-	\DeclareMathOperator{\sgn}{sgn} % sign function
+	\DeclareMathOperator{\sign}{sign} % sign function
 	\DeclareMathOperator{\img}{Im} % image
 	\DeclareMathOperator{\rank}{rank} % rank
 	\DeclareMathOperator{\Spec}{Spec} % spectrum
