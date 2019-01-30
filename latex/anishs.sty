@@ -1,18 +1,38 @@
 \ProvidesPackage{anishs}
-% Author: Anish Sevekari
-% Last Modified: Fri 25 Jan 2019 03:59:18 PM EST
+% Last Modified: Wed 30 Jan 2019 05:17:23 PM EST
+% This is based on Even Chen's even.sty
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
+\usepackage{nameref,hyperref,cleveref} % for better referencing systems
 
-\newif\ifanishssetup\anishssetuptrue
-\newif\ifanishspkg\anishspkgtrue
-\newif\ifanishspage\anishspagetrue
-\newif\ifanishsfancy\anishsfancytrue
-\newif\ifanishsthm\anishsthmtrue
-\newif\ifanishsfancythm\anishsfancythmfalse
-\newif\ifanishssecthm\anishssecthmfalse
-\newif\ifanishssubsecthm\anishssubsecthmfalse
-\newif\ifanishsasy\anishsasyfalse
-\newif\ifanishstikz\anishstikzfalse
-\newif\ifanishsnicelinks\anishsnicelinkstrue
+%TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
+%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
+
+%arguments
+\newif\ifanishssetup\anishssetuptrue%Setup the page
+\newif\ifanishspkg\anishspkgtrue%Add small packages
+\newif\ifanishsfancy\anishsfancytrue%fancy page setup
+\newif\ifanishsthm\anishsthmtrue%Theorem Defs
+\newif\ifanishspage\anishspagefalse%Margins
+
+\newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
+\newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
+\newif\ifanishsfancythm\anishsfancythmfalse%fancy thm setup
+
+\newif\ifanishstikz\anishstikzfalse%Tikz commutative diagrams
+\newif\ifanishsnicelinks\anishsnicelinkstrue%Colored Links instead of Box
+
+\newif\ifanishsasy\anishsasyfalse%Asymptote support
+
+%Recieving arguments
+\DeclareOption{setup}{\anishssetuptrue}
+\DeclareOption{nosetup}{\anishssetupfalse}
+\DeclareOption{pkg}{\anishspkgtrue}
+\DeclareOption{nopkg}{\anishspkgfalse}
+\DeclareOption{fancy}{\anishsfancytrue}
+\DeclareOption{nofancy}{\anishsfancyfalse}
+\DeclareOption{savepaper}{\anishspagetrue}
+\DeclareOption{nothm}{\anishsthmfalse}
 
 \DeclareOption{secthm}{\anishssecthmtrue}
 \DeclareOption{subsecthm}{\anishssubsecthmtrue}
@@ -27,7 +47,6 @@
 
 \ProcessOptions\relax
 
-\usepackage{amssymb,amsmath,amsthm}
 % Page Setup and Environments etc
 \ifanishssetup%
 	% Common Micros
@@ -347,7 +366,6 @@
     \usepackage{asycolors}
     % Add other useful asymptote functions
   \fi
-	\usepackage{nameref,hyperref,cleveref}
   \ifanishsnicelinks%setting up nice looking links
     \hypersetup{%
       colorlinks   = true, %Colours links instead of ugly boxes

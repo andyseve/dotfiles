@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 27 Dec 2018 09:29:07 PM EST
+" Last Updated: 1/30/2019 5:05:38 PM
 " tex specific vim settings
 
 " Core Settings {{{
