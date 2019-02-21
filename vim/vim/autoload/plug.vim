@@ -96,7 +96,11 @@ let s:plug_src = 'https://github.com/junegunn/vim-plug.git'
 let s:plug_tab = get(s:, 'plug_tab', -1)
 let s:plug_buf = get(s:, 'plug_buf', -1)
 let s:mac_gui = has('gui_macvim') && has('gui_running')
+<<<<<<< HEAD
 let s:is_win = has('win32')
+=======
+let s:is_win = has('win32') || has('win64')
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
 let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)
 let s:vim8 = has('patch-8.0.0039') && exists('*job_start')
 let s:me = resolve(expand('<sfile>:p'))
@@ -193,6 +197,7 @@ function! s:ask_no_interrupt(...)
   endtry
 endfunction
 
+<<<<<<< HEAD
 function! s:lazy(plug, opt)
   return has_key(a:plug, a:opt) &&
         \ (empty(s:to_a(a:plug[a:opt]))         ||
@@ -201,6 +206,8 @@ function! s:lazy(plug, opt)
         \  len(s:glob(s:rtp(a:plug), 'after/plugin')))
 endfunction
 
+=======
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
 function! plug#end()
   if !exists('g:plugs')
     return s:err('Call plug#begin() first')
@@ -222,7 +229,11 @@ function! plug#end()
       continue
     endif
     let plug = g:plugs[name]
+<<<<<<< HEAD
     if get(s:loaded, name, 0) || !s:lazy(plug, 'on') && !s:lazy(plug, 'for')
+=======
+    if get(s:loaded, name, 0) || !has_key(plug, 'on') && !has_key(plug, 'for')
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       let s:loaded[name] = 1
       continue
     endif
@@ -771,9 +782,12 @@ function! s:prepare(...)
     execute 'silent! unmap <buffer>' k
   endfor
   setlocal buftype=nofile bufhidden=wipe nobuflisted nolist noswapfile nowrap cursorline modifiable nospell
+<<<<<<< HEAD
   if exists('+colorcolumn')
     setlocal colorcolumn=
   endif
+=======
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
   setf vim-plug
   if exists('g:syntax_on')
     call s:syntax()
@@ -810,7 +824,11 @@ function! s:bang(cmd, ...)
     let cmd = a:0 ? s:with_cd(a:cmd, a:1) : a:cmd
     if s:is_win
       let batchfile = tempname().'.bat'
+<<<<<<< HEAD
       call writefile(["@echo off\r", cmd . "\r"], batchfile)
+=======
+      call writefile(['@echo off', cmd], batchfile)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       let cmd = batchfile
     endif
     let g:_plug_bang = (s:is_win && has('gui_running') ? 'silent ' : '').'!'.escape(cmd, '#!%')
@@ -1019,8 +1037,11 @@ function! s:update_impl(pull, force, args) abort
     let s:clone_opt .= ' -c core.eol=lf -c core.autocrlf=input'
   endif
 
+<<<<<<< HEAD
   let s:submodule_opt = s:git_version_requirement(2, 8) ? ' --jobs='.threads : ''
 
+=======
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
   " Python version requirement (>= 2.7)
   if python && !has('python3') && !ruby && !use_job && s:update.threads > 1
     redir => pyv
@@ -1112,7 +1133,11 @@ function! s:update_finish()
       if !v:shell_error && filereadable(spec.dir.'/.gitmodules') &&
             \ (s:update.force || has_key(s:update.new, name) || s:is_updated(spec.dir))
         call s:log4(name, 'Updating submodules. This may take a while.')
+<<<<<<< HEAD
         let out .= s:bang('git submodule update --init --recursive'.s:submodule_opt.' 2>&1', spec.dir)
+=======
+        let out .= s:bang('git submodule update --init --recursive 2>&1', spec.dir)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       endif
       let msg = s:format_message(v:shell_error ? 'x': '-', name, out)
       if v:shell_error
@@ -1209,7 +1234,11 @@ function! s:spawn(name, cmd, opts)
   let s:jobs[a:name] = job
   let cmd = has_key(a:opts, 'dir') ? s:with_cd(a:cmd, a:opts.dir) : a:cmd
   if !empty(job.batchfile)
+<<<<<<< HEAD
     call writefile(["@echo off\r", cmd . "\r"], job.batchfile)
+=======
+    call writefile(['@echo off', cmd], job.batchfile)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
     let cmd = job.batchfile
   endif
   let argv = add(s:is_win ? ['cmd', '/c'] : ['sh', '-c'], cmd)
@@ -1331,7 +1360,11 @@ while 1 " Without TCO, Vim stack is bound to explode
 
   let name = keys(s:update.todo)[0]
   let spec = remove(s:update.todo, name)
+<<<<<<< HEAD
   let new  = empty(globpath(spec.dir, '.git', 1))
+=======
+  let new  = !isdirectory(spec.dir)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
 
   call s:log(new ? '+' : '*', name, pull ? 'Updating ...' : 'Installing ...')
   redraw
@@ -2036,7 +2069,11 @@ function! s:system(cmd, ...)
     let cmd = a:0 > 0 ? s:with_cd(a:cmd, a:1) : a:cmd
     if s:is_win
       let batchfile = tempname().'.bat'
+<<<<<<< HEAD
       call writefile(["@echo off\r", cmd . "\r"], batchfile)
+=======
+      call writefile(['@echo off', cmd], batchfile)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       let cmd = batchfile
     endif
     return system(s:is_win ? '('.cmd.')' : cmd)
@@ -2370,7 +2407,11 @@ function! s:preview_commit()
     let cmd = 'cd '.s:shellesc(g:plugs[name].dir).' && git show --no-color --pretty=medium '.sha
     if s:is_win
       let batchfile = tempname().'.bat'
+<<<<<<< HEAD
       call writefile(["@echo off\r", cmd . "\r"], batchfile)
+=======
+      call writefile(['@echo off', cmd], batchfile)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       let cmd = batchfile
     endif
     execute 'silent %!' cmd
@@ -2420,11 +2461,15 @@ function! s:diff()
     call s:append_ul(2, origin ? 'Pending updates:' : 'Last update:')
     for [k, v] in plugs
       let range = origin ? '..origin/'.v.branch : 'HEAD@{1}..'
+<<<<<<< HEAD
       let cmd = 'git log --graph --color=never '.join(map(['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range], 's:shellesc(v:val)'))
       if has_key(v, 'rtp')
         let cmd .= ' -- '.s:shellesc(v.rtp)
       endif
       let diff = s:system_chomp(cmd, v.dir)
+=======
+      let diff = s:system_chomp('git log --graph --color=never '.join(map(['--pretty=format:%x01%h%x01%d%x01%s%x01%cr', range], 's:shellesc(v:val)')), v.dir)
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
       if !empty(diff)
         let ref = has_key(v, 'tag') ? (' (tag: '.v.tag.')') : has_key(v, 'commit') ? (' '.v.commit) : ''
         call append(5, extend(['', '- '.k.':'.ref], map(s:lines(diff), 's:format_git_log(v:val)')))
@@ -2443,6 +2488,7 @@ function! s:diff()
         \ . (cnts[1] ? printf(' %d plugin(s) have pending updates.', cnts[1]) : ''))
 
   if cnts[0] || cnts[1]
+<<<<<<< HEAD
     nnoremap <silent> <buffer> <plug>(plug-preview) :silent! call <SID>preview_commit()<cr>
     if empty(maparg("\<cr>", 'n'))
       nmap <buffer> <cr> <plug>(plug-preview)
@@ -2450,6 +2496,10 @@ function! s:diff()
     if empty(maparg('o', 'n'))
       nmap <buffer> o <plug>(plug-preview)
     endif
+=======
+    nnoremap <silent> <buffer> <cr> :silent! call <SID>preview_commit()<cr>
+    nnoremap <silent> <buffer> o    :silent! call <SID>preview_commit()<cr>
+>>>>>>> afdfc499f2ee0a0abc9bc2b1ab99d1d7ebc3f2d9
   endif
   if cnts[0]
     nnoremap <silent> <buffer> X :call <SID>revert()<cr>
