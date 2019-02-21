@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 30 Jan 2019 05:17:23 PM EST
+% Last Modified: Sat 16 Feb 2019 04:30:27 PM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -193,8 +193,8 @@
 	\DeclareMathOperator{\res}{res} % resultant
 	\DeclareMathOperator{\Int}{Int} % interior
 	\DeclareMathOperator{\Adj}{Adj} % Adjoint
-	\DeclareMathOperator{\height}{ht} % height (mainly for dimension theory of rings)
-	\DeclareMathOperator{\wt}{wt} %weight
+	\DeclareMathOperator{\height}{\mathtt{ht}} % height (mainly for dimension theory of rings)
+	\DeclareMathOperator{\wt}{\mathtt{wt}} %weight
 	\DeclareMathOperator{\sing}{Sing} % Singularities
 	\DeclareMathOperator{\nnz}{nnz} % Non zero entries
 	\DeclareMathOperator{\poly}{poly} % Polynomial
@@ -203,10 +203,11 @@
 	\DeclareMathOperator{\dist}{dist} % Distance
 	\DeclareMathOperator{\diam}{diam} % Diameter
 	\DeclareMathOperator{\supp}{Supp} % Support
+	\DeclareMathOperator{\vspan}{span} % Span
 
-	\DeclareMathOperator{\sininv}{\sin\inv} % Better Trig Inverses
-	\DeclareMathOperator{\cosinv}{\cos\inv}
-	\DeclareMathOperator{\taninv}{\tan\inv}
+	\DeclareMathOperator{\sininv}{\sin^{-1}} % Better Trig Inverses
+	\DeclareMathOperator{\cosinv}{\cos^{-1}}
+	\DeclareMathOperator{\taninv}{\tan^{-1}}
 	
 	% Setting up commonly used packages
   \ifanishspkg%
