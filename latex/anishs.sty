@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Sat 16 Feb 2019 04:30:27 PM EST
+% Last Modified: Fri 01 Mar 2019 01:07:34 AM EST
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -278,30 +278,31 @@
     }
   \ifanishsthm%Theorem settings
     \ifanishsfancythm%
+			% TODO: Complete fancy theorem settings
       \usepackage{thmtools}
       \usepackage[framemethod=TikZ]{mdframed}
     \else
       \usepackage{thmtools}
-      %\usepackage[framemethod=TikZ]{mdframed}
-      %\mdfdefinestyle{mdproblemlines}{%
-        %linecolor=black,
-        %linewidth=0.5pt,
-        %skipabove=1ex,
-				%innertopmargin = 1.5ex,
-        %rightline=false,leftline=false,
-        %frametitlefont=\bfseries,
-        %frametitlerule=true
-      %}
-      %\declaretheoremstyle[
-        %headfont=\bfseries,
-        %notefont=\bfseries,
-        %notebraces=\empty,
-				%headpunct=\empty,
-        %mdframed={style=mdproblemlines},
-        %bodyfont=\normalfont%
-      %]{problemlines}
-      %\declaretheorem[style=problemlines,name=Problem]{asgnproblem}
-      %\newtheorem*{asgnproblem*}{asgnproblem}
+			\usepackage[framemethod=TikZ]{mdframed}
+			\mdfdefinestyle{mdproblemlines}{%
+				linecolor=black,
+				linewidth=0.5pt,
+				skipabove=1ex,
+				innertopmargin = 1.5ex,
+				rightline=false,leftline=false,
+				frametitlefont=\bfseries,
+				frametitlerule=true
+			}
+			\declaretheoremstyle[
+				headfont=\bfseries,
+				notefont=\bfseries,
+				notebraces=\empty,
+				headpunct=\empty,
+				mdframed={style=mdproblemlines},
+				bodyfont=\normalfont%
+			]{problemlines}
+			\declaretheorem[style=problemlines,name=Problem]{asgnproblem}
+			\newtheorem*{asgnproblem*}{asgnproblem}
       \ifanishssecthm%index theorem by section
         \newtheorem{theorem}{Theorem}[section]
       \else\ifanishssubsecthm

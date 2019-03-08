@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 23 Jan 2019 11:53:10 AM EST
+" Last Updated: Fri 01 Mar 2019 12:45:11 AM EST
 
 set nocompatible
 
@@ -294,9 +294,10 @@ set nocompatible
 	let g:vimtex_toc_show_included_files = 1
 	let g:vimtex_toc_fold = 1
 
-	call deoplete#custom#var('omni', 'input_patterns', {
-		\ 'tex': g:vimtex#re#deoplete
-		\})
+	" If using deoplete
+	"call deoplete#custom#var('omni', 'input_patterns', {
+		"\ 'tex': g:vimtex#re#deoplete
+		"\})
 	
 	" LeaderGuide
 	let g:lmap.l = {
@@ -350,7 +351,7 @@ set nocompatible
 	noremap <c-p> :FZF<CR>
 	" }}}
 	" Testing {{{
-	let g:deoplete#enable_at_startup = 1
+	" let g:deoplete#enable_at_startup = 1
 	" }}}
 " }}}
 " Functions {{{
@@ -384,4 +385,3 @@ set nocompatible
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0:nospell
-
