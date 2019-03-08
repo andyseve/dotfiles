@@ -1,9 +1,9 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 01 Mar 2019 12:45:11 AM EST
+" Last Updated: Fri 08 Mar 2019 02:08:58 PM EST
 
 set nocompatible
 
-" vim-plug {{{
+" # vim-plug
   " change installation paths based on os
   if !exists("g:bundle_path")
     if has("win64") || has("win32")
@@ -47,9 +47,11 @@ set nocompatible
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
+
+	Plug 'msuperdock/vim-foldout'
   call plug#end()
-" }}}
-" Core Settings {{{
+
+" # Core Settings
   syntax enable
   set encoding=utf-8
   filetype plugin indent on
@@ -102,6 +104,7 @@ set nocompatible
   set textwidth=0 " Textwidth to infinite
   set spelllang=en_us " Set US English for spellchecking
 	set nospell
+	let &viewoptions = 'folds,cursor' " Saves folds and cursor
 
 	set updatetime=1000
 
@@ -121,8 +124,7 @@ set nocompatible
 		set backupdir=~/.vim/.backup//
 		set directory=~/.vim/.swp//
 	endif
-" }}}
-" Tab settings {{{
+" # Tab settings
   set autoindent
   set smartindent
 	set breakindent
@@ -131,24 +133,20 @@ set nocompatible
   set softtabstop=2
   set tabstop=2
   set noexpandtab
-" }}}
-" Search settings {{{
+" # Search settings
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
   " Clear out search highlights
   nnoremap <leader><space> :nohlsearch<CR> 
-" }}}
-" Fold Settings {{{
+" # Fold Settings
   set foldenable
-  set foldlevelstart=3
-" }}}
-" Generic Bindings and Shortcuts {{{
+" # Generic Bindings and Shortcuts
   nnoremap :W :w
   nnoremap :Q :q
 	nnoremap -d dd
 	nnoremap -c ddO
 
-	"Movements
+	" Movements
   nnoremap j gj
   nnoremap k gk
   vnoremap j gj
@@ -165,20 +163,20 @@ set nocompatible
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
 " }}}
-" Plugin Configurations and Bindings {{{ 
-	" Vim Leader Guide Configuration {{{
+" # Plugin Configurations and Bindings
+	" ## Vim Leader Guide Configuration
 	let g:lmap = {}
 	
   " Global Copy and Paste
-	noremap <plug>(global-paste) "+gP
-	noremap <plug>(global-copy) "+y
-	nmap <leader>p <plug>(global-paste)
-	nmap <leader>y <plug>(global-copy)
-  vmap <leader>p <plug>(global-paste)
-  vmap <leader>y <plug>(global-copy)
+	noremap <Plug>GlobalPaste "+gP
+	noremap <Plug>GlobalCopy "+y
+	"nmap <leader>p <Plug>(global-paste)
+	"nmap <leader>y <plug>(global-copy)
+  "vmap <leader>p <plug>(global-paste)
+  "vmap <leader>y <plug>(global-copy)
 	let g:lmap = {
-				\'p': ['<plug>(global-paste)','Paste'],
-				\'y': ['<plug>(global-copy)','Copy'],
+				\'p': ['<Plug>GlobalPaste','Paste'],
+				\'y': ['<Plug>GlobalCopy','Copy'],
 				\}
 
 
@@ -252,8 +250,7 @@ set nocompatible
 			endif
 		endfunc
   inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
-	" }}}
-  " YouCompleteMe Configuration {{{
+  " # YouCompleteMe Configuration {{{
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
   let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 	let g:ycm_confirm_extra_conf = 0
@@ -341,20 +338,23 @@ set nocompatible
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
-	" }}}
-	" FZF and Ag configuration {{{
+" ## FZF and Ag configuration
 	if executable('ag')
 		set grepprg=ag\ --vimgrep
 		let g:ackprg='ag --vimgrep'
 		let g:ctrlp_user_command='ag --vimgrep -g'
 	endif
 	noremap <c-p> :FZF<CR>
-	" }}}
-	" Testing {{{
-	" let g:deoplete#enable_at_startup = 1
-	" }}}
-" }}}
-" Functions {{{
+" ## Testing
+	"let g:deoplete#enable_at_startup = 1
+" ## Foldout
+		let g:foldout_save = 1
+		
+		map <leader>n <Plug>FoldoutNavigation
+		let g:lmap = {
+				\'n': ['<Plug>FoldoutNavigation','Navigation'],
+				\}
+" # Functions
   " Update last modified entries
   function! UpdateLastModified()
     " TODO: Delete the update search
@@ -369,19 +369,20 @@ set nocompatible
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
-" }}}
-" Autocommands {{{
+" # Autocommands
+
   augroup Anishs
     autocmd!
+		" This is now handled by the viewoptions setting
     " Preserve cursor position on opening the file
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \	  exe "normal! g`\"" |
-      \ endif
+    "autocmd BufReadPost *
+      "\ if line("'\"") > 0 && line("'\"") <= line("$") |
+      "\	  exe "normal! g`\"" |
+      "\ endif
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch
   augroup END
 " }}}
 
-" vim:foldmethod=marker:foldlevel=0:nospell
+" vim:foldmethod=manual:foldlevel=0:nospell
