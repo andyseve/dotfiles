@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 08 Mar 2019 02:08:58 PM EST
+" Last Updated: Tue 02 Apr 2019 05:43:29 PM EDT
 
 set nocompatible
 
@@ -51,6 +51,15 @@ set nocompatible
 	Plug 'msuperdock/vim-foldout'
   call plug#end()
 
+" # Variables
+	if(has("win64") || has("win32"))
+		let g:vimdir = "~/vimfiles"
+		let g:vimrc = "~/_vimrc"
+	else
+		let g:vimdir = "~/.vim"
+		let g:vimrc = "~/.vimrc"
+	endif
+
 " # Core Settings
   syntax enable
   set encoding=utf-8
@@ -61,6 +70,7 @@ set nocompatible
     colorscheme solarized
     if has("win64") || has("win32")
       set guifont=Consolas:h12:cANSI
+			set visualbell
     else
       set guifont=ubuntu\ Mono\ 12
     endif
@@ -162,40 +172,34 @@ set nocompatible
   " Backspace to delete words
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
-" }}}
+
 " # Plugin Configurations and Bindings
 	" ## Vim Leader Guide Configuration
 	let g:lmap = {}
 	
   " Global Copy and Paste
-	noremap <Plug>GlobalPaste "+gP
-	noremap <Plug>GlobalCopy "+y
-	"nmap <leader>p <Plug>(global-paste)
-	"nmap <leader>y <plug>(global-copy)
-  "vmap <leader>p <plug>(global-paste)
-  "vmap <leader>y <plug>(global-copy)
-	let g:lmap = {
-				\'p': ['<Plug>GlobalPaste','Paste'],
-				\'y': ['<Plug>GlobalCopy','Copy'],
-				\}
+	"noremap <Plug>GlobalPaste "+gP
+	"noremap <Plug>GlobalCopy "+y
+	let g:lmap.p = ['normal "+gP','Paste']
+	let g:lmap.y = ['normal "+y','Copy']
 
 
 	" Quick Edits
 	let g:lmap.e = {
 				\'name': 'Quick Edit',
-				\'s':['UltiSnipsEdit', 'Snippets'],
-				\'v':['vsplit ~/dotfiles/vim/vimrc','Vimrc'],
+				\'s':['UltiSnipsEdit<CR>', 'Snippets'],
+				\'v':['vsplit ' . g:vimrc,'Vimrc'],
 				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
 				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
 				\}
 
 	" Quick Source
-	if(has("win64") || has("win32"))
-		nnoremap <leader>sv :source ~/_vimrc<CR>
-	else
-		nnoremap <leader>sv :source ~/.vimrc<CR>
-	endif
-  nnoremap <leader>es :UltiSnipsEdit<CR>
+	nnoremap <leader>sv :"source " . g:vimrc<CR>
+	"if(has("win64") || has("win32"))
+		"nnoremap <leader>sv :source ~/_vimrc<CR>
+	"else
+		"nnoremap <leader>sv :source ~/.vimrc<CR>
+	"endif
 	
 	"Git menu
 	let g:lmap.g = {
@@ -211,6 +215,12 @@ set nocompatible
 	let g:lmap.c = {
 				\'name': 'Comments',
 				\}
+
+	let g:lmap.o = {
+				\'name': 'Lists',
+				\}
+	let g:lmap.o.o = ['copen', 'Quickfix']
+	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
 	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
@@ -351,9 +361,7 @@ set nocompatible
 		let g:foldout_save = 1
 		
 		map <leader>n <Plug>FoldoutNavigation
-		let g:lmap = {
-				\'n': ['<Plug>FoldoutNavigation','Navigation'],
-				\}
+		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 " # Functions
   " Update last modified entries
   function! UpdateLastModified()
@@ -370,7 +378,6 @@ set nocompatible
     call winrestview(b:cur_window)
   endfunc
 " # Autocommands
-
   augroup Anishs
     autocmd!
 		" This is now handled by the viewoptions setting
