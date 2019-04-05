@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 02 Apr 2019 05:43:29 PM EDT
+" Last Updated: 4/5/2019 11:32:25 AM
 
 set nocompatible
 
@@ -50,15 +50,6 @@ set nocompatible
 
 	Plug 'msuperdock/vim-foldout'
   call plug#end()
-
-" # Variables
-	if(has("win64") || has("win32"))
-		let g:vimdir = "~/vimfiles"
-		let g:vimrc = "~/_vimrc"
-	else
-		let g:vimdir = "~/.vim"
-		let g:vimrc = "~/.vimrc"
-	endif
 
 " # Core Settings
   syntax enable
@@ -114,7 +105,7 @@ set nocompatible
   set textwidth=0 " Textwidth to infinite
   set spelllang=en_us " Set US English for spellchecking
 	set nospell
-	let &viewoptions = 'folds,cursor' " Saves folds and cursor
+	set viewoptions-=options " Saves folds and cursor
 
 	set updatetime=1000
 
@@ -129,10 +120,12 @@ set nocompatible
 		set undodir=~/vimfiles/.undo//
 		set backupdir=~/vimfiles/.backup//
 		set directory=~/vimfiles/.swp//
+		set viewdir=~/vimfiles/view//
 	else
 		set undodir=~/.vim/.undo//
 		set backupdir=~/.vim/.backup//
 		set directory=~/.vim/.swp//
+		set viewdir=~/.vim/view//
 	endif
 " # Tab settings
   set autoindent
@@ -194,12 +187,11 @@ set nocompatible
 				\}
 
 	" Quick Source
-	nnoremap <leader>sv :"source " . g:vimrc<CR>
-	"if(has("win64") || has("win32"))
-		"nnoremap <leader>sv :source ~/_vimrc<CR>
-	"else
-		"nnoremap <leader>sv :source ~/.vimrc<CR>
-	"endif
+	if(has("win64") || has("win32"))
+		nnoremap <leader>sv :source ~/_vimrc<CR>
+	else
+		nnoremap <leader>sv :source ~/.vimrc<CR>
+	endif
 	
 	"Git menu
 	let g:lmap.g = {
@@ -313,10 +305,10 @@ set nocompatible
 	"
 	" SumatraPDF config for windows
   if has("win64") || has("win32")
-    let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
+		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
 					\ = ' -forward-search @tex @line @pdf'
-					\ . ' -inverse-search "gvim --servername ' . v:servername
+					\ . ' -inverse-search "gvim.exe --servername ' . v:servername
 					\ . ' --remote-send \"^<C-\^>^<C-n^>'
 					\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
 					\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
@@ -333,6 +325,7 @@ set nocompatible
   let g:airline_inactive_collapse = 0
   let g:airline_skip_empty_sections = 1
   let g:airline#extensions#whitespace#enabled = 0
+	let g:airline#extensions#tabline#enabled = 1
   
   " Airline symbols
   if !exists('g:airline_symbols')
@@ -380,12 +373,9 @@ set nocompatible
 " # Autocommands
   augroup Anishs
     autocmd!
-		" This is now handled by the viewoptions setting
-    " Preserve cursor position on opening the file
-    "autocmd BufReadPost *
-      "\ if line("'\"") > 0 && line("'\"") <= line("$") |
-      "\	  exe "normal! g`\"" |
-      "\ endif
+		"foldouts handles view calls
+		"autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		"autocmd BufReadPre ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch
