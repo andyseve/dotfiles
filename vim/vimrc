@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 17 Apr 2019 02:44:50 PM EDT
+" Last Updated: Wed 17 Apr 2019 03:31:20 PM EDT
 
 set nocompatible
 
@@ -55,7 +55,7 @@ set nocompatible
   syntax enable
   set encoding=utf-8
   filetype plugin indent on
-	" Setting Colorscheme {{{
+	" Setting Colorscheme
   if(has("gui_running"))
     set background=dark
     colorscheme solarized
@@ -69,10 +69,11 @@ set nocompatible
     set background=dark
     colorscheme desert
   endif
-	" }}}
+	
   set backspace=indent,eol,start
   set ruler " Display cursor position
-  " Numbering Settings and functions {{{
+
+  " Numbering Settings and functions
     set number
     " Toggle between relative and absolute numbers
     function! RelativeNumber()
@@ -92,7 +93,7 @@ set nocompatible
       autocmd BufEnter * call RelativeNumber()
       autocmd InsertEnter * call AbsoluteNumber()
       autocmd InsertLeave * call RelativeNumber()
-  " }}}
+  
   set confirm " Exit confirmation
   set wildmenu
   set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
@@ -136,13 +137,17 @@ set nocompatible
   set softtabstop=2
   set tabstop=2
   set noexpandtab
+
 " # Search settings
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
   " Clear out search highlights
   nnoremap <leader><space> :nohlsearch<CR> 
+
 " # Fold Settings
   set foldenable
+  set foldlevelstart=3
+	
 " # Generic Bindings and Shortcuts
   nnoremap :W :w
   nnoremap :Q :q
@@ -222,8 +227,8 @@ set nocompatible
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
-	" }}}
-  " Ultisnips Configuration {{{
+	
+  " ## Ultisnips Configuration
 	if has("win64") || has("win32")
 		set rtp+=~/vimfiles 
 		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
@@ -250,7 +255,8 @@ set nocompatible
 			endif
 		endfunc
   inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
-  " # YouCompleteMe Configuration {{{
+
+  " ## YouCompleteMe Configuration
   let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
   let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 	let g:ycm_confirm_extra_conf = 0
@@ -268,12 +274,12 @@ set nocompatible
   endif
   let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
   let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
-	" }}}
-  " Gundo Configuration {{{
+
+  " ## Gundo Configuration
   let g:gundo_prefer_python3 = 1
   nnoremap <leader>u :GundoToggle<CR>
-	" }}}
-  " NERDTree Configuration {{{
+
+  " ## NERDTree Configuration
   let g:NERDTreeQuitOnOpen = 1
   nnoremap <M-\> :NERDTreeToggle<CR>
   inoremap <M-\> <c-o>:NERDTreeToggle<CR>
@@ -282,8 +288,8 @@ set nocompatible
 		autocmd!
 		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 	augroup END
-	" }}}
-  " Vimtex configuration {{{
+
+  " ## Vimtex configuration
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
 	let g:vimtex_toc_enabled = 1
@@ -296,12 +302,12 @@ set nocompatible
 		"\ 'tex': g:vimtex#re#deoplete
 		"\})
 	
-	" LeaderGuide
+	" ## LeaderGuide
 	let g:lmap.l = {
 				\'name': 'Latex',
 				\}
 	"
-	" SumatraPDF config for windows
+	" ## SumatraPDF config for windows
   if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
@@ -316,8 +322,8 @@ set nocompatible
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
-	" }}}
-  " Airline Configuration {{{
+	
+  " ## Airline Configuration
   let g:airline_theme = 'solarized'
   let g:airline_solarized_bg = 'dark'
   let g:airline_powerline_fonts = 1
@@ -326,7 +332,7 @@ set nocompatible
   let g:airline#extensions#whitespace#enabled = 0
 	let g:airline#extensions#tabline#enabled = 1
   
-  " Airline symbols
+  " ## Airline symbols
   if !exists('g:airline_symbols')
     let g:airline_symbols ={}
   endif
@@ -335,25 +341,28 @@ set nocompatible
     let g:airline_powerline_fonts = 0
     let g:airline_symbols.space = "\u0020"
   endif
-	" }}}
-  " Solarized Config for Terminal {{{
+
+  " ## Solarized Config for Terminal {{{
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
-" ## FZF and Ag configuration
+
+	" ## FZF and Ag configuration
 	if executable('ag')
 		set grepprg=ag\ --vimgrep
 		let g:ackprg='ag --vimgrep'
 		let g:ctrlp_user_command='ag --vimgrep -g'
 	endif
 	noremap <c-p> :FZF<CR>
-" ## Testing
-	"let g:deoplete#enable_at_startup = 1
-" ## Foldout
+
+	" ## Foldout
 		let g:foldout_save = 1
 		
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+
+	" ## Testing
+	"let g:deoplete#enable_at_startup = 1
 
 " # Functions
   " Update last modified entries
@@ -370,6 +379,7 @@ set nocompatible
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
+
 " # Autocommands
   augroup Anishs
     autocmd!
@@ -380,5 +390,4 @@ set nocompatible
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch
   augroup END
-" }}}
 
