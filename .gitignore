@@ -1,6 +1,8 @@
 vim/vim/bundle/**
+vim/vim/view/**
 vim/vim/.undo/**
 vim/vim/.backup/**
 vim/vim/.swp/**
+vim/vim/autoload/dein.vim
 
 **/*.swp

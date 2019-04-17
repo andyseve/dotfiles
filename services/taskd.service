@@ -12,7 +12,7 @@ Group=taskd
 WorkingDirectory=/var/taskd
 PrivateTmp=true
 InaccessibleDirectories=/home /root /boot /opt /mnt /media /bin /source
-ReadOnlyDirectories = /etc /usr
+ReadOnlyDirectories=/etc /usr
 
 [Install]
 WantedBy=multi-user.target

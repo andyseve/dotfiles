@@ -62,13 +62,13 @@ global !p
 import re
 def expand_enum(text):
 	if(text == 'a'):
-		 return "[label=(\\alph*)]"
+		return "[label= (\\alph*)]"
 	if(text == 'A'):
-		return "[label=(\\Alph*)]"
+		return "[label= (\\Alph*)]"
 	if(text == 'r'):
-		return "[label=(\\roman*)]"
+		return "[label= (\\roman*)]"
 	if(text == 'R'):
-		return "[label=(\\Roman*)]"
+		return "[label= (\\Roman*)]"
 	return ""
 def add_leavevmode(snip):
 	begin_line = snip.snippet_start[0] - 1
@@ -121,8 +121,11 @@ endsnippet
 snippet cds "cdots" i
 \cdots
 endsnippet
-snippet th "thmicro" i
-\thmicro
+snippet th "th" w
+^{\text{th}}
+endsnippet
+snippet inv "inverse" i
+^{-1}
 endsnippet
 snippet it "item" b
 \item
