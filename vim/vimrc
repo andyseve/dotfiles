@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: 4/5/2019 11:32:25 AM
+" Last Updated: Tue 16 Apr 2019 05:42:08 PM EDT
 
 set nocompatible
 
@@ -171,17 +171,15 @@ set nocompatible
 	let g:lmap = {}
 	
   " Global Copy and Paste
-	"noremap <Plug>GlobalPaste "+gP
-	"noremap <Plug>GlobalCopy "+y
-	let g:lmap.p = ['normal "+gP','Paste']
-	let g:lmap.y = ['normal "+y','Copy']
-
+	let g:lmap.p = ['"+gP', 'Paste']
+	let g:lmap.y = ['"+y', 'Copy']
+	
 
 	" Quick Edits
 	let g:lmap.e = {
 				\'name': 'Quick Edit',
 				\'s':['UltiSnipsEdit<CR>', 'Snippets'],
-				\'v':['vsplit ' . g:vimrc,'Vimrc'],
+				\'v':['vsplit ~/.vimrc', 'Vimrc'],
 				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
 				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
 				\}
@@ -315,6 +313,7 @@ set nocompatible
 					\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
 					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
   else
+		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
 	" }}}
@@ -355,6 +354,7 @@ set nocompatible
 		
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+
 " # Functions
   " Update last modified entries
   function! UpdateLastModified()

@@ -1,15 +1,18 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 12 Dec 2018 02:02:01 AM EST
+# Last Edited: Tue 16 Apr 2019 05:11:13 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
 ZPLUG_HOME=$HOME/.zsh/zplug
 fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 
+################################################################################
+# Zplug ########################################################################
+################################################################################
+
 source $ZPLUG_HOME/init.zsh
 # Packages and themes
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "voronkovich/apache2.plugin.zsh"
 zplug "wting/autojump"
 zplug "hlissner/zsh-autopair"
 zplug "jeffwalter/zsh-plugin-cd-ssh"
@@ -18,7 +21,6 @@ zplug "zsh-users/zsh-history-substring-search"
 zplug "junegunn/fzf-bin", from:gh-r, as:command
 zplug "zsh-users/zsh-autosuggestions"
 zplug "srijanshetty/zsh-pip-completion"
-zplug "zpm-zsh/ssh"
 
 # load  syntax highlighting after everything else has loaded.
 zplug "zdharma/fast-syntax-highlighting", defer:2
@@ -32,49 +34,37 @@ if ! zplug check --verbose; then
 	fi
 fi
 
-# Turning the beep sound off for Windows
-unsetopt beep
-setopt histignorealldups sharehistory
+zplug load
 
-# Use vim keybindings
-bindkey -v
+################################################################################
+# Settings #####################################################################
+################################################################################
+
+KEYTIMEOUT=1 # keytiming 10ms
+CASE_SENSITIVE="false" # case sensative searches
+HYPHEN_INSENSITIVE="true" # hyphen insensative searches
+unsetopt beep # removes beeps in windows
+
+setopt histreduceblanks # remove blanks
+setopt histignorealldups # ignore repeats in history
+setopt sharehistory # share history between terminals
+
+setopt correct # spelling correction
+COMPLETION_WAITING_DOTS="ture"
+bindkey -v # Use vim keybindings
+
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
-# Use modern completion system
-autoload -Uz compinit
 
-zstyle ':completion:*' auto-description 'specify: %d'
-zstyle ':completion:*' completer _expand _complete _correct _approximate
-zstyle ':completion:*' format 'Completing %d'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:*' list-colors ''
-zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
-zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select=long
-zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
-zstyle ':completion:*' use-compctl false
-zstyle ':completion:*' verbose true
 
-zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
-zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+################################################################################
+# Keybindings ##################################################################
+################################################################################
 
-# Helper function
-# Returns whether the given command is executable or aliased.
-_has() {
-  return $( whence $1 >/dev/null )
-}
-_color() {
-  return $( [ -z "$INSIDE_EMACS" ] )
-}
-
-# Keybindings
 # Search
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
@@ -84,10 +74,29 @@ bindkey "${key[Down]}" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
-zplug load
+################################################################################
+# Functions and Commands #######################################################
+################################################################################
 
-# Importing functions and commands
-source $ZSH_HOME/functions/*
+# Helper functions
+# Returns whether the given command is executable or aliased.
+_has() {
+  return $( whence $1 >/dev/null )
+}
+_color() {
+  return $( [ -z "$INSIDE_EMACS" ] )
+}
+
+# run neofetch at start of ssh session
+if [[ -n $SSH_CONNECTION ]]; then
+	if _has neofetch; then
+		neofetch
+	fi
+fi
+
+# loading autojump
+[[ -s /home/stranger/.autojump/etc/profile.d/autojump.sh ]] & source /home/stranger/.autojump/etc/profile.d/autojump.sh
+
 
 # Prompt line modifications
 prompt_dir() {
@@ -105,6 +114,16 @@ if _has fzf; then
 		--height 40% --reverse
   '
 fi
+
+# Importing functions and commands
+for file in $ZSH_HOME/functions/*.zsh; do
+	source $file
+done
+
+################################################################################
+# Aliases ######################################################################
+################################################################################
+
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -124,16 +143,41 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Importing Aliases
+for file in $ZSH_HOME/aliases/*.zsh; do
+	source $file
+done
+
+################################################################################
+# Definitions ##################################################################
+################################################################################
+
+export PAGER='less'
+export EDITOR='vim'
+
+PATH="$PATH:/home/stranger/bin/miniconda3/bin" # add anaconda to path
 
 
-# Alias definitions
-if [ -f "~/.zsh_aliases" ]; then
-	source ~/.zsh_aliases
-else
-	source ~/.bash_aliases
-fi
+# Use modern completion system
+autoload -Uz compinit && compinit -u
 
-# Path Changes
-# Conda
-PATH="$PATH:/home/stranger/bin/miniconda3/bin"
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+#zstyle ':completion:*' menu select=2
+#eval "$(dircolors -b)"
+#zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+#zstyle ':completion:*' list-colors ''
+#zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+#zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+#zstyle ':completion:*' menu select=long
+#zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+#zstyle ':completion:*' use-compctl false
+#zstyle ':completion:*' verbose true
+
+#zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+#zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
