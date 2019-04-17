@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 16 Apr 2019 05:42:08 PM EDT
+" Last Updated: Wed 17 Apr 2019 02:44:50 PM EDT
 
 set nocompatible
 
@@ -382,4 +382,3 @@ set nocompatible
   augroup END
 " }}}
 
-" vim:foldmethod=manual:foldlevel=0:nospell
