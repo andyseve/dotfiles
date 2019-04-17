@@ -117,11 +117,14 @@ fi
 if check vim; then
 	link $DOTFILES/vim/vim $HOME/.vim
 	link $DOTFILES/vim/vimrc $HOME/.vimrc
+	link $DOTFILES/vim/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	
 	cdir $HOME/.vim/.backup
 	cdir $HOME/.vim/.swp
 	cdir $HOME/.vim/.undo
 	cdir $HOME/.vim/view
+
+	$DOTFILES/vim/vim_plug_setup.sh
 else
 	nope vim
 fi
