@@ -90,6 +90,23 @@ checkpkg() {
 nope() {
 	echo "$1 is not installed"
 }
+# cloning git repo $1 to folder $2
+clone() {
+	if [ -e "$2" ]; then
+		echo "oops! directory $2 already exists. Can't clone in there."
+	else
+		echo "cloning $1 into $2"
+		git clone $1 $2
+	fi
+}
+# downloading file with url=$1 to $2
+download() {
+	if [ -e "$2" ]; then
+		echo "file $2 already exists"
+	else
+		curl -fLo "$2" --create-dirs "$1"
+	fi
+}
 
 ################################################################################
 # Configs ######################################################################
@@ -107,24 +124,43 @@ fi
 
 #zsh
 if check zsh; then
-	link $DOTFILES/zsh/zshrc $HOME/.zshrc
-	link $DOTFILES/zsh/zsh $HOME/.zsh
+	IF=$DOTFILES/zsh
+	OF=$HOME/.zsh
+
+	cdir $OF
+
+	link $IF/zshrc $OF/zshrc
+	link $OF/zshrc $HOME/.zshrc
+	link $IF/aliases $OF/aliases
+	link $IF/complitions $OF/completions
+	link $IF/functions $OF/functions
+
+	clone "https://github.com/zplug/zplug.git" $OF/zplug
 else
 	nope zsh
 fi
 
 #vim
 if check vim; then
-	link $DOTFILES/vim/vim $HOME/.vim
-	link $DOTFILES/vim/vimrc $HOME/.vimrc
-	link $DOTFILES/vim/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
-	
-	cdir $HOME/.vim/.backup
-	cdir $HOME/.vim/.swp
-	cdir $HOME/.vim/.undo
-	cdir $HOME/.vim/view
+	IF=$DOTFILES/vim
+	OF=$HOME/.vim
 
-	$DOTFILES/vim/vim_plug_setup.sh
+	cdir $OF
+	cdir $OF/.swp
+	cdir $OF/.backup
+	cdir $OF/.undo
+	cdir $OF/view
+
+	link $IF/vimrc $OF/vimrc
+	link $OF/vimrc $HOME/.vimrc
+	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
+	link $IF/vimrc.noplugin $OF/vimrc.noplugin
+	link $OF/vimrc.noplugin $HOME/.vimrc.noplugin
+		
+
+	cdir $OF/autoload
+	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
+
 else
 	nope vim
 fi

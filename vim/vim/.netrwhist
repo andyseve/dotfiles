@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='C:\Users\andys\Documents\CMU\GraduateAlgorithms2018\hw4'
-let g:netrw_dirhist_2='/'
-let g:netrw_dirhist_3='/media/Storage/Documents/CMU/MachineLearning(715)2018/hw3'
-let g:netrw_dirhist_4='/media/Storage/Documents/CMU/Olympiads/tex_files/nice_recurrence_trick'
-let g:netrw_dirhist_5='/home/stranger/dotfiles/setup'
