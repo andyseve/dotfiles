@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 18 Apr 2019 12:02:46 AM DST
+## Last Modified: Thu 18 Apr 2019 12:38:19 AM DST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -127,14 +127,15 @@ fi
 if check zsh; then
 	IF=$DOTFILES/zsh
 	OF=$HOME/.zsh
+	FOLDERS=(aliases completions functions)
 
 	cdir $OF
 
 	link $IF/zshrc $OF/zshrc
 	link $OF/zshrc $HOME/.zshrc
-	link $IF/aliases $OF/aliases
-	link $IF/complitions $OF/completions
-	link $IF/functions $OF/functions
+	for dir in ${FOLDERS[@]}; do
+		link "$IF/$dir" "$OF/$dir"
+	done
 
 	clone "https://github.com/zplug/zplug.git" $OF/zplug
 else
@@ -145,6 +146,7 @@ fi
 if check vim; then
 	IF=$DOTFILES/vim
 	OF=$HOME/.vim
+	FOLDERS=(ftdetect ftplugin spell syntax UltiSnips)
 
 	cdir $OF
 	cdir $OF/.swp
@@ -157,7 +159,9 @@ if check vim; then
 	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	link $IF/vimrc.noplugin $OF/vimrc.noplugin
 	link $OF/vimrc.noplugin $HOME/.vimrc.noplugin
-		
+	for dir in ${FOLDERS[@]}; do
+		link "$IF/$dir" "$OF/$dir"
+	done
 
 	cdir $OF/autoload
 	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
