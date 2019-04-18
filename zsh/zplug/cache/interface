@@ -1,0 +1,11 @@
+arzzen/calc.plugin.zsh
+fsegouin/oh-my-zsh-agnoster-mod-theme, as:theme
+hlissner/zsh-autopair
+jeffwalter/zsh-plugin-cd-ssh
+junegunn/fzf-bin, as:command from:gh-r
+srijanshetty/zsh-pip-completion
+wting/autojump
+zdharma/fast-syntax-highlighting, defer:2
+zplug/zplug, hook-build:zplug --self-manage
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-history-substring-search

@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 18 Apr 2019 12:02:36 AM DST
+" Last Updated: Thu 18 Apr 2019 12:49:32 AM DST
 
 set nocompatible
 
@@ -24,14 +24,14 @@ set nocompatible
     endif
   endfunc
   call plug#begin(bundle_path)
-  Plug 'scrooloose/nerdtree'
-  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
   Plug 'SirVer/ultisnips'
 	Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
 	"Plug 'Shougo/deoplete.nvim'
   "Plug 'roxma/nvim-yarp'
   "Plug 'roxma/vim-hug-neovim-rpc'
-  Plug 'lervag/vimtex'
+  Plug 'lervag/vimtex', {'for': 'latex'}
   Plug 'sjl/gundo.vim'
 	Plug 'junegunn/fzf', {'do':'./install --bin'}
 	Plug 'junegunn/fzf.vim'

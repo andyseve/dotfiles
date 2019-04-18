@@ -1,0 +1,11 @@
+repo:hlissner/zsh-autopair	status:10
+repo:arzzen/calc.plugin.zsh	status:10
+repo:junegunn/fzf-bin	status:10
+repo:zsh-users/zsh-autosuggestions	status:10
+repo:srijanshetty/zsh-pip-completion	status:10
+repo:zsh-users/zsh-history-substring-search	status:10
+repo:jeffwalter/zsh-plugin-cd-ssh	status:10
+repo:fsegouin/oh-my-zsh-agnoster-mod-theme	status:10
+repo:zdharma/fast-syntax-highlighting	status:10
+repo:zplug/zplug	status:10
+repo:wting/autojump	status:10
