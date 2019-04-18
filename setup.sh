@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last edited on:
+## Last Modified: Thu 18 Apr 2019 12:02:46 AM DST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -10,7 +10,8 @@ CONFIG="$HOME/.config"
 LOCAL="$HOME/.local/share"
 DOTFILES="$HOME/dotfiles"
 OVERWRITE="$HOME/.overwrites"
-DID_OVERWRITE="false"
+DID_OVERWRITE=false
+EXISTS_OVERWRITE=false
 
 ################################################################################
 # Helper Functinos #############################################################
@@ -24,8 +25,8 @@ if [ -e "$OVERWRITE" ]; then
 	else
 		echo -e "\n$(date)" >> $OVERWRITE
 		echo "--------------------------------------------------------------------------------" >> $OVERWRITE
+		EXISTS_OVERWRITE=true
 	fi
-	DID_OVERWRITE="true"
 else
 	touch $OVERWRITE
 	echo $(date) >> $OVERWRITE
@@ -38,7 +39,7 @@ bup() {
 		echo "creating backup of $1..."
 		mv $1 $1.bak
 		echo "$1" >> $OVERWRITE
-		DID_OVERWRITE="true"
+		DID_OVERWRITE=true
 	fi
 }
 # creates dir if it doesn't exist. 
@@ -165,11 +166,22 @@ else
 	nope vim
 fi
 
+#neofetch
+if check neofetch; then
+	cdir $CONFIG/neofetch
+	link $DOTFILES/neofetch/config.conf $CONFIG/neofetch/config.conf
+else
+	nope neofetch
+fi
+
 #latex
 
 #cleaning up
-if [ !$DID_OVERWRITE ]; then
-	rm $OVERWRITE
+if ! $DID_OVERWRITE; then
+	echo "no overwrites! yaaay"
+	if ! $EXISTS_OVERWRITE;then
+		rm $OVERWRITE
+	fi
 else
 	echo "check the list of overwrites in $OVERWRITE"
 fi
