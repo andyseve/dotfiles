@@ -1,5 +1,5 @@
 # bashrc for Anish Sevekari
-# Last Updated: Wed 11 Apr 2018 04:57:01 PM EDT
+# Last Updated: Thu 18 Apr 2019 20:03:11 UTC
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
@@ -118,4 +118,6 @@ if ! shopt -oq posix; then
 fi
 
 # added by Miniconda3 installer
-export PATH="/home/stranger/bin/miniconda3/bin:$PATH"
+if [-e "$HOME/bin/miniconda3/bin" ]; then
+	export PATH="$HOMEr/bin/miniconda3/bin:$PATH"
+fi
