@@ -1,5 +1,6 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 18 Apr 2019 11:41:31 AM DST
+# Last Edited: Thu 18 Apr 2019 11:41:33 AM DST
+# Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -13,14 +14,8 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 source $ZPLUG_HOME/init.zsh
 # Packages and themes
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "wting/autojump"
 zplug "hlissner/zsh-autopair"
-zplug "jeffwalter/zsh-plugin-cd-ssh"
-zplug "arzzen/calc.plugin.zsh"
-zplug "zsh-users/zsh-history-substring-search"
 zplug "junegunn/fzf-bin", from:gh-r, as:command
-zplug "zsh-users/zsh-autosuggestions"
-zplug "srijanshetty/zsh-pip-completion"
 
 # load  syntax highlighting after everything else has loaded.
 zplug "zdharma/fast-syntax-highlighting", defer:2
@@ -68,11 +63,6 @@ HISTFILE=~/.zsh_history
 # Search
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
-# history search keybindings
-bindkey "${key[Up]}" history-substring-search-up
-bindkey "${key[Down]}" history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 
 ################################################################################
 # Functions and Commands #######################################################
@@ -93,9 +83,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 		neofetch
 	fi
 fi
-
-# loading autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
 # Prompt line modifications
