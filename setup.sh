@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 18 Apr 2019 14:39:53 UTC
+## Last Modified: Thu 18 Apr 2019 23:20:27 UTC
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -127,7 +127,7 @@ fi
 if check zsh; then
 	IF=$DOTFILES/zsh
 	OF=$HOME/.zsh
-	FOLDERS=(aliases completions functions)
+	FOLDERS=(aliases functions)
 
 	cdir $OF
 
