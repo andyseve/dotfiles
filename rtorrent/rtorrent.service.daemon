@@ -1,0 +1,18 @@
+[Unit]
+Description=rtorrent server
+Wants=network-online.target
+After=newtork-online.target
+
+[Service]
+User=rtorrent
+Group=rtorrent
+Type=forking
+KillMode=none
+Environment="HOME=/media/torrents"
+ExecStartPre=/usr/bin/bash -c "if test -r /media/torrents/.session/rtorrent.lock && test -z 'pidof rtorrent'; then rm -f /media/torrents/.session/rtorrent.lock; fi"
+ExecStart=/usr/bin/tmux -L rtorrent -S /tmp/rtorrent new-session -s rtorrent -n rtorrent -d "rtorrent -n -o import=/media/torrents/.rtorrent.rc"
+ExecStop=/usr/bin/bash -c "/usr/bin/tmux -L rtorrent -S /tmp/rtorrent send-keys -t rtorrent C-q && while pidof rtorrent > /dev/null; do sleep 0.5; done"
+WorkingDirectory=/media/torrents
+
+[Install]
+WantedBy=multi-user.target
