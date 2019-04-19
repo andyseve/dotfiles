@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 18 Apr 2019 23:20:27 UTC
+## Last Modified: Fri 19 Apr 2019 03:07:10 UTC
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -12,6 +12,20 @@ DOTFILES="$HOME/dotfiles"
 OVERWRITE="$HOME/.overwrites"
 DID_OVERWRITE=false
 EXISTS_OVERWRITE=false
+LITE=false
+NOPLUGIN=false
+
+while test $# != 0
+do
+	case "$1" in
+		-l | --lite)
+			LITE=true ;;
+		-n | --noplugin)
+			NOPLUGIN=true ;;
+		*) echo "flags are --lite,--noplugin" ;;
+	esac
+	shift
+done
 
 ################################################################################
 # Helper Functinos #############################################################
@@ -132,10 +146,20 @@ if check zsh; then
 	cdir $OF
 
 	link $IF/zshrc $OF/zshrc
-	link $OF/zshrc $HOME/.zshrc
+	link $IF/zshrc.lite $OF/zshrc.lite
+	link $IF/zshrc.noplugin $OF/zshrc.noplugin
+
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
+
+	if $LITE; then
+		link $OF/zshrc.lite $HOME/.zshrc
+	elif $NOPLUGIN; then
+		link $OF/zshrc.noplugin $HOME/.zshrc
+	else
+		link $OF/zshrc $HOME/.zshrc
+	fi
 
 	clone "https://github.com/zplug/zplug.git" $OF/zplug
 else
@@ -155,13 +179,21 @@ if check vim; then
 	cdir $OF/view
 
 	link $IF/vimrc $OF/vimrc
-	link $OF/vimrc $HOME/.vimrc
-	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	link $IF/vimrc.noplugin $OF/vimrc.noplugin
-	link $OF/vimrc.noplugin $HOME/.vimrc.noplugin
+	link $IF/vimrc.lite $OF/vimrc.lite
+	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
+
+	link $OF/vimrc.noplugin $HOME/.vimrc.noplugin
+	if $LITE; then
+		link $OF/vimrc.lite $HOME/.vimrc
+	elif $NOPLUGIN; then
+		link $OF/vimrc.noplugin $HOME/.vimrc
+	else
+		link $OF/vimrc $HOME/.vimrc
+	fi
 
 	cdir $OF/autoload
 	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
@@ -179,6 +211,29 @@ else
 fi
 
 #latex
+
+#rtorrent
+if check rtorrent; then
+	IF="$DOTFILES/rtorrent"
+	OF="$HOME/torrents"
+
+	link $IF/rtorrent.rc $HOME/.rtorrent.rc
+
+	FOLDERS=(.session log incomplete)
+	STORAGE=(downloads watch)
+	SUBDIRS=(games iso movies music series)
+
+	for fol in ${FOLDERS[@]}; do
+		cdir "$OF/$fol"
+	done
+	for fol in ${STORAGE[@]}; do
+		for subdir in ${SUBDIRS[@]}; do
+			cdir "$OF/$fol/$subdir"
+		done
+	done
+
+	link $IF/rtorrent.service $CONFIG/systemd/user/rtorrent.service
+fi
 
 #cleaning up
 if ! $DID_OVERWRITE; then

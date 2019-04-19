@@ -1,0 +1,152 @@
+" Author: Anish Sevekari
+" Last Updated: Wed 17 Apr 2019 03:31:21 PM EDT
+
+set nocompatible
+
+" # Core Settings
+  syntax enable
+  set encoding=utf-8
+  filetype plugin indent on
+	" Setting Colorscheme
+  if(has("gui_running"))
+    set background=dark
+    colorscheme solarized
+    if has("win64") || has("win32")
+      set guifont=Consolas:h12:cANSI
+			set visualbell
+    else
+      set guifont=ubuntu\ Mono\ 12
+    endif
+  else
+    set background=dark
+    colorscheme desert
+  endif
+	
+  set backspace=indent,eol,start
+  set ruler " Display cursor position
+
+  " Numbering Settings and functions
+    set number
+    " Toggle between relative and absolute numbers
+    function! RelativeNumber()
+      set number
+      set relativenumber
+    endfunc
+    function! AbsoluteNumber()
+      set norelativenumber
+      set number
+    endfunc
+    " Autocommands to toggle between relative and absolute numbering
+    augroup AnishsNumber
+      autocmd!
+      autocmd FocusLost * call AbsoluteNumber()
+      autocmd FocusGained * call RelativeNumber()
+      autocmd BufLeave * call AbsoluteNumber()
+      autocmd BufEnter * call RelativeNumber()
+      autocmd InsertEnter * call AbsoluteNumber()
+      autocmd InsertLeave * call RelativeNumber()
+  
+  set confirm " Exit confirmation
+  set wildmenu
+  set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
+  set showmatch " Highlight matching braces
+  set modeline " Enables modlines (File specific vim settings)
+  set modelines=1 " Read only the last line for vim specific options
+  set autoread " Read changes from outside automatically
+  set nomousehide " To fix a bug that causes cursor to dissapear
+  set mouse=a
+  set textwidth=0 " Textwidth to infinite
+  set spelllang=en_us " Set US English for spellchecking
+	set nospell
+	set viewoptions-=options " Saves folds and cursor
+
+	set updatetime=1000
+
+	let mapleader = "\\"
+	
+	" Gui Options
+	set guioptions-=L " Remove left scrollbar
+	set guioptions-=T " Remove Toolbar
+
+	" Back up directories
+	if has("win64") || has("win32")
+		set undodir=~/vimfiles/.undo//
+		set backupdir=~/vimfiles/.backup//
+		set directory=~/vimfiles/.swp//
+		set viewdir=~/vimfiles/view//
+	else
+		set undodir=~/.vim/.undo//
+		set backupdir=~/.vim/.backup//
+		set directory=~/.vim/.swp//
+		set viewdir=~/.vim/view//
+	endif
+" # Tab settings
+  set autoindent
+  set smartindent
+	set breakindent
+
+  set shiftwidth=2
+  set softtabstop=2
+  set tabstop=2
+  set noexpandtab
+
+" # Search settings
+  set hlsearch " Highlight searches
+  set incsearch " Incremental search (As characters are entered)
+  " Clear out search highlights
+  nnoremap <leader><space> :nohlsearch<CR> 
+
+" # Fold Settings
+  set foldenable
+  set foldlevelstart=3
+	
+" # Generic Bindings and Shortcuts
+  nnoremap :W :w
+  nnoremap :Q :q
+	nnoremap -d dd
+	nnoremap -c ddO
+
+	" Movements
+  nnoremap j gj
+  nnoremap k gk
+  vnoremap j gj
+  vnoremap k gk
+
+  " Hotkeys for saving in gvim
+  if(has("gui_running"))
+    nnoremap <c-s> :update<CR>
+    vnoremap <c-s> <c-c>:update<CR>
+    inoremap <c-s> <c-o>:update<CR>
+  endif
+
+  " Backspace to delete words
+  imap <c-backspace> <c-o>:normal dbx<CR>
+	nmap <c-backspace> dbx
+
+" # Functions
+  " Update last modified entries
+  function! UpdateLastModified()
+    " TODO: Delete the update search
+    let b:cur_window = winsaveview()
+    let b:last_line = line('$')
+    if(b:last_line > 20)
+      let b:last_line = 20
+    endif
+    let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
+    echo cmd
+    execute cmd
+    :nohlsearch
+    call winrestview(b:cur_window)
+  endfunc
+
+" # Autocommands
+  augroup Anishs
+    autocmd!
+		"foldouts handles view calls
+		"autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		"autocmd BufReadPre ?* silent loadview
+    " Update last modified tags at start of the file
+    autocmd BufWritePre * silent! call UpdateLastModified() | redraw
+    autocmd BufEnter * :nohlsearch
+  augroup END
+
