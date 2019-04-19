@@ -3,8 +3,11 @@ alias cclip='xclip -selection clipboard'
 alias showuser='cut -d: -f1 /etc/passwd'
 alias my-ip="curl http://ipecho.net/plain; echo"
 alias fetch="neofetch"
+
 alias viml="vim -u $HOME/dotfiles/vim/vimrc.noplugin"
 alias vimt="vim -u $HOME/dotfiles/vim/vimrc.testing"
+
+alias rtorrent-attach="tmux -L rtorrent -S /tmp/rtorrent attach -t rtorrent"
 
 # directories
 alias cmu='cd ~/Documents/CMU'
