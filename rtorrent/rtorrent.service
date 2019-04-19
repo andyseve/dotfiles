@@ -1,5 +1,5 @@
 [Unit]
-Description=rtorrent
+Description=rTorrent Daemon
 After=network.target
 
 [Service]
@@ -12,4 +12,4 @@ WorkingDirectory=%h
 Restart=on-failure
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
