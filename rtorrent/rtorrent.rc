@@ -175,7 +175,7 @@ trackers.use_udp.set = yes
 # network.max_open_sockets.set = 65023
 
 # set the umask applied to all files created by rtorrent
-# system.umask.set =
+ system.umask.set = 775
 
 # alternate keyboard mappings
 # qwerty | azerty | qwertz | dvorak
