@@ -24,19 +24,18 @@ check_hash = yes
 ########################################################
 
 #session info
-session.path.set = /media/torrents/.session				
+session.path.set = ~/torrents/.session				
 #default download directory
-directory.default.set = /media/torrents/incomplete			
-#run as daemon
-#system.use_daemon.set = true
+directory.default.set = ~/torrents/incomplete			
 
 #watch directories
-schedule2 = watch_directory_1,10,10,"load.start=/media/torrents/watch/*.torrent,d.custom1.set=/media/torrents/downloads/"
-schedule2 = watch_directory_2,10,10,"load.start=/media/torrents/watch/movies/*.torrent,d.custom1.set=/media/torrents/downloads/movies"
-schedule2 = watch_directory_3,10,10,"load.start=/media/torrents/watch/tv/*.torrent,d.custom1.set=/media/torrents/downloads/tv"
-schedule2 = watch_directory_4,10,10,"load.start=/media/torrents/watch/music/*.torrent,d.custom1.set=/media/torrents/downloads/music"
-schedule2 = watch_directory_5,10,10,"load.start=/media/torrents/watch/iso/*.torrent,d.custom1.set=/media/torrents/downloads/iso"
-schedule2 = watch_directory_6,10,10,"load.start=/media/torrents/watch/games/*.torrent,d.custom1.set=/media/torrents/downloads/games"
+schedule2 = watch_directory_1,10,10,"load.start=~/torrents/watch/*.torrent,d.custom1.set=~/torrents/downloads/"
+schedule2 = watch_directory_2,10,10,"load.start=~/torrents/watch/movies/*.torrent,d.custom1.set=~/torrents/downloads/movies"
+schedule2 = watch_directory_3,10,10,"load.start=~/torrents/watch/tv/*.torrent,d.custom1.set=~/torrents/downloads/tv"
+schedule2 = watch_directory_4,10,10,"load.start=~/torrents/watch/music/*.torrent,d.custom1.set=~/torrents/downloads/music"
+schedule2 = watch_directory_5,10,10,"load.start=~/torrents/watch/iso/*.torrent,d.custom1.set=~/torrents/downloads/iso"
+schedule2 = watch_directory_6,10,10,"load.start=~/torrents/watch/games/*.torrent,d.custom1.set=~/torrents/downloads/games"
+schedule2 = watch_directory_7,10,10,"load.start=~/torrents/watch/.porn/*.torrent,d.custom1.set=~/torrents/downloads/.porn"
 
 #start and stop 
 schedule2 = untied_directory,5,5,stop_untied=
@@ -176,7 +175,7 @@ trackers.use_udp.set = yes
 # network.max_open_sockets.set = 65023
 
 # set the umask applied to all files created by rtorrent
-# system.umask.set =
+ system.umask.set = 775
 
 # alternate keyboard mappings
 # qwerty | azerty | qwertz | dvorak
@@ -185,9 +184,9 @@ trackers.use_udp.set = yes
 
 ################ If you need log, uncomment (remove ######) from all lines below
 ######
-log.open_file = "rtorrent", /media/torrents/log/rtorrent.log
-log.open_file = "tracker", /media/torrents/log/tracker.log
-log.open_file = "storage", /media/torrents/log/storage.log
+log.open_file = "rtorrent", ~/torrents/log/rtorrent.log
+log.open_file = "tracker", ~/torrents/log/tracker.log
+log.open_file = "storage", ~/torrents/log/storage.log
 ######
 log.add_output = "info", "rtorrent"
 log.add_output = "critical", "rtorrent"
