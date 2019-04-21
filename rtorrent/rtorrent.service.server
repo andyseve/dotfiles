@@ -1,7 +1,7 @@
 [Unit]
 Description=rtorrent server
-After=newtork-online.target openvpn@rtorrent.service
 Requires=network-online.target openvpn@rtorrent.service
+After=newtork-online.target openvpn@rtorrent.service
 
 [Service]
 User=rtorrent
