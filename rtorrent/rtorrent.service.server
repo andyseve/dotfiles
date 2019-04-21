@@ -1,7 +1,7 @@
 [Unit]
 Description=rtorrent server
-Wants=network-online.target
-After=newtork-online.target
+Requires=network-online.target openvpn@rtorrent.service
+After=newtork-online.target openvpn@rtorrent.service
 
 [Service]
 User=rtorrent
@@ -13,6 +13,7 @@ ExecStartPre=/usr/bin/bash -c "if test -r /media/torrents/.session/rtorrent.lock
 ExecStart=/usr/bin/tmux -L rtorrent -S /tmp/rtorrent new-session -s rtorrent -n rtorrent -d "rtorrent -n -o import=/media/torrents/.rtorrent.rc"
 ExecStop=/usr/bin/bash -c "/usr/bin/tmux -L rtorrent -S /tmp/rtorrent send-keys -t rtorrent C-q && while pidof rtorrent > /dev/null; do sleep 0.5; done"
 WorkingDirectory=/media/torrents
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
