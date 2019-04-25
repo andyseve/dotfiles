@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 25 Apr 2019 03:34:03 AM EDT
+" Last Updated: Thu 25 Apr 2019 22:00:59 UTC
 
 set nocompatible
 
@@ -9,7 +9,7 @@ set nocompatible
   filetype plugin indent on
 	" Setting Colorscheme
   if(has("gui_running"))
-  i  set background=dark
+    set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
       set guifont=Consolas:h12:cANSI
