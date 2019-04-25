@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 25 Apr 2019 02:51:00 AM EDT
+## Last Modified: Thu 25 Apr 2019 03:16:04 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -120,6 +120,7 @@ if check vim; then
 	link $IF/vimrc $OF/vimrc
 	link $IF/vimrc.noplugin $OF/vimrc.noplugin
 	link $IF/vimrc.lite $OF/vimrc.lite
+	link $IF/vimrc.testing $OF/vimrc.testing
 	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"

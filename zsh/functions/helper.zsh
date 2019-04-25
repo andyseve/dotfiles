@@ -1,23 +1,6 @@
-
 ################################################################################
 # Helper Functinos #############################################################
 ################################################################################
-
-# handling overwrites
-if [ -e "$OVERWRITE" ]; then
-	read -n 1 -p "Overwrite file already exists. Are you sure you want to proceed?[y|n]" cont
-	if [ "$cont" = "n" ]; then
-		exit 1
-	else
-		echo -e "\n$(date)" >> $OVERWRITE
-		echo "--------------------------------------------------------------------------------" >> $OVERWRITE
-		EXISTS_OVERWRITE=true
-	fi
-else
-	touch $OVERWRITE
-	echo $(date) >> $OVERWRITE
-	echo "--------------------------------------------------------------------------------" >> $OVERWRITE
-fi
 		
 # backs up if the directory exists
 bup() {
