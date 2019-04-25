@@ -1,0 +1,47 @@
+snippet yns "Yes No with Select" b
+echo "${1:Choose Yes or No}"
+select cont in "Yes" "No"; do
+	case \$${2:yn} in
+		[Yy]*)
+			$3
+		[Nn]*)
+			$4
+		*)
+			echo "Please make a correct selection."
+	esac
+done
+endsnippet
+
+snippet ynr "Yes No option read" b
+while true; do
+	read -n 1 -p "${1:Do you want to proceed?}[y|n]" ${2:cont}
+	printf "\n"
+	case \$$2 in
+		[Yy]*)
+			$3
+			break;;
+		[Nn]*)
+			$4
+			break;;
+		*)
+			${5:echo "Please enter a valid selection"}
+			;;
+	esac
+done
+endsnippet
+
+snippet yn "Yes No option read without loop" b
+read -n 1 -p "${1:Do you want to proceed?}[y|n]" ${2:cont}
+printf "\n"
+case \$$2 in
+	[Yy]*)
+		$3
+		break;;
+	[Nn]*)
+		$4
+		break;;
+	*)
+		${5:echo "Please enter a valid selection"}
+		;;
+esac
+endsnippet
