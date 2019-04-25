@@ -29,14 +29,13 @@ session.path.set = /media/torrents/.session
 directory.default.set = /media/torrents/incomplete
 
 #watch directories
-schedule2 = unsorted,10,10,"load.normal=/media/torrents/watch/*.torrent,d.custom1.set=/media/torrents/downloads/"
-schedule2 = movies,10,10,"load.normal=/media/torrents/watch/movies/*.torrent,d.custom1.set=/media/torrents/downloads/movies"
-schedule2 = series,10,10,"load.normal=/media/torrents/watch/series/*.torrent,d.custom1.set=/media/torrents/downloads/series"
-schedule2 = music,10,10,"load.normal=/media/torrents/watch/music/*.torrent,d.custom1.set=/media/torrents/downloads/music"
-schedule2 = iso,10,10,"load.normal=/media/torrents/watch/iso/*.torrent,d.custom1.set=/media/torrents/downloads/iso"
-schedule2 = games,10,10,"load.normal=/media/torrents/watch/games/*.torrent,d.custom1.set=/media/torrents/downloads/games"
-schedule2 = books,10,10,"load.start=/media/torrents/watch/books/*.torrent,d.custom1.set=/media/torrents/downloads/books"
-schedule2 = porn,10,10,"load.normal=/media/torrents/watch/.porn/*.torrent,d.custom1.set=/media/torrents/downloads/.porn"
+schedule2 = unsorted,10,10,"load.start=/media/torrents/watch/*.torrent,d.custom1.set=/media/torrents/downloads/"
+schedule2 = movies,10,10,"load.start=/media/torrents/watch/movies/*.torrent,d.custom1.set=/media/torrents/downloads/movies"
+schedule2 = series,10,10,"load.start=/media/torrents/watch/series/*.torrent,d.custom1.set=/media/torrents/downloads/series"
+schedule2 = music,10,10,"load.start=/media/torrents/watch/music/*.torrent,d.custom1.set=/media/torrents/downloads/music"
+schedule2 = iso,10,10,"load.start=/media/torrents/watch/iso/*.torrent,d.custom1.set=/media/torrents/downloads/iso"
+schedule2 = games,10,10,"load.start=/media/torrents/watch/games/*.torrent,d.custom1.set=/media/torrents/downloads/games"
+schedule2 = porn,10,10,"load.start=/media/torrents/watch/.porn/*.torrent,d.custom1.set=/media/torrents/downloads/.porn"
 
 #start and stop 
 schedule2 = untied_directory,5,5,stop_untied=
