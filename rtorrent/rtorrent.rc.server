@@ -26,16 +26,16 @@ check_hash = yes
 #session info
 session.path.set = /media/torrents/.session				
 #default download directory
-directory.default.set = /media/torrents/incomplete			
+directory.default.set = /media/torrents/incomplete
 
 #watch directories
-schedule2 = watch_directory_1,10,10,"load.start=/media/torrents/watch/*.torrent,d.custom1.set=/media/torrents/downloads/"
-schedule2 = watch_directory_2,10,10,"load.start=/media/torrents/watch/movies/*.torrent,d.custom1.set=/media/torrents/downloads/movies"
-schedule2 = watch_directory_3,10,10,"load.start=/media/torrents/watch/tv/*.torrent,d.custom1.set=/media/torrents/downloads/tv"
-schedule2 = watch_directory_4,10,10,"load.start=/media/torrents/watch/music/*.torrent,d.custom1.set=/media/torrents/downloads/music"
-schedule2 = watch_directory_5,10,10,"load.start=/media/torrents/watch/iso/*.torrent,d.custom1.set=/media/torrents/downloads/iso"
-schedule2 = watch_directory_6,10,10,"load.start=/media/torrents/watch/games/*.torrent,d.custom1.set=/media/torrents/downloads/games"
-schedule2 = watch_directory_7,10,10,"load.start=/media/torrents/watch/.porn/*.torrent,d.custom1.set=/media/torrents/downloads/.porn"
+schedule2 = unsorted,10,10,"load.normal=/media/torrents/watch/*.torrent,d.custom1.set=/media/torrents/downloads/"
+schedule2 = movies,10,10,"load.normal=/media/torrents/watch/movies/*.torrent,d.custom1.set=/media/torrents/downloads/movies"
+schedule2 = series,10,10,"load.normal=/media/torrents/watch/series/*.torrent,d.custom1.set=/media/torrents/downloads/series"
+schedule2 = music,10,10,"load.normal=/media/torrents/watch/music/*.torrent,d.custom1.set=/media/torrents/downloads/music"
+schedule2 = iso,10,10,"load.normal=/media/torrents/watch/iso/*.torrent,d.custom1.set=/media/torrents/downloads/iso"
+schedule2 = games,10,10,"load.normal=/media/torrents/watch/games/*.torrent,d.custom1.set=/media/torrents/downloads/games"
+schedule2 = porn,10,10,"load.normal=/media/torrents/watch/.porn/*.torrent,d.custom1.set=/media/torrents/downloads/.porn"
 
 #start and stop 
 schedule2 = untied_directory,5,5,stop_untied=
@@ -140,7 +140,7 @@ pieces.preload.min_rate.set = 5120
 network.send_buffer.size.set = 1M
 network.receive_buffer.size.set = 131072
 
-pieces.sync.always_safe.set = no
+pieces.sync.always_safe.set = 1
 pieces.sync.timeout.set = 600
 pieces.sync.timeout_safe.set = 900
 
@@ -149,16 +149,14 @@ pieces.sync.timeout_safe.set = 900
 
 # session.path.set =
 session.name.set =
-session.use_lock.set = yes
-session.on_completion.set = yes
+session.use_lock.set = 1
+session.on_completion.set = 1
 
 system.file.split_size.set = -1
 system.file.split_suffix.set = .part
 
 # set whether the client should try to connect to UDP trackers
-# use_udp_trackers = yes
-trackers.use_udp.set = yes
-# use_udp_trackers = yes
+trackers.use_udp.set = 1
 
 # use a http proxy. [url] ;an empty string disables this setting
 # http_proxy =
@@ -175,7 +173,7 @@ trackers.use_udp.set = yes
 # network.max_open_sockets.set = 65023
 
 # set the umask applied to all files created by rtorrent
- system.umask.set = 775
+system.umask.set = 0002
 
 # alternate keyboard mappings
 # qwerty | azerty | qwertz | dvorak
