@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 18 Apr 2019 11:41:31 AM DST
+# Last Edited: Thu 25 Apr 2019 12:34:29 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -13,7 +13,7 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 source $ZPLUG_HOME/init.zsh
 # Packages and themes
 zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "wting/autojump"
+zplug "wting/autojump", hook-build:"./install.py"
 zplug "hlissner/zsh-autopair"
 zplug "jeffwalter/zsh-plugin-cd-ssh"
 zplug "arzzen/calc.plugin.zsh"

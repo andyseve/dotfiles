@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Fri 19 Apr 2019 03:07:10 UTC
+## Last Modified: Thu 25 Apr 2019 12:39:53 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -186,7 +186,6 @@ if check vim; then
 		link "$IF/$dir" "$OF/$dir"
 	done
 
-	link $OF/vimrc.noplugin $HOME/.vimrc.noplugin
 	if $LITE; then
 		link $OF/vimrc.lite $HOME/.vimrc
 	elif $NOPLUGIN; then

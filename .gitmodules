@@ -1,6 +1,0 @@
-[submodule "zsh/themes/agnoster"]
-	path = zsh/themes/agnoster
-	url = https://github.com/agnoster/agnoster-zsh-theme.git
-[submodule "themes/numix-solarized-gtk-theme"]
-	path = themes/numix-solarized-gtk-theme
-	url = git@github.com:andyseve/numix-solarized-gtk-theme.git
