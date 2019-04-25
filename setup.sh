@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 25 Apr 2019 01:13:00 AM EDT
+## Last Modified: Thu 25 Apr 2019 02:51:00 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -19,15 +19,47 @@ while test $# != 0
 do
 	case "$1" in
 		-l | --lite)
-			LITE=true ;;
+			LITE=true
+			;;
 		-n | --noplugin)
-			NOPLUGIN=true ;;
-		*) echo "flags are --lite,--noplugin" ;;
+			NOPLUGIN=true
+			;;
+		*)
+			echo "flags are --lite,--noplugin"
+			exit 0
+			;;
 	esac
 	shift
 done
 
+# handling overwrites
+if [ -e "$OVERWRITE" ]; then
+	while true; do
+		read -n 1 -p "Overwrite file already exists. Are you sure you want to run setup again?[y|n]" cont
+		printf "\n"
+		case $cont in
+			[Yy]*)
+				echo "$(date)" >> $OVERWRITE
+				echo "--------------------------------------------------------------------------------" >> $OVERWRITE
+				EXISTS_OVERWRITE=true
+				break;;
+			[Nn]*)
+				echo "Exiting."
+				exit 0
+				;;
+			*)
+				echo "Please enter a valid selection"
+				;;
+		esac
+	done
+else
+	touch $OVERWRITE
+fi
+
+
+# import helper functions
 source $DOTFILES/zsh/functions/helper.zsh
+
 
 
 ################################################################################
@@ -140,6 +172,26 @@ if check rtorrent; then
 
 	link $IF/rtorrent.service $CONFIG/systemd/user/rtorrent.service
 fi
+
+#Themes
+while true; do
+	read -n 1 -p "Do you want to install themes[y|n]" install_themes
+	printf "\n"
+	case $install_themes in
+		[Yy]*)
+			echo "Installing themes..."
+			$HOME/dotfiles/.setup_themes.sh
+			break;;
+		[Nn]*)
+			echo "You can install themes later from $HOME/dotfiles/.setup_themes.sh"
+			echo "Or install themes separately in $HOMe/dotfiles/themes"
+			break;;
+		*)
+			echo "Please enter a valid selection"
+			;;
+	esac
+done
+
 
 #cleaning up
 if ! $DID_OVERWRITE; then
