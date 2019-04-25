@@ -1,7 +1,38 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 17 Apr 2019 03:31:21 PM EDT
+" Last Updated: Thu 25 Apr 2019 03:32:46 AM EDT
 
 set nocompatible
+
+" # vim-plug
+  " change installation paths based on os
+  if !exists("g:bundle_path")
+    if has("win64") || has("win32")
+      let g:bundle_path = '~/vimfiles/bundle'
+    else
+      let g:bundle_path = '~/.vim/bundle'
+    endif
+  endif
+
+  call plug#begin(bundle_path)
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+  Plug 'SirVer/ultisnips'
+  Plug 'lervag/vimtex', {'for': 'latex'}
+  Plug 'sjl/gundo.vim'
+  Plug 'tpope/vim-fugitive'
+	Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-repeat'
+	Plug 'hecal3/vim-leader-guide'
+	Plug 'scrooloose/nerdcommenter'
+	Plug 'godlygeek/tabular'
+	Plug 'mileszs/ack.vim'
+
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'altercation/vim-colors-solarized'
+
+	Plug 'msuperdock/vim-foldout'
+  call plug#end()
 
 " # Core Settings
   syntax enable
@@ -19,7 +50,7 @@ set nocompatible
     endif
   else
     set background=dark
-    colorscheme desert
+    colorscheme solarized
   endif
 	
   set backspace=indent,eol,start
@@ -122,6 +153,164 @@ set nocompatible
   " Backspace to delete words
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
+	
+	" Global Copy and Paste
+	noremap <leader>p "+gP
+	noremap <leader>y "+y
+
+" # Plugin Configurations and Bindings
+	" ## Vim Leader Guide Configuration
+	let g:lmap = {}
+	
+	" Global Copy and Paste 
+	let g:lmap.p = {'name': 'Paste'}
+	let g:lmap.y = {'name': 'Copy'}
+	
+
+	" Quick Edits
+	let g:lmap.e = {
+				\'name': 'Quick Edit',
+				\'s':['UltiSnipsEdit', 'Snippets'],
+				\'v':['vsplit ~/.vimrc', 'Vimrc'],
+				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
+				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
+				\}
+
+	" Quick Source
+	if(has("win64") || has("win32"))
+		nnoremap <leader>sv :source ~/_vimrc<CR>
+	else
+		nnoremap <leader>sv :source ~/.vimrc<CR>
+	endif
+	
+	"Git menu
+	let g:lmap.g = {
+				\'name': 'Git Menu',
+				\'s': ['Gstatus', 'Git Status'],
+				\'p': ['Gpull', 'Git Pull'],
+				\'u': ['Gpush', 'Git Push'],
+				\'c': ['Gcommit', 'Git Commit'],
+				\'w': ['Gwrite', 'Git Write'],
+				\'r': ['Gread', 'Git Read'],
+				\}
+
+	let g:lmap.c = {
+				\'name': 'Comments',
+				\}
+
+	let g:lmap.o = {
+				\'name': 'Lists',
+				\}
+	let g:lmap.o.o = ['copen', 'Quickfix']
+	let g:lmap.o.l = ['lopen', 'Locationlist']
+
+	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
+
+	augroup AnishsVimLeader
+		autocmd!
+		autocmd FileType gitcommit noremap <buffer> <leader> <Plug>leaderguide-buffer
+		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
+		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
+	augroup END
+	
+  " ## Ultisnips Configuration
+	if has("win64") || has("win32")
+		set rtp+=~/vimfiles 
+		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
+	else
+		set rtp+=~/.vim
+		let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+	endif
+  let g:UltiSnipsExpandTrigger="<c-j>"
+  let g:UltiSnipsJumpForwardTrigger="<c-j>"
+  let g:UltiSnipsJumpBackwardTrigger="<c-h>"
+  let g:UltiSnipsListSnippets="<c-l>"
+
+  let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
+  let g:UltiSnipsEditSplit="horizontal"
+	" Enter to expand snippets when possible
+	" Does not work with cpp
+		let g:ulti_expand_or_jump_res = 0
+		function! ExpandSnippetOrCarriageReturn()
+			let tmp = UltiSnips#ExpandSnippetOrJump()
+			if g:ulti_expand_or_jump_res > 0
+				return tmp
+			else
+				return "\<CR>"
+			endif
+		endfunc
+  inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
+
+  " ## Gundo Configuration
+  let g:gundo_prefer_python3 = 1
+  nnoremap <leader>u :GundoToggle<CR>
+
+  " ## NERDTree Configuration
+  let g:NERDTreeQuitOnOpen = 1
+  nnoremap <M-\> :NERDTreeToggle<CR>
+  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
+	" Close if only windows present is NERDTree
+	augroup AnishsNerdTree
+		autocmd!
+		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	augroup END
+
+  " ## Vimtex configuration
+  let g:vimtex_enabled = 1
+  let g:vimtex_view_automatic = 1
+	let g:vimtex_toc_enabled = 1
+	let g:vimtex_toc_depth = 1
+	let g:vimtex_toc_show_included_files = 1
+	let g:vimtex_toc_fold = 1
+
+	" LeaderGuide
+	let g:lmap.l = {
+				\'name': 'Latex',
+				\}
+
+	" SumatraPDF config for windows
+  if has("win64") || has("win32")
+		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
+		let g:vimtex_view_general_options
+					\ = ' -forward-search @tex @line @pdf'
+					\ . ' -inverse-search "gvim.exe --servername ' . v:servername
+					\ . ' --remote-send \"^<C-\^>^<C-n^>'
+					\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
+					\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
+					\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
+					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
+  else
+		let g:vimtex_view_general_viewer = 'zathura'
+    let g:vimtex_view_method = 'zathura'
+  endif
+	
+  " ## Airline Configuration
+  let g:airline_theme = 'solarized'
+  let g:airline_solarized_bg = 'dark'
+  let g:airline_powerline_fonts = 0
+  let g:airline_inactive_collapse = 0
+  let g:airline_skip_empty_sections = 1
+  let g:airline#extensions#whitespace#enabled = 0
+	let g:airline#extensions#tabline#enabled = 1
+  
+  " ## Solarized Config for Terminal {{{
+  let g:solarized_termtrans = 1
+  let g:solarized_termcolors = 256
+  let g:solarized_contrast = 'normal'
+
+	" ## FZF and Ag configuration
+	if executable('ag')
+		set grepprg=ag\ --vimgrep
+		let g:ackprg='ag --vimgrep'
+		let g:ctrlp_user_command='ag --vimgrep -g'
+	endif
+	noremap <c-p> :FZF<CR>
+
+	" ## Foldout
+		let g:foldout_save = 1
+		
+		map <leader>n <Plug>FoldoutNavigation
+		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 
 " # Functions
   " Update last modified entries

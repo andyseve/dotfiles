@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 25 Apr 2019 03:34:21 AM EDT
+" Last Updated: Thu 25 Apr 2019 03:34:19 AM EDT
 
 set nocompatible
 
@@ -28,6 +28,9 @@ set nocompatible
   Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
   Plug 'SirVer/ultisnips'
 	Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
+	"Plug 'Shougo/deoplete.nvim'
+  "Plug 'roxma/nvim-yarp'
+  "Plug 'roxma/vim-hug-neovim-rpc'
   Plug 'lervag/vimtex', {'for': 'latex'}
   Plug 'sjl/gundo.vim'
 	Plug 'junegunn/fzf', {'do':'./install --bin'}
@@ -296,12 +299,17 @@ set nocompatible
 	let g:vimtex_toc_show_included_files = 1
 	let g:vimtex_toc_fold = 1
 
-	" LeaderGuide
+	" If using deoplete
+	"call deoplete#custom#var('omni', 'input_patterns', {
+		"\ 'tex': g:vimtex#re#deoplete
+		"\})
+	
+	" ## LeaderGuide
 	let g:lmap.l = {
 				\'name': 'Latex',
 				\}
-
-	" SumatraPDF config for windows
+	"
+	" ## SumatraPDF config for windows
   if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
@@ -326,7 +334,7 @@ set nocompatible
   let g:airline#extensions#whitespace#enabled = 0
 	let g:airline#extensions#tabline#enabled = 1
   
-  " Airline symbols
+  " ## Airline symbols
   if !exists('g:airline_symbols')
     let g:airline_symbols ={}
   endif
@@ -355,6 +363,8 @@ set nocompatible
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 
+	" ## Testing
+	"let g:deoplete#enable_at_startup = 1
 
 " # Functions
   " Update last modified entries

@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 17 Apr 2019 03:31:21 PM EDT
+" Last Updated: Thu 25 Apr 2019 03:34:03 AM EDT
 
 set nocompatible
 
@@ -9,7 +9,7 @@ set nocompatible
   filetype plugin indent on
 	" Setting Colorscheme
   if(has("gui_running"))
-    set background=dark
+  i  set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
       set guifont=Consolas:h12:cANSI
@@ -19,7 +19,7 @@ set nocompatible
     endif
   else
     set background=dark
-    colorscheme desert
+    colorscheme solarized
   endif
 	
   set backspace=indent,eol,start
@@ -122,6 +122,10 @@ set nocompatible
   " Backspace to delete words
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
+	
+	" Global Copy and Paste
+	noremap <leader>p "+gP
+	noremap <leader>y "+y
 
 " # Functions
   " Update last modified entries
