@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 25 Apr 2019 22:00:10 UTC
+" Last Updated: Fri 26 Apr 2019 03:11:28 AM EDT
 
 set nocompatible
 
@@ -219,6 +219,8 @@ set nocompatible
 	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
+	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
+	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
 
 	augroup AnishsVimLeader
 		autocmd!
