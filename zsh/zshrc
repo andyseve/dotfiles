@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 25 Apr 2019 12:34:29 AM EDT
+# Last Edited: Wed 01 May 2019 03:22:48 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -78,8 +78,6 @@ bindkey -M vicmd 'j' history-substring-search-down
 # Functions and Commands #######################################################
 ################################################################################
 
-# Helper functions
-# Returns whether the given command is executable or aliased.
 _has() {
   return $( whence $1 >/dev/null )
 }

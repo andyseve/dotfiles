@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 18 Apr 2019 11:41:33 AM DST
+# Last Edited: Wed 01 May 2019 03:22:24 PM EDT
 # Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
@@ -68,8 +68,6 @@ bindkey -M vicmd '/' history-incremental-search-forward
 # Functions and Commands #######################################################
 ################################################################################
 
-# Helper functions
-# Returns whether the given command is executable or aliased.
 _has() {
   return $( whence $1 >/dev/null )
 }
