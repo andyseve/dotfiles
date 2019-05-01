@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 26 Apr 2019 03:11:28 AM EDT
+" Last Updated: Wed 01 May 2019 02:57:42 PM EDT
 
 set nocompatible
 
@@ -325,7 +325,7 @@ set nocompatible
   let g:airline_powerline_fonts = 1
   let g:airline_inactive_collapse = 0
   let g:airline_skip_empty_sections = 1
-  let g:airline#extensions#whitespace#enabled = 0
+  let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
   
   " Airline symbols
