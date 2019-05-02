@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 25 Apr 2019 03:16:04 AM EDT
+## Last Modified: 5/2/2019 4:21:21 PM
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -150,6 +150,10 @@ else
 fi
 
 #latex
+if check pdflatex; then
+	cdir $HOME/texmf/tex/latex/local
+	link $DOTFILES/latex/anishs.sty $HOME/texmf/tex/latex/local/anishs.sty
+fi
 
 #rtorrent
 if check rtorrent; then
