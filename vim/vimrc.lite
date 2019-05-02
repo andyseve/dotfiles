@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 25 Apr 2019 03:32:46 AM EDT
+" Last Updated: Wed 01 May 2019 02:56:35 PM EDT
 
 set nocompatible
 
@@ -205,6 +205,8 @@ set nocompatible
 	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
+	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
+	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
 
 	augroup AnishsVimLeader
 		autocmd!
@@ -287,10 +289,10 @@ set nocompatible
   " ## Airline Configuration
   let g:airline_theme = 'solarized'
   let g:airline_solarized_bg = 'dark'
-  let g:airline_powerline_fonts = 0
+  let g:airline_powerline_fonts = 1
   let g:airline_inactive_collapse = 0
   let g:airline_skip_empty_sections = 1
-  let g:airline#extensions#whitespace#enabled = 0
+  let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
   
   " ## Solarized Config for Terminal {{{
@@ -311,6 +313,7 @@ set nocompatible
 		
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+
 
 " # Functions
   " Update last modified entries
