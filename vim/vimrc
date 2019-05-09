@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 01 May 2019 02:57:42 PM EDT
+" Last Updated: Thu 02 May 2019 06:32:46 PM EDT
 
 set nocompatible
 
@@ -27,19 +27,20 @@ set nocompatible
   Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
   Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
   Plug 'SirVer/ultisnips'
-	Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex', {'for': 'latex'}
   Plug 'sjl/gundo.vim'
-	Plug 'junegunn/fzf', {'do':'./install --bin'}
-	Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf', {'do':'./install --bin'}
+  Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
-	Plug 'tpope/vim-surround'
-	Plug 'tpope/vim-repeat'
-	Plug 'hecal3/vim-leader-guide'
-	Plug 'w0rp/ale'
-	Plug 'scrooloose/nerdcommenter'
-	Plug 'godlygeek/tabular'
-	Plug 'mileszs/ack.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-repeat'
+  Plug 'hecal3/vim-leader-guide'
+  Plug 'w0rp/ale'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'godlygeek/tabular'
+  Plug 'mileszs/ack.vim'
+  Plug 'jiangmiao/auto-pairs'
 
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
