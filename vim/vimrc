@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 26 Apr 2019 03:11:28 AM EDT
+" Last Updated: Mon 29 Apr 2019 12:55:02 PM EDT
 
 set nocompatible
 
@@ -138,8 +138,6 @@ set nocompatible
 " # Search settings
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
-  " Clear out search highlights
-  nnoremap <leader><space> :nohlsearch<CR> 
 
 " # Fold Settings
   set foldenable
@@ -167,18 +165,20 @@ set nocompatible
   " Backspace to delete words
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
-	
-	" Global Copy and Paste
+
 	noremap <leader>p "+gP
 	noremap <leader>y "+y
-
+	nnoremap <leader><space> :nohlsearch<CR>
+	
 " # Plugin Configurations and Bindings
 	" ## Vim Leader Guide Configuration
+	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
+	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
 	let g:lmap = {}
 	
 	" Global Copy and Paste 
-	let g:lmap.p = {'name': 'Paste'}
-	let g:lmap.y = {'name': 'Copy'}
+	let g:lmap.p = [ 'normal "+gP', 'Paste']
+	let g:lmap.y = [ 'normal "+y', 'Copy' ]
 	
 
 	" Quick Edits
@@ -213,22 +213,20 @@ set nocompatible
 				\}
 
 	let g:lmap.o = {
-				\'name': 'Lists',
+				\'name': 'Lists'
 				\}
 	let g:lmap.o.o = ['copen', 'Quickfix']
 	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
-	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
-	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
-
+	
 	augroup AnishsVimLeader
 		autocmd!
 		autocmd FileType gitcommit noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
-	
+
   " ## Ultisnips Configuration
 	if has("win64") || has("win32")
 		set rtp+=~/vimfiles 
@@ -332,7 +330,7 @@ set nocompatible
   if !exists('g:airline_symbols')
     let g:airline_symbols ={}
   endif
-  let g:airline_symbols.space = "\u3000"
+	let g:airline_symbols.space = "\u3000"
   if has("win64") || has("win32")
     let g:airline_powerline_fonts = 0
     let g:airline_symbols.space = "\u0020"
@@ -354,9 +352,7 @@ set nocompatible
 	" ## Foldout
 		let g:foldout_save = 1
 		
-		map <leader>n <Plug>FoldoutNavigation
-		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
-
+		let g:lmap.n = ['<Plug>FoldoutNavigation','Navigation']
 
 " # Functions
   " Update last modified entries
