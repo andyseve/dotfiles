@@ -1,10 +1,9 @@
 " Author: Anish Sevekari
-" Last Modified: Thu 02 May 2019 06:35:35 PM EDT
+" Last Modified: Sun 19 May 2019 04:42:15 PM EDT
 " Cpp specific vim settings
 
 " Core Settings {{{
 	setlocal foldmethod=syntax
-	setlocal foldnestmax=3
 " }}}
 " Tabstops {{{
 	set tabstop=4

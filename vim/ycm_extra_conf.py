@@ -46,7 +46,7 @@ flags = [
 # a "-std=<something>".
 # For a C project, you would set this to something like 'c99' instead of
 # 'c++11'.
-'-std=c++0x',
+'-std=c++17'
 # ...and the same thing goes for the magic -x option which specifies the
 # language that the files to be compiled are written in. This is mostly
 # relevant for c++ headers.
@@ -55,12 +55,12 @@ flags = [
 'c++',
 # Following lines mainly includes paths of headers that need to be added
 # for the compilation of project.
-'-isystem', '/usr/include/c++/7',
-'-isystem', '/usr/include/x86_64-linux-gnu/c++/7',
-'-isystem', '/usr/include/c++/7/backward',
-'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/7/include',
+'-isystem', '/usr/include/c++/8',
+'-isystem', '/usr/include/x86_64-linux-gnu/c++/8',
+'-isystem', '/usr/include/c++/8/backward',
+'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/8/include',
 '-isystem', '/usr/local/include',
-'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed',
+'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed',
 '-isystem', '/usr/include/x86_64-linux-gnu',
 '-isystem', '/usr/include',
 ]
