@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 13 Jun 2019 03:34:35 AM DST
+# Last Edited: Thu 13 Jun 2019 03:34:38 AM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -32,6 +32,8 @@ zplugin light zdharma/fast-syntax-highlighting
 ################################################################################
 # Settings #####################################################################
 ################################################################################
+
+ZSH_THEME=agnoster-nanof
 
 KEYTIMEOUT=1 # keytiming 10ms
 CASE_SENSITIVE="false" # case sensative searches
@@ -173,4 +175,5 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
 

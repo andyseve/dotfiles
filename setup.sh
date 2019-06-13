@@ -1,5 +1,5 @@
 #!/bin/bash
-## Last Modified: Thu 25 Apr 2019 03:16:04 AM EDT
+## Last Modified: Thu 13 Jun 2019 03:36:32 AM DST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -87,6 +87,7 @@ if check zsh; then
 	link $IF/zshrc $OF/zshrc
 	link $IF/zshrc.lite $OF/zshrc.lite
 	link $IF/zshrc.noplugin $OF/zshrc.noplugin
+	link $IF/zshrc.testing $OF/zshrc.testing
 
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
@@ -100,7 +101,7 @@ if check zsh; then
 		link $OF/zshrc $HOME/.zshrc
 	fi
 
-	clone "https://github.com/zplug/zplug.git" $OF/zplug
+	sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
 else
 	nope zsh
 fi
