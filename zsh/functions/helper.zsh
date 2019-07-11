@@ -33,7 +33,7 @@ move() {
 }
 # links $1 to $2 if it's not linked already
 link() {
-	if [ ! "$(readlink $2)" = "$1" ]; then
+	if [ ! "${readlink $2}" = "$1" ]; then
 		bup $2
 		echo "creating symlink $2 -> $1..."
 		ln -s $1 $2
@@ -41,7 +41,7 @@ link() {
 }
 # checks if command exists and is executable
 check() {
-	if [ -x "$(command -v $1)" ]; then
+	if [ -x "${command -v $1}" ]; then
 		true
 	else
 		false

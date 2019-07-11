@@ -1,35 +1,27 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 01 May 2019 03:22:49 PM EDT
+# Last Edited: Thu 13 Jun 2019 03:38:10 AM DST
 # Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
-ZPLUG_HOME=$HOME/.zsh/zplug
 fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 
 ################################################################################
-# Zplug ########################################################################
+# Zplugin ######################################################################
 ################################################################################
 
-source $ZPLUG_HOME/init.zsh
-# Packages and themes
-zplug "zplug/zplug", hook-build:"zplug --self-manage"
-zplug "hlissner/zsh-autopair"
-zplug "junegunn/fzf-bin", from:gh-r, as:command
+source '/home/stranger/.zplugin/bin/zplugin.zsh'
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
 
-# load  syntax highlighting after everything else has loaded.
-zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "fsegouin/oh-my-zsh-agnoster-mod-theme", as:theme
+zplugin light hlissner/zsh-autopair
+zplugin light zsh-users/zsh-history-substring-search
 
-# Install uninstalled plugins
-if ! zplug check --verbose; then
-	printf "Install? [y/n]: "
-	if read -q; then
-		echo; zplug install
-	fi
-fi
+zplugin ice from"gh-r" as"program"
+zplugin load junegunn/fzf-bin
 
-zplug load
+zplugin light fsegouin/oh-my-zsh-agnoster-mod-theme
+zplugin light zdharma/fast-syntax-highlighting
 
 ################################################################################
 # Settings #####################################################################

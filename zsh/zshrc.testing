@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 21 Jun 2019 12:43:12 PM EDT
+# Last Edited: Thu 13 Jun 2019 03:34:38 AM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -16,17 +16,24 @@ autoload -Uz _zplugin
 zplugin light hlissner/zsh-autopair
 zplugin light jeffwalter/zsh-plugin-cd-ssh
 zplugin light arzzen/calc.plugin.zsh
+zplugin light zsh-users/zsh-history-substring-search
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light srijanshetty/zsh-pip-completion
-zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
-zplugin ice atclone"./install.py"; zplugin light wting/autojump
-zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
+
+zplugin ice from"gh-r" as"program"
+zplugin load junegunn/fzf-bin
+
+zplugin ice atclone"./install.py"
+zplugin load wting/autojump
+
+zplugin light fsegouin/oh-my-zsh-agnoster-mod-theme
 zplugin light zdharma/fast-syntax-highlighting
-zplugin light zsh-users/zsh-history-substring-search
 
 ################################################################################
 # Settings #####################################################################
 ################################################################################
+
+ZSH_THEME=agnoster-nanof
 
 KEYTIMEOUT=1 # keytiming 10ms
 CASE_SENSITIVE="false" # case sensative searches
@@ -38,7 +45,7 @@ setopt histignorealldups # ignore repeats in history
 setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
-COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="ture"
 bindkey -v # Use vim keybindings
 
 
@@ -57,19 +64,14 @@ HISTFILE=~/.zsh_history
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
 # history search keybindings
-bindkey '${key[up]}' history-substring-search-up
-bindkey '${key[down]}' history-substring-search-down
+bindkey "${key[Up]}" history-substring-search-up
+bindkey "${key[Down]}" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
 ################################################################################
 # Functions and Commands #######################################################
 ################################################################################
-
-# Importing functions and commands
-for file in $ZSH_HOME/functions/*.zsh; do
-	source $file
-done
 
 _has() {
   return $( whence $1 >/dev/null )
@@ -90,6 +92,9 @@ fi
 
 
 # Prompt line modifications
+prompt_dir() {
+	prompt_segment blue black "%$(( $COLUMNS - 70 ))<...<%3~%<<"
+}
 
 # FZF config
 if _has fzf; then
@@ -102,6 +107,11 @@ if _has fzf; then
 		--height 40% --reverse
   '
 fi
+
+# Importing functions and commands
+for file in $ZSH_HOME/functions/*.zsh; do
+	source $file
+done
 
 ################################################################################
 # Aliases ######################################################################
@@ -145,26 +155,6 @@ if [ -e "$HOME/bin/miniconda3/bin" ]; then
 fi
 
 
-################################################################################
-# Prompt #######################################################################
-################################################################################
-autoload -U promptinit && promptinit
-
-PURE_PROMPT_SYMBOL='❯'
-PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
-PROMPT='%F{white}%* '$PROMPT
-
-precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}"
-       if [[ ${(j.|.)pipestatus} = 0 ]]; then
-              RPROMPT=""
-       fi
-}
-add-zsh-hook precmd precmd_pipestatus
-################################################################################
-# Completions ##################################################################
-################################################################################
-
 # Use modern completion system
 autoload -Uz compinit && compinit -u
 
@@ -185,4 +175,5 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
 
