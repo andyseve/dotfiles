@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 15 May 2019 04:29:25 AM EDT
+" Last Updated: Mon 20 May 2019 08:51:56 PM EDT
 
 set nocompatible
 
@@ -117,7 +117,7 @@ set nocompatible
   " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
-	set guioptions-=m " Remove Menubar
+  set guioptions-=m " Remove Menubar
 
 
   " Back up directories
@@ -274,6 +274,11 @@ nnoremap :Q :q
   let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
   let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 
+	" ## ALE Configuration
+	let g:ale_line_on_text_changed = 'never'
+	let g:ale_on_enter = 0
+	let g:ale_on_save = 1
+
   " ## Gundo Configuration
   let g:gundo_prefer_python3 = 1
   nnoremap <leader>u :GundoToggle<CR>
@@ -302,7 +307,7 @@ nnoremap :Q :q
 				\}
 
 	" SumatraPDF config for windows
-  if has("win64") || has("win32")
+	if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
 					\ = ' -forward-search @tex @line @pdf'
@@ -341,16 +346,16 @@ nnoremap :Q :q
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
 
-	" ## FZF and Ag configuration
-	if executable('ag')
-		set grepprg=ag\ --vimgrep
-		let g:ackprg='ag --vimgrep'
-		let g:ctrlp_user_command='ag --vimgrep -g'
-	endif
-	noremap <c-p> :FZF<CR>
+  " ## FZF and Ag configuration
+  if executable('ag')
+	  set grepprg=ag\ --vimgrep
+	  let g:ackprg='ag --vimgrep'
+	  let g:ctrlp_user_command='ag --vimgrep -g'
+  endif
+  noremap <c-p> :FZF<CR>
 
-	" ## Foldout
-		let g:foldout_save = 1
+  " ## Foldout
+  let g:foldout_save = 1
 
 " # Functions
   " Update last modified entries
