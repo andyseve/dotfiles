@@ -1,10 +1,21 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 13 Jun 2019 03:34:08 AM DST
-# Lite zshrc with only essential plugins
+# Last Edited: Thu 11 Jul 2019 12:10:34 PM DST
+# Zshrc with only color settings
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
 fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+
+################################################################################
+# Zplugin ######################################################################
+################################################################################
+
+source '/home/stranger/.zplugin/bin/zplugin.zsh'
+autoload -Uz _zplugin
+(( ${+_comps} )) && _comps[zplugin]=_zplugin
+
+zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
+zplugin light zdharma/fast-syntax-highlighting
 
 ################################################################################
 # Settings #####################################################################
@@ -43,6 +54,11 @@ bindkey -M vicmd '/' history-incremental-search-forward
 # Functions and Commands #######################################################
 ################################################################################
 
+# Importing functions and commands
+for file in $ZSH_HOME/functions/*.zsh; do
+	source $file
+done
+
 _has() {
   return $( whence $1 >/dev/null )
 }
@@ -58,10 +74,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 
-# Prompt line modifications
-prompt_dir() {
-	prompt_segment blue black "%$(( $COLUMNS - 70 ))<...<%3~%<<"
-}
 
 # FZF config
 if _has fzf; then
@@ -74,11 +86,6 @@ if _has fzf; then
 		--height 40% --reverse
   '
 fi
-
-# Importing functions and commands
-for file in $ZSH_HOME/functions/*.zsh; do
-	source $file
-done
 
 ################################################################################
 # Aliases ######################################################################
@@ -121,6 +128,26 @@ if [ -e "$HOME/bin/miniconda3/bin" ]; then
 	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
 fi
 
+
+################################################################################
+# Prompt #######################################################################
+################################################################################
+autoload -U promptinit && promptinit
+
+PURE_PROMPT_SYMBOL='❯'
+PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
+PROMPT='%F{white}%* '$PROMPT
+
+precmd_pipestatus() {
+	RPROMPT="%F{red}${(j.|.)pipestatus}"
+       if [[ ${(j.|.)pipestatus} = 0 ]]; then
+              RPROMPT=""
+       fi
+}
+add-zsh-hook precmd precmd_pipestatus
+################################################################################
+# Completions ##################################################################
+################################################################################
 
 # Use modern completion system
 autoload -Uz compinit && compinit -u
