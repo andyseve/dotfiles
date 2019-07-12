@@ -55,7 +55,7 @@ bool miller_rabin(${1:int} p){
 endsnippet
 snippet mod "Global mod functions" b
 ${1:int} mod = ${2:1000000007};
-inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % mod);}
+inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % mod); }
 inline $1 mul($1 a, $1 b) { return ($1) ((1ll * a * b) % mod); }
 $1 pow($1 x, $1 a){
 	if(a == 0) return 1;
@@ -69,7 +69,7 @@ $1 inv(int x){
 }
 endsnippet
 snippet mod "Local mod functions" b
-inline ${1:int} sum($1 a, $1 b, $1 mod) { return ($1) ((a + b) % mod);}
+inline ${1:int} sum($1 a, $1 b, $1 mod) { return ($1) ((a + b) % mod); }
 inline $1 mul($1 a, $1 b, $1 mod) { return ($1) ((1ll * a * b) % mod); }
 $1 pow($1 x, $1 a, $1 mod){
 	if(a == 0) return 1;
@@ -88,6 +88,26 @@ ${1:long long} gcd($1 a, $1 b){
 	else return gcd(b, a % b);
 }
 $0
+endsnippet
+snippet frac "Fraction Functions" b
+inline pair<${1:int},$1> sum(pair<$1,$1> a, pair<$1,$1>b){
+	return make_pair(
+			sum(mul(a.first, b.second), mul(a.second, b.first)),
+			mul(a.second, b.second)
+			);
+}
+inline pair<$1,$1> mul(pair<$1,$1> a, pair<$1,$1> b){
+	return make_pair(
+			mul(a.first, b.first),
+			mul(a.second, b.second)
+			);
+}
+inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b){
+	return make_pair(
+			sum(mul(a.first, b.second), - mul(a.second, b.first)),
+			mul(a.second, b.second)
+			);
+}
 endsnippet
 # Geometry
 snippet 3dvec "3D vectors" b
