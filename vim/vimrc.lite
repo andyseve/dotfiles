@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 01 May 2019 02:56:35 PM EDT
+" Last Updated: Thu 27 Jun 2019 05:50:36 PM EDT
 
 set nocompatible
 
@@ -14,12 +14,12 @@ set nocompatible
   endif
 
   call plug#begin(bundle_path)
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
-  Plug 'SirVer/ultisnips'
-  Plug 'lervag/vimtex', {'for': 'latex'}
-  Plug 'sjl/gundo.vim'
-  Plug 'tpope/vim-fugitive'
+	Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+	Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+	Plug 'SirVer/ultisnips'
+	Plug 'lervag/vimtex', {'for': 'latex'}
+	Plug 'sjl/gundo.vim'
+	Plug 'tpope/vim-fugitive'
 	Plug 'tpope/vim-surround'
 	Plug 'tpope/vim-repeat'
 	Plug 'hecal3/vim-leader-guide'
@@ -27,11 +27,11 @@ set nocompatible
 	Plug 'godlygeek/tabular'
 	Plug 'mileszs/ack.vim'
 
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'altercation/vim-colors-solarized'
+	Plug 'vim-airline/vim-airline'
+	Plug 'vim-airline/vim-airline-themes'
+	Plug 'altercation/vim-colors-solarized'
 
-	Plug 'msuperdock/vim-foldout'
+	"Plug 'msuperdock/vim-foldout'
   call plug#end()
 
 " # Core Settings
