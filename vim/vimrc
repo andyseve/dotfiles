@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 20 May 2019 08:51:56 PM EDT
+" Last Updated: Thu 11 Jul 2019 10:31:57 PM EDT
 
 set nocompatible
 
@@ -47,7 +47,7 @@ set nocompatible
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
 
-  Plug 'msuperdock/vim-foldout'
+  "Plug 'msuperdock/vim-foldout'
   call plug#end()
 
 " # Core Settings
