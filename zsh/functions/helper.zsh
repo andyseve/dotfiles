@@ -7,8 +7,8 @@ bup() {
 	if [ -e "$1" ] || [ -L "$1" ]; then
 		echo "creating backup of $1..."
 		mv $1 $1.bak
-		echo "$1" >> $OVERWRITE
-		DID_OVERWRITE=true
+		if [[ -v $OVERWRITE  ]]; then echo "$1" >> $OVERWRITE; fi;
+		if [[ -v $DID_OVERWRITE ]]; then DID_OVERWRITE=true; fi;
 	fi
 }
 # creates dir if it doesn't exist. 
