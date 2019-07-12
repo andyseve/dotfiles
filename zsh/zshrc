@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 11 Jul 2019 12:06:47 PM DST
+# Last Edited: Fri 12 Jul 2019 11:53:30 AM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -19,6 +19,7 @@ zplugin light arzzen/calc.plugin.zsh
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light srijanshetty/zsh-pip-completion
 zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
+zplugin ice atclone"./install.py"; zplugin light wting/autojump
 zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
 zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-history-substring-search

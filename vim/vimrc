@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 11 Jul 2019 11:52:03 AM DST
+" Last Updated: Fri 12 Jul 2019 11:55:01 AM DST
 
 set nocompatible
 
@@ -47,7 +47,7 @@ set nocompatible
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
 
-  Plug 'msuperdock/vim-foldout'
+  "Plug 'msuperdock/vim-foldout'
   call plug#end()
 
 " # Core Settings
@@ -117,7 +117,7 @@ set nocompatible
   " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
-	set guioptions-=m " Remove Menubar
+  set guioptions-=m " Remove Menubar
 
 
   " Back up directories
@@ -229,6 +229,11 @@ set nocompatible
   let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
   let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 
+	" ## ALE Configuration
+	let g:ale_line_on_text_changed = 'never'
+	let g:ale_on_enter = 0
+	let g:ale_on_save = 1
+
   " ## Gundo Configuration
   let g:gundo_prefer_python3 = 1
   nnoremap <leader>u :GundoToggle<CR>
@@ -257,7 +262,7 @@ set nocompatible
 				\}
 
 	" SumatraPDF config for windows
-  if has("win64") || has("win32")
+	if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
 					\ = ' -forward-search @tex @line @pdf'
@@ -296,14 +301,15 @@ set nocompatible
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
 
-	" ## FZF and Ag configuration
-	if executable('ag')
-		set grepprg=ag\ --vimgrep
-		let g:ackprg='ag --vimgrep'
-		let g:ctrlp_user_command='ag --vimgrep -g'
-	endif
-	noremap <c-p> :FZF<CR>
+  " ## FZF and Ag configuration
+  if executable('ag')
+	  set grepprg=ag\ --vimgrep
+	  let g:ackprg='ag --vimgrep'
+	  let g:ctrlp_user_command='ag --vimgrep -g'
+  endif
+  noremap <c-p> :FZF<CR>
 
+<<<<<<< HEAD
 	" ## Foldout
 		let g:foldout_save = 1
 		
@@ -359,6 +365,8 @@ set nocompatible
 		nnoremap sv :source ~/.vimrc<CR>
 	endif
 	
+  " ## Foldout
+  let g:foldout_save = 1
 
 " # Functions
   " Update last modified entries
