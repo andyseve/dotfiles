@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 12 Jul 2019 11:55:01 AM DST
+" Last Updated: Fri 12 Jul 2019 10:30:42 PM EDT
 
 set nocompatible
 
@@ -309,7 +309,6 @@ set nocompatible
   endif
   noremap <c-p> :FZF<CR>
 
-<<<<<<< HEAD
 	" ## Foldout
 		let g:foldout_save = 1
 		
