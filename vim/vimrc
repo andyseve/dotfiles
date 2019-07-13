@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 11 Jul 2019 10:31:57 PM EDT
+" Last Updated: Fri 12 Jul 2019 11:55:01 AM DST
 
 set nocompatible
 
@@ -31,6 +31,7 @@ set nocompatible
   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
   Plug 'lervag/vimtex', {'for': 'latex'}
   Plug 'sjl/gundo.vim'
+  Plug 'mileszs/ack.vim'
   Plug 'junegunn/fzf', {'do':'./install --bin'}
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
@@ -40,7 +41,6 @@ set nocompatible
   Plug 'w0rp/ale'
   Plug 'scrooloose/nerdcommenter'
   Plug 'godlygeek/tabular'
-  Plug 'mileszs/ack.vim'
   Plug 'jiangmiao/auto-pairs'
 
   Plug 'vim-airline/vim-airline'
@@ -151,30 +151,6 @@ set nocompatible
   set foldenable
   set foldlevelstart=3
 	
-" # Generic Bindings and Shortcuts
-  nnoremap :W :w
-nnoremap :Q :q
-  nnoremap -d dd
-  nnoremap -c ddO
-
-  " Movements
-  nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
-  nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
-  vnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
-  vnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
-
-  " Hotkeys for saving in gvim
-  if(has("gui_running"))
-    nnoremap <c-s> :update<CR>
-    vnoremap <c-s> <c-c>:update<CR>
-    inoremap <c-s> <c-o>:update<CR>
-  endif
-
-  " Backspace to delete words
-  imap <c-backspace> <c-o>:normal dbx<CR>
-	nmap <c-backspace> dbx
-
-
 " # Plugin Configurations and Bindings
 	" ## Vim Leader Guide Configuration
 	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
@@ -188,27 +164,6 @@ nnoremap :Q :q
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
-	
-	" Global Copy and Paste 
-	let g:lmap.p = [ 'call feedkeys("\"+gP")', 'Paste']
-	let g:lmap.y = [ 'call feedkeys("\"+y")', 'Copy' ]
-	
-
-	" Quick Edits
-	let g:lmap.e = {
-				\'name': 'Quick Edit',
-				\'s':['UltiSnipsEdit', 'Snippets'],
-				\'v':['vsplit ~/.vimrc', 'Vimrc'],
-				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
-				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
-				\}
-
-	" Quick Source
-	if(has("win64") || has("win32"))
-		nnoremap sv :source ~/_vimrc<CR>
-	else
-		nnoremap sv :source ~/.vimrc<CR>
-	endif
 	
 	"Git menu
 	let g:lmap.g = {
@@ -354,6 +309,62 @@ nnoremap :Q :q
   endif
   noremap <c-p> :FZF<CR>
 
+<<<<<<< HEAD
+	" ## Foldout
+		let g:foldout_save = 1
+		
+		map <leader>n <Plug>FoldoutNavigation
+		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+
+" # Generic Bindings and Shortcuts
+  nnoremap :W :w
+  nnoremap :Q :q
+	nnoremap -d dd
+	nnoremap -c ddO
+
+	" Movements
+  nnoremap j gj
+  nnoremap k gk
+  vnoremap j gj
+  vnoremap k gk
+
+  " Hotkeys for saving in gvim
+  if(has("gui_running"))
+    nnoremap <c-s> :update<CR>
+    vnoremap <c-s> <c-c>:update<CR>
+    inoremap <c-s> <c-o>:update<CR>
+  endif
+
+  " Backspace to delete words
+  imap <c-backspace> <c-o>:normal dbx<CR>
+	nmap <c-backspace> dbx
+
+
+	" Global Copy and Paste 
+	let g:lmap.p = [ 'call feedkeys("\"+gP")', 'Paste']
+	let g:lmap.y = [ 'call feedkeys("\"+y")', 'Copy' ]
+	
+
+	" Quick Edits
+	let g:lmap.e = {
+				\'name': 'Quick Edit',
+				\'s':['UltiSnipsEdit', 'Snippets'],
+				\'v':['vsplit ~/.vimrc', 'Vimrc'],
+				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
+				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
+				\}
+
+	" Remove search highlight
+	nmap <leader>h :nohlsearch<CR>
+	let g:lmap.h = ['nohlsearch', 'Highlight']
+
+	" Quick Source
+	if(has("win64") || has("win32"))
+		nnoremap sv :source ~/_vimrc<CR>
+	else
+		nnoremap sv :source ~/.vimrc<CR>
+	endif
+	
   " ## Foldout
   let g:foldout_save = 1
 
