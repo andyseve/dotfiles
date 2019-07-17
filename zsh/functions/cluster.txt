@@ -1,0 +1,12 @@
+usage: cluster [-s | --server value] [-d | --domain value]
+       [-u | --username value] [-n | --name value] [-h | --home value]
+			 [-t |  --type value] [-c | command value] <command> [<args>]
+example: cluster -s foo -d bar.com -u yoda sync my_matlab_project
+Executes the command on target in the server.
+
+Commands:
+sync: Syncs copies of the folder on the server with local copy
+delete: Deletes the copy on the server
+run: Executes the code on the server. Details depend on type
+attach: Attaches to the running session on the server, if there is one
+
