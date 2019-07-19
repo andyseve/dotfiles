@@ -1,5 +1,15 @@
 # # Templates
-snippet temp "Basic Template"
+snippet code "Main template" b
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	freopen("${1:in}", "r", stdin); freopen("${2:out}", "w", stdout);
+	ios_base::sync_with_stdio(false);
+	$0
+}
+endsnippet
+snippet temp "Basic Template" b
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -71,7 +81,7 @@ $1 pow($1 x, $1 a){
 	return ret;
 }
 $1 inv(int x){
-	return pow(x, mod - 1);
+	return pow(x, mod - 2);
 }
 endsnippet
 snippet mod "Local mod functions" b
@@ -85,7 +95,7 @@ $1 pow($1 x, $1 a, $1 mod){
 	return ret;
 }
 $1 inv($1 x, $1 mod){
-	return pow(x, mod - 1, mod);
+	return pow(x, mod - 2, mod);
 }
 endsnippet
 snippet gcd "Euclid's Algorithm" b
