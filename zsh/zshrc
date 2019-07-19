@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 21 Jun 2019 02:29:59 PM EDT
+# Last Edited: Fri 12 Jul 2019 11:53:30 AM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -18,7 +18,7 @@ zplugin light jeffwalter/zsh-plugin-cd-ssh
 zplugin light arzzen/calc.plugin.zsh
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light srijanshetty/zsh-pip-completion
-zplugin ice from"gh-r" as"program"; zplugin load junegunn/fzf-bin
+zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
 zplugin ice atclone"./install.py"; zplugin light wting/autojump
 zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
 zplugin light zdharma/fast-syntax-highlighting
@@ -89,7 +89,6 @@ fi
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
-# Prompt line modifications
 
 # FZF config
 if _has fzf; then
