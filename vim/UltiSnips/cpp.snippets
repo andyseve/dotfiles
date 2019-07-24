@@ -25,8 +25,12 @@ snippet cin "optimized cin" b
 ios_base::sync_with_stdio(false);
 $0
 endsnippet
-snippet inf "infinity" b
-const ${1:int} ${2:inf} = numeric_limits<int>::max();
+snippet infi "infinity" b
+const int ${1:inf} = 1 << 30;
+$0
+endsnippet
+snippet infl "infinity" b
+const long long ${1:inf} = 1ll << 62;
 $0
 endsnippet
 

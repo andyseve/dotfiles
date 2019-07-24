@@ -1,9 +1,9 @@
 " Author: Anish Sevekari
-" Last Modified: Thu 11 Jul 2019 02:39:29 PM EDT
+" Last Modified: Tue 23 Jul 2019 02:58:37 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
-	setlocal foldmethod=syntax
+	setlocal foldmethod=manual
 
 " # Tabstops
 	setlocal tabstop=4
