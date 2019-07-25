@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Tue 23 Jul 2019 02:58:37 PM EDT
+" Last Modified: Wed 24 Jul 2019 05:52:20 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -12,8 +12,9 @@
 	setlocal noexpandtab
 
 " # Mappings
-	map <F5> :make main<CR>
-	map <F6> :make run<CR>
+	nnoremap <F5> :silent! !{xsel -b > in} \| redraw!<CR>
+	nnoremap <F6> :Make main<CR>
+	nnoremap <F7> :Make run<CR>
 
 " # ALE Settings
 	let b:ale_linters = ['gcc']
