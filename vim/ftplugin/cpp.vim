@@ -1,18 +1,24 @@
 " Author: Anish Sevekari
-" Last Modified: Wed 19 Jun 2019 06:23:55 PM EDT
+" Last Modified: Wed 24 Jul 2019 05:52:20 PM EDT
 " Cpp specific vim settings
 
-" Core Settings
-	setlocal foldmethod=syntax
+" # Core Settings
+	setlocal foldmethod=manual
 
-"	Tabstops
+" # Tabstops
 	setlocal tabstop=4
 	setlocal softtabstop=4
 	setlocal shiftwidth=4
 	setlocal noexpandtab
-	
-" Mappings
-	map <F5> :make main<CR>
-	map <F6> :make run<CR>
+
+" # Mappings
+	nnoremap <F5> :silent! !{xsel -b > in} \| redraw!<CR>
+	nnoremap <F6> :Make main<CR>
+	nnoremap <F7> :Make run<CR>
+
+" # ALE Settings
+	let b:ale_linters = ['gcc']
+	let b:ale_fixers = ['clang-format', 'uncrustify']
+	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -O3 -pthread -lm'
 
 " vim:foldmethod=marker:foldlevel=0:nospell

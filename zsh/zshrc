@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 21 Jun 2019 12:43:12 PM EDT
+# Last Edited: Fri 19 Jul 2019 02:07:37 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -57,8 +57,8 @@ HISTFILE=~/.zsh_history
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
 # history search keybindings
-bindkey '${key[up]}' history-substring-search-up
-bindkey '${key[down]}' history-substring-search-down
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
@@ -89,7 +89,6 @@ fi
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
-# Prompt line modifications
 
 # FZF config
 if _has fzf; then
