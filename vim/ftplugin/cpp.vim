@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Wed 24 Jul 2019 05:52:20 PM EDT
+" Last Modified: Sun 28 Jul 2019 03:45:09 AM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -17,8 +17,17 @@
 	nnoremap <F7> :Make run<CR>
 
 " # ALE Settings
-	let b:ale_linters = ['gcc']
+	let b:ale_linters = ['gcc', 'clang']
 	let b:ale_fixers = ['clang-format', 'uncrustify']
 	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -O3 -pthread -lm'
 
-" vim:foldmethod=marker:foldlevel=0:nospell
+" # Abbreviations
+	ab ll long long
+	ab pii pair<int,int>
+	ab vi vector<int>
+	ab vll vector<long long>
+	ab vpii vector<pair<int,int>>
+	ab mi modular<int>
+	ab pb push_back(
+	ab mp make_pair(
+"  vim:foldmethod=marker:foldlevel=0:nospell
