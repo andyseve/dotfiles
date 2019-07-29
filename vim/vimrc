@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 24 Jul 2019 05:56:36 PM EDT
+" Last Updated: Thu 25 Jul 2019 06:51:30 PM EDT
 
 set nocompatible
 
@@ -184,6 +184,7 @@ set nocompatible
 	let g:lmap.o = {
 				\'name': 'Lists'
 				\}
+	let g:lmap.o.k = ['copen', 'Quickfix']
 	let g:lmap.o.o = ['cwindow', 'Quickfix']
 	let g:lmap.o.l = ['lwindow', 'Locationlist']
 
