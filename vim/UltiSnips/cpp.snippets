@@ -4,8 +4,8 @@ snippet code "Main template" b
 using namespace std;
 
 int main(){
-	freopen("${1:in}", "r", stdin); freopen("${2:out}", "w", stdout);
 	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 	$0
 }
 endsnippet
@@ -28,11 +28,9 @@ $0
 endsnippet
 snippet infi "infinity" b
 const int ${1:inf} = 1 << 30;
-$0
 endsnippet
 snippet infl "infinity" b
 const long long ${1:inf} = 1ll << 62;
-$0
 endsnippet
 
 # # Common functions
