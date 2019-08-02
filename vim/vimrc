@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 29 Jul 2019 07:02:57 PM EDT
+" Last Updated: Mon 29 Jul 2019 08:22:21 PM EDT
 
 set nocompatible
 
@@ -380,7 +380,6 @@ set nocompatible
       let b:last_line = 20
     endif
     let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
-    echo cmd
     execute cmd
     :nohlsearch
     call winrestview(b:cur_window)

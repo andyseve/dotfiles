@@ -64,6 +64,14 @@ int ${1:bs}(int s, int l, int r){
 	else return $1(s, mid, r);
 }
 endsnippet
+snippet bs "Binary Search" 
+int ${1:a} = ${2:0}, ${3:b} = ${4:n};
+while($1 < $2){
+	int m = ($1 + $2) / 2;
+	if ( $0 ) a = m + 1;
+	else b = m;
+}
+endsnippet
 
 # # Number Theory
 snippet miller_rabin "Miller Rabin Primality Test" b
@@ -87,16 +95,16 @@ bool miller_rabin(${1:int} p){
 	return true;
 }
 endsnippet
-snippet mod1 "mod value 1" b
+snippet mod1 "mod value 1"
 1000000007
 endsnippet
-snippet mod2 "mod value 2" b
+snippet mod2 "mod value 2"
 998244353
 endsnippet
 snippet modg "Global mod functions" b
 const ${1:int} ${2:mod} = ${3:1000000007};
 inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % $2); }
-inline $1 sub($1 a, $1 b) {return ($1) ((a -= b) % $2 < 0 ) ? a + $2 : a; }
+inline $1 sub($1 a, $1 b) { return ($1) ((a -= b) % $2 < 0 ) ? a + $2 : a; }
 inline $1 mul($1 a, $1 b) { return ($1) ((1ll * a * b) % $2); }
 $1 pow($1 x, $1 a){
 	if(a == 0) return 1;
