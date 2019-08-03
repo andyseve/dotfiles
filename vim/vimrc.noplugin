@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 11 Jul 2019 12:05:00 PM DST
+" Last Updated: Mon 29 Jul 2019 04:19:40 PM EDT
 
 set nocompatible
 
@@ -26,25 +26,26 @@ set nocompatible
   set ruler " Display cursor position
 
   " Numbering Settings and functions
-    set number
-    " Toggle between relative and absolute numbers
-    function! RelativeNumber()
-      set number
-      set relativenumber
-    endfunc
-    function! AbsoluteNumber()
-      set norelativenumber
-      set number
-    endfunc
-    " Autocommands to toggle between relative and absolute numbering
-    augroup AnishsNumber
-      autocmd!
-      autocmd FocusLost * call AbsoluteNumber()
-      autocmd FocusGained * call RelativeNumber()
-      autocmd BufLeave * call AbsoluteNumber()
-      autocmd BufEnter * call RelativeNumber()
-      autocmd InsertEnter * call AbsoluteNumber()
-      autocmd InsertLeave * call RelativeNumber()
+  set number
+  " Toggle between relative and absolute numbers
+  function! RelativeNumber()
+	  set number
+	  set relativenumber
+  endfunc
+  function! AbsoluteNumber()
+	  set norelativenumber
+	  set number
+  endfunc
+  " Autocommands to toggle between relative and absolute numbering
+	augroup AnishsNumber
+		autocmd!
+		autocmd FocusLost * call AbsoluteNumber()
+		autocmd FocusGained * call RelativeNumber()
+		autocmd BufLeave * call AbsoluteNumber()
+		autocmd BufEnter * call RelativeNumber()
+		autocmd InsertEnter * call AbsoluteNumber()
+		autocmd InsertLeave * call RelativeNumber()
+	augroup END
   
   set confirm " Exit confirmation
   set wildmenu
@@ -58,8 +59,8 @@ set nocompatible
   set mouse=a
   set textwidth=0 " Textwidth to infinite
   set spelllang=en_us " Set US English for spellchecking
-	set nospell
-	set viewoptions-=options " Saves folds and cursor
+  set nospell
+  set viewoptions-=options " Saves folds and cursor
 
   set updatetime=1000
 
@@ -68,7 +69,7 @@ set nocompatible
   " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
-	set guioptions-=m " Remove Menubar
+  set guioptions-=m " Remove Menubar
 
 
   " Back up directories
@@ -146,6 +147,9 @@ set nocompatible
 		nnoremap sv :source ~/.vimrc<CR>
 	endif
 	
+	" Quick lists
+	nnoremap <leader>oo :cwindow
+	nnoremap <leader>ol :lwindow
 
 " # Functions
   " Update last modified entries

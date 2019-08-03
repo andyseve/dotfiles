@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 17 Jul 2019 12:33:55 AM DST
+" Last Updated: Mon 29 Jul 2019 04:24:27 PM EDT
 
 set nocompatible
 
@@ -14,9 +14,8 @@ set nocompatible
   endif
 
   call plug#begin(bundle_path)
-	
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+  Plug 'hecal3/vim-leader-guide'
+  Plug 'ervandew/supertab'
   Plug 'SirVer/ultisnips'
   Plug 'lervag/vimtex', {'for': 'latex'}
   Plug 'sjl/gundo.vim'
@@ -24,17 +23,19 @@ set nocompatible
   Plug 'junegunn/fzf', {'do':'./install --bin'}
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
+	Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
+  Plug 'jiangmiao/auto-pairs'
   Plug 'tpope/vim-surround'
-  Plug 'hecal3/vim-leader-guide'
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
+  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'altercation/vim-colors-solarized'
   Plug 'scrooloose/nerdcommenter'
   Plug 'godlygeek/tabular'
-  Plug 'jiangmiao/auto-pairs'
-
-	Plug 'vim-airline/vim-airline'
-	Plug 'vim-airline/vim-airline-themes'
-	Plug 'altercation/vim-colors-solarized'
-
-	"Plug 'msuperdock/vim-foldout'
+  Plug 'tpope/vim-repeat'
+	Plug 'tpope/vim-dispatch'
+  "Plug 'msuperdock/vim-foldout'
   call plug#end()
 
 " # Core Settings
@@ -72,15 +73,15 @@ set nocompatible
 	  set number
   endfunc
   " Autocommands to toggle between relative and absolute numbering
-  augroup AnishsNumber
-	  autocmd!
-	  autocmd FocusLost * call AbsoluteNumber()
-	  autocmd FocusGained * call RelativeNumber()
-	  autocmd BufLeave * call AbsoluteNumber()
-	  autocmd BufEnter * call RelativeNumber()
-	  autocmd InsertEnter * call AbsoluteNumber()
-	  autocmd InsertLeave * call RelativeNumber()
-  augroup END
+	augroup AnishsNumber
+		autocmd!
+		autocmd FocusLost * call AbsoluteNumber()
+		autocmd FocusGained * call RelativeNumber()
+		autocmd BufLeave * call AbsoluteNumber()
+		autocmd BufEnter * call RelativeNumber()
+		autocmd InsertEnter * call AbsoluteNumber()
+		autocmd InsertLeave * call RelativeNumber()
+	augroup END
   
   set confirm " Exit confirmation
   set wildmenu
@@ -94,8 +95,8 @@ set nocompatible
   set mouse=a
   set textwidth=0 " Textwidth to infinite
   set spelllang=en_us " Set US English for spellchecking
-	set nospell
-	set viewoptions-=options " Saves folds and cursor
+  set nospell
+  set viewoptions-=options " Saves folds and cursor
 
   set updatetime=1000
 
@@ -104,7 +105,7 @@ set nocompatible
   " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
-	set guioptions-=m " Remove Menubar
+  set guioptions-=m " Remove Menubar
 
 
   " Back up directories
@@ -152,26 +153,6 @@ set nocompatible
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
 	
-	"Git menu
-	let g:lmap.g = {
-				\'name': 'Git Menu',
-				\'s': ['Gstatus', 'Git Status'],
-				\'p': ['Gpull', 'Git Pull'],
-				\'u': ['Gpush', 'Git Push'],
-				\'c': ['Gcommit', 'Git Commit'],
-				\'w': ['Gwrite', 'Git Write'],
-				\'r': ['Gread', 'Git Read'],
-				\}
-
-	let g:lmap.c = {
-				\'name': 'Comments',
-				\}
-
-	let g:lmap.o = {
-				\'name': 'Lists'
-				\}
-	let g:lmap.o.o = ['copen', 'Quickfix']
-	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 
   " ## Ultisnips Configuration
@@ -189,32 +170,12 @@ set nocompatible
 
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
   let g:UltiSnipsEditSplit="horizontal"
-	" Enter to expand snippets when possible
-	" Does not work with cpp
-		let g:ulti_expand_or_jump_res = 0
-		function! ExpandSnippetOrCarriageReturn()
-			let tmp = UltiSnips#ExpandSnippetOrJump()
-			if g:ulti_expand_or_jump_res > 0
-				return tmp
-			else
-				return "\<CR>"
-			endif
-		endfunc
-  inoremap <expr> <CR> "<C-R>=ExpandSnippetOrCarriageReturn()<CR>"
 
-  " ## Gundo Configuration
-  let g:gundo_prefer_python3 = 1
-  nnoremap <leader>u :GundoToggle<CR>
 
-  " ## NERDTree Configuration
-  let g:NERDTreeQuitOnOpen = 1
-  nnoremap <M-\> :NERDTreeToggle<CR>
-  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
-	" Close if only windows present is NERDTree
-	augroup AnishsNerdTree
-		autocmd!
-		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-	augroup END
+	" ## ALE Configuration
+	let g:ale_line_on_text_changed = 'never'
+	let g:ale_on_enter = 1
+	let g:ale_on_save = 1
 
   " ## Vimtex configuration
   let g:vimtex_enabled = 1
@@ -244,6 +205,44 @@ set nocompatible
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
+
+  " ## Gundo Configuration
+  let g:gundo_prefer_python3 = 1
+  nnoremap <leader>u :GundoToggle<CR>
+
+  " ## FZF and Ag configuration
+  if executable('ag')
+	  set grepprg=ag\ --vimgrep
+	  let g:ackprg='ag --vimgrep'
+	  let g:ctrlp_user_command='ag --vimgrep -g'
+  endif
+  noremap <c-p> :FZF<CR>
+
+	" ## Fugitive + Github-Dashboard
+	let g:lmap.g = {
+				\'name': 'Git Menu',
+				\'s': ['Gstatus', 'Git Status'],
+				\'p': ['Gpull', 'Git Pull'],
+				\'u': ['Gpush', 'Git Push'],
+				\'c': ['Gcommit', 'Git Commit'],
+				\'w': ['Gwrite', 'Git Write'],
+				\'r': ['Gread', 'Git Read'],
+				\}
+
+  " ## NERDTree Configuration
+  let g:NERDTreeQuitOnOpen = 1
+  nnoremap <M-\> :NERDTreeToggle<CR>
+  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
+	" Close if only windows present is NERDTree
+	augroup AnishsNerdTree
+		autocmd!
+		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	augroup END
+
+	" ## NERDcommenter
+	let g:lmap.c = {
+				\'name': 'Comments',
+				\}
 	
   " ## Airline Configuration
   let g:airline_theme = 'solarized'
@@ -254,18 +253,20 @@ set nocompatible
   let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
   
+  " Airline symbols
+  if !exists('g:airline_symbols')
+    let g:airline_symbols ={}
+  endif
+	let g:airline_symbols.space = "\u3000"
+  if has("win64") || has("win32")
+    let g:airline_powerline_fonts = 0
+    let g:airline_symbols.space = "\u0020"
+  endif
+
   " ## Solarized Config for Terminal {{{
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
-
-	" ## FZF and Ag configuration
-	if executable('ag')
-		set grepprg=ag\ --vimgrep
-		let g:ackprg='ag --vimgrep'
-		let g:ctrlp_user_command='ag --vimgrep -g'
-	endif
-	noremap <c-p> :FZF<CR>
 
 	" ## Foldout
 		let g:foldout_save = 1
@@ -311,7 +312,7 @@ set nocompatible
 				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
 				\}
 
-	" Remove Search Highlight
+	" Remove search highlight
 	nmap <leader>h :nohlsearch<CR>
 	let g:lmap.h = ['nohlsearch', 'Highlight']
 
@@ -321,7 +322,13 @@ set nocompatible
 	else
 		nnoremap sv :source ~/.vimrc<CR>
 	endif
-	
+
+	" Quick lists
+	let g:lmap.o = {
+				\'name': 'Lists'
+				\}
+	let g:lmap.o.o = ['cwindow', 'Quickfix']
+	let g:lmap.o.l = ['lwindow', 'Locationlist']
 
 " # Functions
   " Update last modified entries
