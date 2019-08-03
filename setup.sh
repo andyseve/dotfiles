@@ -1,5 +1,4 @@
-#!/bin/bash
-## Last Modified: Sat 03 Aug 2019 11:14:23 AM EDT
+## Last Modified: Sat 03 Aug 2019 01:30:06 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
