@@ -1,4 +1,4 @@
-## Last Modified: Sat 03 Aug 2019 01:30:06 PM EDT
+## Last Modified: Sat 03 Aug 2019 09:35:08 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -13,6 +13,8 @@ DID_OVERWRITE=false
 EXISTS_OVERWRITE=false
 LITE=false
 NOPLUGIN=false
+
+source $DOTFILES/zsh/functions/helper.zsh
 
 while test $# != 0
 do
