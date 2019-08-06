@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 19 Jul 2019 02:07:37 AM EDT
+# Last Edited: Mon 05 Aug 2019 11:30:05 PM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -9,7 +9,7 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 # Zplugin ######################################################################
 ################################################################################
 
-source '/home/stranger/.zplugin/bin/zplugin.zsh'
+source $HOME/.zplugin/bin/zplugin.zsh
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
@@ -18,7 +18,6 @@ zplugin light jeffwalter/zsh-plugin-cd-ssh
 zplugin light arzzen/calc.plugin.zsh
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light srijanshetty/zsh-pip-completion
-zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
 zplugin ice atclone"./install.py"; zplugin light wting/autojump
 zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
 zplugin light zdharma/fast-syntax-highlighting
