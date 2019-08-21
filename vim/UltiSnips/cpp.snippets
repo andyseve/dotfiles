@@ -23,9 +23,10 @@ snippet freopen "freopen line" b
 freopen("${1:in}", "r", stdin); freopen("${2:out}", "w", stdout);
 $0
 endsnippet
-snippet cin "optimized cin" b
+snippet ios "optimized ios" b
 ios_base::sync_with_stdio(false);
 cin.tie(NULL);
+cout.tie(NULL);
 $0
 endsnippet
 snippet infi "infinity" b
@@ -46,7 +47,7 @@ snippet fori "Incremental for loop"
 for(int ${1:i} = ${2:a}; $1 < ${3:b}; ++$1)
 endsnippet
 snippet ford "Decreasing for loop"
-for(int ${1:i} = ${2:n}; $1 > ${3:-1}; --$1)
+for(int ${1:i} = ${2:n-1}; $1 >= ${3:0}; --$1)
 endsnippet
 snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
@@ -142,9 +143,9 @@ endsnippet
 # modular class copied from Benq
 snippet modular "modular class" b
 const int ${1:MOD} = ${2:1000000007};
-template<class T> struct modular {
-	T val;
-	explicit operator T() const { return val; }
+struct modular {
+	long long val;
+	explicit operator long long() const { return val; }
 	modular() { val = 0; }
 	modular(const long long & v){
 		val = (-$1 <= v && v <= $1) ? v : v % $1;
@@ -152,6 +153,7 @@ template<class T> struct modular {
 	}
 
 	friend ostream& operator<<(ostream& os, const modular& a) { return os << a.val; }
+	friend istream& operator>>(istream& in, modular& a) { return in >> a.val; }
 	friend bool operator==(const modular& a, const modular& b) { return a.val == b.val; }
 	friend bool operator!=(const modular& a, const modular& b) { return !(a == b); }
 	friend bool operator<(const modular& a, const modular& b) { return a.val < b.val; }

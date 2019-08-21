@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 03 Aug 2019 11:57:18 AM EDT
+# Last Edited: Wed 07 Aug 2019 10:42:18 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -9,7 +9,7 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 # Zplugin ######################################################################
 ################################################################################
 
-source '$HOME/.zplugin/bin/zplugin.zsh'
+source $HOME/.zplugin/bin/zplugin.zsh
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 

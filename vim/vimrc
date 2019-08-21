@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 05 Aug 2019 11:20:07 PM EDT
+" Last Updated: Mon 12 Aug 2019 03:33:24 PM EDT
 
 set nocompatible
 
@@ -384,6 +384,15 @@ set nocompatible
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
+	
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
 
 " # Autocommands
   augroup Anishs
