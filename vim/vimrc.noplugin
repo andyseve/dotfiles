@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 29 Jul 2019 04:19:40 PM EDT
+" Last Updated: Mon 05 Aug 2019 11:32:24 PM DST
 
 set nocompatible
 
@@ -19,7 +19,7 @@ set nocompatible
     endif
   else
     set background=dark
-    colorscheme solarized
+    colorscheme desert
   endif
 	
   set backspace=indent,eol,start

@@ -1,5 +1,4 @@
-#!/bin/bash
-## Last Modified: Tue 02 Jul 2019 04:04:31 AM EDT
+## Last Modified: Tue 20 Aug 2019 05:21:52 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -35,7 +34,7 @@ done
 # handling overwrites
 if [ -e "$OVERWRITE" ]; then
 	while true; do
-		read -n 1 -p "Overwrite file already exists. Are you sure you want to run setup again?[y|n]" cont
+		read -p "Overwrite file already exists. Are you sure you want to run setup again?[y|n]" cont
 		printf "\n"
 		case $cont in
 			[Yy]*)
@@ -58,7 +57,7 @@ fi
 
 
 # import helper functions
-source $DOTFILES/zsh/functions/helper.zsh
+. $DOTFILES/zsh/functions/helper.zsh
 
 
 
@@ -114,7 +113,6 @@ if check zsh; then
 		cd "$ZPLG_HOME"
 		git clone --depth 10 https://github.com/zdharma/zplugin.git bin
 	fi
-
 else
 	nope zsh
 fi
@@ -150,7 +148,6 @@ if check vim; then
 
 	cdir $OF/autoload
 	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
-
 else
 	nope vim
 fi
@@ -194,7 +191,7 @@ fi
 
 #Themes
 while true; do
-	read -n 1 -p "Do you want to install themes[y|n]" install_themes
+	read -p "Do you want to install themes[y|n]" install_themes
 	printf "\n"
 	case $install_themes in
 		[Yy]*)
