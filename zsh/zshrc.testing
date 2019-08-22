@@ -1,6 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 11 Jul 2019 12:10:34 PM DST
-# Zshrc with only color settings
+# Last Edited: Thu 11 Jul 2019 12:12:26 PM DST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -14,8 +13,15 @@ source '/home/stranger/.zplugin/bin/zplugin.zsh'
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
+zplugin light hlissner/zsh-autopair
+zplugin light jeffwalter/zsh-plugin-cd-ssh
+zplugin light arzzen/calc.plugin.zsh
+zplugin light zsh-users/zsh-autosuggestions
+zplugin light srijanshetty/zsh-pip-completion
+zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
 zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
 zplugin light zdharma/fast-syntax-highlighting
+zplugin light zsh-users/zsh-history-substring-search
 
 ################################################################################
 # Settings #####################################################################
@@ -31,7 +37,7 @@ setopt histignorealldups # ignore repeats in history
 setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
-COMPLETION_WAITING_DOTS="ture"
+COMPLETION_WAITING_DOTS="true"
 bindkey -v # Use vim keybindings
 
 
@@ -49,6 +55,11 @@ HISTFILE=~/.zsh_history
 # Search
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
+# history search keybindings
+bindkey '${key[up]}' history-substring-search-up
+bindkey '${key[down]}' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 ################################################################################
 # Functions and Commands #######################################################
@@ -72,6 +83,9 @@ if [[ -n $SSH_CONNECTION ]]; then
 		neofetch
 	fi
 fi
+
+# loading autojump
+[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
 

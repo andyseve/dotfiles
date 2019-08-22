@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 01 May 2019 02:57:43 PM EDT
+" Last Updated: Mon 29 Jul 2019 04:19:40 PM EDT
 
 set nocompatible
 
@@ -26,28 +26,30 @@ set nocompatible
   set ruler " Display cursor position
 
   " Numbering Settings and functions
-    set number
-    " Toggle between relative and absolute numbers
-    function! RelativeNumber()
-      set number
-      set relativenumber
-    endfunc
-    function! AbsoluteNumber()
-      set norelativenumber
-      set number
-    endfunc
-    " Autocommands to toggle between relative and absolute numbering
-    augroup AnishsNumber
-      autocmd!
-      autocmd FocusLost * call AbsoluteNumber()
-      autocmd FocusGained * call RelativeNumber()
-      autocmd BufLeave * call AbsoluteNumber()
-      autocmd BufEnter * call RelativeNumber()
-      autocmd InsertEnter * call AbsoluteNumber()
-      autocmd InsertLeave * call RelativeNumber()
+  set number
+  " Toggle between relative and absolute numbers
+  function! RelativeNumber()
+	  set number
+	  set relativenumber
+  endfunc
+  function! AbsoluteNumber()
+	  set norelativenumber
+	  set number
+  endfunc
+  " Autocommands to toggle between relative and absolute numbering
+	augroup AnishsNumber
+		autocmd!
+		autocmd FocusLost * call AbsoluteNumber()
+		autocmd FocusGained * call RelativeNumber()
+		autocmd BufLeave * call AbsoluteNumber()
+		autocmd BufEnter * call RelativeNumber()
+		autocmd InsertEnter * call AbsoluteNumber()
+		autocmd InsertLeave * call RelativeNumber()
+	augroup END
   
   set confirm " Exit confirmation
   set wildmenu
+  set wildmode=full
   set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
   set showmatch " Highlight matching braces
   set modeline " Enables modlines (File specific vim settings)
@@ -57,33 +59,35 @@ set nocompatible
   set mouse=a
   set textwidth=0 " Textwidth to infinite
   set spelllang=en_us " Set US English for spellchecking
-	set nospell
-	set viewoptions-=options " Saves folds and cursor
+  set nospell
+  set viewoptions-=options " Saves folds and cursor
 
-	set updatetime=1000
+  set updatetime=1000
 
-	let mapleader = "\\"
-	
-	" Gui Options
-	set guioptions-=L " Remove left scrollbar
-	set guioptions-=T " Remove Toolbar
+  let mapleader = "\\"
 
-	" Back up directories
-	if has("win64") || has("win32")
-		set undodir=~/vimfiles/.undo//
-		set backupdir=~/vimfiles/.backup//
-		set directory=~/vimfiles/.swp//
-		set viewdir=~/vimfiles/view//
-	else
-		set undodir=~/.vim/.undo//
-		set backupdir=~/.vim/.backup//
-		set directory=~/.vim/.swp//
-		set viewdir=~/.vim/view//
-	endif
-" # Tab settings
+  " Gui Options
+  set guioptions-=L " Remove left scrollbar
+  set guioptions-=T " Remove Toolbar
+  set guioptions-=m " Remove Menubar
+
+
+  " Back up directories
+  if has("win64") || has("win32")
+	set undodir=~/vimfiles/.undo//
+	set backupdir=~/vimfiles/.backup//
+	set directory=~/vimfiles/.swp//
+	set viewdir=~/vimfiles/view//
+  else
+	set undodir=~/.vim/.undo//
+	set backupdir=~/.vim/.backup//
+	set directory=~/.vim/.swp//
+	set viewdir=~/.vim/view//
+  endif
+  " # indent settings
   set autoindent
   set smartindent
-	set breakindent
+  set breakindent
 
   set shiftwidth=2
   set softtabstop=2
@@ -93,8 +97,6 @@ set nocompatible
 " # Search settings
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
-  " Clear out search highlights
-  nnoremap <leader><space> :nohlsearch<CR> 
 
 " # Fold Settings
   set foldenable
@@ -122,10 +124,32 @@ set nocompatible
   " Backspace to delete words
   imap <c-backspace> <c-o>:normal dbx<CR>
 	nmap <c-backspace> dbx
-	
+
+
 	" Global Copy and Paste
 	noremap <leader>p "+gP
 	noremap <leader>y "+y
+
+
+	" Quick Edits
+	nmap <leader>es :UltiSnipsEdit<CR>
+	nmap <leader>ev :vsplit ~/.vimrc<CR>
+	nmap <leader>el :vsplit ~/dotfiles/latex/anishs.sty<CR>
+	nmap <leader>ez :vsplit ~/.zshrc<CR>
+
+	" Remove Search Highlight
+	nmap <leader>h :nohlsearch<CR>
+
+	" Quick Source
+	if(has("win64") || has("win32"))
+		nnoremap sv :source ~/_vimrc<CR>
+	else
+		nnoremap sv :source ~/.vimrc<CR>
+	endif
+	
+	" Quick lists
+	nnoremap <leader>oo :cwindow
+	nnoremap <leader>ol :lwindow
 
 " # Functions
   " Update last modified entries

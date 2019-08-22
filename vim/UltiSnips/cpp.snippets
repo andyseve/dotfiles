@@ -1,5 +1,15 @@
-# Templates
-snippet temp "Basic Template"
+# # Templates
+snippet code "Main template" b
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	$0
+}
+endsnippet
+snippet temp "Basic Template" b
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -13,25 +23,57 @@ $0
 endsnippet
 snippet cin "optimized cin" b
 ios_base::sync_with_stdio(false);
+cin.tie(NULL);
 $0
 endsnippet
-# Common functions
+snippet infi "infinity" b
+const int ${1:inf} = 1 << 30;
+endsnippet
+snippet infl "infinity" b
+const long long ${1:inf} = 1ll << 62;
+endsnippet
+
+# # Common functions
 snippet forg  "General for loop"
-for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$1}){
-	$0
-}
+for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$2})
 endsnippet
 snippet for "Basic for loop" 
-for(int ${1:i} = 0; $1 < ${2:n}; ++$1){
-	$0
-}
+for(int ${1:i} = 0; $1 < ${2:n}; ++$1)
 endsnippet
 snippet fori "Incremental for loop"
-for(int ${1:i} = ${2:a}; $1 < ${3:b}; ++$1){
-	$0
+for(int ${1:i} = ${2:a}; $1 < ${3:b}; ++$1)
+endsnippet
+snippet ford "Decreasing for loop"
+for(int ${1:i} = ${2:n}; $1 > ${3:-1}; --$1)
+endsnippet
+snippet bsl "Binary Search" b
+// returns smallest index with >= s;
+int ${1:bs}(int s, int l, int r){
+	if(l == r) return l;
+	int mid = (l + r)/2;
+	if(${2:array}[mid] < s) return $1(s, mid+1, r);
+	else return $1(s, l, mid);
 }
 endsnippet
-# Number Theory
+snippet bsg "Binary Search" b
+// returns largest index with >= s;
+int ${1:bs}(int s, int l, int r){
+	if(l == r) return l;
+	int mid = (l + r)/2;
+	if(${2:array}[mid] > s) return $1(s, l, mid-1);
+	else return $1(s, mid, r);
+}
+endsnippet
+snippet bs "Binary Search" 
+int ${1:a} = ${2:0}, ${3:b} = ${4:n};
+while($1 < $2){
+	int m = ($1 + $2) / 2;
+	if ( $0 ) a = m + 1;
+	else b = m;
+}
+endsnippet
+
+# # Number Theory
 snippet miller_rabin "Miller Rabin Primality Test" b
 bool miller_rabin(${1:int} p){
 	$1 s = 0; $1 r = p-1;
@@ -53,34 +95,78 @@ bool miller_rabin(${1:int} p){
 	return true;
 }
 endsnippet
-snippet mod "Global mod functions" b
-${1:int} mod = ${2:1000000007};
-inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % mod);}
-inline $1 mul($1 a, $1 b) { return ($1) ((1ll * a * b) % mod); }
+snippet mod1 "mod value 1"
+1000000007
+endsnippet
+snippet mod2 "mod value 2"
+998244353
+endsnippet
+snippet modg "Global mod functions" b
+const ${1:int} ${2:mod} = ${3:1000000007};
+inline $1 sum($1 a, $1 b) { return ($1) ((a + b) % $2); }
+inline $1 sub($1 a, $1 b) { return ($1) ((a -= b) % $2 < 0 ) ? a + $2 : a; }
+inline $1 mul($1 a, $1 b) { return ($1) ((1ll * a * b) % $2); }
 $1 pow($1 x, $1 a){
 	if(a == 0) return 1;
 	$1 ret = pow(x, a/2);
 	ret = mul(ret, ret);
-	if(a % 2) ret = mul(x, ret);
+	if(a & 1) ret = mul(x, ret);
 	return ret;
 }
-$1 inv(int x){
-	return pow(x, mod - 1);
+$1 inv($1 x){
+	return pow(x, $2 - 2);
 }
+$0
 endsnippet
-snippet mod "Local mod functions" b
-inline ${1:int} sum($1 a, $1 b, $1 mod) { return ($1) ((a + b) % mod);}
+snippet modf "mod functions" b
+inline ${1:int} sum($1 a, $1 b, $1 mod) { return ($1) ((a + b) % mod); }
+inline $1 sub($1 a, $1 b, $1 mod) {return ($1) ((a -= b) % mod < 0 ) ? a + mod : a; }
 inline $1 mul($1 a, $1 b, $1 mod) { return ($1) ((1ll * a * b) % mod); }
 $1 pow($1 x, $1 a, $1 mod){
 	if(a == 0) return 1;
 	$1 ret = pow(x, a/2, mod);
 	ret = mul(ret, ret, mod);
-	if(a % 2) ret = mul(x, ret, mod);
+	if(a & 1) ret = mul(x, ret, mod);
 	return ret;
 }
 $1 inv($1 x, $1 mod){
-	return pow(x, mod - 1, mod);
+	return pow(x, mod - 2, mod);
 }
+$0
+endsnippet
+snippet modular "modular class" b
+const int ${1:MOD} = ${2:1000000007};
+template<class T> struct modular {
+	T val;
+	explicit operator T() const { return val; }
+	modular() { val = 0; }
+	modular(const long long & v){
+		val = (-$1 <= v && v <= $1) ? v : v % $1;
+		if (val < 0) val += $1;
+	}
+
+	friend ostream& operator<<(ostream& os, const modular& a) { return os << a.val; }
+	friend bool operator==(const modular& a, const modular& b) { return a.val == b.val; }
+	friend bool operator!=(const modular& a, const modular& b) { return !(a == b); }
+	friend bool operator<(const modular& a, const modular& b) { return a.val < b.val; }
+
+	modular operator-() const { return modular(-val); }
+	modular& operator+=(const modular& m) { if ((val += m.val) >= $1) val -= $1; return *this; }
+	modular& operator-=(const modular& m) { if ((val -= m.val) < 0) val += $1; return *this; }
+	modular& operator*=(const modular& m) { val = (long long)val*m.val%$1; return *this; }
+	friend modular pow(modular a, long long p) {
+		modular ans = 1; for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans;
+	}
+	friend modular inv(const modular& a) { return pow(a, $1 - 2); } 
+	modular& operator/=(const modular& m) { return (*this) *= inv(m); }
+
+	friend modular operator+(modular a, const modular& b) { return a += b; }
+	friend modular operator-(modular a, const modular& b) { return a -= b; }
+	friend modular operator*(modular a, const modular& b) { return a *= b; }
+
+	friend modular operator/(modular a, const modular& b) { return a /= b; }	
+};
 endsnippet
 snippet gcd "Euclid's Algorithm" b
 ${1:long long} gcd($1 a, $1 b){
@@ -89,7 +175,28 @@ ${1:long long} gcd($1 a, $1 b){
 }
 $0
 endsnippet
-# Geometry
+snippet frac "Fraction Functions" b
+inline pair<${1:int},$1> sum(pair<$1,$1> a, pair<$1,$1>b){
+	return make_pair(
+			sum(mul(a.first, b.second), mul(a.second, b.first)),
+			mul(a.second, b.second)
+			);
+}
+inline pair<$1,$1> mul(pair<$1,$1> a, pair<$1,$1> b){
+	return make_pair(
+			mul(a.first, b.first),
+			mul(a.second, b.second)
+			);
+}
+inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b){
+	return make_pair(
+			sum(mul(a.first, b.second), - mul(a.second, b.first)),
+			mul(a.second, b.second)
+			);
+}
+endsnippet
+
+# # Geometry
 snippet 3dvec "3D vectors" b
 // 3d vector (can degenerate to 2d when z=0)
 #define T ${1:long double}
@@ -129,9 +236,91 @@ ostream& operator<<(ostream& out, const vec& v) {
 }
 #undef T
 endsnippet
-# Debug
+snippet vector "Vector template" b
+template<class T> struct vec {
+	int n;
+	vector<T> d;
+	vec(int _n) : n(_n) {d = vector<T>(n);}
+	vec() : vec(0) {}
+	int operator*(const vec& v){
+		assert(n == v.n);
+		int ret = 0;
+		for(int i = 0; i < n; ++i) ret += d[i] * v.d[i];
+		return ret;
+	}
+	vec& operator +=(const vec& v){
+		assert(n == v.n);
+		for(int i = 0; i < n; ++i) d[i] += v.d[i];
+		return *this;
+	}
+	vec& operator-=(const vec& v){
+		assert(n == v.n);
+		for(int i = 0; i < n; ++i) d[i] -= v.d[i];
+		return *this;
+	}
+	vec operator +(const vec& v){ return vec(*this)+=v; }
+	vec operator -(const vec& v){ return vec(*this)-=v; }
+};
+endsnippet
+snippet matrix "Matrix template" b
+template<class T> struct mat{
+	int r, c;
+	vector<vector<T>> d;
+	mat(int _r, int _c) : r(_r), c(_c) {d.assign(r,vector<T>(c));}
+	mat() : mat(0,0) {}
+	mat(const vector<vector<T>>& _d) : r(_d.size()), c(_d[0].size()) {d = _d;}
+	mat& operator+=(const mat& m){
+		assert(r == m.r && c == m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] += m.d[i][j];
+		return *this;
+	}
+	mat& operator-=(const mat& m){
+		assert(r == m.r && c == m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] -= m.d[i][j];
+		return *this;
+	}
+	mat operator*(const mat& m){
+		assert(c == m.r);
+		mat x(r,m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) for(int k = 0; k < m.c; ++k)
+			x.d[i][k] += d[i][j] * m.d[j][k];
+		return x;
+	}
+	mat operator+(const mat& m){ return mat(*this)+=m; }
+	mat operator-(const mat& m){ return mat(*this)-=m; }
+	mat operator*=(const mat& m){ return *this=(*this)*m; }
+};
+endsnippet
+# # Data Structures
+snippet prefix_tree "Prefix sum segment tree" b
+// Prefix tree
+// combine can be min, max (non commutative?)
+${1:int} ${2:seg}[2 * ${3:N}];
+$1 ${6:query}(int l, int r){
+	l += $3, r+= $3; //can be replace by actual upperbound
+	$1 ans = ${4:0}; //identity element under $5
+	while(l < r){
+		if( l & 1 ) ans = ${5:combine}($2[l++], ans);
+		if( r & 1 ) ans = $5($2[--r], ans);
+		l >>= 1 , r >>= 1;
+	}
+	return ans;
+}
+
+void ${7:update}(int i, $1 val){
+	i += $3; // can be replaced by actual upperbound
+	$1[i] = val; i >>= 1;
+	while(i > 0){
+		$2[i] = $5($2[2 * i], $2[2 * i + 1]);
+		i >>= 1;
+	}
+}
+void ${8:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = $4;}
+
+endsnippet
+# # Debug {{{
 snippet debug "basic debug" b
 cout << "debug-------------: " << $1 << endl;
 $0
 endsnippet
-# vim:ts=4:sts=4:foldmethod=syntax:foldlevel=0:noexpandtab
+# vim:ts=4:sts=4:foldmethod=marker:foldlevel=0:noexpandtab
