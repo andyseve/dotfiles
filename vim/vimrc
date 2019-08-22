@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: 8/22/2019 2:32:23 AM
+" Last Updated: 8/22/2019 2:33:05 AM
 
 set nocompatible
 
@@ -63,7 +63,7 @@ set nocompatible
       set guifont=Consolas:h12:cANSI
 			set visualbell
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=ubuntu\ Mono\ 14
     endif
   else
     set background=dark
@@ -384,6 +384,15 @@ set nocompatible
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
+	
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
 
 " # Autocommands
   augroup Anishs
