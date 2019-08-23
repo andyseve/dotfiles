@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Fri 23 Aug 2019 03:00:20 AM EDT
+" Last Modified: Fri 23 Aug 2019 04:25:24 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -38,7 +38,7 @@
 	iab vcd vector<complex<double>>
 	ab pb push_back(
 	ab mp make_pair(
-	ab cendl cout << endl;
-	ab newline cout << "\n";
+	ab cendl cout << endl
+	ab newline cout << "\n"
 	ab *=2 <<= 1
 "  vim:foldmethod=marker:foldlevel=0:nospell
