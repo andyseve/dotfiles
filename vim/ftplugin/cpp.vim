@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Mon 05 Aug 2019 11:20:41 PM EDT
+" Last Modified: Wed 21 Aug 2019 05:01:45 AM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -28,13 +28,14 @@
 
 " # Abbreviations
 	iab ll long long
+	iab cd complex<double>
 	iab pii pair<int,int>
 	iab vi vector<int>
 	iab vll vector<long long>
 	iab vpii vector<pair<int,int>>
 	iab mi modular<int>
-	ab pb push_back(
-	ab mp make_pair(
-	iab cendl cout << endl;
-	iab newline cout << endl;
+	ab pb push_back
+	ab mp make_pair
+	iab cendl cout << endl
+	iab newline cout << endl
 "  vim:foldmethod=marker:foldlevel=0:nospell

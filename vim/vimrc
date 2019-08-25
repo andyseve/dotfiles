@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 05 Aug 2019 11:20:07 PM EDT
+" Last Updated: Wed 21 Aug 2019 05:04:39 AM EDT
 
 set nocompatible
 
@@ -37,7 +37,7 @@ set nocompatible
   Plug 'tpope/vim-fugitive'
 	Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'jiangmiao/auto-pairs'
-  Plug 'tpope/vim-surround'
+	Plug 'tpope/vim-surround'
   Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
   Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
   Plug 'vim-airline/vim-airline'
