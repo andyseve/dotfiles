@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Wed 21 Aug 2019 05:01:45 AM EDT
+" Last Modified: Sat 24 Aug 2019 11:06:35 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -24,18 +24,23 @@
 " # ALE Settings
 	let b:ale_linters = ['gcc', 'clang']
 	let b:ale_fixers = ['clang-format', 'uncrustify']
-	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -O3 -pthread -lm'
+	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -Wno-unused-result -O3 -pthread -lm'
 
 " # Abbreviations
 	iab ll long long
-	iab cd complex<double>
 	iab pii pair<int,int>
 	iab vi vector<int>
+	iab ll long long
 	iab vll vector<long long>
+	iab pii pair<int,int>
 	iab vpii vector<pair<int,int>>
 	iab mi modular<int>
-	ab pb push_back
-	ab mp make_pair
-	iab cendl cout << endl
-	iab newline cout << endl
+	iab vmi vector<modular<int>>
+	iab cd complex<double>
+	iab vcd vector<complex<double>>
+	ab pb push_back(
+	ab mp make_pair(
+	ab cendl cout << endl
+	ab newline cout << "\n"
+	ab *=2 <<= 1
 "  vim:foldmethod=marker:foldlevel=0:nospell
