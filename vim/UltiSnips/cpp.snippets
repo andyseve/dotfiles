@@ -1,6 +1,20 @@
-# # Templates
+# # Templates {{{
 snippet code "Main template" b
-#include<bits/stdc++.h>
+#include<iostream>
+#include<cstdlib>
+#include<algorithm>
+#include<cassert>
+#include<ctime>
+#include<cwctype>
+
+#include<vector>
+#include<queue>
+#include<set>
+#include<bitset>
+
+#include<cmath>
+#include<complex>
+
 using namespace std;
 
 #define szof(x) ((int) x.size())
@@ -35,8 +49,8 @@ endsnippet
 snippet infl "infinity" b
 const long long ${1:inf} = 1ll << 62;
 endsnippet
-
-# # Common functions
+# }}}
+# # Common functions {{{
 snippet forg  "General for loop"
 for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$2})
 endsnippet
@@ -52,34 +66,8 @@ endsnippet
 snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
 endsnippet
-snippet bsl "Binary Search" b
-// returns smallest index with >= s;
-int ${1:bs}(int s, int l, int r){
-	if(l == r) return l;
-	int mid = (l + r)/2;
-	if(${2:array}[mid] < s) return $1(s, mid+1, r);
-	else return $1(s, l, mid);
-}
-endsnippet
-snippet bsg "Binary Search" b
-// returns largest index with >= s;
-int ${1:bs}(int s, int l, int r){
-	if(l == r) return l;
-	int mid = (l + r)/2;
-	if(${2:array}[mid] > s) return $1(s, l, mid-1);
-	else return $1(s, mid, r);
-}
-endsnippet
-snippet bs "Binary Search" 
-int ${1:a} = ${2:0}, ${3:b} = ${4:n};
-while($1 < $2){
-	int m = ($1 + $2) / 2;
-	if ( $0 ) a = m + 1;
-	else b = m;
-}
-endsnippet
-
-# # Number Theory
+# }}}
+# # Number Theory {{{
 snippet miller_rabin "Miller Rabin Primality Test" b
 bool miller_rabin(${1:int} p){
 	$1 s = 0; $1 r = p-1;
@@ -203,8 +191,8 @@ inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b){
 			);
 }
 endsnippet
-
-# # Geometry
+# }}}
+# # Geometry {{{
 snippet 3dvec "3D vectors" b
 // 3d vector (can degenerate to 2d when z=0)
 #define T ${1:long double}
@@ -291,37 +279,8 @@ struct point{
 	friend bool operator<(point a, point b){ if(a.x == b.x) return a.y < b.y; else return a.x < b.x; }
 };
 endsnippet
-# matrix class copied from benq
-snippet matrix "Matrix template" b
-template<class T> struct mat{
-	int r, c;
-	vector<vector<T>> d;
-	mat(int _r, int _c) : r(_r), c(_c) {d.assign(r,vector<T>(c));}
-	mat() : mat(0,0) {}
-	mat(const vector<vector<T>>& _d) : r(_d.size()), c(_d[0].size()) {d = _d;}
-	mat& operator+=(const mat& m){
-		assert(r == m.r && c == m.c);
-		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] += m.d[i][j];
-		return *this;
-	}
-	mat& operator-=(const mat& m){
-		assert(r == m.r && c == m.c);
-		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] -= m.d[i][j];
-		return *this;
-	}
-	mat operator*(const mat& m){
-		assert(c == m.r);
-		mat x(r,m.c);
-		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) for(int k = 0; k < m.c; ++k)
-			x.d[i][k] += d[i][j] * m.d[j][k];
-		return x;
-	}
-	mat operator+(const mat& m){ return mat(*this)+=m; }
-	mat operator-(const mat& m){ return mat(*this)-=m; }
-	mat operator*=(const mat& m){ return *this=(*this)*m; }
-};
-endsnippet
-# # Data Structures
+# }}}
+# # Data Structures {{{
 snippet segtreeg "General Segment tree" b
 ${1:int} ${2:seg}[2 * ${3:N}];
 $1 ${6:query}(int l, int r){
@@ -366,8 +325,104 @@ function<void(int,int)> ${6:update} = [&](int i, int val){
 };
 function<void()> ${7:fill} = [&] {for(int i=0; i < 2 * $3; ++i) $2[i] = $4;};
 endsnippet
+# }}}
+# # Algorithms {{{
+# matrix class copied from benq
+snippet matrix "Matrix template" b
+template<class T> struct mat{
+	int r, c;
+	vector<vector<T>> d;
+	mat(int _r, int _c) : r(_r), c(_c) {d.assign(r,vector<T>(c));}
+	mat() : mat(0,0) {}
+	mat(const vector<vector<T>>& _d) : r(_d.size()), c(_d[0].size()) {d = _d;}
+	mat& operator+=(const mat& m){
+		assert(r == m.r && c == m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] += m.d[i][j];
+		return *this;
+	}
+	mat& operator-=(const mat& m){
+		assert(r == m.r && c == m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) d[i][j] -= m.d[i][j];
+		return *this;
+	}
+	mat operator*(const mat& m){
+		assert(c == m.r);
+		mat x(r,m.c);
+		for(int i = 0; i < r; ++i) for(int j = 0; j < c; ++j) for(int k = 0; k < m.c; ++k)
+			x.d[i][k] += d[i][j] * m.d[j][k];
+		return x;
+	}
+	mat operator+(const mat& m){ return mat(*this)+=m; }
+	mat operator-(const mat& m){ return mat(*this)-=m; }
+	mat operator*=(const mat& m){ return *this=(*this)*m; }
+};
+endsnippet
+snippet bsl "Binary Search" b
+// returns smallest index with >= s;
+int ${1:bs}(int s, int l, int r){
+	if(l == r) return l;
+	int mid = (l + r)/2;
+	if(${2:array}[mid] < s) return $1(s, mid+1, r);
+	else return $1(s, l, mid);
+}
+endsnippet
+snippet bsg "Binary Search" b
+// returns largest index with >= s;
+int ${1:bs}(int s, int l, int r){
+	if(l == r) return l;
+	int mid = (l + r)/2;
+	if(${2:array}[mid] > s) return $1(s, l, mid-1);
+	else return $1(s, mid, r);
+}
+endsnippet
+snippet bs "Binary Search" 
+int ${1:a} = ${2:0}, ${3:b} = ${4:n};
+while($1 < $2){
+	int m = ($1 + $2) / 2;
+	if ( $0 ) a = m + 1;
+	else b = m;
+}
+endsnippet
+snippet fft "Fast Fourier Transform Inplace"
+const double PI = acos(-1);
 
-# # Algorithms
+int reverse(int num, int lg_n){
+	int res = 0;
+	for(int i = 0; i < lg_n; ++i){
+		if(num & (1 << i))
+			res |= 1 << (lg_n - 1 - i);
+	}
+	return res;
+}
+
+void fft(vector<complex<double>> &a, bool invert){
+	int n = a.size();
+	int lg_n = 0;
+	while((1 << lg_n) < n) lg_n ++;
+	
+	for(int i = 0; i < n; ++i){
+		if(i < reverse(i,lg_n)) swap(a[i], a[reverse(i,lg_n)]);
+	}
+
+	for(int len = 2; len <= n; len <<= 1){
+		double ang = 2 * PI / len * (invert ? -1 : 1);
+		complex<double> wlen(cos(ang),sin(ang));
+		for(int i = 0; i < n; i+=len){
+			complex<double> w(1);
+			for(int j = 0; j < len/2; ++j){
+				complex<double> u = a[i+j], v = a[i+j+len/2] * w;
+				a[i + j] = u + v;
+				a[i + j + len/2] = u - v;
+				w *= wlen;
+			}
+		}
+	}
+
+	if (invert){
+		for(complex<double> x : a) x /= n;
+	}
+}
+endsnippet
 snippet mo_query "Mo's algo - queries" b
 int ${1:block} = ${2:550}; // 550^2 > 300000;
 struct query{
@@ -378,6 +433,14 @@ struct query{
 		else return a.r < b.r;
 	}
 };
+endsnippet
+snippet floyd-warshall "All pairs shortest paths" b
+// setup initial values to be edge weights.
+for(int k = 0; k < n; ++k){
+	for(int i = 0; i < n; ++i) for(int j = 0; j < n; ++j){
+		${1:sp}[i][j] = min($1[i][j], $1[i][k] + $1[k][j]);
+	}
+}
 endsnippet
 snippet mo_loop "Mo's algo - loop" b
 for(query ${1:a} : ${2:q}){
@@ -396,9 +459,11 @@ for(query ${1:a} : ${2:q}){
 	}
 }
 endsnippet
+# }}}
 # # Debug {{{
 snippet debug "basic debug" b
 cout << "debug-------------: " << $1 << endl;
 $0
 endsnippet
+# }}}
 # vim:ts=4:sts=4:foldmethod=marker:foldlevel=0:noexpandtab
