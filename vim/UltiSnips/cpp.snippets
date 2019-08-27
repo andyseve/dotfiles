@@ -284,15 +284,20 @@ template<class T> struct vec {
 	vec operator -(const vec& v){ return vec(*this)-=v; }
 };
 endsnippet
-snippet point "Point template" b
+snippet pointi "Point template int" b
 struct point{
 	int x,y;
 	point(int xx,int yy) {x=xx;y=yy;}
 	point() : point(0,0) {}
 	point(const point& a) {x = a.x; y = a.y;}
+
+	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
+	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
 	friend bool operator==(const point& a, const point& b){
 		return (a.x == b.x && a.y == b.y);
 	}
+	friend bool operator<(point a, point b){ if(a.x == b.x) return a.y < b.y; else return a.x < b.x; }
+
 	point& operator*=(int v){ x *= v; y *= v; return *this; }
 	point& operator/=(int v){ x /= v; y /= v; return *this; }
 	point operator-(){ return point(-x,-y); }
@@ -302,7 +307,32 @@ struct point{
 	friend point operator/(point a, int v){ return a/=v; }
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
+};
+endsnippet
+snippet pointd "Point template int" b
+double eps = ${1:1e-6};
+struct point{
+	double x,y;
+	point(double xx,double yy) {x=xx;y=yy;}
+	point() : point(0,0) {}
+	point(const point& a) {x = a.x; y = a.y;}
+
+	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
+	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
+	friend bool operator==(const point& a, const point& b){
+		return (-eps < a.x - b.x && a.x - b.x < eps && -eps < a.y - b.y && a.y - b.y < eps);
+	}
 	friend bool operator<(point a, point b){ if(a.x == b.x) return a.y < b.y; else return a.x < b.x; }
+
+	point& operator*=(double v){ x *= v; y *= v; return *this; }
+	point& operator/=(double v){ x /= v; y /= v; return *this; }
+	point operator-(){ return point(-x,-y); }
+	point& operator+=(const point& a){ x+=a.x; y-=a.y; return *this; }
+	point& operator-=(const point& a){ x-=a.x; y-=a.y; return *this; }
+	friend point operator*(point a, double v){ return a*=v; }
+	friend point operator/(point a, double v){ return a/=v; }
+	friend point operator+(point a, point b){ return a+=b; }
+	friend point operator-(point a, point b){ return a-=b; }
 };
 endsnippet
 # matrix class copied from benq
