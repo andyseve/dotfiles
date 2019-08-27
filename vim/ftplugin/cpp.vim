@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Fri 23 Aug 2019 04:25:24 PM EDT
+" Last Modified: Sat 24 Aug 2019 11:06:35 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -27,6 +27,8 @@
 	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -Wno-unused-result -O3 -pthread -lm'
 
 " # Abbreviations
+	iab ll long long
+	iab pii pair<int,int>
 	iab vi vector<int>
 	iab ll long long
 	iab vll vector<long long>
