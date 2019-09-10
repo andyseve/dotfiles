@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sat 07 Sep 2019 06:24:51 AM EDT
+" Last Updated: Tue 10 Sep 2019 04:43:22 PM EDT
 " tex specific vim settings
 
 " Core Settings {{{
@@ -13,7 +13,7 @@
 	
 " }}}
 " autocorrects {{{
-
+	ab inv ^{-1}
 " }}}
 " Ale config {{{
 	let b:ale_max_signs = 20
