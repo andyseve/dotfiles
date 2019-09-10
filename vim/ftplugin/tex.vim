@@ -1,10 +1,11 @@
 " Author: Anish Sevekari
-" Last Updated: 1/30/2019 5:05:38 PM
+" Last Updated: Sat 07 Sep 2019 06:24:51 AM EDT
 " tex specific vim settings
 
 " Core Settings {{{
 	set spelllang=en_us
 	set nospell
+	set colorcolumn=100
 " }}}
 " Key bindings and leader guide settings{{{
 	" This is where the fun starts.
