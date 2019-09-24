@@ -1,5 +1,5 @@
-eProvidesPackage{anishs}
-% Last Modified: Sun 15 Sep 2019 10:37:28 PM EDT
+\ProvidesPackage{anishs}
+% Last Modified: Thu 19 Sep 2019 07:33:41 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -130,6 +130,7 @@ eProvidesPackage{anishs}
 	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
 	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
 	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
+	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
 	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Norm
 	\DeclarePairedDelimiterXPP\normp[2]{}{\lVert}{\rVert}{\ifblank{#2}{}{_{#2}}}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
 	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
