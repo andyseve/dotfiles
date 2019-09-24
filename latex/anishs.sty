@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 29 Aug 2019 02:32:44 PM EDT
+% Last Modified: Mon 23 Sep 2019 03:41:24 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -77,6 +77,7 @@
 	\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
 
 	% Common symbols
+
 
 	% Delimiters: Based on mathtools
 	% Declaring paired delimiters like this provides better spacing.
@@ -361,6 +362,21 @@
     \usepackage{tikz}
     \usepackage{tikz-cd}
     \usetikzlibrary{calc}
+		% fun stuff
+		\newcommand{\shrug}[1][]{%
+			\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+				\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
+				\draw \arm;
+				\draw[xscale=-1] \arm;
+				\def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
+				\draw \headpart;
+				\draw[xscale=-1] \headpart;
+				\def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
+				\draw[shift={(-0.3,0.8)}] \eye;
+				\draw[shift={(0,0.85)}] \eye;
+				% draw mouth
+				\draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
+		\end{tikzpicture}}
   \fi
   \ifanishsasy%Asymptote Setup
     \usepackage{asymptote}
