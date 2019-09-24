@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Mon 09 Sep 2019 11:53:52 PM EDT
+" Last Modified: Tue 10 Sep 2019 07:03:30 PM EDT
 " Cpp specific vim settings
 
 " # Core Settings
@@ -28,12 +28,11 @@
 
 " # Abbreviations
 	iab vi vector<int>
+	iab vm vector<modular>
 	ab ll long long
 	iab vll vector<long long>
 	iab pii pair<int,int>
 	iab vpii vector<pair<int,int>>
-	iab mi modular<int>
-	iab vmi vector<modular<int>>
 	iab cd complex<double>
 	iab vcd vector<complex<double>>
 	ab pb push_back(

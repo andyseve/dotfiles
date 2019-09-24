@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Mon 23 Sep 2019 03:41:24 PM EDT
+% Last Modified: Tue 24 Sep 2019 07:58:29 AM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -131,6 +131,7 @@
 	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
 	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
 	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
+	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
 	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Norm
 	\DeclarePairedDelimiterXPP\normp[2]{}{\lVert}{\rVert}{\ifblank{#2}{}{_{#2}}}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
 	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
@@ -189,6 +190,7 @@
 	\DeclareMathOperator{\pred}{pred} % Predecessor
 	\DeclareMathOperator{\dom}{dom} % domain
 	\DeclareMathOperator{\ran}{ran} % range
+	\DeclareMathOperator{\Aut}{Aut} % automophisms
 	\DeclareMathOperator{\Hom}{Hom} % homomorphism
 	\DeclareMathOperator{\End}{End} % endomorphism
 	\DeclareMathOperator{\res}{res} % resultant
@@ -236,11 +238,11 @@
     }
     \usepackage[shortlabels]{enumitem} % for better lists
     \usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
-    \usepackage{mathtools}
-    \usepackage{microtype}
-    \usepackage{upgreek}
-    \usepackage{import}
-    \usepackage{graphicx} % for small tweaks
+		\usepackage{mathtools}
+		\usepackage{microtype}
+		\usepackage{upgreek}
+		\usepackage{import}
+		\usepackage{graphicx} % for small tweaks
 		\usepackage{bbm} % Adding support for \mathbbm{1}
 
 		% Better Tables
