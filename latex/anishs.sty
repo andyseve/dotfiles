@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 24 Sep 2019 07:58:29 AM EDT
+% Last Modified: Wed 25 Sep 2019 10:00:26 PM EDT
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
@@ -58,13 +58,13 @@
 	\newcommand\rem{\textbf{\underline{Remark}}}
 	\newcommand\question{\textbf{\underline{Question}}}
 	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
-	\renewcommand\emptyset{\varnothing} % Slightly better symbol
-	\renewcommand\iff{\ensuremath{\Leftrightarrow}}
+	\newcommand\tageqn{\addtocounter{equation}{1}\tag{\theequation}} % Equation numbering
+	\newcommand\labeleqn[1]{\addtocounter{equation}{1}\tag{\theequation}\label{#1}}
 
 	% Better symbols and renamings
-	\newcommand\OhStar{\ensuremath{\mathcal{O}^{\star}}}
 	\newcommand\Oh{\ensuremath{\mathcal{O}}}
 	\newcommand\oh{\scalebox{0.7}{$\mathcal{O}$}}
+	\newcommand\OhStar{\ensuremath{\Oh^{\star}}}
 	\newcommand\xor{\oplus}
 	\newcommand\tensor{\otimes} % I don't like to remember things.
 	\newcommand\transpose{\intercal} % Much better
@@ -72,6 +72,8 @@
 	\newcommand\iso{\cong}
 	\newcommand\del{\partial}
 	\newcommand\conj[1]{\overline{#1}}
+	\renewcommand\emptyset{\varnothing} % Slightly better symbol
+	\renewcommand\iff{\ensuremath{\Leftrightarrow}}
 
 	% Common Math Constructs
 	\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
