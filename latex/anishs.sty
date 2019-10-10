@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 09 Oct 2019 04:16:45 PM EDT
+% Last Modified: Thu 10 Oct 2019 03:46:52 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -380,8 +380,8 @@
   \fi
   \ifanishstikz%TikZ for diagrams
     \usepackage{tikz}
-    \usepackage{tikz-cd}
     \usetikzlibrary{calc}
+		\usetikzlibrary{cd}
 		% fun stuff
 		\newcommand{\shrug}[1][]{%
 			\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
