@@ -1,10 +1,12 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 10 Oct 2019 03:46:52 PM EDT
+% Last Modified: Thu 10 Oct 2019 04:04:57 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-\usepackage{nameref,hyperref,cleveref} % for better referencing systems
+\usepackage{nameref}
+\usepackage[backref=page]{hyperref}
+\usepackage{cleveref} % for better referencing systems
 
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
 %TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
@@ -409,8 +411,6 @@
       urlcolor     = blue, %Colour for external hyperlinks
       linkcolor    = blue, %Colour of internal links
       citecolor    = red,  %Colour of citations
-			backref			 = true,
-			bookmarks    = true
     }
   \fi
 \fi
