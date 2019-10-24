@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 16 Sep 2019 01:39:57 AM EDT
+" Last Updated: Thu 24 Oct 2019 02:16:34 AM EDT
 
 set nocompatible
 
@@ -27,19 +27,19 @@ set nocompatible
   Plug 'hecal3/vim-leader-guide'
   Plug 'ervandew/supertab'
   Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
+  Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM')}
   Plug 'w0rp/ale'
-  Plug 'lervag/vimtex', {'for': 'latex'}
+  Plug 'lervag/vimtex',                   { 'for': 'latex'}
   Plug 'sjl/gundo.vim'
   Plug 'mileszs/ack.vim'
-  Plug 'junegunn/fzf', {'do':'./install --bin'}
+  Plug 'junegunn/fzf',                    { 'do':'./install --bin'}
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
-	Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
+	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'jiangmiao/auto-pairs'
 	Plug 'tpope/vim-surround'
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+  Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle'}
+  Plug 'Xuyuanp/nerdtree-git-plugin',     { 'on': 'NERDTreeToggle'}
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
@@ -47,7 +47,9 @@ set nocompatible
   Plug 'godlygeek/tabular'
   Plug 'tpope/vim-repeat'
 	Plug 'tpope/vim-dispatch'
-  "Plug 'msuperdock/vim-foldout'
+	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell'}
+	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell'}
+  "Plug 'msuperdock/vim-foldout'  "Had compatibility issue with Ultisnips
   call plug#end()
 
 " # Core Settings
@@ -215,6 +217,9 @@ set nocompatible
 	let g:ale_line_on_text_changed = 'never'
 	let g:ale_on_enter = 1
 	let g:ale_on_save = 1
+
+	let g:ale_linters = {}
+	let g:ale_linters.haskell = ['ghc-mod', 'hlint']
 
   " ## Vimtex configuration
   let g:vimtex_enabled = 1
@@ -405,3 +410,4 @@ set nocompatible
     autocmd BufEnter * :nohlsearch
   augroup END
 
+" vim:foldmethod=marker

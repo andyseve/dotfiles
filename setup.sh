@@ -1,4 +1,4 @@
-## Last Modified: Tue 20 Aug 2019 05:21:52 PM EDT
+## Last Modified: Wed 23 Oct 2019 11:51:15 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -68,14 +68,14 @@ fi
 cdir $CONFIG/systemd/user
 echo -e "\nlinking configs..."
 
-#bash
+# bash
 if check bash; then
 	link $DOTFILES/bash/bashrc $HOME/.bashrc
 else
 	nope bash
 fi
 
-#zsh
+# zsh
 if check zsh; then
 	IF=$DOTFILES/zsh
 	OF=$HOME/.zsh
@@ -117,7 +117,7 @@ else
 	nope zsh
 fi
 
-#vim
+# vim
 if check vim; then
 	IF=$DOTFILES/vim
 	OF=$HOME/.vim
@@ -152,7 +152,7 @@ else
 	nope vim
 fi
 
-#neofetch
+# neofetch
 if check neofetch; then
 	cdir $CONFIG/neofetch
 	link $DOTFILES/neofetch/config.conf $CONFIG/neofetch/config.conf
@@ -166,7 +166,7 @@ if check pdflatex; then
 	link $DOTFILES/latex/anishs.sty $HOME/texmf/tex/latex/local/anishs.sty
 fi
 
-#rtorrent
+# rtorrent
 if check rtorrent; then
 	IF="$DOTFILES/rtorrent"
 	OF="$HOME/torrents"
@@ -187,9 +187,24 @@ if check rtorrent; then
 	done
 
 	link $IF/rtorrent.service $CONFIG/systemd/user/rtorrent.service
+else
+	nope rtorrent
 fi
 
-#Themes
+# xmonad
+if check xmonad; then
+	IF="$DOTFILES/xmonad"
+	OF="$HOME/.xmonad"
+
+	link $IF/xmonad.hs $OF/xmonad.hs
+else
+	nope xmonad
+fi
+
+
+################################################################################
+# Themes #######################################################################
+################################################################################
 while true; do
 	read -p "Do you want to install themes[y|n]" install_themes
 	printf "\n"
@@ -209,7 +224,7 @@ while true; do
 done
 
 
-#cleaning up
+# cleaning up
 if ! $DID_OVERWRITE; then
 	echo "no overwrites! yaaay"
 	if ! $EXISTS_OVERWRITE;then
