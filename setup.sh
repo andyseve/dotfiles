@@ -1,4 +1,4 @@
-## Last Modified: Wed 23 Oct 2019 11:51:15 PM EDT
+## Last Modified: Thu 24 Oct 2019 11:09:59 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -231,5 +231,6 @@ if ! $DID_OVERWRITE; then
 		rm $OVERWRITE
 	fi
 else
-	echo "check the list of overwrites in $OVERWRITE"
+	echo "Overwritten files:"
+	cat $OVERWRITE
 fi
