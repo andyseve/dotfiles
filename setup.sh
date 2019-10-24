@@ -1,4 +1,4 @@
-## Last Modified: Thu 24 Oct 2019 11:09:59 AM EDT
+## Last Modified: Thu 24 Oct 2019 03:40:41 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -117,6 +117,14 @@ else
 	nope zsh
 fi
 
+# bin
+IF=$DOTFILES/bin
+OF=$HOME/bin
+
+for file in "$IF"/*; do
+	link $file $OF/${file##*/}
+done
+
 # vim
 if check vim; then
 	IF=$DOTFILES/vim
@@ -197,6 +205,7 @@ if check xmonad; then
 	OF="$HOME/.xmonad"
 
 	link $IF/xmonad.hs $OF/xmonad.hs
+	link $IF/xmobar.conf $OF/xmobar.conf
 else
 	nope xmonad
 fi

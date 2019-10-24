@@ -1,0 +1,17 @@
+#!/bin/sh
+
+myrof() {
+	rofi -i -dmenu -p "$1"
+}
+
+myhosts() {
+	cat "$HOME/.ssh/config" | grep "Host " | awk -F "Host " '{print $2}'
+}
+
+
+SELECTION="$(myhosts | myrof ssh)"
+
+[ -z "$SELECTION" ] && exit 1
+
+term -e ssh "$SELECTION"
+

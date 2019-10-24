@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 24 Oct 2019 03:03:21 AM EDT
+-- Last Modified: Thu 24 Oct 2019 05:00:43 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -159,21 +159,20 @@ main = do
 
 
 myConfig p = def
-    {
-        borderWidth        = border,
-        clickJustFocuses   = myClickJustFocuses,
-        focusFollowsMouse  = myFocusFollowsMouse,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
-        manageHook         = myManageHook,
-        handleEventHook    = myHandleEventHook,
-        layoutHook         = myLayoutHook,
-        logHook            = myLogHook p,
-        modMask            = myModMask,
-        mouseBindings      = myMouseBindings,
-        startupHook        = myStartupHook,
-        terminal           = myTerminal,
-        workspaces         = myWorkspaces
+    { borderWidth        = border
+    , clickJustFocuses   = myClickJustFocuses
+    , focusFollowsMouse  = myFocusFollowsMouse
+    , normalBorderColor  = myNormalBorderColor
+    , focusedBorderColor = myFocusedBorderColor
+    , manageHook         = myManageHook
+    , handleEventHook    = myHandleEventHook
+    , layoutHook         = myLayoutHook
+    , logHook            = myLogHook p
+    , modMask            = myModMask
+    , mouseBindings      = myMouseBindings
+    , startupHook        = myStartupHook
+    , terminal           = myTerminal
+    , workspaces         = myWorkspaces
     }
 
 ----------------------------------------------------------------------------}}}
@@ -198,46 +197,22 @@ myWorkspaces = [ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9, "NSP"]
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "gnome-terminal"
+myTerminal    = "alacritty"
+myAltTerminal = "gnome-terminal"
 myBrowser     = "firefox"
 myLauncher    = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
 myAltLauncher = "dmenu_run"
-myKeyViewer   = "rofi -i -dmenu -p 'Xmonad leys'"
+myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myStatusBar   = "xmobar -x0 /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
 scratchpads = [ 
-                NS "quake" spawnQuake findQuake manageQuake
-              , NS "cmus" spawnCmus findCmus manageCmus  
-              , NS "htop" spawnHtop findHtop manageHtop
+                NS "htop" spawnHtop findHtop manageHtop
               , NS "weather" spawnWeather findWeather manageWeather
               ]
 
     where
-    spawnQuake  = "alacritty --class=quake"
-    findQuake   = resource =? "quake"
-    manageQuake = customFloating $ W.RationalRect x y w h
-                 where
-                   w, h, x, y :: Rational
-                   h = 1/2
-                   w = 9/10
-                   x = (1-w)/2
-                   y = 0
-    spawnCmus  = "alacritty --class=scratch-cmus -e cmus"
-    findCmus   = resource =? "scratch-cmus"
-    --findCmus   = (resource =? "lxterminal") <&&> (hasName =? "lx-cmus")
-    manageCmus = customFloating $ W.RationalRect x y w h
-                 where
-                   w, h, x, y :: Rational
-                   h = 1
-                   w = 1
-                   x = 0
-                   y = 0
-                   --h = 1/2
-                   --w = 1/2
-                   --x = (1-w)/2
-                   --y = (1-h)/2
     spawnHtop  = "alacritty --class=scratch-htop -e htop"
     findHtop   = resource =? "scratch-htop"
     manageHtop = customFloating $ W.RationalRect x y w h
@@ -293,9 +268,9 @@ cyan    = "#2aa198"
 green   = "#859900"
 
 -- sizes
-gap    = 10
-topbar = 10
-border = 0
+gap    = 1
+topbar = 2
+border = 2
 prompt = 20
 status = 20
 
@@ -308,9 +283,9 @@ inactive     = base02
 focuscolor   = blue
 unfocuscolor = base02
 
-mySmallFont = "xft:Hack:style=Regular:size=7:hinting=true"
-myFont      = "xft:Hack:style=Regular:size=9:hinting=true"
-myBigFont   = "xft:Hack:style=Regular:size=11:hinting=true"
+mySmallFont = "xft:monospace:style=Regular:size=8:hinting=true"
+myFont      = "xft:monospace:style=Regular:size=10:hinting=true"
+myBigFont   = "xft:monospace:style=Regular:size=12:hinting=true"
 
 -- this is a "fake title" used as a highlight bar in lieu of full borders
 -- (I find this a cleaner and less visually intrusive solution)
@@ -406,7 +381,6 @@ myLayoutHook = fullscreenFloat -- fixes floating windows going full screen, whil
              $ fullBarToggle
              $ mirrorToggle
              $ reflectToggle
-             $ onWorkspace "flt" floatWorkSpace
              $ onWorkspace "float" floatWorkSpace
              $ onWorkspace "www" tabWorkSpace
              $ onWorkspace "sys" tabWorkSpace
@@ -1103,14 +1077,9 @@ myKeys conf = let
     [ 
       ("M-x M-r"                  , addName "restart XMonad"                  $ spawn "xmonad --restart")
     , ("M-x M-S-r"                , addName "rebuild & restart XMonad"        $ spawn "xmonad --recompile && xmonad --restart")
-    --, ("M-x M-q"                  , addName "logout"                          $ spawn myLogout)
-    --, ("M-<Pause>"                , addName "logout"                          $ spawn myLogout)
     , ("M-x M-e"                  , addName "edit xmonad.hs"                  $ spawn (myEditor ++ " ~/.xmonad/xmonad.hs"))
     , ("M-x M-l"                  , addName "lock screen"                     $ spawn "lockscreen")
     , ("M-F1"                     , addName "show keybindings"                $ return ())
-    --, ("M-v"                      , addName "visual mode"                     $ spawn "my-mode visual")
-    --, ("M-<Escape>"               , addName "normal mode"                     $ spawn "my-mode normal")
-    --, ("M-i"                      , addName "insert mode"                     $ spawn "my-mode insert")
     , ("M-<Pause>"                , addName "Quit XMonad"                     $ confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     , ("M-x M-q"                  , addName "Quit XMonad"                     $ confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     ] ^++^
@@ -1175,11 +1144,8 @@ myKeys conf = let
 
     subKeys "scratchpads"
     [ 
-      ("M-c"                    , addName "cmus"                        $ namedScratchpadAction scratchpads "cmus")
-    , ("<F12>"                  , addName "quake"                       $ namedScratchpadAction scratchpads "quake")
-    , ("C-M1-<Delete>"          , addName "htop"                        $ namedScratchpadAction scratchpads "htop")
+      ("C-M1-<Delete>"          , addName "htop"                        $ namedScratchpadAction scratchpads "htop")
     , ("M-<F5>"                 , addName "weather"                     $ namedScratchpadAction scratchpads "weather")
-    --, ("M-p k"                  , addName "keepass"                     $ namedScratchpadAction scratchpads "keepass")
     ] ^++^
 
 
@@ -1238,8 +1204,6 @@ myKeys conf = let
     , ("M-' M-<Backspace>"        , addName "remove workspace"              $ confirmPrompt hotPromptTheme "delete workspace?" $ removeWorkspace)
     , ("M-' M-l"                  , addName "next non-empty ws"             $ nextHidWS)
     , ("M-' M-h"                  , addName "prev non-empty ws"             $ prevHidWS)
-    --, ("M-w"                    , addName "Switch to Project"           $ switchProjectPrompt warmPromptTheme)
-    --, ("M-S-w"                  , addName "Shift to Project"            $ shiftToProjectPrompt warmPromptTheme)
     ]
      ++ zipM "M-"                "view ws"                                wsKeys [0..] (withNthWorkspace W.greedyView)
      ++ zipM "M-S-"              "move w to ws"                           wsKeys [0..] (withNthWorkspace W.shift)

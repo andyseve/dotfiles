@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rofi -show run -modi run,drun -disable-history -columns 3 -sidebar-mode
+

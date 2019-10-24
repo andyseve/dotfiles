@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rofi -show window -modi window,windowcd -sidebar-mode -theme-str '#window { height: 100%; width: 30em; location: west; anchor: west; }'
+
