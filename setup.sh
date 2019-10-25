@@ -1,4 +1,4 @@
-## Last Modified: Thu 24 Oct 2019 03:40:41 PM EDT
+## Last Modified: Thu 24 Oct 2019 05:06:02 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -124,6 +124,16 @@ OF=$HOME/bin
 for file in "$IF"/*; do
 	link $file $OF/${file##*/}
 done
+
+# alacritty
+if check alacritty; then
+	IF=$DOTFILES/alacritty
+	OF=$HOME/.config/alacritty
+
+	link $IF/alacritty.yml $OF/alacritty.yml
+else
+	nope alacritty
+fi
 
 # vim
 if check vim; then

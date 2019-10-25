@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 24 Oct 2019 12:47:36 PM EDT
+" Last Updated: Fri 25 Oct 2019 10:20:56 AM EDT
 
 set nocompatible
 
@@ -112,7 +112,7 @@ set nocompatible
   set textwidth=0          " Textwidth to infinite
   set spelllang=en_us      " Set US English for spellchecking
   set nospell
-  set viewoptions-=options " Saves folds and cursor
+  set viewoptions-=options " Excludes options (like working dir) from view
   set updatetime=1000
 
   let mapleader = "\\"
@@ -331,10 +331,10 @@ set nocompatible
 
 	"                                                                         }}}
   " ## Foldout                                                              {{{
-		let g:foldout_save = 1
+		"let g:foldout_save = 1
 
-		map <leader>n <Plug>FoldoutNavigation
-		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+		"map <leader>n <Plug>FoldoutNavigation
+		"let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 
 	"                                                                         }}}
 
@@ -425,9 +425,8 @@ set nocompatible
 " # Autocommands                                                            {{{
   augroup Anishs
     autocmd!
-		"foldouts handles view calls
-		"autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-		"autocmd BufReadPre ?* silent loadview
+		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		autocmd BufWinEnter ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch

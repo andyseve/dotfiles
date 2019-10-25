@@ -13,7 +13,7 @@ getforecast() {
 }
 
 showforecast() {
-	less -S "$report"
+	less -R "$report"
 }
 
 help_message() {

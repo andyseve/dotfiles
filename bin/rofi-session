@@ -1,7 +1,7 @@
 #!/bin/sh
 
 myrof() {
-	rofi -i -lines 6 -location 1 -width 15 -dmenu -p "$1"
+	rofi -matching fuzzy -i -lines 6 -location 1 -width 15 -dmenu -p "$1"
 }
 
 OPTIONS="lock screen\nlog out\nsuspend\nhibernate\nreboot\nshut down"

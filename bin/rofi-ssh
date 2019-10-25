@@ -1,7 +1,7 @@
 #!/bin/sh
 
 myrof() {
-	rofi -i -dmenu -p "$1"
+	rofi -matching fuzzy -i -dmenu -p "$1"
 }
 
 myhosts() {

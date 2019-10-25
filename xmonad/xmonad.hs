@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 24 Oct 2019 05:00:43 PM EDT
+-- Last Modified: Fri 25 Oct 2019 11:59:58 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -20,6 +20,7 @@ import System.IO                            -- for xmonbar
 import System.Posix.Process(executeFile)
 import System.IO.Unsafe                     -- for modes
 import System.Posix.Unistd                  -- for hostname
+import Data.Time.LocalTime
 
 import XMonad hiding ( (|||) )              -- ||| from X.L.LayoutCombinators
 import qualified XMonad.StackSet as W       -- myManageHookShift
@@ -42,6 +43,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll               -- action all the things
 import XMonad.Actions.KeyRemap              -- this may let me do a hackity hack hack to get vim-like modes!
 
+import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.DynamicLog              -- for xmobar
 import XMonad.Hooks.DynamicProperty         -- 0.12 broken; works with github version
 import XMonad.Hooks.EwmhDesktops
@@ -66,6 +68,7 @@ import XMonad.Layout.Drawer
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
 import XMonad.Layout.Hidden
+import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutBuilder
 import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.LayoutScreens
@@ -148,26 +151,22 @@ import XMonad.Layout.NoBorders
 ---------------------------------------------------------------------------
 
 main = do
-    xmproc <- spawnPipe myStatusBar
-
-	-- for independent screens
-	--nScreens <- countScreens
-
     xmonad
-        $ myKeyMods
-        $ myConfig xmproc
+        $ withNavigation2DConfig myNav2DConf
+        $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+        $ myConfig
 
 
-myConfig p = def
+myConfig = def
     { borderWidth        = border
     , clickJustFocuses   = myClickJustFocuses
-    , focusFollowsMouse  = myFocusFollowsMouse
+    , focusFollowsMouse  = myFocusFollowMouse
     , normalBorderColor  = myNormalBorderColor
     , focusedBorderColor = myFocusedBorderColor
     , manageHook         = myManageHook
     , handleEventHook    = myHandleEventHook
     , layoutHook         = myLayoutHook
-    , logHook            = myLogHook p
+    , logHook            = myLogHook
     , modMask            = myModMask
     , mouseBindings      = myMouseBindings
     , startupHook        = myStartupHook
@@ -200,10 +199,12 @@ myWorkspaces = [ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9, "NSP"]
 myTerminal    = "alacritty"
 myAltTerminal = "gnome-terminal"
 myBrowser     = "firefox"
-myLauncher    = "rofi -matching fuzzy -modi combi -show combi -combi-modi run,drun"
+myAltBrowser  = "google-chrome"
+myLauncher    = "rofi-run"
 myAltLauncher = "dmenu_run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
-myStatusBar   = "xmobar -x0 /home/stranger/.xmonad/xmobar.conf"
+myWinSearch   = "rofi-window"
+myStatusBar   = "xmobar -x  /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
@@ -246,8 +247,8 @@ scratchpads = [
 -- Theme                                                                    {{{
 -------------------------------------------------------------------------------
 
-myFocusFollowsMouse = False
-myClickJustFocuses  = True
+myFocusFollowMouse = False
+myClickJustFocuses = False
 
 -- solarized colors
 base03  = "#002b36"
@@ -283,9 +284,9 @@ inactive     = base02
 focuscolor   = blue
 unfocuscolor = base02
 
-mySmallFont = "xft:monospace:style=Regular:size=8:hinting=true"
-myFont      = "xft:monospace:style=Regular:size=10:hinting=true"
-myBigFont   = "xft:monospace:style=Regular:size=12:hinting=true"
+mySmallFont = "xft:hack:style=Regular:size=8:hinting=true"
+myFont      = "xft:hack:style=Regular:size=10:hinting=true"
+myBigFont   = "xft:hack:style=Regular:size=12:hinting=true"
 
 -- this is a "fake title" used as a highlight bar in lieu of full borders
 -- (I find this a cleaner and less visually intrusive solution)
@@ -941,8 +942,6 @@ myLayoutHook = fullscreenFloat -- fixes floating windows going full screen, whil
 ------------------------------------------------------------------------}}}
 -- Bindings                                                             {{{
 ---------------------------------------------------------------------------
-myKeyMods p = addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys $ p
-           -- ++ buildKeyRemapBindings [myKeyRemap,emptyKeyRemap]
 
 myModMask = mod4Mask -- super key (win)
 
@@ -973,13 +972,13 @@ shiftAndView dir = findWorkspace getSortByIndex dir (WSIs notSP) 1
 shiftAndView' dir = findWorkspace getSortByIndexNoSP dir HiddenNonEmptyWS 1
         >>= \t -> (windows . W.shift $ t) >> (windows . W.greedyView $ t)
 nextHidWS = findWorkspace getSortByIndexNoSP Next HiddenWS 1
-        >>= \t -> (windows . W.view $ t)
+        >>= \t ->  windows . W.view $ t
 prevHidWS = findWorkspace getSortByIndexNoSP Prev HiddenWS 1
-        >>= \t -> (windows . W.view $ t)
+        >>= \t ->  windows . W.view $ t
 nextNonEmptyWS = findWorkspace getSortByIndexNoSP Next HiddenNonEmptyWS 1
-        >>= \t -> (windows . W.view $ t)
+        >>= \t ->  windows . W.view $ t
 prevNonEmptyWS = findWorkspace getSortByIndexNoSP Prev HiddenNonEmptyWS 1
-        >>= \t -> (windows . W.view $ t)
+        >>= \t ->  windows . W.view $ t
 getSortByIndexNoSP =
         fmap (.namedScratchpadFilterOutWorkspace) getSortByIndex
 
@@ -1078,65 +1077,51 @@ myKeys conf = let
       ("M-x M-r"                  , addName "restart XMonad"                  $ spawn "xmonad --restart")
     , ("M-x M-S-r"                , addName "rebuild & restart XMonad"        $ spawn "xmonad --recompile && xmonad --restart")
     , ("M-x M-e"                  , addName "edit xmonad.hs"                  $ spawn (myEditor ++ " ~/.xmonad/xmonad.hs"))
-    , ("M-x M-l"                  , addName "lock screen"                     $ spawn "lockscreen")
+    , ("M-x M-l"                  , addName "lock screen"                     $ spawn "gnome-screensaver-command -l")
+    , ("M1-C-l"                   , addName "lock screen"                     $ spawn "gnome-screensaver-command -l")
     , ("M-F1"                     , addName "show keybindings"                $ return ())
-    , ("M-<Pause>"                , addName "Quit XMonad"                     $ confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     , ("M-x M-q"                  , addName "Quit XMonad"                     $ confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     ] ^++^
 
     -----------------------------------------------------------------------
     -- Actions
     -----------------------------------------------------------------------
-    --subKeys "actions"
-    --[
-      --("M-<KP_Add>"                  , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
-    --, ("M-<KP_Subtract>"             , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
-    --, ("M-<KP_Multiply>"             , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
-    ----, ("M-<Page_Up>"                 , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
-    ----, ("M-<Page_Down>"               , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
-    ----, ("M-<End>"                     , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
-    ----, ("<XF86AudioRaiseVolume>"      , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
-    ----, ("<XF86AudioLowerVolume>"      , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
-    ----, ("<XF86AudioMute>"             , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
-    ----, ("<Print>"                     , addName "screenshot"                  $ runOrRaise "xfce4-screenshooter" (className =? "Xfce4-screenshooter"))
-    ----, ("S-<Print>"                   , addName "screenshot fullscreen"       $ spawn "xfce4-screenshooter --fullscreen")
-    ----, ("C-<Print>"                   , addName "screenshot region"           $ spawn "xfce4-screenshooter --region")
-    ----, ("M1-<Print>"                  , addName "screenshot window"           $ spawn "xfce4-screenshooter --window")
-    --] ^++^
+    subKeys "actions"
+    [
+      ("M-<Page_Up>"                 , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
+    , ("M-<Page_Down>"               , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
+    , ("M-<End>"                     , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
+    , ("<XF86AudioRaiseVolume>"      , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
+    , ("<XF86AudioLowerVolume>"      , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
+    , ("<XF86AudioMute>"             , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
+    , ("<Print>"                     , addName "screenshot"                  $ runOrRaise "gnome-screenshot" (className =? "gnome-screenshot"))
+    , ("S-<Print>"                   , addName "screenshot fullscreen"       $ spawn "gnome-screenshot --fullscreen")
+    , ("C-<Print>"                   , addName "screenshot region"           $ spawn "gnome-screenshot --region")
+    , ("M1-<Print>"                  , addName "screenshot window"           $ spawn "gnome-screenshot --window")
+    ] ^++^
 
     -----------------------------------------------------------------------
     -- Launchers
     -----------------------------------------------------------------------
-    --subKeys "launchers"
-    --[ 
-      ----("M-<Space>"              , addName "launcher"                        $ spawn myLauncher)
-    ----, ("M-C-<Space>"            , addName "alt-launcher"                    $ spawn myAltLauncher)
-    ----, ("M-C-\\"                 , addName "web search"                      $ spawn myWebSearch)
-    ----, ("M-S-\\"                 , addName "bookmark search"                 $ spawn myBookmarks)
-    ----, ("M-/"                    , addName "window search"                   $ spawn myWinSearch)
-    ----, ("M-p"                    , addName "passwords"                       $ spawn "rofi-pass")
-    ----, ("M-<Return>"             , addName "terminal"                        $ spawn myTerminal)
-    ----, ("M-S-<Return>"           , addName "alt-terminal"                    $ spawn myAltTerminal)
-    ----, ("M-\\"                   , addName "browser"                         $ spawn myBrowser)
-    ----, ("M-s"                    , addName "ssh"                             $ spawn "rofi-ssh")
-    ----, ("M1-<F1>"                , addName "app menu"                        $ spawn "xfce4-popup-applicationsmenu")
-      ----("M-S-o"                  , addName "launcher"                        $ spawn myLauncher)
-    ----, ("M-o M-o"                , addName "launcher"                        $ spawn myLauncher)
-    ----, ("M-o M-b"                , addName "browser"                         $ spawn myBrowser)
-      --("M-o M-S-b"              , addName "alt-browser"                     $ spawn myAltBrowser)
-    ----, ("M-o M-f"                , addName "files"                           $ spawn myFiles)
-    --, ("M-o M-S-f"              , addName "alt-files"                       $ spawn myAltFiles)
-    --, ("M-o M-s"                , addName "skype"                           $ spawn "skypeforlinux")
-    --, ("M-o M-t"                , addName "terminal"                        $ spawn myTerminal)
-    --, ("M-o M-S-T"              , addName "alt-terminal"                    $ spawn myAltTerminal)
-    --, ("M-o M-m"                , addName "email"                           $ spawn myMail)
-    --, ("M-o M-v"                , addName "virtualbox"                      $ spawn "VirtualBox")
-    ----, ("<XF86Calculator>"       , addName "calculator"                      $ runOrRaise "gnome-calculator" (resource =? "gnome-calculator"))
-    ----, ("M-c"                    , addName "NSP Chat"                        $ bindOn WS [(wsWRK, namedScratchpadAction scratchpads "hangoutsWork"),
-                                                                            ---- ("", namedScratchpadAction scratchpads "hangoutsPersonal")])
-    ----, ("M-t"                    , addName "NSP Tasks"                       $ bindOn WS [(wsWRK, namedScratchpadAction scratchpads "trelloWork"),
-                                                                              ---- ("", namedScratchpadAction scratchpads "trello")])
-    --] ^++^
+    subKeys "launchers"
+    [
+      ("M-p"          , addName "launcher"                        $ spawn myLauncher)
+    , ("M-S-p"        , addName "alt-launcher"                    $ spawn myAltLauncher)
+    , ("M-/"          , addName "window search"                   $ spawn myWinSearch)
+    , ("M-<Return>"   , addName "terminal"                        $ spawn myTerminal)
+    , ("M-S-<Return>" , addName "alt-terminal"                    $ spawn myAltTerminal)
+    , ("M-\\"         , addName "browser"                         $ spawn myBrowser)
+    , ("M-s"          , addName "ssh"                             $ spawn "rofi-ssh")
+    , ("M-e"          , addName "files"                           $ spawn myFiles)
+    , ("M-S-o"        , addName "launcher"                        $ spawn myLauncher)
+    , ("M-o M-o"      , addName "launcher"                        $ spawn myLauncher)
+    , ("M-o M-b"      , addName "browser"                         $ spawn myBrowser)
+    , ("M-o M-S-b"    , addName "alt-browser"                     $ spawn myAltBrowser)
+    , ("M-o M-f"      , addName "files"                           $ spawn myFiles)
+    , ("M-o M-s"      , addName "skype"                           $ spawn "skypeforlinux")
+    , ("M-o M-t"      , addName "terminal"                        $ spawn myTerminal)
+    , ("M-o M-S-T"    , addName "alt-terminal"                    $ spawn myAltTerminal)
+    ] ^++^
 
     -----------------------------------------------------------------------
     -- ScratchPads
@@ -1261,37 +1246,6 @@ myKeys conf = let
     -- , ("M4-C-S-<Return>"        , addName "onGroup swapMaster"          $ onGroup swapMaster')
 
     -----------------------------------------------------------------------
-    -- LuomButtons
-    -----------------------------------------------------------------------
-
-    subKeys "luom mouse"
-    [ 
-      ("M-M1-<KP_End>"                  , addName "[ST] cycle sublayout"           $ toSubl NextLayout)
-    , ("M-M1-<KP_Down>"                 , addName "[SM] super key"                 $ return ())
-    , ("M-M1-<KP_Page_Down>"            , addName "[SB] cycle all layouts"         $ sendMessage NextLayout)
-    , ("M-M1-<KP_Left>"                 , addName "[TR] next non-empty ws"         $ nextNonEmptyWS)
-    , ("M-M1-<KP_Begin>"                , addName "[TL] prev non-empty ws"         $ prevNonEmptyWS)
-    , ("M-M1-<KP_Right>"                , addName "[TM] reset layout"              $ setLayout $ XMonad.layoutHook conf)
-    ] ^++^
-
-
-    -----------------------------------------------------------------------
-    -- EVGAButtons
-    -----------------------------------------------------------------------
-
-    subKeys "evga mouse"
-    [ 
-      ("M-C-M1-<KP_Left>"               , addName "[LT] super key"                 $ return ())
-    , ("M-C-M1-<KP_End>"                , addName "[LB] cycle all layouts"         $ sendMessage NextLayout)
-    , ("M-C-M1-<KP_Right>"              , addName "[RT] next non-empty ws"         $ return ())
-    , ("M-C-M1-<KP_Page_Down>"          , addName "[RB] prev non-empty ws"         $ return ())
-    , ("M-C-M1-<KP_Up>"                 , addName "[TT] next non-empty ws"         $ return ())
-    , ("M-C-M1-<KP_Down>"               , addName "[TB] prev non-empty ws"         $ return ())
-    ] ^++^
-
-
-
-    -----------------------------------------------------------------------
     -- Music
     -----------------------------------------------------------------------
 
@@ -1323,15 +1277,15 @@ myKeys conf = let
     -- To this end, I am using X.A.MessageFeedback to test for success on using the BSP resizing
     -- and, if it fails, defaulting to the standard (or the X.L.ResizableTile Mirror variants)
     -- Expand and Shrink commands.
-      ("M-["                    , addName "expand (L on BSP)"           $ tryMsgR (ExpandTowards L) (Shrink))
-    , ("M-]"                    , addName "expand (R on BSP)"           $ tryMsgR (ExpandTowards R) (Expand))
-    , ("M-S-["                  , addName "expand (U on BSP)"           $ tryMsgR (ExpandTowards U) (MirrorShrink))
-    , ("M-S-]"                  , addName "expand (D on BSP)"           $ tryMsgR (ExpandTowards D) (MirrorExpand))
+      ("M-["                    , addName "expand (L on BSP)"           $ tryMsgR (ExpandTowards L) Shrink)
+    , ("M-]"                    , addName "expand (R on BSP)"           $ tryMsgR (ExpandTowards R) Expand)
+    , ("M-S-["                  , addName "expand (U on BSP)"           $ tryMsgR (ExpandTowards U) MirrorShrink)
+    , ("M-S-]"                  , addName "expand (D on BSP)"           $ tryMsgR (ExpandTowards D) MirrorExpand)
 
-    , ("M-C-["                  , addName "shrink (L on BSP)"           $ tryMsgR (ShrinkFrom R) (Shrink))
-    , ("M-C-]"                  , addName "shrink (R on BSP)"           $ tryMsgR (ShrinkFrom L) (Expand))
-    , ("M-C-S-["                , addName "shrink (U on BSP)"           $ tryMsgR (ShrinkFrom D) (MirrorShrink))
-    , ("M-C-S-]"                , addName "shrink (D on BSP)"           $ tryMsgR (ShrinkFrom U) (MirrorExpand))
+    , ("M-C-["                  , addName "shrink (L on BSP)"           $ tryMsgR (ShrinkFrom R) Shrink)
+    , ("M-C-]"                  , addName "shrink (R on BSP)"           $ tryMsgR (ShrinkFrom L) Expand)
+    , ("M-C-S-["                , addName "shrink (U on BSP)"           $ tryMsgR (ShrinkFrom D) MirrorShrink)
+    , ("M-C-S-]"                , addName "shrink (D on BSP)"           $ tryMsgR (ShrinkFrom U) MirrorExpand)
 
   --, ("M-r"                    , addName "Mirror (BSP rotate)"         $ tryMsgR (Rotate) (XMonad.Layout.MultiToggle.Toggle MIRROR))
   --, ("M-S-C-m"                , addName "Mirror (always)"             $ sendMessage $ XMonad.Layout.MultiToggle.Toggle MIRROR)
@@ -1410,75 +1364,50 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 ---------------------------------------------------------------------------
 
 myStartupHook = do
-    --spawnOnce "~/.xmonad/scripts/auto-start.sh"
-    --spawnOnOnce "skypeforlinux" (myWorkspaces !! 5)
-    --spawnOnOnce (myTerminal ++ " -e htop") (myWorkspaces !! 9)
-    -- this should hopefully let java apps show up correctly (and it does!)
-    setWMName "LG3D"
-    --setDefaultKeyRemap emptyKeyRemap [myKeyRemap, emptyKeyRemap]
+    spawn "feh --bg-scale /home/stranger/Pictures/recycled_texture_background_by_sandeep_m-d6aeau9_PZ9chud.jpg"
+    spawn (myTerminal ++ " -e htop")
+    dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
 
 rebuildXmonad :: X ()
-rebuildXmonad = do
-    spawn "my-xmonad recompile"
+rebuildXmonad = 
+    spawn "xmonad --recompile && xmonad --restart"
 
 restartXmonad :: X ()
-restartXmonad = do
-    spawn "my-xmonad restart"
+restartXmonad = 
+    spawn "xmoand --restart"
 
 ------------------------------------------------------------------------}}}
 -- Log                                                                  {{{
 ---------------------------------------------------------------------------
 
---windowCount     = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
-
---myLogHook h j = do
-myLogHook h = do
+myLogHook = do
     -- following block for copy windows marking
     copies <- wsContainingCopies
     let check ws | ws `elem` copies =
                    pad . xmobarColor yellow red . wrap "&" "&"  $ ws
                  | otherwise = pad ws
 
+    -- LogHook for fading windows
     --fadeWindowsLogHook myFadeHook
     ewmhDesktopsLogHook
-    --dynamicLogWithPP $ defaultPP
-    dynamicLogWithPP $ def
+    
+    -- LogHook for dynamic bars using pretty print
+    multiPP myLogPP myLogPP
+    
 
-        { ppCurrent             = xmobarColor active "" . wrap "[" "]"
-        , ppTitle               = xmobarColor active "" . shorten 50
-        , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
-        , ppUrgent              = xmobarColor red    "" . wrap " " " "
-        , ppHidden              = check
-        , ppHiddenNoWindows     = const ""
-        , ppSep                 = xmobarColor red blue "  :  "
-        , ppWsSep               = " "
-        , ppLayout              = xmobarColor yellow ""
-        , ppOrder               = id
-        , ppOutput              = hPutStrLn h  
-        , ppSort                = fmap 
-                                  (namedScratchpadFilterOutWorkspace.)
-                                  (ppSort def)
-                                  --(ppSort defaultPP)
-        , ppExtras              = [] }
---myFadeHook = composeAll
-    --[ opaque -- default to opaque
-    --, isUnfocused --> opacity 0.85
-    --, (className =? "Terminator") <&&> (isUnfocused) --> opacity 0.9
-    --, (className =? "URxvt") <&&> (isUnfocused) --> opacity 0.9
-    --, fmap ("Google" `isPrefixOf`) className --> opaque
-    --, isDialog --> opaque 
-    ----, isUnfocused --> opacity 0.55
-    ----, isFloating  --> opacity 0.75
-    --]
-
+myLogPP = defaultPP
+    { ppCurrent             = xmobarColor active "" . wrap "[" "]"
+    , ppTitle               = xmobarColor active "" . shorten 50
+    , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
+    , ppUrgent              = xmobarColor red    "" . wrap " " " "
+    }
 ------------------------------------------------------------------------}}}
 -- Actions                                                              {{{
 ---------------------------------------------------------------------------
-
 
 ---------------------------------------------------------------------------
 -- Urgency Hook                                                            
@@ -1553,9 +1482,7 @@ myManageHook =
                     , "Add New Items"
                     ]
         myCenterFloatsC = [
-                            "Pavucontrol"
-                          , "Xmessage"
-                          , "Xfce4-taskmanager"
+                            "Xmessage"
                           ]
         myCenterFloatsT = [
                             "Application Finder"
@@ -1564,8 +1491,9 @@ myManageHook =
                           ]
         myWWWC = [
                    "qutebrowser"
-                 , "Firefox"
+                 , "firefox"
                  , "Vivaldi-stable"
+                 , "google-chrome"
                  ]
         myMediaC = [
                      "vlc"
@@ -1575,12 +1503,13 @@ myManageHook =
                     "Skype"
                   , "Pidgin"
                   , "Wire"
+                  , "Discord"
                   ]
         myMailC = [
                     "Thunderbird"
                   ]
         myMailT = [
-                    "urxvt-mutt"
+                    "alacritty-mutt"
                   ]
         mySysC = [
                    "VirtualBox"
@@ -1595,26 +1524,26 @@ myManageHook =
 -- X Event Actions
 ---------------------------------------------------------------------------
 
--- for reference, the following line is the same as dynamicTitle myDynHook
--- <+> dynamicPropertyChange "WM_NAME" myDynHook
-
--- I'm not really into full screens without my say so... I often like to
--- fullscreen a window but keep it constrained to a window rect (e.g.
--- for videos, etc. without the UI chrome cluttering things up). I can
--- always do that and then full screen the subsequent window if I want.
--- THUS, to cut a long comment short, no fullscreenEventHook
--- <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook
-
+-- Not mine. TODO: understnad and edit this
 myHandleEventHook = docksEventHook
                 <+> fadeWindowsEventHook
-                -- <+> dynamicTitle myDynHook
                 <+> handleEventHook def
                 <+> XMonad.Layout.Fullscreen.fullscreenEventHook
-    --where
-        --myDynHook = composeAll
-            --[ isPersonalHangouts --> forceCenterFloat
-            --, isWorkHangouts --> insertPosition End Newer
-            --]aux
+                -- Create a Status bar for each screen
+                <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer
+
+
+-- BarCreator and Destroyer for dynamic bars
+myBarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
+myBarCreator (XMonad.S sid) = do
+    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
+    XMonad.trace (show t ++ ": XMonad myBarCreator " ++ show sid)
+    XMonad.Util.Run.spawnPipe ("xmobar --screen " ++ show sid ++ " ~/.xmonad/xmobar.conf")
+
+myBarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
+myBarDestroyer = do
+    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
+    XMonad.trace (show t ++ ": XMonad myBarDestroyer")
 
 ---------------------------------------------------------------------------
 -- Custom hook helpers
@@ -1651,5 +1580,6 @@ forceCenterFloat = doFloatDep move
 --  when x (liftX . addTag tag =<< ask)
 --  return Nothing
 
+------------------------------------------------------------------------}}}
 
--- vim: ft=haskell:foldmethod=marker:expandtab:ts=4:sts=4:shiftwidth=4
+-- vim: ft=haskell:foldmethod=marker:foldlevel=4:expandtab:ts=4:sts=4:shiftwidth=4
