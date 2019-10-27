@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 25 Oct 2019 11:59:58 AM EDT
+-- Last Modified: Sun 27 Oct 2019 05:30:04 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -204,7 +204,7 @@ myLauncher    = "rofi-run"
 myAltLauncher = "dmenu_run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi-window"
-myStatusBar   = "xmobar -x  /home/stranger/.xmonad/xmobar.conf"
+myStatusBar   = "xmobar -x 0  /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
@@ -1365,7 +1365,6 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 myStartupHook = do
     spawn "feh --bg-scale /home/stranger/Pictures/recycled_texture_background_by_sandeep_m-d6aeau9_PZ9chud.jpg"
-    spawn (myTerminal ++ " -e htop")
     dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
@@ -1391,15 +1390,10 @@ myLogHook = do
                    pad . xmobarColor yellow red . wrap "&" "&"  $ ws
                  | otherwise = pad ws
 
-    -- LogHook for fading windows
-    --fadeWindowsLogHook myFadeHook
-    ewmhDesktopsLogHook
-    
-    -- LogHook for dynamic bars using pretty print
     multiPP myLogPP myLogPP
-    
 
-myLogPP = defaultPP
+myLogPP :: XMonad.Hooks.DynamicLog.PP
+myLogPP = XMonad.Hooks.DynamicLog.defaultPP
     { ppCurrent             = xmobarColor active "" . wrap "[" "]"
     , ppTitle               = xmobarColor active "" . shorten 50
     , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
