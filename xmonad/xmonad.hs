@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 25 Oct 2019 11:59:58 AM EDT
+-- Last Modified: Fri 25 Oct 2019 02:20:40 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -26,7 +26,7 @@ import XMonad hiding ( (|||) )              -- ||| from X.L.LayoutCombinators
 import qualified XMonad.StackSet as W       -- myManageHookShift
 
 import XMonad.Actions.Commands
-import XMonad.Actions.ConditionalKeys       -- bindings per workspace or layout
+--import XMonad.Actions.ConditionalKeys       -- bindings per workspace or layout
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.CopyWindow            -- like cylons, except x windows
 import XMonad.Actions.CycleWS
@@ -1159,8 +1159,8 @@ myKeys conf = let
     , ("M-g M-p"                , addName "promote"                         $ promote) 
     , ("M-g M-m"                , addName "swap with master"                $ windows W.swapMaster)
 
-    , ("M-i"                    , addName "navigate tabs D/R"               $ bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')])
-    , ("M-u"                    , addName "navigate tabs U/L"               $ bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')])
+    --, ("M-i"                    , addName "navigate tabs D/R"               $ bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')])
+    --, ("M-u"                    , addName "navigate tabs U/L"               $ bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')])
     , ("M-S-i"                  , addName "swap tab D/R"                    $ windows W.swapDown)
     , ("M-S-u"                  , addName "swap tab U/L"                    $ windows W.swapUp)
     ]
