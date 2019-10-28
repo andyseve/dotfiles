@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 25 Oct 2019 02:20:40 PM EDT
+-- Last Modified: Mon 28 Oct 2019 09:40:48 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -26,7 +26,6 @@ import XMonad hiding ( (|||) )              -- ||| from X.L.LayoutCombinators
 import qualified XMonad.StackSet as W       -- myManageHookShift
 
 import XMonad.Actions.Commands
---import XMonad.Actions.ConditionalKeys       -- bindings per workspace or layout
 import qualified XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.CopyWindow            -- like cylons, except x windows
 import XMonad.Actions.CycleWS
@@ -204,7 +203,7 @@ myLauncher    = "rofi-run"
 myAltLauncher = "dmenu_run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi-window"
-myStatusBar   = "xmobar -x  /home/stranger/.xmonad/xmobar.conf"
+myStatusBar   = "xmobar -x 0  /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
@@ -267,6 +266,8 @@ violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
 green   = "#859900"
+white   = "#FFFFFF"
+black   = "#000000"
 
 -- sizes
 gap    = 1
@@ -1365,7 +1366,6 @@ myMouseBindings (XConfig {XMonad.modMask = myModMask}) = M.fromList $
 
 myStartupHook = do
     spawn "feh --bg-scale /home/stranger/Pictures/recycled_texture_background_by_sandeep_m-d6aeau9_PZ9chud.jpg"
-    spawn (myTerminal ++ " -e htop")
     dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
@@ -1391,20 +1391,40 @@ myLogHook = do
                    pad . xmobarColor yellow red . wrap "&" "&"  $ ws
                  | otherwise = pad ws
 
-    -- LogHook for fading windows
-    --fadeWindowsLogHook myFadeHook
-    ewmhDesktopsLogHook
-    
-    -- LogHook for dynamic bars using pretty print
+    -- LogHook for multiple screens
+    -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
-    
 
-myLogPP = defaultPP
-    { ppCurrent             = xmobarColor active "" . wrap "[" "]"
-    , ppTitle               = xmobarColor active "" . shorten 50
-    , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
-    , ppUrgent              = xmobarColor red    "" . wrap " " " "
+myLogPP :: XMonad.Hooks.DynamicLog.PP
+--myLogPP = XMonad.Hooks.DynamicLog.defaultPP
+    --{ ppCurrent             = xmobarColor active "" . wrap "[" "]"
+    --, ppTitle               = xmobarColor active "" . shorten 50
+    --, ppVisible             = xmobarColor base0  "" . wrap "(" ")"
+    --, ppUrgent              = xmobarColor red    "" . wrap " " " "
+    --}
+
+
+myLogPP = def
+    { ppCurrent             = xmobarColor black active . wrap " " " "
+    , ppTitle               = xmobarColor white "" . shorten 80
+    , ppVisible             = xmobarColor black violet . wrap " " " "
+    , ppUrgent              = xmobarColor black red . wrap " " " "
+    , ppHidden              = xmobarColor black orange . wrap " " " "
+    --, ppHiddenNoWindows     = xmobarColor white "" . wrap " " " "
+        --, ppSep                 = "<fc=#ff79c6> │ </fc>"
+    , ppSep                 = " <icon=separators/separator.xpm/> "
+    , ppWsSep               = ""
+    , ppLayout              = xmobarColor yellow ""
+    , ppOrder               = \(ws:l:t:ex) -> [ws,l]++ex++[t] --id
+        --, ppOutput              = \x -> hPutStrLn h x >> hPutStrLn j x  
+    --, ppOutput              = PutStrLn
+    , ppSort                = fmap 
+                                  (namedScratchpadFilterOutWorkspace.)
+                                  (ppSort def)
+                                  --(ppSort defaultPP)
     }
+
+
 ------------------------------------------------------------------------}}}
 -- Actions                                                              {{{
 ---------------------------------------------------------------------------
