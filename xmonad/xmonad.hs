@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 27 Oct 2019 05:31:51 PM EDT
+-- Last Modified: Sun 27 Oct 2019 05:41:25 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -266,6 +266,8 @@ violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
 green   = "#859900"
+white   = "#FFFFFF"
+black   = "#000000"
 
 -- sizes
 gap    = 1
@@ -1389,15 +1391,40 @@ myLogHook = do
                    pad . xmobarColor yellow red . wrap "&" "&"  $ ws
                  | otherwise = pad ws
 
+    -- LogHook for multiple screens
+    -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
 
 myLogPP :: XMonad.Hooks.DynamicLog.PP
-myLogPP = XMonad.Hooks.DynamicLog.defaultPP
-    { ppCurrent             = xmobarColor active "" . wrap "[" "]"
-    , ppTitle               = xmobarColor active "" . shorten 50
-    , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
-    , ppUrgent              = xmobarColor red    "" . wrap " " " "
+--myLogPP = XMonad.Hooks.DynamicLog.defaultPP
+    --{ ppCurrent             = xmobarColor active "" . wrap "[" "]"
+    --, ppTitle               = xmobarColor active "" . shorten 50
+    --, ppVisible             = xmobarColor base0  "" . wrap "(" ")"
+    --, ppUrgent              = xmobarColor red    "" . wrap " " " "
+    --}
+
+
+myLogPP = def
+    { ppCurrent             = xmobarColor black active . wrap " " " "
+    , ppTitle               = xmobarColor white "" . shorten 80
+    , ppVisible             = xmobarColor black violet . wrap " " " "
+    , ppUrgent              = xmobarColor black red . wrap " " " "
+    , ppHidden              = xmobarColor black orange . wrap " " " "
+    --, ppHiddenNoWindows     = xmobarColor white "" . wrap " " " "
+        --, ppSep                 = "<fc=#ff79c6> │ </fc>"
+    , ppSep                 = " <icon=separators/separator.xpm/> "
+    , ppWsSep               = ""
+    , ppLayout              = xmobarColor yellow ""
+    , ppOrder               = \(ws:l:t:ex) -> [ws,l]++ex++[t] --id
+        --, ppOutput              = \x -> hPutStrLn h x >> hPutStrLn j x  
+    --, ppOutput              = PutStrLn
+    , ppSort                = fmap 
+                                  (namedScratchpadFilterOutWorkspace.)
+                                  (ppSort def)
+                                  --(ppSort defaultPP)
     }
+
+
 ------------------------------------------------------------------------}}}
 -- Actions                                                              {{{
 ---------------------------------------------------------------------------
