@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 24 Oct 2019 12:55:15 PM EDT
+# Last Edited: Wed 30 Oct 2019 11:11:54 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -86,7 +86,7 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # loading autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
+[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
 
