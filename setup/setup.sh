@@ -1,4 +1,4 @@
-## Last Modified: Mon 28 Oct 2019 01:23:49 AM EDT
+## Last Modified: Tue 29 Oct 2019 10:15:24 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -213,6 +213,7 @@ fi
 if check xmonad; then
 	IF="$DOTFILES/xmonad"
 	OF="$HOME/.xmonad"
+	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
 	link $IF/xmobar.conf $OF/xmobar.conf
@@ -235,7 +236,7 @@ while true; do
 	case $install_themes in
 		[Yy]*)
 			echo "Installing themes..."
-			$HOME/dotfiles/.setup_themes.sh
+			$HOME/dotfiles/setup/.setup_themes.sh
 			break;;
 		[Nn]*)
 			echo "You can install themes later from $HOME/dotfiles/.setup_themes.sh"

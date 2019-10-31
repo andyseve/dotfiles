@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 25 Oct 2019 10:20:56 AM EDT
+" Last Updated: Wed 30 Oct 2019 12:28:31 PM EDT
 
 set nocompatible
 
@@ -67,7 +67,7 @@ set nocompatible
       set guifont=Consolas:h12:cANSI
 			set visualbell
     else
-      set guifont=Ubuntu\ Mono\ 12
+      set guifont=xft:hack:h12
     endif
   else
     set background=dark
