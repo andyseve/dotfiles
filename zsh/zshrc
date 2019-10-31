@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 30 Oct 2019 11:11:54 PM EDT
+# Last Edited: Thu 31 Oct 2019 01:01:08 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -46,6 +46,10 @@ bindkey -v # Use vim keybindings
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
+
+
+# zsh/autosuggestions color change
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 
 
 
@@ -160,6 +164,7 @@ precmd_pipestatus() {
        fi
 }
 add-zsh-hook precmd precmd_pipestatus
+
 ################################################################################
 # Completions ##################################################################
 ################################################################################

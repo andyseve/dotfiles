@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 30 Oct 2019 11:45:40 PM EDT
+" Last Updated: Thu 31 Oct 2019 12:58:00 AM EDT
 
 set nocompatible
 
@@ -55,6 +55,7 @@ set nocompatible
 
 "                                                                           }}}
 " # Core Settings                                                           {{{
+  set background=dark
 	syntax enable
   set synmaxcol=200
   set encoding=utf-8
@@ -70,7 +71,7 @@ set nocompatible
       set guifont=Fira\ Code\ Medium\ 12
     endif
   else
-    set background=dark
+		set background=dark
     colorscheme solarized
   endif
 
@@ -103,10 +104,12 @@ set nocompatible
   set wildmenu
   set wildmode=full
   set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+	set showcmd              " Show (partial) command in status line
   set showmatch            " Highlight matching braces
   set modeline             " Enables modlines (File specific vim settings)
   set modelines=1          " Read only the last line for vim specific options
   set autoread             " Read changes from outside automatically
+	set autowrite            " Automaticall save before commands like :next and :make
   set nomousehide          " To fix a bug that causes cursor to dissapear
   set mouse=a              " Enable mouse
   set textwidth=0          " Textwidth to infinite
@@ -114,6 +117,7 @@ set nocompatible
   set nospell
   set viewoptions-=options " Excludes options (like working dir) from view
   set updatetime=1000
+	set hidden               " Hide buffers when they are abandoned
 
   let mapleader = "\\"
 
@@ -150,6 +154,8 @@ set nocompatible
 " # Search Settings                                                         {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
+	set ignorecase " Do case insensitive matching
+	set smartcase " Do smart case matching
 
 "                                                                           }}}
 " # Fold Settings                                                           {{{
