@@ -1,4 +1,4 @@
-## Last Modified: Mon 28 Oct 2019 01:23:49 AM EDT
+## Last Modified: Thu 31 Oct 2019 11:07:18 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -87,6 +87,8 @@ if check zsh; then
 	link $IF/zshrc.lite $OF/zshrc.lite
 	link $IF/zshrc.noplugin $OF/zshrc.noplugin
 	link $IF/zshrc.testing $OF/zshrc.testing
+	
+	link $IF/dircolors $OF/dircolors
 
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
@@ -213,6 +215,7 @@ fi
 if check xmonad; then
 	IF="$DOTFILES/xmonad"
 	OF="$HOME/.xmonad"
+	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
 	link $IF/xmobar.conf $OF/xmobar.conf
@@ -225,21 +228,29 @@ else
 	nope xmonad
 fi
 
+# xfce
+if check xfce4-terminal; then
+	cdir $HOME/.config/xfce4/terminal
+	link $DOTFILES/xfce4/terminal/terminalrc $HOME/.config/xfce4/terminal/terminalrc
+else
+	nope xfce4-terminal
+fi
+
 
 ################################################################################
 # Themes #######################################################################
 ################################################################################
 while true; do
-	read -p "Do you want to install themes[y|n]" install_themes
+	read -p "Do you want to install ALL themes[y|n]" install_themes
 	printf "\n"
 	case $install_themes in
 		[Yy]*)
 			echo "Installing themes..."
-			$HOME/dotfiles/.setup_themes.sh
+			$HOME/dotfiles/themes.sh
 			break;;
 		[Nn]*)
-			echo "You can install themes later from $HOME/dotfiles/.setup_themes.sh"
-			echo "Or install themes separately in $HOMe/dotfiles/themes"
+			echo "You can install themes later from $HOME/dotfiles/themes.sh"
+			echo "Or install themes separately in $HOME/dotfiles/themes"
 			break;;
 		*)
 			echo "Please enter a valid selection"
