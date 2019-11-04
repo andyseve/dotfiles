@@ -1,6 +1,6 @@
 # Author: Anish Sevekari
-# Last Edited: Sun 18 Aug 2019 02:24:39 PM DST
-# Zshrc with only color settings
+# Last Edited: Thu 24 Oct 2019 12:55:03 PM EDT
+# Zshrc with only color and completiong settings
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -31,7 +31,7 @@ setopt histignorealldups # ignore repeats in history
 setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
-COMPLETION_WAITING_DOTS="ture"
+COMPLETION_WAITING_DOTS="true"
 bindkey -v # Use vim keybindings
 
 
@@ -170,3 +170,4 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# vim:ft=zsh

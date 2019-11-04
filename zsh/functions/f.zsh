@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 21 Jun 2019 02:32:35 PM EDT
+# Last Edited: Thu 31 Oct 2019 01:44:46 AM EDT
 # Better fzf function
 # Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
 # We prefer setting height to 40% for better readability
@@ -28,6 +28,7 @@ function f(){
 		file="$(fzf -q ${@:1})"
 	fi
 	if [[ ! -z $file ]]; then
+		echo "$file" | xsel -ib
 		echo "$file"
 		return 0
 	fi

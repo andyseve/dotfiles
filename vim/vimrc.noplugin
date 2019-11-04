@@ -1,13 +1,15 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 05 Aug 2019 11:32:24 PM DST
+" Last Updated: Thu 24 Oct 2019 12:50:37 PM EDT
 
 set nocompatible
 
-" # Core Settings
+"                                                                           }}}
+" # Core Settings                                                           {{{
   syntax enable
+	set synmaxcol=200
   set encoding=utf-8
   filetype plugin indent on
-	" Setting Colorscheme
+	" ## Setting Colorscheme
   if(has("gui_running"))
     set background=dark
     colorscheme solarized
@@ -25,7 +27,7 @@ set nocompatible
   set backspace=indent,eol,start
   set ruler " Display cursor position
 
-  " Numbering Settings and functions
+  " ## Numbering Settings and functions
   set number
   " Toggle between relative and absolute numbers
   function! RelativeNumber()
@@ -46,33 +48,32 @@ set nocompatible
 		autocmd InsertEnter * call AbsoluteNumber()
 		autocmd InsertLeave * call RelativeNumber()
 	augroup END
-  
-  set confirm " Exit confirmation
+
+  set confirm              " Exit confirmation
   set wildmenu
   set wildmode=full
-  set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
-  set showmatch " Highlight matching braces
-  set modeline " Enables modlines (File specific vim settings)
-  set modelines=1 " Read only the last line for vim specific options
-  set autoread " Read changes from outside automatically
-  set nomousehide " To fix a bug that causes cursor to dissapear
-  set mouse=a
-  set textwidth=0 " Textwidth to infinite
-  set spelllang=en_us " Set US English for spellchecking
+  set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+  set showmatch            " Highlight matching braces
+  set modeline             " Enables modlines (File specific vim settings)
+  set modelines=1          " Read only the last line for vim specific options
+  set autoread             " Read changes from outside automatically
+  set nomousehide          " To fix a bug that causes cursor to dissapear
+  set mouse=a              " Enable mouse
+  set textwidth=0          " Textwidth to infinite
+  set spelllang=en_us      " Set US English for spellchecking
   set nospell
   set viewoptions-=options " Saves folds and cursor
-
   set updatetime=1000
 
   let mapleader = "\\"
 
-  " Gui Options
+  " ## Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
   set guioptions-=m " Remove Menubar
 
 
-  " Back up directories
+  " ## Back up directories
   if has("win64") || has("win32")
 	set undodir=~/vimfiles/.undo//
 	set backupdir=~/vimfiles/.backup//
@@ -84,7 +85,9 @@ set nocompatible
 	set directory=~/.vim/.swp//
 	set viewdir=~/.vim/view//
   endif
-  " # indent settings
+
+"                                                                           }}}
+" # Indent Settings                                                         {{{
   set autoindent
   set smartindent
   set breakindent
@@ -94,15 +97,18 @@ set nocompatible
   set tabstop=2
   set noexpandtab
 
-" # Search settings
+"                                                                           }}}
+" # Search Settings                                                         {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
 
-" # Fold Settings
+"                                                                           }}}
+" # Fold Settings                                                           {{{
   set foldenable
   set foldlevelstart=3
 	
-" # Generic Bindings and Shortcuts
+"                                                                           }}}
+" # Generic Bindings and Shortcuts                                          {{{
   nnoremap :W :w
   nnoremap :Q :q
 	nnoremap -d dd
@@ -137,7 +143,7 @@ set nocompatible
 	nmap <leader>el :vsplit ~/dotfiles/latex/anishs.sty<CR>
 	nmap <leader>ez :vsplit ~/.zshrc<CR>
 
-	" Remove Search Highlight
+	" Remove search highlight
 	nmap <leader>h :nohlsearch<CR>
 
 	" Quick Source
@@ -146,12 +152,13 @@ set nocompatible
 	else
 		nnoremap sv :source ~/.vimrc<CR>
 	endif
-	
+
 	" Quick lists
 	nnoremap <leader>oo :cwindow
 	nnoremap <leader>ol :lwindow
 
-" # Functions
+"                                                                           }}}
+" # Functions                                                               {{{
   " Update last modified entries
   function! UpdateLastModified()
     " TODO: Delete the update search
@@ -161,13 +168,22 @@ set nocompatible
       let b:last_line = 20
     endif
     let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
-    echo cmd
     execute cmd
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
 
-" # Autocommands
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
+
+"                                                                           }}}
+" # Autocommands                                                            {{{
   augroup Anishs
     autocmd!
 		"foldouts handles view calls
@@ -178,3 +194,6 @@ set nocompatible
     autocmd BufEnter * :nohlsearch
   augroup END
 
+"                                                                           }}}
+
+" vim:foldmethod=marker:ft=vim

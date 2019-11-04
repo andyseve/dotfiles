@@ -1,9 +1,9 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 29 Jul 2019 04:24:27 PM EDT
+" Last Updated: Thu 24 Oct 2019 12:42:50 PM EDT
 
 set nocompatible
 
-" # vim-plug
+" # vim-plug                                                                 {{{
   " change installation paths based on os
   if !exists("g:bundle_path")
     if has("win64") || has("win32")
@@ -17,17 +17,17 @@ set nocompatible
   Plug 'hecal3/vim-leader-guide'
   Plug 'ervandew/supertab'
   Plug 'SirVer/ultisnips'
-  Plug 'lervag/vimtex', {'for': 'latex'}
+  Plug 'lervag/vimtex',                 { 'for': 'latex' }
   Plug 'sjl/gundo.vim'
   Plug 'mileszs/ack.vim'
-  Plug 'junegunn/fzf', {'do':'./install --bin'}
+  Plug 'junegunn/fzf',                    { 'do':'./install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
-	Plug 'junegunn/vim-github-dashboard', { 'on': ['GHDashboard', 'GHActivity'] }
+	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'jiangmiao/auto-pairs'
-  Plug 'tpope/vim-surround'
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+	Plug 'tpope/vim-surround'
+  Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
+  Plug 'Xuyuanp/nerdtree-git-plugin',     { 'on': 'NERDTreeToggle' }
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
@@ -35,11 +35,15 @@ set nocompatible
   Plug 'godlygeek/tabular'
   Plug 'tpope/vim-repeat'
 	Plug 'tpope/vim-dispatch'
-  "Plug 'msuperdock/vim-foldout'
-  call plug#end()
+	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
+	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
+	Plug 'Konfekt/FastFold'
 
-" # Core Settings
-  syntax enable
+	call plug#end()
+
+"                                                                           }}}
+" # Core Settings                                                           {{{
+	syntax enable
   set synmaxcol=200
   set encoding=utf-8
   filetype plugin indent on
@@ -51,7 +55,7 @@ set nocompatible
       set guifont=Consolas:h12:cANSI
 			set visualbell
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=Ubuntu\ Mono\ 12
     endif
   else
     set background=dark
@@ -82,22 +86,21 @@ set nocompatible
 		autocmd InsertEnter * call AbsoluteNumber()
 		autocmd InsertLeave * call RelativeNumber()
 	augroup END
-  
-  set confirm " Exit confirmation
+
+  set confirm              " Exit confirmation
   set wildmenu
   set wildmode=full
-  set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
-  set showmatch " Highlight matching braces
-  set modeline " Enables modlines (File specific vim settings)
-  set modelines=1 " Read only the last line for vim specific options
-  set autoread " Read changes from outside automatically
-  set nomousehide " To fix a bug that causes cursor to dissapear
-  set mouse=a
-  set textwidth=0 " Textwidth to infinite
-  set spelllang=en_us " Set US English for spellchecking
+  set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+  set showmatch            " Highlight matching braces
+  set modeline             " Enables modlines (File specific vim settings)
+  set modelines=1          " Read only the last line for vim specific options
+  set autoread             " Read changes from outside automatically
+  set nomousehide          " To fix a bug that causes cursor to dissapear
+  set mouse=a              " Enable mouse
+  set textwidth=0          " Textwidth to infinite
+  set spelllang=en_us      " Set US English for spellchecking
   set nospell
   set viewoptions-=options " Saves folds and cursor
-
   set updatetime=1000
 
   let mapleader = "\\"
@@ -131,33 +134,37 @@ set nocompatible
   set tabstop=2
   set noexpandtab
 
-" # Search settings
+"                                                                           }}}
+" # Search Settings                                                         {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
 
-" # Fold Settings
+"                                                                           }}}
+" # Fold Settings                                                           {{{
   set foldenable
   set foldlevelstart=3
-	
-" # Plugin Configurations and Bindings
-	" ## Vim Leader Guide Configuration
+
+"                                                                           }}}
+" # Plugin Configurations and Bindings                                      {{{
+
+	" ## Vim Leader Guide Configuration                                       {{{
 	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
 	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
 	let g:lmap = {}
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
-	
+
 	augroup AnishsVimLeader
 		autocmd!
 		autocmd FileType gitcommit noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
-	
 
 
-  " ## Ultisnips Configuration
+	"                                                                         }}}
+  " ## Ultisnips Configuration                                              {{{
 	if has("win64") || has("win32")
-		set rtp+=~/vimfiles 
+		set rtp+=~/vimfiles
 		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
 	else
 		set rtp+=~/.vim
@@ -172,12 +179,8 @@ set nocompatible
   let g:UltiSnipsEditSplit="horizontal"
 
 
-	" ## ALE Configuration
-	let g:ale_line_on_text_changed = 'never'
-	let g:ale_on_enter = 1
-	let g:ale_on_save = 1
-
-  " ## Vimtex configuration
+	"                                                                         }}}
+  " ## Vimtex configuration                                                 {{{
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
 	let g:vimtex_toc_enabled = 1
@@ -191,7 +194,7 @@ set nocompatible
 				\}
 
 	" SumatraPDF config for windows
-  if has("win64") || has("win32")
+	if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
 					\ = ' -forward-search @tex @line @pdf'
@@ -200,17 +203,19 @@ set nocompatible
 					\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
 					\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
 					\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
-					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
+					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""'
   else
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
 
-  " ## Gundo Configuration
+	"                                                                         }}}
+  " ## Gundo Configuration                                                  {{{
   let g:gundo_prefer_python3 = 1
   nnoremap <leader>u :GundoToggle<CR>
 
-  " ## FZF and Ag configuration
+	"                                                                         }}}
+  " ## FZF and Ag configuration                                             {{{
   if executable('ag')
 	  set grepprg=ag\ --vimgrep
 	  let g:ackprg='ag --vimgrep'
@@ -218,7 +223,8 @@ set nocompatible
   endif
   noremap <c-p> :FZF<CR>
 
-	" ## Fugitive + Github-Dashboard
+	"                                                                         }}}
+  " ## Fugitive + Github-Dashboard                                          {{{
 	let g:lmap.g = {
 				\'name': 'Git Menu',
 				\'s': ['Gstatus', 'Git Status'],
@@ -229,7 +235,8 @@ set nocompatible
 				\'r': ['Gread', 'Git Read'],
 				\}
 
-  " ## NERDTree Configuration
+	"                                                                         }}}
+  " ## NERDTree Configuration                                               {{{
   let g:NERDTreeQuitOnOpen = 1
   nnoremap <M-\> :NERDTreeToggle<CR>
   inoremap <M-\> <c-o>:NERDTreeToggle<CR>
@@ -239,12 +246,14 @@ set nocompatible
 		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 	augroup END
 
-	" ## NERDcommenter
+	"                                                                         }}}
+  " ## NERDcommenter                                                        {{{
 	let g:lmap.c = {
 				\'name': 'Comments',
 				\}
-	
-  " ## Airline Configuration
+
+	"                                                                         }}}
+  " ## Airline Configuration                                                {{{
   let g:airline_theme = 'solarized'
   let g:airline_solarized_bg = 'dark'
   let g:airline_powerline_fonts = 1
@@ -252,7 +261,7 @@ set nocompatible
   let g:airline_skip_empty_sections = 1
   let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
-  
+
   " Airline symbols
   if !exists('g:airline_symbols')
     let g:airline_symbols ={}
@@ -263,18 +272,23 @@ set nocompatible
     let g:airline_symbols.space = "\u0020"
   endif
 
-  " ## Solarized Config for Terminal {{{
+	"                                                                         }}}
+  " ## Solarized Config for Terminal                                        {{{
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
 
-	" ## Foldout
+	"                                                                         }}}
+  " ## Foldout                                                              {{{
 		let g:foldout_save = 1
-		
+
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 
-" # Generic Bindings and Shortcuts
+	"                                                                         }}}
+
+"                                                                           }}}
+" # Generic Bindings and Shortcuts                                          {{{
   nnoremap :W :w
   nnoremap :Q :q
 	nnoremap -d dd
@@ -298,10 +312,10 @@ set nocompatible
 	nmap <c-backspace> dbx
 
 
-	" Global Copy and Paste 
+	" Global Copy and Paste
 	let g:lmap.p = [ 'call feedkeys("\"+gP")', 'Paste']
 	let g:lmap.y = [ 'call feedkeys("\"+y")', 'Copy' ]
-	
+
 
 	" Quick Edits
 	let g:lmap.e = {
@@ -327,10 +341,12 @@ set nocompatible
 	let g:lmap.o = {
 				\'name': 'Lists'
 				\}
+	let g:lmap.o.k = ['copen', 'Quickfix']
 	let g:lmap.o.o = ['cwindow', 'Quickfix']
 	let g:lmap.o.l = ['lwindow', 'Locationlist']
 
-" # Functions
+"                                                                           }}}
+" # Functions                                                               {{{
   " Update last modified entries
   function! UpdateLastModified()
     " TODO: Delete the update search
@@ -340,13 +356,22 @@ set nocompatible
       let b:last_line = 20
     endif
     let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
-    echo cmd
     execute cmd
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
 
-" # Autocommands
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
+
+"                                                                           }}}
+" # Autocommands                                                            {{{
   augroup Anishs
     autocmd!
 		"foldouts handles view calls
@@ -357,3 +382,6 @@ set nocompatible
     autocmd BufEnter * :nohlsearch
   augroup END
 
+"                                                                           }}}
+
+" vim:foldmethod=marker:ft=vim

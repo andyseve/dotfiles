@@ -1,0 +1,46 @@
+#!/bin/sh
+
+myrof() {
+	rofi -matching fuzzy -i -lines 6 -location 1 -width 15 -dmenu -p "$1"
+}
+
+OPTIONS="lock screen\nlog out\nsuspend\nhibernate\nreboot\nshut down"
+
+SELECTION=$(printf "$OPTIONS" | myrof "session")
+[ -z "$SELECTION" ] && exit 1
+
+confirm() {
+	CONF=$(printf "yes\nno" | myrof "are you sure?")
+	case $CONF in
+		[Yy]* )
+			return 0
+			;;
+		* )
+			return 1
+			;;
+	esac
+}
+
+case "$SELECTION" in
+	"lock screen" )
+		gnome-screensaver-command -l
+		;;
+	"log out" )
+		confirm && gnome-session-quit --logout
+		;;
+	"suspend" )
+		confirm && systemctl suspend
+		;;
+	"hibernate" )
+		confirm && systemctl hibernate
+		;;
+	"reboot" )
+		confirm && systemctl reboot
+		;;
+	"shut down" )
+		confirm && systemctl poweroff
+		;;
+	* )
+		exit 1 ;;
+esac
+

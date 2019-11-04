@@ -1,0 +1,87 @@
+#!/bin/sh
+
+report="$HOME/.local/share/weather_report"
+report_trunc="$HOME/.local/share/weather_report_trunc"
+
+
+getforecast() {
+	ping -q -c 1 1.1.1.1 >/dev/null || exit 1
+	curl -s "wttr.in/$1" > "$report" || exit 1
+	sed -i '$d' "$report"
+	curl -s "wttr.in/$1?format=%t" > "$report_trunc" || exit 1
+	curl -s "wttr.in/$1?format=%C" | tr '[:upper:]' '[:lower:]' >> "$report_trunc" || exit 1
+}
+
+showforecast() {
+	less -R "$report"
+}
+
+help_message() {
+	printf 'curl wttr.in and save copies to ~/.local/share in order to be accessed later\n'
+	printf 'options:\n'
+	printf '\t-f                force update\n'
+	printf '\t-l [location]     use different location\n'
+	printf '\t--noshow          only update files\n'
+	printf '\t-h, --help        show this help message\n'
+}
+
+location=""
+force=""
+noshow=""
+
+while getopts "hfl:-:" opt; do
+	case $opt in
+		h )
+			help_message
+			exit 0
+			;;
+		f )
+			 force="true"
+			 ;;
+		 l )
+			 location="$OPTARG"
+			 rm -f "$report"
+			 rm -f "$report_trunc"
+			 ;;
+		 - )
+			 case $OPTARG in
+				 noshow )
+					 noshow="true"
+					 ;;
+				 help )
+					 help_message
+					 exit 0
+					 ;;
+				 * )
+					 help_message
+					 exit 1
+					 ;;
+			 esac
+			 ;;
+		\? )
+			help_message
+			exit 1
+			;;
+		: )
+			help_message
+			exit 1
+			;;
+	esac
+done
+
+if [ -n "$force" ]; then
+	getforecast "$location"
+else
+	{ [ -e "$report" ] && [ -e "$report_trunc" ]; } || getforecast "$location"
+
+	# update report if it's been over 30mins
+	TIMELIM="1799"
+
+	CURTIME="$(date +%s)"
+	FILETIME="$(stat "$report" -c %Y)"
+	TIMEDIFF="$(( CURTIME-FILETIME ))"
+	[ "$TIMEDIFF" -gt "$TIMELIM" ] && getforecast "$location"
+fi
+
+[ -z "$noshow" ] || exit 0
+showforecast

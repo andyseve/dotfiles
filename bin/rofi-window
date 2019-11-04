@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rofi -matching fuzzy -show window -modi window,windowcd -sidebar-mode
+
