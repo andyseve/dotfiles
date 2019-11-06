@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 29 Oct 2019 06:56:05 PM EDT
+-- Last Modified: Sun 03 Nov 2019 09:00:28 PM EST
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -177,33 +177,33 @@ myConfig = def
 -- Workspaces                                                               {{{
 -------------------------------------------------------------------------------
 
-ws1   = "main"
-ws2   = "www"
-ws3   = "TeX"
-ws4   = "aux1"
-ws5   = "aux2"
-ws6   = "chat"
-ws7   = "media"
-ws8   = "mail"
-ws9   = "sus"
+wsmain   = "main"
+wswww   = "www"
+wstex   = "TeX"
+wscode   = "code"
+wsaux   = "aux"
+wschat   = "chat"
+wsmedia   = "media"
+wsmail   = "mail"
+wssys   = "sys"
 wsmin = "min"
 
 myWorkspaces :: [String]
-myWorkspaces = [ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9, "NSP"]	
+myWorkspaces = [wsmain, wswww, wstex, wscode, wsaux, wschat, wsmedia, wsmail, wssys, "NSP"]	
 
 ----------------------------------------------------------------------------}}}
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "alacritty"
-myAltTerminal = "gnome-terminal"
+myTerminal    = "rxvt-unicode"
+myAltTerminal = "alacritty"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome"
-myLauncher    = "rofi-run"
+myLauncher    = "rofi -matching fuzzy -show run -modi run,drun -disable-history -columns 3 -sidebar-mode"
 myAltLauncher = "dmenu_run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi-window"
-myStatusBar   = "xmobar -x 0  /home/stranger/.xmonad/xmobar.conf"
+myStatusBar   = "xmobar /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
@@ -1114,7 +1114,7 @@ myKeys conf = let
     , ("M-\\"         , addName "browser"                         $ spawn myBrowser)
     , ("M-s"          , addName "ssh"                             $ spawn "rofi-ssh")
     , ("M-e"          , addName "files"                           $ spawn myFiles)
-    , ("M-S-o"        , addName "launcher"                        $ spawn myLauncher)
+    , ("M-S-o"        , addName "launcher"                        $ spawn "rofi-run")
     , ("M-o M-o"      , addName "launcher"                        $ spawn myLauncher)
     , ("M-o M-b"      , addName "browser"                         $ spawn myBrowser)
     , ("M-o M-S-b"    , addName "alt-browser"                     $ spawn myAltBrowser)
@@ -1469,12 +1469,12 @@ myManageHook =
             , [ title     =? t      --> doCenterFloat | t <- myCenterFloatsT ]
             , [ isDialog <&&> className =? b        --> forceCenterFloat   | b <- myWWWC ]
             -- note that counting workspaces starts at 0 instead of 1
-            , [ className =? w      --> doShift "www" | w <- myWWWC   ]
-            , [ className =? c      --> doShift "chat" | c <- myChatC  ]
-            , [ className =? m      --> doShift "media" | m <- myMediaC ]
-            , [ className =? m      --> doShift "mail" | m <- myMailC  ]
-            , [ title     =? m      --> doShift "mail" | m <- myMailT  ]
-            , [ className =? s      --> doShift "sys" | s <- mySysC   ]
+            , [ className =? w      --> doShift wswww | w <- myWWWC   ]
+            , [ className =? c      --> doShift wschat | c <- myChatC  ]
+            , [ className =? m      --> doShift wsmedia | m <- myMediaC ]
+            , [ className =? m      --> doShift wsmail | m <- myMailC  ]
+            , [ title     =? m      --> doShift wsmail | m <- myMailT  ]
+            , [ className =? s      --> doShift wssys | s <- mySysC   ]
             ]
         manageOneSpecific = composeOne
             [
