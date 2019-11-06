@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 01 Nov 2019 05:42:23 AM EDT
+% Last Modified: Tue 05 Nov 2019 08:08:46 PM EST
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -191,6 +191,7 @@
 	\DeclareMathOperator*{\argmax}{argmax}
 	\DeclareMathOperator{\sgn}{sgn} % sign function
 	\DeclareMathOperator{\sign}{sign} % same thing as above
+	\DeclareMathOperator{\id}{\textit{id}}
 	\DeclareMathOperator{\img}{Im} % image
 	\DeclareMathOperator{\rank}{rank} % rank
 	\DeclareMathOperator{\Spec}{Spec} % spectrum
@@ -280,6 +281,18 @@
 
 		% Better Tables
 		\usepackage{tabularx, booktabs}
+  \fi
+  \ifanishspage% Geometry of the Page
+		\setlength{\headheight}{1.5em}
+    \setlength{\topmargin}{1em}
+    \setlength{\topmargin}{\topmargin minus \headheight}
+    \setlength{\topmargin}{\topmargin minus \headsep}
+    \setlength{\oddsidemargin}{0in}
+    \setlength{\evensidemargin}{\oddsidemargin}
+    \setlength{\textwidth}{6.5in}
+    \setlength{\marginparwidth}{0.5in}
+    \setlength{\parskip}{1.5ex}
+    \setlength{\parindent}{0in}
   \fi
   \ifanishsfancy%Fancy Page Setup
     \usepackage{titling}
@@ -390,7 +403,7 @@
   \ifanishstikz%TikZ for diagrams
     \usepackage{tikz}
     \usetikzlibrary{calc}
-		\usetikzlibrary{cd}
+	\usetikzlibrary{cd}
 		% fun stuff
 		\newcommand{\shrug}[1][]{%
 			\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
