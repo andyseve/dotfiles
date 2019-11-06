@@ -1,4 +1,4 @@
-## Last Modified: Thu 31 Oct 2019 12:38:19 PM EDT
+## Last Modified: Tue 05 Nov 2019 08:04:06 PM EST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -248,7 +248,7 @@ while true; do
 	case $install_themes in
 		[Yy]*)
 			echo "Installing themes..."
-			$HOME/dotfiles/themes.sh
+			$HOME/dotfiles/setup/themes.sh
 			break;;
 		[Nn]*)
 			echo "You can install themes later from $HOME/dotfiles/themes.sh"
