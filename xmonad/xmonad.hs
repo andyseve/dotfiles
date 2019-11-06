@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 29 Oct 2019 06:56:05 PM EDT
+-- Last Modified: Tue 05 Nov 2019 07:55:14 AM EST
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -195,7 +195,7 @@ myWorkspaces = [ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9, "NSP"]
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "alacritty"
+myTerminal    = "rxvt-unicode"
 myAltTerminal = "gnome-terminal"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome"
