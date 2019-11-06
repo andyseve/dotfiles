@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 11 Oct 2019 04:42:50 PM EDT
+% Last Modified: Fri 01 Nov 2019 05:42:23 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -17,6 +17,7 @@
 \newif\ifanishsfancy\anishsfancytrue%fancy page setup
 \newif\ifanishsthm\anishsthmtrue%Theorem Defs
 \newif\ifanishspage\anishspagefalse%Margins
+\newif\ifanishstodo\anishstodofalse%Todonotes
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -36,6 +37,7 @@
 \DeclareOption{nofancy}{\anishsfancyfalse}
 \DeclareOption{savepaper}{\anishspagetrue}
 \DeclareOption{nothm}{\anishsthmfalse}
+\DeclareOption{todo}{\anishstodotrue}
 
 \DeclareOption{secthm}{\anishssecthmtrue}
 \DeclareOption{subsecthm}{\anishssubsecthmtrue}
@@ -233,6 +235,17 @@
 	\newcommand{\F}{\mathbbm F}
 	\newcommand{\Q}{\mathbbm Q}
 	
+  \ifanishspage% Geometry of the Page
+    \setlength{\topmargin}{1ex}
+    \setlength{\topmargin}{\topmargin minus \headheight}
+    \setlength{\topmargin}{\topmargin minus \headsep}
+    \setlength{\oddsidemargin}{0in}
+    \setlength{\evensidemargin}{\oddsidemargin}
+    \setlength{\textwidth}{6.5in}
+    \setlength{\marginparwidth}{0.5in}
+    \setlength{\parskip}{1.5ex}
+    \setlength{\parindent}{0in}
+  \fi
 	% Setting up commonly used packages
   \ifanishspkg%
     \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
@@ -258,7 +271,6 @@
       frame=none
     }
     \usepackage[shortlabels]{enumitem} % for better lists
-    \usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
 		\usepackage{mathtools}
 		\usepackage{microtype}
 		\usepackage{upgreek}
@@ -268,17 +280,6 @@
 
 		% Better Tables
 		\usepackage{tabularx, booktabs}
-  \fi
-  \ifanishspage% Geometry of the Page
-    \setlength{\topmargin}{1ex}
-    \setlength{\topmargin}{\topmargin minus \headheight}
-    \setlength{\topmargin}{\topmargin minus \headsep}
-    \setlength{\oddsidemargin}{0in}
-    \setlength{\evensidemargin}{\oddsidemargin}
-    \setlength{\textwidth}{6.5in}
-    \setlength{\marginparwidth}{0.5in}
-    \setlength{\parskip}{1.5ex}
-    \setlength{\parindent}{0in}
   \fi
   \ifanishsfancy%Fancy Page Setup
     \usepackage{titling}
@@ -299,6 +300,11 @@
       \fancyhead{}
       \renewcommand{\headrulewidth}{0pt}
     }
+	\fi
+	\ifanishstodo
+		\setlength{\marginparwidth}{2cm}
+		\usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
+	\fi
   \ifanishsthm%Theorem settings
     \ifanishsfancythm%
 			% TODO: Complete fancy theorem settings
