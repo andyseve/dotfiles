@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 31 Oct 2019 03:17:40 PM EDT
+" Last Updated: Thu 07 Nov 2019 11:35:46 AM EST
 
 set nocompatible
 
@@ -17,9 +17,9 @@ set nocompatible
     " Builds ycm only when forced, installed or updated
     if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
 			if has("win64") || has("win32")
-				!python "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+				!python3 "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
 			else
-				!python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer
+				!python3 "$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer"
 			endif
     endif
   endfunc
@@ -65,10 +65,10 @@ set nocompatible
     set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
-      set guifont=Consolas:h12:cANSI
+      set guifont=Consolas:h10:cANSI
 			set visualbell
     else
-      set guifont=Fira\ Code\ Medium\ 12
+      set guifont=Fira\ Code\ Regular\ 10
     endif
   else
 		set background=dark
@@ -314,7 +314,7 @@ set nocompatible
   let g:airline_theme = 'solarized'
   let g:airline_solarized_bg = 'dark'
   let g:airline_powerline_fonts = 1
-  let g:airline_inactive_collapse = 0
+  let g:airline_inactive_collapse = 1
   let g:airline_skip_empty_sections = 1
   let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
