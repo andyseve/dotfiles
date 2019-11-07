@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 29 Oct 2019 06:56:05 PM EDT
+-- Last Modified: Thu 07 Nov 2019 01:43:44 AM EST
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -152,6 +152,7 @@ import XMonad.Layout.NoBorders
 main = do
     xmonad
         $ withNavigation2DConfig myNav2DConf
+        $ ewmh
         $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
         $ myConfig
 
@@ -195,15 +196,15 @@ myWorkspaces = [ws1, ws2, ws3, ws4, ws5, ws6, ws7, ws8, ws9, "NSP"]
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "alacritty"
+myTerminal    = "rxvt-unicode"
 myAltTerminal = "gnome-terminal"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome"
-myLauncher    = "rofi-run"
+myLauncher    = "rofi -matching fuzzy -show run -modi drun,run --disable-history -sidebar-mode -show-icon"
 myAltLauncher = "dmenu_run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
-myWinSearch   = "rofi-window"
-myStatusBar   = "xmobar -x 0  /home/stranger/.xmonad/xmobar.conf"
+myWinSearch   = "rofi -matching fuzzy -show window -modi window,windowcd -sidebar-mode -show-icon"
+myStatusBar   = "xmobar /home/stranger/.xmonad/xmobar.conf"
 myFiles       = "nautilus ~"
 myEditor      = "gvim"
 
