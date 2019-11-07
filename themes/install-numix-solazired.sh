@@ -3,12 +3,15 @@
 sudo apt install numix-gtk-theme
 sudo apt install ruby-sass libglib2.0-dev libgdk-pixbuf2.0-dev libxml2-utils
 sudo apt install inkscape
+sudo cp -r /usr/share/themes/Numix /usr/share/themes/NumixSolarizedDark
 
 source $HOME/dotfiles/zsh/functions/helper.zsh
 OF=$HOME/.themes/numix-solarized-gtk-theme
 
+cdir $HOME/.themes
+
 clone git@github.com:andyseve/numix-solarized-gtk-theme.git $OF
-cd $OF & sudo make install
+cd $OF && sudo make install
 
 
 echo "Installed Numix and NumixSolarized themes"
