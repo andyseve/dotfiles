@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Mon 11 Nov 2019 11:38:57 AM EST
+% Last Modified: Fri 17 Jan 2020 09:50:35 PM EST
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -65,6 +65,7 @@
 	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
 	\newcommand\tageqn{\addtocounter{equation}{1}\tag{\theequation}} % Equation numbering
 	\newcommand\labeleqn[1]{\addtocounter{equation}{1}\tag{\theequation}\label{#1}}
+	\newcommand\numbereqn{\addtocounter{equation}{1}\tag{\theequation}}
 
 	% Better symbols and renamings
 	\newcommand\Oh{\ensuremath{\mathcal{O}}}
@@ -346,10 +347,12 @@
 			\newtheorem*{asgnproblem*}{asgnproblem}
       \ifanishssecthm%index theorem by section
         \newtheorem{theorem}{Theorem}[section]
-      \else\ifanishssubsecthm
-				\newtheorem{theorem}{Theorem}[subsection]
 			\else
-				\newtheorem{theorem}{Theorem}
+				\ifanishssubsecthm
+					\newtheorem{theorem}{Theorem}[subsection]
+				\else
+					\newtheorem{theorem}{Theorem}
+				\fi
 			\fi
 
       \theoremstyle{plain}
