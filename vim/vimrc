@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: 11/20/2019 1:12:48 PM
+" Last Updated: Tue 04 Feb 2020 03:18:37 PM EST
 
 set nocompatible
 
@@ -57,7 +57,7 @@ set nocompatible
 " # Core Settings                                                           {{{
   set background=dark
 	syntax enable
-  set synmaxcol=200
+  set synmaxcol=0
   set encoding=utf-8
   filetype plugin indent on
 	" Setting Colorscheme
