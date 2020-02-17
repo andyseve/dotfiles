@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 31 Oct 2019 12:34:00 PM EDT
+# Last Edited: Mon 17 Feb 2020 02:02:37 PM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -148,6 +148,7 @@ export PAGER='less'
 export EDITOR='vim'
 
 PATH="$PATH:$HOME/bin" # add my scripts to bin
+PATH="$PATH:$HOME/.local/bin" # numpy scripts
 if [ -e "$HOME/bin/miniconda3/bin" ]; then
 	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
 fi
