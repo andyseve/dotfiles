@@ -1,4 +1,4 @@
-## Last Modified: Tue 05 Nov 2019 08:07:57 PM EST
+## Last Modified: Thu 20 Feb 2020 04:32:07 PM EST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -236,6 +236,18 @@ if check xfce4-terminal; then
 	link $DOTFILES/xfce4/terminal/terminalrc $HOME/.config/xfce4/terminal/terminalrc
 else
 	nope xfce4-terminal
+fi
+
+# ranger
+if check ranger; then
+	IF="$DOTFILES/ranger"
+	OF="$HOME/.config/ranger"
+	cdir $OF
+	
+	link $IF/rc.conf $OF/rc.conf
+	link $IF/commands.py $OF/commands.py
+else
+	nope ranger
 fi
 
 
