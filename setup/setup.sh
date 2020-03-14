@@ -1,4 +1,4 @@
-## Last Modified: Thu 20 Feb 2020 04:32:07 PM EST
+## Last Modified: Sat 14 Mar 2020 04:41:36 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -172,6 +172,17 @@ if check vim; then
 	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
 else
 	nope vim
+fi
+
+# nvim
+if check nvim; then
+	IF=$DOTFILES/nvim
+	OF=$HOME/.config/nvim
+	
+	cdir $OF
+	link $IF/init.vim $OF/init.vim
+else
+	nope neovim
 fi
 
 # neofetch
