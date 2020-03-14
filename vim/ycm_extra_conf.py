@@ -40,6 +40,7 @@ flags = [
 '-Wno-variadic-macros',
 '-fexceptions',
 '-DNDEBUG',
+'-Wno-usused-result',
 # THIS IS IMPORTANT! Without a "-std=<something>" flag, clang won't know which
 # language to use when compiling headers. So it will guess. Badly. So C++
 # headers will be compiled as C headers. You don't want that so ALWAYS specify
@@ -55,12 +56,12 @@ flags = [
 'c++',
 # Following lines mainly includes paths of headers that need to be added
 # for the compilation of project.
-'-isystem', '/usr/include/c++/8',
-'-isystem', '/usr/include/x86_64-linux-gnu/c++/8',
-'-isystem', '/usr/include/c++/8/backward',
-'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/8/include',
+'-isystem', '/usr/include/c++/9',
+'-isystem', '/usr/include/x86_64-linux-gnu/c++/9',
+'-isystem', '/usr/include/c++/9/backward',
+'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/9/include',
 '-isystem', '/usr/local/include',
-'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed',
+'-isystem', '/usr/lib/gcc/x86_64-linux-gnu/9/include-fixed',
 '-isystem', '/usr/include/x86_64-linux-gnu',
 '-isystem', '/usr/include',
 ]
