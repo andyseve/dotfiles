@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 14 Mar 2020 04:24:38 PM EDT
+# Last Edited: Sat 14 Mar 2020 06:03:28 PM EDT
 # Zshrc with only color and completiong settings
 
 # Set zsh variables and source corresponding settings
@@ -126,7 +126,11 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
+fi
 
 PATH="$PATH:$HOME/bin" # add my scripts to bin
 PATH="$PATH:$HOME/.local/bin" # numpy scripts

@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 14 Mar 2020 04:23:54 PM EDT
+# Last Edited: Sat 14 Mar 2020 06:01:07 PM EDT
 # Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
@@ -134,7 +134,11 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
+fi
 
 PATH="$PATH:$HOME/bin" # add my scripts to bin
 PATH="$PATH:$HOME/.local/bin" # numpy scripts
