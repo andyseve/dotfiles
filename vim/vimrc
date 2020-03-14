@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sat 14 Mar 2020 03:42:13 PM EDT
+" Last Updated: Sat 14 Mar 2020 04:18:53 PM EDT
 
 set nocompatible
 
@@ -109,7 +109,7 @@ set nocompatible
   set modeline             " Enables modlines (File specific vim settings)
   set modelines=1          " Read only the last line for vim specific options
   set autoread             " Read changes from outside automatically
-	set autowrite            " Automaticall save before commands like :next and :make
+	set autowrite            " Automatically save before commands like :next and :make
   set nomousehide          " To fix a bug that causes cursor to dissapear
   set mouse=a              " Enable mouse
   set textwidth=0          " Textwidth to infinite
@@ -335,12 +335,13 @@ set nocompatible
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
 
-	"                                                                         }}}
-  " ## Foldout                                                              {{{
-		"let g:foldout_save = 1
-
-		"map <leader>n <Plug>FoldoutNavigation
-		"let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+	" ## FZF and Ag configuration
+	if executable('ag')
+		set grepprg=ag\ --vimgrep
+		let g:ackprg='ag --vimgrep'
+		let g:ctrlp_user_command='ag --vimgrep -g'
+	endif
+	noremap <c-p> :FZF<CR>
 
 	"                                                                         }}}
 
@@ -440,4 +441,4 @@ set nocompatible
 
 "                                                                           }}}
 
-" vim:foldmethod=marker
+" vim:foldmethod=marker:syntax=vim

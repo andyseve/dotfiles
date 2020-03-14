@@ -1,9 +1,9 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 11 Jul 2019 11:52:03 AM DST
+" Last Updated: Sat 14 Mar 2020 04:18:52 PM EDT
 
 set nocompatible
 
-" # vim-plug
+" # vim-plug                                                                 {{{
   " change installation paths based on os
   if !exists("g:bundle_path")
     if has("win64") || has("win32")
@@ -17,42 +17,47 @@ set nocompatible
     " Builds ycm only when forced, installed or updated
     if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
 			if has("win64") || has("win32")
-				!python "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+				!python3 "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
 			else
-				!python3 ~/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer
+				!python3 "$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer"
 			endif
     endif
   endfunc
   call plug#begin(bundle_path)
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle'}
-  Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle'}
+  Plug 'hecal3/vim-leader-guide'
   Plug 'ervandew/supertab'
   Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM')}
-  Plug 'lervag/vimtex', {'for': 'latex'}
+  Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
+  Plug 'w0rp/ale'
+  Plug 'lervag/vimtex',                   { 'for': 'latex' }
   Plug 'sjl/gundo.vim'
   Plug 'mileszs/ack.vim'
-  Plug 'junegunn/fzf', {'do':'./install --bin'}
+  Plug 'junegunn/fzf',                    { 'do':'./install --bin' }
   Plug 'junegunn/fzf.vim'
   Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-repeat'
-  Plug 'hecal3/vim-leader-guide'
-  Plug 'w0rp/ale'
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'godlygeek/tabular'
+	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'jiangmiao/auto-pairs'
-
+	Plug 'tpope/vim-surround'
+  Plug 'scrooloose/nerdtree',             { 'on': 'NERDTreeToggle' }
+  Plug 'Xuyuanp/nerdtree-git-plugin',     { 'on': 'NERDTreeToggle' }
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
   Plug 'altercation/vim-colors-solarized'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'godlygeek/tabular'
+  Plug 'tpope/vim-repeat'
+	Plug 'tpope/vim-dispatch'
+	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
+	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
+	Plug 'Konfekt/FastFold'
 
-  Plug 'msuperdock/vim-foldout'
-  call plug#end()
+	call plug#end()
 
-" # Core Settings
-  syntax enable
-  set synmaxcol=200
+"                                                                           }}}
+" # Core Settings                                                           {{{
+  set background=dark
+	syntax enable
+  set synmaxcol=0
   set encoding=utf-8
   filetype plugin indent on
 	" Setting Colorscheme
@@ -60,16 +65,16 @@ set nocompatible
     set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
-      set guifont=Consolas:h12:cANSI
+      set guifont=Consolas:h10:cANSI
 			set visualbell
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=Fira\ Code\ Regular\ 10
     endif
   else
-    set background=dark
+		set background=dark
     colorscheme solarized
   endif
-	
+
   set backspace=indent,eol,start
   set ruler " Display cursor position
 
@@ -85,39 +90,41 @@ set nocompatible
 	  set number
   endfunc
   " Autocommands to toggle between relative and absolute numbering
-  augroup AnishsNumber
-	  autocmd!
-	  autocmd FocusLost * call AbsoluteNumber()
-	  autocmd FocusGained * call RelativeNumber()
-	  autocmd BufLeave * call AbsoluteNumber()
-	  autocmd BufEnter * call RelativeNumber()
-	  autocmd InsertEnter * call AbsoluteNumber()
-	  autocmd InsertLeave * call RelativeNumber()
-  augroup END
-  
-  set confirm " Exit confirmation
+	augroup AnishsNumber
+		autocmd!
+		autocmd FocusLost * call AbsoluteNumber()
+		autocmd FocusGained * call RelativeNumber()
+		autocmd BufLeave * call AbsoluteNumber()
+		autocmd BufEnter * call RelativeNumber()
+		autocmd InsertEnter * call AbsoluteNumber()
+		autocmd InsertLeave * call RelativeNumber()
+	augroup END
+
+  set confirm              " Exit confirmation
   set wildmenu
   set wildmode=full
-  set lazyredraw " Lazy redrawing of screen, force redraw using :redraw
-  set showmatch " Highlight matching braces
-  set modeline " Enables modlines (File specific vim settings)
-  set modelines=1 " Read only the last line for vim specific options
-  set autoread " Read changes from outside automatically
-  set nomousehide " To fix a bug that causes cursor to dissapear
-  set mouse=a
-  set textwidth=0 " Textwidth to infinite
-  set spelllang=en_us " Set US English for spellchecking
+  set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+	set showcmd              " Show (partial) command in status line
+  set showmatch            " Highlight matching braces
+  set modeline             " Enables modlines (File specific vim settings)
+  set modelines=1          " Read only the last line for vim specific options
+  set autoread             " Read changes from outside automatically
+	set autowrite            " Automatically save before commands like :next and :make
+  set nomousehide          " To fix a bug that causes cursor to dissapear
+  set mouse=a              " Enable mouse
+  set textwidth=0          " Textwidth to infinite
+  set spelllang=en_us      " Set US English for spellchecking
   set nospell
-  set viewoptions-=options " Saves folds and cursor
-
+  set viewoptions-=options " Excludes options (like working dir) from view
   set updatetime=1000
+	set hidden               " Hide buffers when they are abandoned
 
   let mapleader = "\\"
 
   " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
-	set guioptions-=m " Remove Menubar
+  set guioptions-=m " Remove Menubar
 
 
   " Back up directories
@@ -132,64 +139,50 @@ set nocompatible
 	set directory=~/.vim/.swp//
 	set viewdir=~/.vim/view//
   endif
-  " # indent settings
+" # indent settings
   set autoindent
   set smartindent
   set breakindent
-  set showbreak=↳\ 
+  set showbreak=↳\
 
   set shiftwidth=2
   set softtabstop=2
   set tabstop=2
   set noexpandtab
 
-" # Search settings
+"                                                                           }}}
+" # Search Settings                                                         {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
+	set ignorecase " Do case insensitive matching
+	set smartcase " Do smart case matching
 
-" # Fold Settings
+"                                                                           }}}
+" # Fold Settings                                                           {{{
   set foldenable
   set foldlevelstart=3
-	
-" # Plugin Configurations and Bindings
-	" ## Vim Leader Guide Configuration
+
+"                                                                           }}}
+" # Plugin Configurations and Bindings                                      {{{
+
+	" ## Vim Leader Guide Configuration                                       {{{
 	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
 	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
 	let g:lmap = {}
 	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
-	
+
 	augroup AnishsVimLeader
 		autocmd!
 		autocmd FileType gitcommit noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
 		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
 	augroup END
-	
-	"Git menu
-	let g:lmap.g = {
-				\'name': 'Git Menu',
-				\'s': ['Gstatus', 'Git Status'],
-				\'p': ['Gpull', 'Git Pull'],
-				\'u': ['Gpush', 'Git Push'],
-				\'c': ['Gcommit', 'Git Commit'],
-				\'w': ['Gwrite', 'Git Write'],
-				\'r': ['Gread', 'Git Read'],
-				\}
-
-	let g:lmap.c = {
-				\'name': 'Comments',
-				\}
-
-	let g:lmap.o = {
-				\'name': 'Lists'
-				\}
-	let g:lmap.o.o = ['copen', 'Quickfix']
-	let g:lmap.o.l = ['lopen', 'Locationlist']
 
 
-  " ## Ultisnips Configuration
+	"                                                                         }}}
+  " ## Ultisnips Configuration                                              {{{
 	if has("win64") || has("win32")
-		set rtp+=~/vimfiles 
+		set rtp+=~/vimfiles
 		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
 	else
 		set rtp+=~/.vim
@@ -203,7 +196,8 @@ set nocompatible
   let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
   let g:UltiSnipsEditSplit="horizontal"
 
-  " ## YouCompleteMe Configuration
+	"                                                                         }}}
+  " ## YouCompleteMe Configuration                                          {{{
   if has("win64") || has("win32")
     let g:ycm_server_python_interpreter = 'python'
   else
@@ -223,27 +217,27 @@ set nocompatible
 	let g:ycm_complete_in_comments = 1
 	let g:ycm_cache_omnifunc = 1
 
+	let g:ycm_show_diagnostic_ui = 0
+
   if !exists('g:ycm_sematics_triggers')
     let g:ycm_semantic_triggers = {}
   endif
   let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
   let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 
-  " ## Gundo Configuration
-  let g:gundo_prefer_python3 = 1
-  nnoremap <leader>u :GundoToggle<CR>
+	"                                                                         }}}
+  " ## ALE Configuration                                                    {{{
+	let g:ale_line_on_text_changed = 'never'
+	let g:ale_on_enter = 1
+	let g:ale_on_save = 1
 
-  " ## NERDTree Configuration
-  let g:NERDTreeQuitOnOpen = 1
-  nnoremap <M-\> :NERDTreeToggle<CR>
-  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
-	" Close if only windows present is NERDTree
-	augroup AnishsNerdTree
-		autocmd!
-		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-	augroup END
+	if !exists('g:ale_linters')
+		let g:ale_linters = {}
+	endif
+	let g:ale_linters.haskell = ['ghc-mod', 'hlint']
 
-  " ## Vimtex configuration
+	"                                                                         }}}
+  " ## Vimtex configuration                                                 {{{
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
 	let g:vimtex_toc_enabled = 1
@@ -257,7 +251,7 @@ set nocompatible
 				\}
 
 	" SumatraPDF config for windows
-  if has("win64") || has("win32")
+	if has("win64") || has("win32")
 		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 		let g:vimtex_view_general_options
 					\ = ' -forward-search @tex @line @pdf'
@@ -266,21 +260,65 @@ set nocompatible
 					\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
 					\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
 					\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
-					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""' 
+					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""'
   else
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
-	
-  " ## Airline Configuration
+
+	"                                                                         }}}
+  " ## Gundo Configuration                                                  {{{
+  let g:gundo_prefer_python3 = 1
+  nnoremap <leader>u :GundoToggle<CR>
+
+	"                                                                         }}}
+  " ## FZF and Ag configuration                                             {{{
+  if executable('ag')
+	  set grepprg=ag\ --vimgrep
+	  let g:ackprg='ag --vimgrep'
+	  let g:ctrlp_user_command='ag --vimgrep -g'
+  endif
+  noremap <c-p> :FZF<CR>
+
+	"                                                                         }}}
+  " ## Fugitive + Github-Dashboard                                          {{{
+	let g:lmap.g = {
+				\'name': 'Git Menu',
+				\'s': ['Gstatus', 'Git Status'],
+				\'p': ['Gpull', 'Git Pull'],
+				\'u': ['Gpush', 'Git Push'],
+				\'c': ['Gcommit', 'Git Commit'],
+				\'w': ['Gwrite', 'Git Write'],
+				\'r': ['Gread', 'Git Read'],
+				\}
+
+	"                                                                         }}}
+  " ## NERDTree Configuration                                               {{{
+  let g:NERDTreeQuitOnOpen = 1
+  nnoremap <M-\> :NERDTreeToggle<CR>
+  inoremap <M-\> <c-o>:NERDTreeToggle<CR>
+	" Close if only windows present is NERDTree
+	augroup AnishsNerdTree
+		autocmd!
+		autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	augroup END
+
+	"                                                                         }}}
+  " ## NERDcommenter                                                        {{{
+	let g:lmap.c = {
+				\'name': 'Comments',
+				\}
+
+	"                                                                         }}}
+  " ## Airline Configuration                                                {{{
   let g:airline_theme = 'solarized'
   let g:airline_solarized_bg = 'dark'
   let g:airline_powerline_fonts = 1
-  let g:airline_inactive_collapse = 0
+  let g:airline_inactive_collapse = 1
   let g:airline_skip_empty_sections = 1
   let g:airline#extensions#whitespace#enabled = 1
 	let g:airline#extensions#tabline#enabled = 1
-  
+
   " Airline symbols
   if !exists('g:airline_symbols')
     let g:airline_symbols ={}
@@ -291,7 +329,8 @@ set nocompatible
     let g:airline_symbols.space = "\u0020"
   endif
 
-  " ## Solarized Config for Terminal {{{
+	"                                                                         }}}
+  " ## Solarized Config for Terminal                                        {{{
   let g:solarized_termtrans = 1
   let g:solarized_termcolors = 256
   let g:solarized_contrast = 'normal'
@@ -310,7 +349,8 @@ set nocompatible
 		map <leader>n <Plug>FoldoutNavigation
 		let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
 
-" # Generic Bindings and Shortcuts
+"                                                                           }}}
+" # Generic Bindings and Shortcuts                                          {{{
   nnoremap :W :w
   nnoremap :Q :q
 	nnoremap -d dd
@@ -334,10 +374,10 @@ set nocompatible
 	nmap <c-backspace> dbx
 
 
-	" Global Copy and Paste 
+	" Global Copy and Paste
 	let g:lmap.p = [ 'call feedkeys("\"+gP")', 'Paste']
 	let g:lmap.y = [ 'call feedkeys("\"+y")', 'Copy' ]
-	
+
 
 	" Quick Edits
 	let g:lmap.e = {
@@ -358,9 +398,17 @@ set nocompatible
 	else
 		nnoremap sv :source ~/.vimrc<CR>
 	endif
-	
 
-" # Functions
+	" Quick lists
+	let g:lmap.o = {
+				\'name': 'Lists'
+				\}
+	let g:lmap.o.k = ['copen', 'Quickfix']
+	let g:lmap.o.o = ['cwindow', 'Quickfix']
+	let g:lmap.o.l = ['lwindow', 'Locationlist']
+
+"                                                                           }}}
+" # Functions                                                               {{{
   " Update last modified entries
   function! UpdateLastModified()
     " TODO: Delete the update search
@@ -370,20 +418,31 @@ set nocompatible
       let b:last_line = 20
     endif
     let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
-    echo cmd
     execute cmd
     :nohlsearch
     call winrestview(b:cur_window)
   endfunc
 
-" # Autocommands
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
+
+"                                                                           }}}
+" # Autocommands                                                            {{{
   augroup Anishs
     autocmd!
-		"foldouts handles view calls
-		"autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-		"autocmd BufReadPre ?* silent loadview
+		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		autocmd BufWinEnter ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch
   augroup END
 
+"                                                                           }}}
+
+" vim:foldmethod=marker:syntax=vim
