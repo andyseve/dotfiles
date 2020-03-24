@@ -1,4 +1,4 @@
-## Last Modified: Sat 14 Mar 2020 04:41:36 PM EDT
+## Last Modified: Tue 24 Mar 2020 02:50:54 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -156,6 +156,7 @@ if check vim; then
 	link $IF/vimrc.lite $OF/vimrc.lite
 	link $IF/vimrc.testing $OF/vimrc.testing
 	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
+	link $IF/coc-settings.json $OF/coc-settings.json
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
@@ -181,6 +182,7 @@ if check nvim; then
 	
 	cdir $OF
 	link $IF/init.vim $OF/init.vim
+	link $DOTFILES/vim/coc-settings.json $OF/coc-settings.json
 else
 	nope neovim
 fi
@@ -261,6 +263,16 @@ else
 	nope ranger
 fi
 
+# rofi
+if check rofi; then
+	IF="$DOTFILES/rofi"
+	OF="$HOME/.config/rofi"
+	cdir $OF
+
+	link $IF/config.rasi $OF/config.rasi
+else
+	nope rofi
+fi
 
 ################################################################################
 # Themes #######################################################################

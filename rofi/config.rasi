@@ -1,0 +1,4 @@
+configuration {
+	theme: "solarized";
+	font: "fira code 10";
+}
