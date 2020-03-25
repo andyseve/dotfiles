@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 07 Nov 2019 01:45:05 AM EST
+-- Last Modified: Tue 24 Mar 2020 09:17:05 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -144,6 +144,7 @@ import XMonad.Layout.NoBorders
 -- import XMonad.Hooks.ServerMode
 -- import XMonad.Actions.Commands 
 -- import Control.Concurrent (threadDelay)
+import XMonad.Config.Gnome
 
 ------------------------------------------------------------------------}}}
 -- Main                                                                 {{{
@@ -178,25 +179,24 @@ myConfig = def
 -- Workspaces                                                               {{{
 -------------------------------------------------------------------------------
 
-wsmain   = "main"
-wswww   = "www"
+wsmain  = "main"
 wstex   = "TeX"
-wscode   = "code"
-wsaux   = "aux"
-wschat   = "chat"
-wsmedia   = "media"
-wsmail   = "mail"
+wscode  = "code"
+wsgame  = "game"
+wswww   = "www"
+wscom   = "com"
+wsmedia = "media"
 wssys   = "sys"
-wsmin = "min"
+wsmin   = "min"
 
 myWorkspaces :: [String]
-myWorkspaces = [wsmain, wswww, wstex, wscode, wsaux, wschat, wsmedia, wsmail, wssys, "NSP"]	
+myWorkspaces = [ wsmain, wstex, wscode, wsgame, wswww, wscom, wsmedia, wssys, "NSP" ]
 
 ----------------------------------------------------------------------------}}}
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "rxvt-unicode"
+myTerminal    = "alacritty"
 myAltTerminal = "gnome-terminal"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome"
@@ -211,37 +211,38 @@ myEditor      = "gvim"
 scratchpads = [ 
                 NS "htop" spawnHtop findHtop manageHtop
               , NS "weather" spawnWeather findWeather manageWeather
+              , NS "task" spawnTask findTask manageTask
               ]
 
     where
-    spawnHtop  = "alacritty --class=scratch-htop -e htop"
-    findHtop   = resource =? "scratch-htop"
-    manageHtop = customFloating $ W.RationalRect x y w h
-                 where
-                   w, h, x, y :: Rational
-                   h = 1/2
-                   w = 1/2
-                   x = (1-w)/2
-                   y = (1-h)/2
-    spawnWeather  = "alacritty --class=scratch-weather -e weather"
-    findWeather   = resource =? "scratch-weather"
-    manageWeather = customFloating $ W.RationalRect x y w h
-                 where
-                   w, h, x, y :: Rational
-                   h = 1/2
-                   w = 1/2
-                   x = (1-w)/2
-                   y = (1-h)/2
-    spawnKeepass  = "keepassxc"
-    findKeepass   = resource =? "keepassxc"
-    manageKeepass = customFloating $ W.RationalRect x y w h
-                 where
-                   w, h, x, y :: Rational
-                   h = 8/10
-                   w = 1/2
-                   x = (1-w)/2
-                   y = (1-h)/2
-    hasName = stringProperty "WM_NAME"
+        spawnHtop  = "alacritty --class=scratch-htop -e htop"
+        findHtop   = resource =? "scratch-htop"
+        manageHtop = customFloating $ W.RationalRect x y w h
+            where
+                w, h, x, y :: Rational
+                h = 1/2
+                w = 1/2
+                x = (1-w)/2
+                y = (1-h)/2
+        spawnWeather  = "alacritty --class=scratch-weather -e weather"
+        findWeather   = resource =? "scratch-weather"
+        manageWeather = customFloating $ W.RationalRect x y w h
+            where
+                w, h, x, y :: Rational
+                h = 1/2
+                w = 1/2
+                x = (1-w)/2
+                y = (1-h)/2
+        spawnTask = "alacritty --class=scratch-task -e task"
+        findTask = resource =? "scratch-task"
+        manageTask = customFloating $ W.RationalRect x y w h
+            where 
+                w, h, x, y :: Rational
+                h = 1/2
+                w = 1/2
+                x = (1 - w)/2
+                y = (1 - h)/2
+        hasName = stringProperty "WM_NAME"
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -271,9 +272,9 @@ white   = "#FFFFFF"
 black   = "#000000"
 
 -- sizes
-gap    = 1
-topbar = 2
-border = 2
+gap    = 4
+topbar = 4
+border = 0
 prompt = 20
 status = 20
 
@@ -286,9 +287,9 @@ inactive     = base02
 focuscolor   = blue
 unfocuscolor = base02
 
-mySmallFont = "xft:hack:style=Regular:size=6:hinting=true"
-myFont      = "xft:hack:style=Regular:size=8:hinting=true"
-myBigFont   = "xft:hack:style=Regular:size=10:hinting=true"
+mySmallFont = "xft:Fira Code:style=Regular:size=6:hinting=true"
+myFont      = "xft:Fira Code:style=Regular:size=8:hinting=true"
+myBigFont   = "xft:Fira Code:style=Regular:size=10:hinting=true"
 
 -- this is a "fake title" used as a highlight bar in lieu of full borders
 -- (I find this a cleaner and less visually intrusive solution)
@@ -1397,26 +1398,19 @@ myLogHook = do
     multiPP myLogPP myLogPP
 
 myLogPP :: XMonad.Hooks.DynamicLog.PP
---myLogPP = XMonad.Hooks.DynamicLog.defaultPP
-    --{ ppCurrent             = xmobarColor active "" . wrap "[" "]"
-    --, ppTitle               = xmobarColor active "" . shorten 50
-    --, ppVisible             = xmobarColor base0  "" . wrap "(" ")"
-    --, ppUrgent              = xmobarColor red    "" . wrap " " " "
-    --}
-
 
 myLogPP = def
-    { ppCurrent             = xmobarColor black active . wrap " " " "
-    , ppTitle               = xmobarColor white "" . shorten 80
-    , ppVisible             = xmobarColor black violet . wrap " " " "
-    , ppUrgent              = xmobarColor black red . wrap " " " "
-    , ppHidden              = xmobarColor black orange . wrap " " " "
+    { ppCurrent             = xmobarColor base03 active . wrap "[" "]"
+    , ppTitle               = xmobarColor base01 "" . shorten 80
+    , ppVisible             = xmobarColor base03 active . wrap " " " "
+    , ppUrgent              = xmobarColor base01 red . wrap " " " "
+    , ppHidden              = xmobarColor base01 "" . wrap " " " "
     --, ppHiddenNoWindows     = xmobarColor white "" . wrap " " " "
         --, ppSep                 = "<fc=#ff79c6> │ </fc>"
-    , ppSep                 = " <icon=separators/separator.xpm/> "
+    , ppSep                 = " :: "
     , ppWsSep               = ""
     , ppLayout              = xmobarColor yellow ""
-    , ppOrder               = \(ws:l:t:ex) -> [ws,l]++ex++[t] --id
+    --, ppOrder               = \(ws:l:t:ex) -> [ws,l]++ex++[t] --id
         --, ppOutput              = \x -> hPutStrLn h x >> hPutStrLn j x  
     --, ppOutput              = PutStrLn
     , ppSort                = fmap 
@@ -1471,10 +1465,10 @@ myManageHook =
             , [ isDialog <&&> className =? b        --> forceCenterFloat   | b <- myWWWC ]
             -- note that counting workspaces starts at 0 instead of 1
             , [ className =? w      --> doShift wswww | w <- myWWWC   ]
-            , [ className =? c      --> doShift wschat | c <- myChatC  ]
+            , [ className =? c      --> doShift wscom | c <- myChatC  ]
             , [ className =? m      --> doShift wsmedia | m <- myMediaC ]
-            , [ className =? m      --> doShift wsmail | m <- myMailC  ]
-            , [ title     =? m      --> doShift wsmail | m <- myMailT  ]
+            , [ className =? m      --> doShift wscom | m <- myMailC  ]
+            , [ title     =? m      --> doShift wscom | m <- myMailT  ]
             , [ className =? s      --> doShift wssys | s <- mySysC   ]
             ]
         manageOneSpecific = composeOne

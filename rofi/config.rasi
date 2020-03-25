@@ -1,4 +1,4 @@
 configuration {
-	theme: "solarized";
-	font: "fira code 10";
+	theme: "solarized_alternate";
+	font: "fira code 12";
 }

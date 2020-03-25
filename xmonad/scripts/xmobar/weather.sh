@@ -36,13 +36,14 @@ esac
 #esac
 
 
-printf '<action=`term -e weather` button=1>'
-printf "<icon=weather/%s.xbm/></action> " "$cond_icon"
+printf "<action=`%s -e weather` button=1>" "$TERM"
+printf "<icon=weather/%s.xbm/> " "$cond_icon"
 case "$(cat $HOME/.local/share/weather_report_trunc)" in
 	*[Uu]nknown*|*[Ee]rror* )
 		printf 'ERROR' ;;
 	* )
 		printf "%s %s" "$weather_tmp" "$weather_cond" ;;
 esac
+printf "</action>"
 
 #printf "<icon=weather/%s.xbm/></action> %s %s" "$cond_icon" "$weather_tmp" "$weather_cond"

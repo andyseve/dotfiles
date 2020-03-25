@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 14 Mar 2020 06:03:46 PM EDT
+# Last Edited: Tue 24 Mar 2020 10:44:09 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -151,10 +151,13 @@ else
 	export EDITOR='vim'
 fi
 
-PATH="$PATH:$HOME/bin" # add my scripts to bin
-PATH="$PATH:$HOME/.local/bin" # numpy scripts
+PATH="$HOME/bin:$PATH" # add my scripts to bin
+PATH="$HOME/.local/bin:$PATH" # numpy scripts
 if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
+	PATH="$HOME/bin/miniconda3/bin:$PATH" # add anaconda to path
+fi
+if [ -e "$HOME/.cabal/bin" ]; then
+	PATH="$HOME/.cabal/bin:$PATH" # add cabal to path
 fi
 
 

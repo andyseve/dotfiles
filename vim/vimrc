@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Mar 2020 03:56:07 PM EDT
+" Last Updated: Mon 23 Mar 2020 01:05:31 PM EDT
 
 set nocompatible
 
@@ -61,20 +61,13 @@ set nocompatible
   set synmaxcol=0
   set encoding=utf-8
   filetype plugin indent on
-	" Setting Colorscheme
-  if(has("gui_running"))
-    set background=dark
-    colorscheme solarized
-    if has("win64") || has("win32")
-      set guifont=Consolas:h10:cANSI
-			set visualbell
-    else
-      set guifont=Fira\ Code\ Regular\ 10
-    endif
-  else
-		set background=dark
-    colorscheme solarized
-  endif
+	" Setting visualbell for windows
+	if has("win64") || has("win32")
+		set guifont=Consolas:h10:cANSI
+		set visualbell
+	else
+		set guifont=Fira\ Code\ Regular\ 10
+	endif
 
   set backspace=indent,eol,start
   set ruler " Display cursor position
@@ -272,14 +265,14 @@ set nocompatible
 	imap <c-k> <Plug>(coc-snippets-expand-jump)
 
 	imap <silent><expr> <tab>
-		\ pumvisible() ? "\<c-n>":
 		\ coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" :
+		\ pumvisible() ? "\<c-n>":
 		\ <SID>check_back_space() ? "\<tab>" :
 		\ coc#refresh()
 	let g:coc_snippet_next = '<tab>'
 
 	inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
-	inoremap <silent><expr> <c-space> coc#refresh()
+	inoremap <silent><expr> <c-space> coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" : coc#refresh()
 	inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 	
 	nmap <silent> [g <Plug>(coc-diagnostic-prev)
@@ -337,7 +330,6 @@ set nocompatible
   else
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
-		let g:vimtex_view_use_temp_files = 1
   endif
 	
 	if has("nvim")
@@ -409,9 +401,11 @@ set nocompatible
 
 	"                                                                         }}}
   " ## Solarized Config for Terminal                                        {{{
-  let g:solarized_termtrans = 1
-  let g:solarized_termcolors = 256
-  let g:solarized_contrast = 'normal'
+	let g:solarized_termtrans=1
+	let g:solarized_termcolors=16
+  let g:solarized_contrast="normal"
+	set background=dark
+	colorscheme solarized
 
 	" ## FZF and Ag configuration
 	if executable('ag')
