@@ -1,4 +1,4 @@
-## Last Modified: Tue 24 Mar 2020 02:50:54 PM EDT
+## Last Modified: Thu 26 Mar 2020 02:54:54 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -272,6 +272,17 @@ if check rofi; then
 	link $IF/config.rasi $OF/config.rasi
 else
 	nope rofi
+fi
+
+# zathura
+if check zathura; then
+	IF="$DOTFILES/zathura"
+	OF="$HOME/.config/zathura"
+	cdir $OF
+
+	link $IF/zathurarc $OF/zathurarc
+else
+	nope zathura
 fi
 
 ################################################################################
