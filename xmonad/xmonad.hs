@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 24 Mar 2020 09:17:05 PM EDT
+-- Last Modified: Thu 26 Mar 2020 12:54:30 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -197,7 +197,7 @@ myWorkspaces = [ wsmain, wstex, wscode, wsgame, wswww, wscom, wsmedia, wssys, "N
 -------------------------------------------------------------------------------
 
 myTerminal    = "alacritty"
-myAltTerminal = "gnome-terminal"
+myAltTerminal = "rxvt_unicode"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome"
 myLauncher    = "rofi -matching fuzzy -show run -modi drun,run --disable-history -sidebar-mode -show-icon"
