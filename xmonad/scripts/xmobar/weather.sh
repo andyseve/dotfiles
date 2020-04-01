@@ -36,7 +36,7 @@ esac
 #esac
 
 
-printf "<action=`%s -e weather` button=1>" "$TERM"
+printf '<action=`alacritty -e weather` button=1>'
 printf "<icon=weather/%s.xbm/> " "$cond_icon"
 case "$(cat $HOME/.local/share/weather_report_trunc)" in
 	*[Uu]nknown*|*[Ee]rror* )
