@@ -1,4 +1,4 @@
-## Last Modified: Thu 26 Mar 2020 02:54:54 PM EDT
+## Last Modified: Fri 27 Mar 2020 10:09:16 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -102,18 +102,18 @@ if check zsh; then
 		link $OF/zshrc $HOME/.zshrc
 	fi
 
-	# zplugin setup
-	if [ -z "$ZPLG_HOME" ]; then
-		ZPLG_HOME="${ZDOTDIR:-$HOME}/.zplugin"
+	# zinit setup
+	if [ -z "$ZINIT_HOME" ]; then
+		ZINIT_HOME="${ZDOTDIR:-$HOME}/.zinit"
 	fi
-	cdir $ZPLG_HOME
-	chmod g-rwX $ZPLG_HOME
-	if test -d "$ZPLG_HOME/bin/.git"; then
-		cd "$ZPLG_HOME/bin"
+	cdir $ZINIT_HOME
+	chmod g-rwX $ZINIT_HOME
+	if test -d "$ZINIT_HOME/bin/.git"; then
+		cd "$ZINIT_HOME/bin"
 		git pull origin master
 	else
-		cd "$ZPLG_HOME"
-		git clone --depth 10 https://github.com/zdharma/zplugin.git bin
+		cd "$ZINIT_HOME"
+		git clone https://github.com/zdharma/zinit.git bin
 	fi
 else
 	nope zsh
