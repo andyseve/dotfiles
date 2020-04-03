@@ -26,9 +26,9 @@
 
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
-		haskellPackages.xmobar
+		unstable.haskellPackages.xmobar
 		rofi
-		dunst
+		dunst libnotify
 		feh
 		compton
 		xdotool xorg.xmodmap xorg.xrandr
@@ -39,7 +39,7 @@
 		firefox google-chrome vivaldi
 		vlc
 		zathura
-		vimHugeX emacs
+		# vimHugeX emacs
 		libreoffice
 		gimp
 		alacritty rxvt_unicode-with-plugins

@@ -26,6 +26,7 @@ in
 			fira-code
 			fira-code-symbols
 			powerline-fonts
+			font-awesome-ttf
 		];
 	};
 
@@ -81,6 +82,7 @@ in
 			pylint
 		]))
 		unstable.haskellPackages.ghc
+		unstable.haskellPackages.hoogle
 		all-hies.latest
 		openjdk nodejs
 

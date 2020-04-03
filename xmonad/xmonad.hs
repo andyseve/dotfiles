@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 31 Mar 2020 09:51:01 PM EDT
+-- Last Modified: Thu 02 Apr 2020 01:01:47 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -211,7 +211,7 @@ status = 20
 myNormalBorderColor  = base02
 myFocusedBorderColor = active
 
-active       = blue
+active       = green
 activeWarn   = red
 inactive     = base02
 focuscolor   = blue
@@ -495,8 +495,9 @@ myKeys conf = let
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
-    spawn "feh --bg-scale /home/stranger/Wallpapers/landscape-mountains-forest-watch-tower-minimalist-minimalism-y712.jpg"
     dynStatusBarStartup myBarCreator myBarDestroyer
+    spawn "feh --bg-scale /home/stranger/Wallpapers/landscape-mountains-forest-watch-tower-minimalist-minimalism-y712.jpg"
+    spawn "dunst"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
