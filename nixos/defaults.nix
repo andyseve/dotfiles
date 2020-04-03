@@ -18,7 +18,6 @@ in
 
 	fonts = {
 		enableFontDir = true;
-		enableGhostscriptFonts = true;
 		fonts = with pkgs; [
 			inconsolata
 			fira
@@ -27,7 +26,15 @@ in
 			fira-code-symbols
 			powerline-fonts
 			font-awesome-ttf
+			lohit-fonts.marathi
 		];
+
+		fontconfig = {
+			penultimate.enable = false;
+			defaultFonts = {
+				monospace = [ "Fira Code" ];
+			};
+		};
 	};
 
 	# NixPkgs Configuration
