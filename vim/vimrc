@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 03 Apr 2020 10:24:11 AM EDT
+" Last Updated: Wed 08 Apr 2020 10:42:57 AM EDT
 
 set nocompatible
 
@@ -51,6 +51,7 @@ set nocompatible
 	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
 	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
 	Plug 'Konfekt/FastFold'
+	Plug 'LnL7/vim-nix',                    { 'for': 'nix' }
 
 	call plug#end()
 

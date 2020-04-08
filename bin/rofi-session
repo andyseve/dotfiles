@@ -29,10 +29,10 @@ case "$SELECTION" in
 		confirm && xmonad --quit
 		;;
 	"suspend" )
-		confirm && systemctl suspend
+		confirm && slimlock && systemctl suspend
 		;;
 	"hibernate" )
-		confirm && systemctl hibernate
+		confirm && slimlock && systemctl hibernate
 		;;
 	"reboot" )
 		confirm && systemctl reboot

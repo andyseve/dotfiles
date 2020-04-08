@@ -1,15 +1,18 @@
 -- http://projects.haskell.org/xmobar/
 -- you can find weather location codes here: http://weather.noaa.gov/index.html
 
+
 Config { 
-				 font    = "xft:Fira Code:size=10:antialias=true"
+				 font    = "xft:Fira Code:style=Bold:size=10:antialias=true"
 			 , additionalFonts = [
-													"xft:Font Awesome:size=9"
+													"xft:FontAwesome5Free:style=Solid:size=10",
+													"xft:FontAwesome5Brands:style=Solid:size=10"
+													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 												]
 			 , iconRoot= ".xmonad/icons"
        , bgColor = "#002b36"
        , fgColor = "#93a1a1"
-       , alpha = 255
+       , alpha = 160
        , position = Top
        , lowerOnStart = True
        , hideOnStart = False
@@ -19,7 +22,7 @@ Config {
        , borderWidth = 0
        , commands = [  
 											Run Battery [
-											   "--template" , "<acstatus>"
+											   "--template" , "<acstatus> (<timeleft>)"
 											 , "--Low"      , "25"
 											 , "--High"     , "50"
 											 , "--low"      , "#dc322f"
@@ -39,7 +42,7 @@ Config {
 											 , "-A" , "5"
 											 , "-a" , "systemctl hibernate"
 											 ] 50
-										, Run Date "%a %_d %b %H:%M" "date" 20
+										, Run Date "%a %d %b %H:%M" "date" 20
 										, Run Volume "default" "Master" [
 																						"-t", "<status> <volume>%"
 																					, "--"
@@ -52,19 +55,19 @@ Config {
 																					, "-C", "#93a1a1"
 																					] 10
 										, Run Brightness [
-													   "-t", "<fn=1>\xf185</fn> <percent>" --
+													   "-t", "<fn=1>\xf185</fn> <percent>%" --
 													 , "--"
 													 , "-D", "intel_backlight"
 													 ] 10
 										, Run Wireless "wlp1s0" [
-																		"-t", "<fn=1>blyat</fn> <essid> <quality>"
+																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
 																	] 10
 										, Run Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
 										, Run StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader%} %date% {%weather% %wlp1s0wi% %default:Master% %bright% %battery%"
+			 , template = " %StdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
        }
 
 -- vim:ft=haskell

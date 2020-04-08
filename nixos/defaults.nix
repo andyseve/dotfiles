@@ -2,10 +2,10 @@
 
 let
 	allHieOverlay = (self: super: {
-		all-hies = import (fetchTarball "https://github.com/infinisil/all-hies/tarball/master") {};
+		all-hies = import <all-hie> {};
 	});
 	unstableOverlay = (self: super: {
-		unstable = import (fetchTarball "https://github.com/NixOs/nixpkgs-channels/archive/nixos-unstable.tar.gz") { config = config.nixpkgs.config; };
+		unstable = import <unstable> { config = config.nixpkgs.config; };
 	});
 in
 {
@@ -83,12 +83,19 @@ in
 		# Dev Tools
 		gnumake cmake
 		gcc clang llvm ccls
-		(python3.withPackages(ps: with ps; [
-			pip virtualenv
-			numpy scipy matplotlib
-			pylint
-		]))
-		unstable.haskellPackages.ghc
+		(python3.withPackages # installing python3 with packages
+			(ps: with ps; [
+				pip virtualenv
+				numpy scipy matplotlib
+				pylint
+			])
+		)
+		(unstable.haskellPackages.ghcWithPackages # installing ghc with packges
+			(haskellPackages: with haskellPackages; [
+				xmonad xmonad-contrib xmonad-extras
+				xmobar
+			])
+		)
 		unstable.haskellPackages.hoogle
 		all-hies.latest
 		openjdk nodejs

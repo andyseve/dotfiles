@@ -1,17 +1,13 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Apr 2020 04:58:47 PM EDT
+-- Last Modified: Wed 08 Apr 2020 02:08:03 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
--- xmobar clean up volume
--- Set up keybindings as I want them.
--- Set up system functions.
--- Set up stalonetray
--- Set up layouts.
--- ManageHook
--- EventHook
+    {-
+
+    -}
 ----------------------------------------------------------------------------}}}
 -- Modules                                                                  {{{
 -------------------------------------------------------------------------------
@@ -67,6 +63,7 @@ import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.Navigation2D
+import XMonad.Actions.PerWorkspaceKeys
 import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll
 -- Util
@@ -111,7 +108,7 @@ myConfig = def
 -------------------------------------------------------------------------------
 
 wsmain  = "main"
-wstex   = "TeX"
+wstex   = "latex"
 wscode  = "code"
 wsgame  = "game"
 wswww   = "www"
@@ -121,7 +118,19 @@ wssys   = "sys"
 wsmin   = "min"
 
 myWorkspaces :: [String]
-myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, "NSP" ]
+myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, wsmin ]
+
+myWorkspaceIcons :: String -> String
+myWorkspaceIcons "main"  = "<fn=1>\xf0f2</fn>"
+myWorkspaceIcons "latex" = "<fn=1>\xf70e</fn>"
+myWorkspaceIcons "code"  = "<fn=2>\xf3e2</fn>"
+myWorkspaceIcons "game"  = "<fn=2>\xf1b6</fn>"
+myWorkspaceIcons "www"   = "<fn=2>\xf269</fn>"
+myWorkspaceIcons "com"   = "<fn=2>\xf232</fn>"
+myWorkspaceIcons "media" = "<fn=2>\xf3b5</fn>"
+myWorkspaceIcons "sys"   = "<fn=1>\xf120</fn>"
+myWorkspaceIcons "min"   = "<fn=1>\xf2d1</fn>"
+myWorkspaceIcons _       = "<fn=1>\xf714</fn>"
 
 ----------------------------------------------------------------------------}}}
 -- Applications                                                             {{{
@@ -137,6 +146,8 @@ myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -matching fuzzy -show window -modi window,windowcd -sidebar-mode -show-icon"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
+
+
 
 scratchpads = [ 
                 NS "htop" spawnHtop findHtop manageHtop
@@ -203,7 +214,7 @@ black   = "#000000"
 
 -- sizes
 gap    = 4
-topbar = 8
+topbar = 4
 border = 0
 prompt = 20
 status = 20
@@ -306,6 +317,16 @@ myLayoutHook = showWorkspaceName
         -----------------------------------------------------------------------
         -- Flex                                                              --
         -----------------------------------------------------------------------
+            -- --------------------------------------
+            -- |                  |                 |
+            -- |                  |      Tabs       |
+            -- |                  |                 |
+            -- |      Master      | --------------- |
+            -- |                  |                 |
+            -- |                  |      Tabs       |
+            -- |                  |                 |
+            -- |                  |                 |
+            -- --------------------------------------
         flex = named "flex"
              $ avoidStruts
              -- Need windowNavigation to merge windows
@@ -326,9 +347,11 @@ myNav2DConf = def
     { defaultTiledNavigation = centerNavigation
     , floatNavigation = centerNavigation
     , screenNavigation = lineNavigation
-    , layoutNavigation = [("tabs", lineNavigation)
+    , layoutNavigation = [ ("Full", centerNavigation)
+                         , ("tabs", lineNavigation)
                          ]
-    , unmappedWindowRect = [("tabs", fullScreenRect)
+    , unmappedWindowRect = [ ("Full", singleWindowRect)
+                           , ("tabs", fullScreenRect)
                            ]
     }
 
@@ -358,7 +381,7 @@ getSortByIndexNoSP =
 
 -- toggle any workspace but scratchpad
 myToggle = windows $ W.view =<< W.tag . head . filter 
-        ((\x -> x /= "NSP" && x /= "SP") . W.tag) . W.hidden
+        ((\x -> x /= wsmin && x /= "SP") . W.tag) . W.hidden
 
 -- toggling between floating and non-floating
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
@@ -366,7 +389,7 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
 
 wsKeys = map show $ [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
-screenKeys = [",", "."]
+screenKeys = ["q", "w"]
 dirKeys = ["j","k","h","l"]
 arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
 fulldirKeys = ["j", "<D>", "k", "<U>", "h", "<L>", "l", "<R>"]
@@ -401,7 +424,7 @@ myKeys conf = let
     ] ^++^
 
     ---------------------------------------------------------------------------
-    -- Actions
+    -- Actions                                                               
     ---------------------------------------------------------------------------
     subKeys "actions"
     [
@@ -413,13 +436,14 @@ myKeys conf = let
     , ("<XF86AudioLowerVolume>"  , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
     , ("<XF86AudioMute>"         , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
     -- brightness
-    , ("<XF86MonBrightnessDown>" , addName "brightness -5"               $ spawn "light -U 5")
-    , ("<XF86MonBrightnessUp>"   , addName "brightness +5"               $ spawn "light -A 5")
+    , ("<XF86MonBrightnessDown>"   , addName "brightness -5"  $ spawn "light -U 5")
+    , ("<XF86MonBrightnessUp>"     , addName "brightness +5"  $ spawn "light -A 5")
+    , ("M-<XF86MonBrightnessDown>" , addName "brightness min" $ spawn "light -S 5")
+    , ("M-<XF86MonBrightnessUp>"   , addName "brightness up"  $ spawn "light -S 100")
     -- screenshots
     , ("<Print>"                 , addName "screenshot window"           $ spawnOnce "scrot -u \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'")
     , ("M-<Print>"               , addName "screenshot fullscreen"       $ spawnOnce "scrot \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'")
-    -- selection screen shot need sleep timer before to avoid keypresses
-    , ("M-C-<Print>"             , addName "screenshot region"           $ spawnOnce "sleep 0.5; scrot -s \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'")
+    , ("M-C-<Print>"             , addName "screenshot region"           $ spawnOnce "sleep 0.5; scrot -s \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'") --sleep 0.5 is to avoid keypress cancel
     ] ^++^
 
     ---------------------------------------------------------------------------
@@ -427,21 +451,22 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "launchers"
     [
-      ("M-p"          , addName "launcher"                        $ spawn myLauncher)
-    , ("M-S-p"        , addName "alt-launcher"                    $ spawn myAltLauncher)
-    , ("M-/"          , addName "window search"                   $ spawn myWinSearch)
-    , ("M-<Return>"   , addName "terminal"                        $ spawn myTerminal)
-    , ("M-S-<Return>" , addName "alt-terminal"                    $ spawn myAltTerminal)
-    , ("M-\\"         , addName "browser"                         $ spawn myBrowser)
-    , ("M-s"          , addName "ssh"                             $ spawn "rofi-ssh")
-    , ("M-e"          , addName "files"                           $ spawn myFiles)
-    , ("M-S-o"        , addName "launcher"                        $ spawn "rofi-run")
-    , ("M-o M-o"      , addName "launcher"                        $ spawn myLauncher)
-    , ("M-o M-b"      , addName "browser"                         $ spawn myBrowser)
-    , ("M-o M-S-b"    , addName "alt-browser"                     $ spawn myAltBrowser)
-    , ("M-o M-f"      , addName "files"                           $ spawn myFiles)
-    , ("M-o M-t"      , addName "terminal"                        $ spawn myTerminal)
-    , ("M-o M-S-T"    , addName "alt-terminal"                    $ spawn myAltTerminal)
+      ("M-p"          , addName "launcher"      $ spawn myLauncher)
+    , ("M-S-p"        , addName "alt-launcher"  $ spawn myAltLauncher)
+    , ("M-/"          , addName "window search" $ spawn myWinSearch)
+    , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal)
+    , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal)
+    , ("M-\\"         , addName "browser"       $ spawn myBrowser)
+    , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh")
+    , ("M-e"          , addName "files"         $ spawn myFiles)
+    , ("M-q"          , addName "logout"        $ spawn "rofi-session")
+    , ("M-S-o"        , addName "launcher"      $ spawn "rofi-run")
+    , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher)
+    , ("M-o M-b"      , addName "browser"       $ spawn myBrowser)
+    , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser)
+    , ("M-o M-f"      , addName "files"         $ spawn myFiles)
+    , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal)
+    , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal)
     ] ^++^
     ---------------------------------------------------------------------------
     -- Windows  
@@ -451,14 +476,19 @@ myKeys conf = let
     [
       ("M-<Backspace>" , addName "kill" kill)
     , ("M-C-<Backspace>", addName "kill all" $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll)
+    , ("M-m" , addName "Focus Master" $ windows W.focusMaster)
+    , ("M-n" , addName "Focus Urgent" $ focusUrgent)
+    , ("M-u" , addName "Tabs D" $ onGroup W.focusDown')
+    , ("M-i" , addName "Tabs U" $ onGroup W.focusUp')
+    , ("M-g" , addName "Unmerge" $ withFocused (sendMessage . UnMerge))
     ] 
-    ++ zipM' "M-" "navigate window" fulldirKeys fulldirs windowGo True
-    ++ zipM' "M-S-" "move window" fulldirKeys fulldirs windowSwap True
-    ++ zipM "M-C-" "merge w/sublayout" fulldirKeys fulldirs (sendMessage . pullGroup)
-    ++ zipM "M-w M-" "merge w/sublayout" fulldirKeys fulldirs (sendMessage . pullGroup)
-    ++ zipM' "M-" "navigate screen" screenKeys rstrdirs screenGo True
-    ++ zipM' "M-S-" "move window to screen" screenKeys rstrdirs windowToScreen True
-    ++ zipM' "M-C-" "Swap workspaces to screen" screenKeys rstrdirs screenSwap True
+    ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
+    ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
+    ++ zipM  "M-C-"   "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
+    ++ zipM  "M-w M-" "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
+    ++ zipM' "M-"     "navigate screen"           screenKeys  rstrdirs screenGo True
+    ++ zipM' "M-S-"   "move window to screen"     screenKeys  rstrdirs windowToScreen True
+    ++ zipM' "M-C-"   "Swap workspaces to screen" screenKeys  rstrdirs screenSwap True
     ) ^++^
     ---------------------------------------------------------------------------
     -- Workspaces
@@ -470,8 +500,8 @@ myKeys conf = let
     , ("M-' M-p", addName "prev non-empty workspace" $ prevHidWS)
     , ("M-' M-'", addName "select workspace" $ selectWorkspace myPromptTheme)
     ]
-    ++ zipM "M-" "view workspace" wsKeys [0..] (withNthWorkspace W.greedyView)
-    ++ zipM "M-S-" "move window to workspace" wsKeys [0..] (withNthWorkspace W.shift)
+    ++ zipM "M-"     "view workspace"           wsKeys [0..] (withNthWorkspace W.greedyView)
+    ++ zipM "M-S-"   "move window to workspace" wsKeys [0..] (withNthWorkspace W.shift)
     ++ zipM "M-y M-" "copy window to workspace" wsKeys [0..] (withNthWorkspace copy)
     ) ^++^
     ---------------------------------------------------------------------------
@@ -479,24 +509,26 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "layouts"
     [
-      ("M-<Tab>", addName "cycle all layouts" $ sendMessage NextLayout)
-    , ("M-S-<Tab>", addName "cycle sublayout" $ toSubl NextLayout)
-    , ("M-C-<Tab>", addName "reset layout" $ setLayout $ XMonad.layoutHook conf)
-    , ("M-t", addName "toggle floating window" $ withFocused toggleFloat)
-    , ("M-S-t", addName "tile all floating windows" $ sinkAll)
-    , ("M-S-=", addName "fullscreen" $ sequence_ [ (withFocused $ windows . W.sink)
-                                                 , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL)
-                                                 ])
-    , ("M-S-r", addName "mirror" $ sequence_ [ (withFocused $ windows . W.sink)
-                                             , (sendMessage $ XMonad.Layout.MultiToggle.Toggle MIRROR)
-                                             ])
+      ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout)
+    , ("M-S-<Tab>", addName "cycle sublayout"           $ toSubl NextLayout)
+    , ("M-C-<Tab>", addName "reset layout"              $ setLayout $ XMonad.layoutHook conf)
+    , ("M-t",       addName "toggle floating window"    $ withFocused toggleFloat)
+    , ("M-S-t",     addName "tile all floating windows" $ sinkAll)
+    , ("M-S-=",     addName "fullscreen"                $ sequence_ [ (withFocused $ windows . W.sink)
+                                                                    , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL)
+                                                                    ])
+    , ("M-' M-,",   addName "Decrease master windows"  $ sendMessage (IncMasterN (-1)))
+    , ("M-' M-.",   addName "Increase master windows"  $ sendMessage (IncMasterN 1))
+    , ("M-' M-j",   addName "Shrink master"            $ sendMessage (Shrink))
+    , ("M-' M-k",   addName "Expand master"            $ sendMessage (Expand))
     ]
 ----------------------------------------------------------------------------}}}
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
+    spawn "~/.fehbg"
     dynStatusBarStartup myBarCreator myBarDestroyer
-    spawn "feh --bg-scale /home/stranger/Wallpapers/landscape-mountains-forest-watch-tower-minimalist-minimalism-y712.jpg"
+    spawn "compton"
     spawn "dunst"
 
 quitXmonad :: X ()
@@ -519,14 +551,17 @@ myLogHook = do
     multiPP myLogPP myLogPP
 
 myLogPP :: XMonad.Hooks.DynamicLog.PP
+myLogPP = myXmobarLogPP
 
-myLogPP = def
-    { ppCurrent = xmobarColor green "" . wrap "[" "]"
-    , ppTitle   = xmobarColor base01 "" . shorten 80
-    , ppVisible = xmobarColor blue ""
-    , ppUrgent  = xmobarColor red ""
-    , ppHidden  = xmobarColor base01 ""
-    , ppSep     = " ::"
+myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
+myXmobarLogPP = def
+    { ppCurrent = xmobarColor blue "" . myWorkspaceIcons
+    , ppTitle   = xmobarColor base01 "" . shorten 60
+    , ppVisible = xmobarColor blue "" . myWorkspaceIcons
+    , ppUrgent  = xmobarColor red "" . myWorkspaceIcons
+    , ppHidden  = xmobarColor white "" . myWorkspaceIcons
+    , ppHiddenNoWindows = xmobarColor base01 "" . myWorkspaceIcons
+    , ppSep     = " <fn=1>\xf054</fn> "
     , ppWsSep   = " "
     , ppLayout  = xmobarColor yellow ""
     }
@@ -547,17 +582,22 @@ myHandleEventHook = docksEventHook
                 -- Create a Status bar for each screen
                 <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer
 
--- BarCreator and Destroyer for dynamic bars
-myBarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
-myBarCreator (XMonad.S sid) = do
-    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad myBarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("xmobar --screen " ++ show sid ++ " ~/.xmonad/xmobar.conf")
+-- Defining barcreator and destroyer
+myBarCreator   = myXmobarCreator
+myBarDestroyer = myXmobarDestroyer
 
-myBarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
-myBarDestroyer = do
+-- Xmobar Creator and Destroyer using dynamic bars
+myXmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
+myXmobarCreator (XMonad.S sid) = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad myBarDestroyer") -- logging
+    XMonad.trace (show t ++ ": XMonad myXmobarCreator " ++ show sid) --logging
+    XMonad.Util.Run.spawnPipe ("xmobar --screen " ++ show sid ++ " ~/.xmonad/xmobar.hs")
+
+myXmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
+myXmobarDestroyer = do
+    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
+    XMonad.trace (show t ++ ": XMonad myXmobarDestroyer") -- logging
+
 ----------------------------------------------------------------------------}}}
 
 -- vim: ft=haskell:foldmethod=marker:foldlevel=4:expandtab:ts=4:sts=4:shiftwidth=4

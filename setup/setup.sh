@@ -1,4 +1,4 @@
-## Last Modified: Fri 27 Mar 2020 10:09:16 PM EDT
+## Last Modified: Tue 07 Apr 2020 10:21:10 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -233,7 +233,11 @@ if check xmonad; then
 	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
-	link $IF/xmobar.conf $OF/xmobar.conf
+	link $IF/xmobar.hs $OF/xmobar.hs
+	link $IF/taffybar.hs $OF/taffybar.hs
+
+	cdir $DOTFILES/taffybar
+	link $IF/taffybar.hs $DOTFILES/taffybar/taffybar.hs
 	
 	FOLDERS=(lib scripts icons)
 	for fol in ${FOLDERS[@]}; do

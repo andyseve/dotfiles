@@ -8,7 +8,11 @@
 		# xkbOptions = "eurosign:e"
 		
 		# Touchpad
-		libinput.enable = true;
+		libinput = {
+			enable = true;
+			accelProfile = "flat";
+			disableWhileTyping = true;
+		};
 
     # Desktop
 		displayManager.slim.enable = true;
