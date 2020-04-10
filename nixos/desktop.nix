@@ -15,6 +15,7 @@
 		};
 
     # Desktop
+    desktopManager.xterm.enable = false;
 		displayManager.slim.enable = true;
 		windowManager.xmonad = {
 			enable = true;

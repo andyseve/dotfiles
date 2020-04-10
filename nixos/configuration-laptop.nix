@@ -7,9 +7,9 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-			./defaults.nix
-			./desktop.nix
+      /etc/nixos/hardware-configuration.nix
+			/etc/nixos/defaults.nix
+			/etc/nixos/desktop.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
