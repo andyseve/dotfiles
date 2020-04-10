@@ -112,9 +112,12 @@ in
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
-	# PulseAudio Full - bluetooth headsets support
-	hardware.pulseaudio.package = pkgs.pulseaudioFull;
+  hardware.pulseaudio = {
+    enable = true;
+	  # PulseAudio Full - bluetooth headsets support
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+    package = pkgs.pulseaudioFull;
+  };
 	hardware.bluetooth.enable = true;
 
 	# 32 bit support, required for steam

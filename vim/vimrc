@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 08 Apr 2020 10:42:57 AM EDT
+" Last Updated: Thu 09 Apr 2020 12:21:42 AM EDT
 
 set nocompatible
 
@@ -140,7 +140,7 @@ set nocompatible
   set autoindent
   set smartindent
   set breakindent
-  set showbreak=↳\
+  set showbreak=↳\ 
 
   set shiftwidth=2
   set softtabstop=2
@@ -506,7 +506,7 @@ set nocompatible
   augroup Anishs
     autocmd!
 		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-		autocmd BufWinEnter ?* silent loadview
+		autocmd WinEnter ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch

@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 08 Apr 2020 02:08:03 AM EDT
+-- Last Modified: Thu 09 Apr 2020 09:47:44 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -13,6 +13,7 @@
 -------------------------------------------------------------------------------
 -- Core
 import qualified Data.Map as M
+import Data.Function (on)
 import Data.Maybe
 import Data.List
 import Data.Time.LocalTime
@@ -120,17 +121,18 @@ wsmin   = "min"
 myWorkspaces :: [String]
 myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, wsmin ]
 
+
 myWorkspaceIcons :: String -> String
-myWorkspaceIcons "main"  = "<fn=1>\xf0f2</fn>"
-myWorkspaceIcons "latex" = "<fn=1>\xf70e</fn>"
-myWorkspaceIcons "code"  = "<fn=2>\xf3e2</fn>"
-myWorkspaceIcons "game"  = "<fn=2>\xf1b6</fn>"
-myWorkspaceIcons "www"   = "<fn=2>\xf269</fn>"
-myWorkspaceIcons "com"   = "<fn=2>\xf232</fn>"
-myWorkspaceIcons "media" = "<fn=2>\xf3b5</fn>"
-myWorkspaceIcons "sys"   = "<fn=1>\xf120</fn>"
-myWorkspaceIcons "min"   = "<fn=1>\xf2d1</fn>"
-myWorkspaceIcons _       = "<fn=1>\xf714</fn>"
+myWorkspaceIcons "main"  = "<fn=1>\xf0f2</fn>" -- 
+myWorkspaceIcons "latex" = "<fn=1>\xf70e</fn>" -- 
+myWorkspaceIcons "code"  = "<fn=1>\xf121</fn>" -- 
+myWorkspaceIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
+myWorkspaceIcons "www"   = "<fn=2>\xf269</fn>" --  
+myWorkspaceIcons "com"   = "<fn=1>\xf075</fn>" -- 
+myWorkspaceIcons "media" = "<fn=2>\xf3b5</fn>" -- 
+myWorkspaceIcons "sys"   = "<fn=1>\xf120</fn>" -- 
+myWorkspaceIcons "min"   = "<fn=1>\xf328</fn>" -- 
+myWorkspaceIcons _       = "<fn=1>\xf714</fn>" -- 
 
 ----------------------------------------------------------------------------}}}
 -- Applications                                                             {{{
@@ -388,7 +390,9 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 then W.sink w s
                 else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
 
-wsKeys = map show $ [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
+
+wsIndices = [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
+wsKeys = map show $ wsIndices
 screenKeys = ["q", "w"]
 dirKeys = ["j","k","h","l"]
 arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
@@ -459,7 +463,7 @@ myKeys conf = let
     , ("M-\\"         , addName "browser"       $ spawn myBrowser)
     , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh")
     , ("M-e"          , addName "files"         $ spawn myFiles)
-    , ("M-q"          , addName "logout"        $ spawn "rofi-session")
+    , ("M-z"          , addName "logout"        $ spawn "rofi-session")
     , ("M-S-o"        , addName "launcher"      $ spawn "rofi-run")
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher)
     , ("M-o M-b"      , addName "browser"       $ spawn myBrowser)
@@ -526,10 +530,11 @@ myKeys conf = let
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
-    spawn "~/.fehbg"
+    spawn "compton" -- TODO: configure settings
+    spawn "dunst" -- TODO: configure theme
+    spawn "xsetroot -cursor_name left_ptr" -- removing cross cursor
+    spawn "~/.fehbg" -- starting wallpaper
     dynStatusBarStartup myBarCreator myBarDestroyer
-    spawn "compton"
-    spawn "dunst"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -556,15 +561,29 @@ myLogPP = myXmobarLogPP
 myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
 myXmobarLogPP = def
     { ppCurrent = xmobarColor blue "" . myWorkspaceIcons
-    , ppTitle   = xmobarColor base01 "" . shorten 60
+    , ppTitle   = xmobarColor green "" . shorten 60
     , ppVisible = xmobarColor blue "" . myWorkspaceIcons
     , ppUrgent  = xmobarColor red "" . myWorkspaceIcons
     , ppHidden  = xmobarColor white "" . myWorkspaceIcons
     , ppHiddenNoWindows = xmobarColor base01 "" . myWorkspaceIcons
-    , ppSep     = " <fn=1>\xf054</fn> "
+    , ppSep     = " <fn=1>\xf101</fn> "
     , ppWsSep   = " "
     , ppLayout  = xmobarColor yellow ""
+    , ppSort    = mkWsSort myWsCompare
     }
+        where
+            myWsIndex :: WorkspaceId -> Int
+            myWsIndex "min" = 1000
+            myWsIndex a = fixIndex $ flip elemIndex myWsOrder a
+                where
+                    fixIndex :: Maybe Int -> Int
+                    fixIndex Nothing = 999
+                    fixIndex (Just a) = a
+                    myWsOrder :: [WorkspaceId]
+                    myWsOrder = [wsmain, wstex, wscode, wsgame, wswww, wscom, wsmedia, wssys, wsmin]
+            myWsCompare :: X WorkspaceCompare
+            myWsCompare = return (compare `on` myWsIndex)
+
 ----------------------------------------------------------------------------}}}
 -- Actions                                                                  {{{
 -------------------------------------------------------------------------------
