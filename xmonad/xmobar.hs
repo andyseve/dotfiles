@@ -1,8 +1,10 @@
 -- http://projects.haskell.org/xmobar/
 -- you can find weather location codes here: http://weather.noaa.gov/index.html
 
+import Xmobar
 
-Config { 
+config :: Config
+config = defaultConfig { 
 				 font    = "xft:Fira Code:style=Bold:size=10:antialias=true"
 			 , additionalFonts = [
 													"xft:FontAwesome5Free:style=Solid:size=10",
@@ -21,7 +23,7 @@ Config {
        , border = NoBorder
        , borderWidth = 0
        , commands = [  
-											Run Battery [
+											Run $ Battery [
 											   "--template" , "<acstatus> (<timeleft>)"
 											 , "--Low"      , "25"
 											 , "--High"     , "50"
@@ -42,8 +44,8 @@ Config {
 											 , "-A" , "5"
 											 , "-a" , "systemctl hibernate"
 											 ] 50
-										, Run Date "%a %d %b %H:%M" "date" 20
-										, Run Volume "default" "Master" [
+										, Run $ Date "%a %d %b %H:%M" "date" 20
+										, Run $ Volume "default" "Master" [
 																						"-t", "<status> <volume>%"
 																					, "--"
 																					, "-o", "<fn=1>\xf6a9</fn>" --
@@ -54,20 +56,23 @@ Config {
 																					, "-c", "#dc322f"
 																					, "-C", "#93a1a1"
 																					] 10
-										, Run Brightness [
+										, Run $ Brightness [
 													   "-t", "<fn=1>\xf185</fn> <percent>%" --
 													 , "--"
 													 , "-D", "intel_backlight"
 													 ] 10
-										, Run Wireless "wlp1s0" [
+										, Run $ Wireless "wlp1s0" [
 																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
 																	] 10
-										, Run Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
-										, Run StdinReader
+										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
+										, Run $ StdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
 			 , template = " %StdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
        }
+
+main :: IO ()
+main = xmobar config
 
 -- vim:ft=haskell
