@@ -24,10 +24,13 @@
 				haskellPackages.xmonad-contrib
 				haskellPackages.xmonad-extras
 				haskellPackages.xmonad
+        haskellPackages.xmobar
 			];
 		};
 		windowManager.default = "xmonad";
 	};
+
+  hardware.opengl.extraPackages = with pkgs; [ libva ];
 
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
@@ -48,9 +51,9 @@
 		libreoffice
 		gimp
 		alacritty rxvt_unicode-with-plugins
-		steam
+    steam
 		discord zoom-us
 		deluge
-		google-play-music-desktop-player
+		unstable.google-play-music-desktop-player
 	];
 }

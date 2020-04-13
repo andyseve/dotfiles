@@ -1,1 +1,0 @@
-/home/stranger/dotfiles/xmonad/taffybar.hs

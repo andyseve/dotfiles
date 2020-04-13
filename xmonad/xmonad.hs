@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 09 Apr 2020 09:47:44 PM EDT
+-- Last Modified: Mon 13 Apr 2020 05:07:31 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -294,52 +294,52 @@ myShowWNameTheme = def
 -- Layouts                                                                  {{{
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
-             $ fullScreenToggle
-             $ mirrorToggle
-             $ flex ||| tabs
+                     $ fullScreenToggle
+                     $ mirrorToggle
+                     $ flex ||| tabs
     where
-        showWorkspaceName = showWName' myShowWNameTheme
+            showWorkspaceName = showWName' myShowWNameTheme
 
-        fullScreenToggle = mkToggle (single FULL)
-        mirrorToggle = mkToggle (single MIRROR)
-        addTopBar = noFrillsDeco shrinkText topBarTheme
+            fullScreenToggle = mkToggle (single FULL)
+            mirrorToggle = mkToggle (single MIRROR)
+            addTopBar = noFrillsDeco shrinkText topBarTheme
 
-        mySpacing = spacing gap
-        myGaps = gaps [(U,gap),(D,gap),(L,gap),(R,gap)]
+            mySpacing = spacing gap
+            myGaps = gaps [(U,gap),(D,gap),(L,gap),(R,gap)]
 
-        suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
-        -----------------------------------------------------------------------
-        -- Tabs Layout                                                       --
-        -----------------------------------------------------------------------
-        tabs = named "tabs"
-             $ avoidStruts
-             $ addTopBar
-             $ addTabs shrinkText myTabTheme
-             $ Simplest
-        -----------------------------------------------------------------------
-        -- Flex                                                              --
-        -----------------------------------------------------------------------
-            -- --------------------------------------
-            -- |                  |                 |
-            -- |                  |      Tabs       |
-            -- |                  |                 |
-            -- |      Master      | --------------- |
-            -- |                  |                 |
-            -- |                  |      Tabs       |
-            -- |                  |                 |
-            -- |                  |                 |
-            -- --------------------------------------
-        flex = named "flex"
-             $ avoidStruts
-             -- Need windowNavigation to merge windows
-             $ windowNavigation
-             $ addTopBar
-             $ addTabs shrinkText myTabTheme
-             $ subLayout [] (Simplest ||| Accordion)
-             $ myGaps
-             $ mySpacing
-             $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [])
-           ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (2/3) [])
+            suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
+            -----------------------------------------------------------------------
+            -- Tabs Layout                                                       --
+            -----------------------------------------------------------------------
+            tabs = named "tabs"
+                     $ avoidStruts
+                     $ addTopBar
+                     $ addTabs shrinkText myTabTheme
+                     $ Simplest
+            -----------------------------------------------------------------------
+            -- Flex                                                              --
+            -----------------------------------------------------------------------
+                    -- --------------------------------------
+                    -- |                  |                 |
+                    -- |                  |      Tabs       |
+                    -- |                  |                 |
+                    -- |      Master      | --------------- |
+                    -- |                  |                 |
+                    -- |                  |      Tabs       |
+                    -- |                  |                 |
+                    -- |                  |                 |
+                    -- --------------------------------------
+            flex = named "flex"
+                     $ avoidStruts
+                     -- Need windowNavigation to merge windows
+                     $ windowNavigation
+                     $ addTopBar
+                     $ addTabs shrinkText myTabTheme
+                     $ subLayout [] (Simplest ||| Accordion)
+                     $ myGaps
+                     $ mySpacing
+                     $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [])
+                 ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (2/3) [])
 
 ----------------------------------------------------------------------------}}}
 -- Bindings                                                                 {{{
@@ -393,7 +393,7 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
 
 wsIndices = [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
 wsKeys = map show $ wsIndices
-screenKeys = ["q", "w"]
+screenKeys = ["q","w"]
 dirKeys = ["j","k","h","l"]
 arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
 fulldirKeys = ["j", "<D>", "k", "<U>", "h", "<L>", "l", "<R>"]
@@ -530,11 +530,11 @@ myKeys conf = let
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
-    spawn "compton" -- TODO: configure settings
-    spawn "dunst" -- TODO: configure theme
-    spawn "xsetroot -cursor_name left_ptr" -- removing cross cursor
-    spawn "~/.fehbg" -- starting wallpaper
-    dynStatusBarStartup myBarCreator myBarDestroyer
+    spawn "~/.config/xrandr && ~./config/fehbg" -- xrandr + feh
+    spawnOnce "compton" -- TODO: configure settings
+    spawnOnce "dunst" -- TODO: configure theme
+    spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
+    XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -610,7 +610,7 @@ myXmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
 myXmobarCreator (XMonad.S sid) = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
     XMonad.trace (show t ++ ": XMonad myXmobarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("xmobar --screen " ++ show sid ++ " ~/.xmonad/xmobar.hs")
+    XMonad.Util.Run.spawnPipe ("~/bin/xmobar/xmobar -x " ++ show sid ++ " ~/.xmonad/xmobar.hs")
 
 myXmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
 myXmobarDestroyer = do

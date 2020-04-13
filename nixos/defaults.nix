@@ -37,6 +37,9 @@ in
 		};
 	};
 
+  # Allow non-free drivers
+  hardware.enableRedistributableFirmware = true;
+
 	# NixPkgs Configuration
 	nixpkgs.config = {
 		allowUnfree = true;
@@ -45,6 +48,9 @@ in
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
+    # Drivers
+    firmwareLinuxNonfree
+
 		# Version Control / Archive
 		git subversion mercurial bazaar
 		unzip zip unrar

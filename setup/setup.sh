@@ -1,4 +1,4 @@
-## Last Modified: Tue 07 Apr 2020 10:21:10 PM EDT
+## Last Modified: Mon 13 Apr 2020 05:07:35 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -65,7 +65,6 @@ fi
 # Configs ######################################################################
 ################################################################################
 
-cdir $CONFIG/systemd/user
 echo -e "\nlinking configs..."
 
 # bash
@@ -233,18 +232,26 @@ if check xmonad; then
 	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
-	link $IF/xmobar.hs $OF/xmobar.hs
-	link $IF/taffybar.hs $OF/taffybar.hs
-
-	cdir $DOTFILES/taffybar
-	link $IF/taffybar.hs $DOTFILES/taffybar/taffybar.hs
-	
-	FOLDERS=(lib scripts icons)
-	for fol in ${FOLDERS[@]}; do
-		link "$IF/$fol" "$OF/$fol"
-	done
 else
 	nope xmonad
+fi
+
+# xmobar
+if check xmobar; then
+	IF="$DOTFILES/xmobar"
+	OF="$HOME/bin/xmobar"
+	cdir $OF
+	
+	if [ ! -L $OF/xmobar.hs ]; then
+		echo "Choose the xmobar file to link"
+		select opt in $IF/*.hs
+		do
+			link $opt $OF/xmobar.hs
+			break
+		done
+	fi
+else
+	nope xmobar
 fi
 
 # xfce
