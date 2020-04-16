@@ -58,7 +58,7 @@
 	];
 
   services = {
-    phylock = {
+    physlock = {
       enable = true;
       allowAnyUser = true;
     };

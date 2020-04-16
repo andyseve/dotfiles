@@ -29,6 +29,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # boot settings
+  boot.loader.grub.default = "saved";
+  boot.plymouth.enable = true;
+
 	# Timezone settings
 	time.timeZone = "America/New_York";
 	time.hardwareClockInLocalTime = true;
