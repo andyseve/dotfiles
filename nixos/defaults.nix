@@ -32,6 +32,9 @@ in
 	# Timezone settings
 	time.timeZone = "America/New_York";
 	time.hardwareClockInLocalTime = true;
+  # location
+  location.provider = "geoclue2";
+
   # Select internationalisation properties
   i18n = {
     consoleFont = "Lat2-Terminus16";

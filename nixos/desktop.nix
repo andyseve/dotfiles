@@ -36,12 +36,14 @@
 		# WindowManager Core
 		unstable.haskellPackages.xmobar
 		rofi
-		compton
-		dunst libnotify
+		compton                          # transparancy
+		dunst libnotify                  # notifications
 		feh
 		xdotool xorg.xmodmap xorg.xrandr
-		scrot
+		scrot                            # screenshots
     xclip
+    redshift                         # for night light
+    geoclue2                         # location
 
 		# Desktop Programs
 		firefox google-chrome vivaldi
@@ -62,5 +64,11 @@
       enable = true;
       allowAnyUser = true;
     };
+    redshift = {
+      enable = true;
+      temperature.day = 6500;
+      temperature.night = 3500;
+    };
+    geoclue2.enable = true;
   };
 }
