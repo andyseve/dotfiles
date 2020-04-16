@@ -16,7 +16,7 @@
 
     # Desktop
     desktopManager.xterm.enable = false;
-		displayManager.slim.enable = true;
+		displayManager.sddm.enable = true;
 		windowManager.xmonad = {
 			enable = true;
 			enableContribAndExtras = true;
@@ -36,24 +36,31 @@
 		# WindowManager Core
 		unstable.haskellPackages.xmobar
 		rofi
+		compton
 		dunst libnotify
 		feh
-		compton
 		xdotool xorg.xmodmap xorg.xrandr
 		scrot
+    xclip
 
 		# Desktop Programs
-		# modularize these, should only be installed if xserver is set
 		firefox google-chrome vivaldi
 		vlc
 		zathura
-		# vimHugeX emacs
+    vimHugeX emacs
 		libreoffice
 		gimp
 		alacritty rxvt_unicode-with-plugins
     steam
-		discord zoom-us
+		unstable.discord unstable.zoom-us
 		deluge
 		unstable.google-play-music-desktop-player
 	];
+
+  services = {
+    physlock = {
+      enable = true;
+      allowAnyUser = true;
+    };
+  };
 }
