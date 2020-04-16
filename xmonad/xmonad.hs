@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 13 Apr 2020 05:07:31 PM EDT
+-- Last Modified: Thu 16 Apr 2020 02:47:58 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -530,7 +530,7 @@ myKeys conf = let
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
-    spawn "~/.config/xrandr && ~./config/fehbg" -- xrandr + feh
+    spawn "~/.config/fehbg"
     spawnOnce "compton" -- TODO: configure settings
     spawnOnce "dunst" -- TODO: configure theme
     spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor

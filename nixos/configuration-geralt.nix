@@ -75,7 +75,7 @@
       # Authentication
       LoginGraceTime 2m
       StrictModes yes
-      MaxAuthTries 3
+       MaxAuthTries 3
       MaxSessions 5
 
       PubkeyAuthentication yes
@@ -92,7 +92,18 @@
 	networking.firewall.allowPing = false;
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-	#
+
+  # Xrandr settings
+  services.xserver.xrandrHeads = [ 
+    {
+      output = "DP-4";
+      primary = true;
+    }
+    {
+      output = "HDMI-0";
+    }
+  ];
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
 	security.sudo.enable = true;
   users.users.stranger = {
