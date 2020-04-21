@@ -27,7 +27,8 @@
         haskellPackages.xmobar
       ];
 		};
-		windowManager.defaultSession = "none+xmonad";
+    windowManager.default="xmonad";
+		#windowManager.defaultSession = "none+xmonad";
 	};
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];
