@@ -17,6 +17,7 @@
     # Desktop
     desktopManager.xterm.enable = false;
 		displayManager.sddm.enable = true;
+    displayManager.defaultSession = "none+xmonad";
 		windowManager.xmonad = {
 			enable = true;
 			enableContribAndExtras = true;
@@ -27,8 +28,6 @@
         haskellPackages.xmobar
       ];
 		};
-    windowManager.default="xmonad";
-		#windowManager.defaultSession = "none+xmonad";
 	};
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];

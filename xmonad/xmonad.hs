@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 16 Apr 2020 11:57:17 AM EDT
+-- Last Modified: Tue 21 Apr 2020 12:22:48 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -445,9 +445,9 @@ myKeys conf = let
     , ("M-<XF86MonBrightnessDown>" , addName "brightness min" $ spawn "light -S 5")
     , ("M-<XF86MonBrightnessUp>"   , addName "brightness up"  $ spawn "light -S 100")
     -- screenshots
-    , ("<Print>"                 , addName "screenshot window"           $ spawnOnce "scrot -u \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'")
-    , ("M-<Print>"               , addName "screenshot fullscreen"       $ spawnOnce "scrot \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'")
-    , ("M-C-<Print>"             , addName "screenshot region"           $ spawnOnce "sleep 0.5; scrot -s \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots'") --sleep 0.5 is to avoid keypress cancel
+    , ("<Print>"                 , addName "screenshot window"           $ spawn "scrot -u \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
+    , ("M-<Print>"               , addName "screenshot fullscreen"       $ spawn "scrot \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
+    , ("M-C-<Print>"             , addName "screenshot region"           $ spawn "sleep 0.5; scrot -s \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'") --sleep 0.5 is to avoid keypress cancel
     ] ^++^
 
     ---------------------------------------------------------------------------

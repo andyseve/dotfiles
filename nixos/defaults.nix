@@ -36,11 +36,11 @@ in
   location.provider = "geoclue2";
 
   # Select internationalisation properties
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
+  console = {
+    keyMap = "us";
+    font = "Lat2-Terminus16";
   };
+  i18n.defaultLocale = "en_US.UTF-8";
 
 	fonts = {
 		enableFontDir = true;
