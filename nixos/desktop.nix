@@ -20,14 +20,14 @@
 		windowManager.xmonad = {
 			enable = true;
 			enableContribAndExtras = true;
-			extraPackages = haskellPackages: [
-				haskellPackages.xmonad-contrib
-				haskellPackages.xmonad-extras
-				haskellPackages.xmonad
+      extraPackages = haskellPackages: [
+        haskellPackages.xmonad-contrib
+        haskellPackages.xmonad-extras
+        haskellPackages.xmonad
         haskellPackages.xmobar
-			];
+      ];
 		};
-		windowManager.default = "xmonad";
+		windowManager.defaultSession = "none+xmonad";
 	};
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];
