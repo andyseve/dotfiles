@@ -65,11 +65,11 @@ config = defaultConfig {
 																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
 																	] 10
 										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
-										, Run $ StdinReader
+										, Run $ UnsafeStdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-			 , template = " %StdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
+			 , template = " %UnsafeStdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
        }
 
 main :: IO ()

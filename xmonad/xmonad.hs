@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 23 Apr 2020 05:33:20 PM EDT
+-- Last Modified: Thu 23 Apr 2020 09:11:04 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -128,17 +128,6 @@ myWorkspaces :: [String]
 myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, wsmin ]
 
 
-myWorkspaceIcons :: String -> String
-myWorkspaceIcons "main"  = "<fn=1>\xf0f2</fn>" -- 
-myWorkspaceIcons "latex" = "<fn=1>\xf70e</fn>" -- 
-myWorkspaceIcons "code"  = "<fn=1>\xf121</fn>" -- 
-myWorkspaceIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
-myWorkspaceIcons "www"   = "<fn=2>\xf269</fn>" --  
-myWorkspaceIcons "com"   = "<fn=1>\xf075</fn>" -- 
-myWorkspaceIcons "media" = "<fn=2>\xf3b5</fn>" -- 
-myWorkspaceIcons "sys"   = "<fn=1>\xf120</fn>" -- 
-myWorkspaceIcons "min"   = "<fn=1>\xf328</fn>" -- 
-myWorkspaceIcons _       = "<fn=1>\xf714</fn>" -- 
 
 ----------------------------------------------------------------------------}}}
 -- Applications                                                             {{{
@@ -573,29 +562,46 @@ myLogPP = myXmobarLogPP
 
 myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
 myXmobarLogPP = def
-    { ppCurrent = xmobarColor blue "" . myWorkspaceIcons
+    { ppCurrent = xmobarColor blue "" . clickableWorkspaces
     , ppTitle   = xmobarColor green "" . shorten 60
-    , ppVisible = xmobarColor blue "" . myWorkspaceIcons
-    , ppUrgent  = xmobarColor red "" . myWorkspaceIcons
-    , ppHidden  = xmobarColor white "" . myWorkspaceIcons
-    , ppHiddenNoWindows = xmobarColor base01 "" . myWorkspaceIcons
+    , ppVisible = xmobarColor blue "" . clickableWorkspaces
+    , ppUrgent  = xmobarColor red "" . clickableWorkspaces
+    , ppHidden  = xmobarColor white "" . clickableWorkspaces
+    , ppHiddenNoWindows = xmobarColor base01 "" . clickableWorkspaces
     , ppSep     = " <fn=1>\xf101</fn> "
     , ppWsSep   = " "
     , ppLayout  = xmobarColor yellow ""
-    , ppSort    = mkWsSort myWsCompare
+    , ppSort    = mkWsSort wsCompare
     }
         where
-            myWsIndex :: WorkspaceId -> Int
-            myWsIndex "min" = 1000
-            myWsIndex a = fixIndex $ flip elemIndex myWsOrder a
-                where
-                    fixIndex :: Maybe Int -> Int
-                    fixIndex Nothing = 999
-                    fixIndex (Just a) = a
-                    myWsOrder :: [WorkspaceId]
-                    myWsOrder = [wsmain, wstex, wscode, wsgame, wswww, wscom, wsmedia, wssys, wsmin]
-            myWsCompare :: X WorkspaceCompare
-            myWsCompare = return (compare `on` myWsIndex)
+            fixIndex :: Maybe Int -> Int
+            fixIndex Nothing = 9
+            fixIndex (Just a) = a
+
+            wsOrder :: [WorkspaceId]
+            wsOrder = [wsmain, wstex, wscode, wsgame, wswww, wscom, wsmedia, wssys, wsmin]
+
+            wsIndex :: WorkspaceId -> Int
+            wsIndex "min" = 10
+            wsIndex a = fixIndex $ flip elemIndex wsOrder a
+
+            wsCompare :: X WorkspaceCompare
+            wsCompare = return (compare `on` wsIndex)
+
+            workspaceToIcons :: String -> String
+            workspaceToIcons "main"  = "<fn=1>\xf0f2</fn>" -- 
+            workspaceToIcons "latex" = "<fn=1>\xf70e</fn>" -- 
+            workspaceToIcons "code"  = "<fn=1>\xf121</fn>" -- 
+            workspaceToIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
+            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" --  
+            workspaceToIcons "com"   = "<fn=1>\xf075</fn>" -- 
+            workspaceToIcons "media" = "<fn=2>\xf3b5</fn>" -- 
+            workspaceToIcons "sys"   = "<fn=1>\xf120</fn>" -- 
+            workspaceToIcons "min"   = "<fn=1>\xf328</fn>" -- 
+            workspaceToIcons _       = "<fn=1>\xf714</fn>" -- 
+
+            clickableWorkspaces :: String -> String
+            clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
 
 ----------------------------------------------------------------------------}}}
 -- Actions                                                                  {{{
@@ -623,7 +629,7 @@ myXmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
 myXmobarCreator (XMonad.S sid) = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
     XMonad.trace (show t ++ ": XMonad myXmobarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("~/bin/xmobar/xmobar -x " ++ show sid ++ " ~/.xmonad/xmobar.hs")
+    XMonad.Util.Run.spawnPipe ("~/.config/xmobar/xmobar -x " ++ show sid ++ " ~/.xmonad/xmobar.hs")
 
 myXmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
 myXmobarDestroyer = do

@@ -1,4 +1,4 @@
-## Last Modified: Thu 23 Apr 2020 01:54:27 AM EDT
+## Last Modified: Thu 23 Apr 2020 09:08:31 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -239,7 +239,7 @@ fi
 # xmobar
 if check xmobar; then
 	IF="$DOTFILES/xmobar"
-	OF="$HOME/bin/xmobar"
+	OF="$CONFIG/xmobar"
 	cdir $OF
 	
 	if [ ! -L $OF/xmobar.hs ]; then
