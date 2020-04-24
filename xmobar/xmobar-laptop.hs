@@ -42,7 +42,7 @@ config = defaultConfig {
 											 , "--on-icon-pattern"   , "<fn=1>\xf0e7</fn>" --
 											 , "--idle-icon-pattern" , "<fn=1>\xf0e9</fn>" --
 											 , "-A" , "5"
-											 , "-a" , "systemctl hibernate"
+											 , "-a" , "notify-send -u critical -a Battery \"Battery Low\" \"Your computer will turn of soon\""
 											 ] 50
 										, Run $ Date "%a %d %b %H:%M" "date" 20
 										, Run $ Volume "default" "Master" [
