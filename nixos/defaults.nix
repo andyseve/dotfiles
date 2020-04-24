@@ -72,6 +72,7 @@ in
 	};
 	nixpkgs.overlays = [ allHieOverlay unstableOverlay ];
 
+  environment.enableDebugInfo = true;
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
     # Drivers
@@ -115,7 +116,7 @@ in
 		# Dev Tools
 		gnumake cmake
 		gcc clang llvm ccls
-		(python3.withPackages # installing python3 with packages
+    (python3.withPackages # installing python3 with packages
 			(ps: with ps; [
 				pip virtualenv
 				pylint
@@ -134,6 +135,7 @@ in
 		unstable.haskellPackages.hoogle
 		all-hies.latest
 		openjdk nodejs
+    gdb
 
 		# Latex
 		texlive.combined.scheme-full

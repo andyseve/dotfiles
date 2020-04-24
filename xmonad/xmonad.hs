@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 23 Apr 2020 09:35:24 PM EDT
+-- Last Modified: Thu 23 Apr 2020 10:20:45 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -440,7 +440,7 @@ myKeys conf = let
     , ("<XF86MonBrightnessDown>"   , addName "brightness -5"  $ spawn "light -U 5")
     , ("<XF86MonBrightnessUp>"     , addName "brightness +5"  $ spawn "light -A 5")
     , ("M-<XF86MonBrightnessDown>" , addName "brightness min" $ spawn "light -S 5")
-    , ("M-<XF86MonBrightnessUp>"   , addName "brightness up"  $ spawn "light -S 100")
+    , ("M-<XF86MonBrightnessUp>"   , addName "brightness max"  $ spawn "light -S 100")
     -- screenshots
     , ("<Print>"                 , addName "screenshot window"           $ spawn "scrot -u \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
     , ("M-<Print>"               , addName "screenshot fullscreen"       $ spawn "scrot \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
@@ -451,8 +451,7 @@ myKeys conf = let
     -- Launchers                                                            {{{
     ---------------------------------------------------------------------------
     subKeys "launchers"
-    [
-      ("M-p"          , addName "launcher"      $ spawn myLauncher)
+    [ ("M-p"          , addName "launcher"      $ spawn myLauncher)
     , ("M-S-p"        , addName "alt-launcher"  $ spawn myAltLauncher)
     , ("M-/"          , addName "window search" $ spawn myWinSearch)
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal)
@@ -474,8 +473,7 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "Windows"
     (
-    [
-      ("M-<Backspace>" , addName "kill" kill)
+    [ ("M-<Backspace>" , addName "kill" kill)
     , ("M-C-<Backspace>", addName "kill all" $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll)
     , ("M-m" , addName "Focus Master" $ windows W.focusMaster)
     , ("M-n" , addName "Focus Urgent" $ focusUrgent)
@@ -497,8 +495,7 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "workspaces"
     (
-    [
-      ("M-' M-n", addName "next non-empty workspace" $ nextHidWS)
+    [ ("M-' M-n", addName "next non-empty workspace" $ nextHidWS)
     , ("M-' M-p", addName "prev non-empty workspace" $ prevHidWS)
     , ("M-' M-'", addName "select workspace" $ selectWorkspace myPromptTheme)
     ]
@@ -510,8 +507,7 @@ myKeys conf = let
     -- Layouts and SubLayouts                                               {{{
     ---------------------------------------------------------------------------
     subKeys "layouts"
-    [
-      ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout)
+    [ ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout)
     , ("M-S-<Tab>", addName "cycle sublayout"           $ toSubl NextLayout)
     , ("M-C-<Tab>", addName "reset layout"              $ setLayout $ XMonad.layoutHook conf)
     , ("M-t",       addName "toggle floating window"    $ withFocused toggleFloat)
