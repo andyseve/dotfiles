@@ -1,4 +1,4 @@
-## Last Modified: Thu 16 Apr 2020 06:59:21 PM EDT
+## Last Modified: Thu 23 Apr 2020 01:54:27 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -294,6 +294,17 @@ if check zathura; then
 	link $IF/zathurarc $OF/zathurarc
 else
 	nope zathura
+fi
+
+# dunst
+if check dunst; then
+	IF="$DOTFILES/dunst"
+	OF="$HOME/.config/dunst"
+	cdir $OF
+
+	link $IF/dunstrc $OF/dunstrc
+else
+	nope dunst
 fi
 
 ################################################################################

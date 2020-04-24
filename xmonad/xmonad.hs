@@ -1,12 +1,18 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 21 Apr 2020 12:22:48 PM EDT
+-- Last Modified: Thu 23 Apr 2020 05:33:20 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
     {-
-
+    * Add urgency hook
+    * Add manage hook, moving applications around
+    * scratchpads
+    * restructure xmobar
+    * xmobar clickable workspaces
+    * xmobar music
+    * xmobar weather
     -}
 ----------------------------------------------------------------------------}}}
 -- Modules                                                                  {{{
@@ -69,7 +75,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll
 -- Util
 import XMonad.Util.EZConfig
-import XMonad.Util.NamedActions
+import XMonad.Util.NamedActions as NA
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.Scratchpad
@@ -82,14 +88,14 @@ import XMonad.Util.WorkspaceCompare
 
 main = do
     xmonad
-        $ withNavigation2DConfig myNav2DConf
-        $ ewmh
-        $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
-        $ myConfig
+         $ withNavigation2DConfig myNav2DConf
+         $ ewmh
+         $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         $ myConfig
 
 
 myConfig = def
-    { borderWidth        = border
+    { borderWidth        = baseBorder
     , clickJustFocuses   = myClickJustFocuses
     , focusFollowsMouse  = myFocusFollowMouse
     , normalBorderColor  = myNormalBorderColor
@@ -217,9 +223,16 @@ black   = "#000000"
 -- sizes
 gap    = 4
 topbar = 4
-border = 0
+baseBorder = 0
 prompt = 20
 status = 20
+
+myBorder = Border
+    { top = gap
+    , bottom = gap
+    , right = gap
+    , left = gap
+    }
 
 myNormalBorderColor  = base02
 myFocusedBorderColor = active
@@ -295,17 +308,14 @@ myShowWNameTheme = def
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
                      $ fullScreenToggle
-                     $ mirrorToggle
-                     $ flex ||| tabs
+                     $ tall ||| tabs
     where
             showWorkspaceName = showWName' myShowWNameTheme
 
             fullScreenToggle = mkToggle (single FULL)
-            mirrorToggle = mkToggle (single MIRROR)
             addTopBar = noFrillsDeco shrinkText topBarTheme
 
-            mySpacing = spacing gap
-            myGaps = gaps [(U,gap),(D,gap),(L,gap),(R,gap)]
+            mySpacing = spacingRaw True myBorder False myBorder True
 
             suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
             -----------------------------------------------------------------------
@@ -329,16 +339,15 @@ myLayoutHook = showWorkspaceName
                     -- |                  |                 |
                     -- |                  |                 |
                     -- --------------------------------------
-            flex = named "flex"
+            tall = named "tall"
                      $ avoidStruts
                      -- Need windowNavigation to merge windows
                      $ windowNavigation
                      $ addTopBar
                      $ addTabs shrinkText myTabTheme
                      $ subLayout [] (Simplest ||| Accordion)
-                     $ myGaps
                      $ mySpacing
-                     $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [])
+                     $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [2, 1])
                  ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (2/3) [])
 
 ----------------------------------------------------------------------------}}}
@@ -356,10 +365,6 @@ myNav2DConf = def
                            , ("tabs", fullScreenRect)
                            ]
     }
-
--- zip commands
-zipM m nm ks as f = zipWith (\k d -> (m++k, addName nm $ f d)) ks as
-zipM' m nm ks as f b = zipWith (\k d -> (m++k, addName nm $ f d b)) ks as
 
 -- workspace navigation functions -- https://github.com/altercation
 -- any workspace but scratchpad
@@ -390,17 +395,7 @@ toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 then W.sink w s
                 else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
 
-
-wsIndices = [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
-wsKeys = map show $ wsIndices
-screenKeys = ["q","w"]
-dirKeys = ["j","k","h","l"]
-arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
-fulldirKeys = ["j", "<D>", "k", "<U>", "h", "<L>", "l", "<R>"]
-fulldirs = [D,D,U,U,L,L,R,R]
-dirs = [D,U,L,R]
-rstrdirs = [L,R]
-
+                
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/blob/master/.xmonad/lib/XMonad/Config/A00001.hs
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "show keybindings" $ io $ do
@@ -411,24 +406,38 @@ showKeybindings x = addName "show keybindings" $ io $ do
 
 myKeys conf = let
     subKeys str ks = subtitle str : mkNamedKeymap conf ks
+
+    wsIndices = [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
+    wsKeys = map show $ wsIndices
+    screenKeys = ["q","w"]
+    dirKeys = ["j","k","h","l"]
+    arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
+    fulldirKeys = ["j", "<D>", "k", "<U>", "h", "<L>", "l", "<R>"]
+    fulldirs = [D,D,U,U,L,L,R,R]
+    dirs = [D,U,L,R]
+    rstrdirs = [L,R]
+
+    -- zip commands
+    zipM m nm ks as f = zipWith (\k d -> (m++k, addName nm $ f d)) ks as
+    zipM' m nm ks as f b = zipWith (\k d -> (m++k, addName nm $ f d b)) ks as
+
+
     in
     ---------------------------------------------------------------------------
-    -- System / Utilities
+    -- System / Utilities                                                   {{{
     ---------------------------------------------------------------------------
     subKeys "system"
     [ 
       ("M-x M-r"           , addName "restart XMonad"           $ spawn "xmonad --restart")
     , ("M-x M-S-r"         , addName "rebuild & restart XMonad" $ spawn "xmonad --recompile && xmonad --restart")
     , ("M-x M-e"           , addName "edit xmonad.hs"           $ spawn (myEditor ++ " ~/.xmonad/xmonad.hs"))
-    , ("M-x M-l"           , addName "lock screen"              $ spawn "slimlock")
-    , ("M1-C-l"            , addName "lock screen"              $ spawn "slimlock")
-    , ("M-F1"              , addName "show keybindings"         $ return ())
-    , ("M-<XF86AudioMute>" , addName "show keybindings"         $ return ())
+    , ("M-x M-l"           , addName "lock screen"              $ spawn "physlock")
+    , ("M1-C-l"            , addName "lock screen"              $ spawn "physlock")
     , ("M-x M-q"           , addName "Quit XMonad"              $ confirmPrompt hotPromptTheme "Quit XMonad"      $ io (exitWith ExitSuccess))
     ] ^++^
 
-    ---------------------------------------------------------------------------
-    -- Actions                                                               
+    ------------------------------------------------------------------------}}}
+    -- Actions                                                              {{{
     ---------------------------------------------------------------------------
     subKeys "actions"
     [
@@ -450,8 +459,8 @@ myKeys conf = let
     , ("M-C-<Print>"             , addName "screenshot region"           $ spawn "sleep 0.5; scrot -s \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'") --sleep 0.5 is to avoid keypress cancel
     ] ^++^
 
-    ---------------------------------------------------------------------------
-    -- Launchers
+    ------------------------------------------------------------------------}}}
+    -- Launchers                                                            {{{
     ---------------------------------------------------------------------------
     subKeys "launchers"
     [
@@ -472,8 +481,8 @@ myKeys conf = let
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal)
     , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal)
     ] ^++^
-    ---------------------------------------------------------------------------
-    -- Windows  
+    ------------------------------------------------------------------------}}}
+    -- Windows                                                              {{{
     ---------------------------------------------------------------------------
     subKeys "Windows"
     (
@@ -486,16 +495,17 @@ myKeys conf = let
     , ("M-i" , addName "Tabs U" $ onGroup W.focusUp')
     , ("M-g" , addName "Unmerge" $ withFocused (sendMessage . UnMerge))
     ] 
+
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
     ++ zipM  "M-C-"   "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
-    ++ zipM  "M-w M-" "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
+    -- ++ zipM  "M-w M-" "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
     ++ zipM' "M-"     "navigate screen"           screenKeys  rstrdirs screenGo True
     ++ zipM' "M-S-"   "move window to screen"     screenKeys  rstrdirs windowToScreen True
     ++ zipM' "M-C-"   "Swap workspaces to screen" screenKeys  rstrdirs screenSwap True
     ) ^++^
-    ---------------------------------------------------------------------------
-    -- Workspaces
+    ------------------------------------------------------------------------}}}
+    -- Workspaces                                                           {{{
     ---------------------------------------------------------------------------
     subKeys "workspaces"
     (
@@ -508,8 +518,8 @@ myKeys conf = let
     ++ zipM "M-S-"   "move window to workspace" wsKeys [0..] (withNthWorkspace W.shift)
     ++ zipM "M-y M-" "copy window to workspace" wsKeys [0..] (withNthWorkspace copy)
     ) ^++^
-    ---------------------------------------------------------------------------
-    -- Layouts and SubLayouts
+    ------------------------------------------------------------------------}}}
+    -- Layouts and SubLayouts                                               {{{
     ---------------------------------------------------------------------------
     subKeys "layouts"
     [
@@ -526,6 +536,9 @@ myKeys conf = let
     , ("M-' M-j",   addName "Shrink master"            $ sendMessage (Shrink))
     , ("M-' M-k",   addName "Expand master"            $ sendMessage (Expand))
     ]
+    ------------------------------------------------------------------------}}}
+
+
 ----------------------------------------------------------------------------}}}
 -- Startup                                                                  {{{
 -------------------------------------------------------------------------------

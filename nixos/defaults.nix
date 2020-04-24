@@ -120,7 +120,6 @@ in
 				pip virtualenv
 				pylint
 				numpy scipy matplotlib
-        opencv4 # computer vision library
         jupyter notebook
         mysql-connector
 			])
@@ -129,6 +128,7 @@ in
 			(haskellPackages: with haskellPackages; [
 				xmonad xmonad-contrib xmonad-extras
 				xmobar
+        hoogle
 			])
 		)
 		unstable.haskellPackages.hoogle
