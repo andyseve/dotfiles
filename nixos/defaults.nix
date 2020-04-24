@@ -110,7 +110,7 @@ in
 		vim neovim emacs26-nox
 		w3m
 		youtube-dl
-		taskwarrior timewarrior
+		taskwarrior timewarrior tasksh
 
 		
 		# Dev Tools

@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 23 Apr 2020 10:20:45 PM EDT
+-- Last Modified: Fri 24 Apr 2020 07:14:39 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -35,6 +35,7 @@ import XMonad.Layout.Accordion
 import XMonad.Layout.Decoration
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
+import XMonad.Layout.ImageButtonDecoration
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.Named
@@ -43,6 +44,7 @@ import XMonad.Layout.LayoutBuilder
 import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.PerScreen -- Screen Functionalities
 import XMonad.Layout.PerWorkspace -- Workspace specific layouts
+import XMonad.Layout.PositionStoreFloat -- Position remebering floats
 import XMonad.Layout.Renamed -- for modifying layout names
 import XMonad.Layout.ResizableTile -- Resizable Horizontal Border
 import XMonad.Layout.ShowWName
@@ -51,6 +53,7 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing -- Smart space around windows
 import XMonad.Layout.SubLayouts -- Layouts inside windows
 import XMonad.Layout.Tabbed
+import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
@@ -61,6 +64,7 @@ import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.PositionStoreHooks
 import XMonad.Hooks.UrgencyHook
 -- Actions
 import XMonad.Actions.Commands
@@ -74,6 +78,7 @@ import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll
 -- Util
 import XMonad.Util.EZConfig
+import XMonad.Util.Image
 import XMonad.Util.NamedActions as NA
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
@@ -88,8 +93,8 @@ import XMonad.Util.WorkspaceCompare
 main = do
     xmonad
          $ withNavigation2DConfig myNav2DConf
-         $ ewmh
          $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         $ ewmh
          $ myConfig
 
 
@@ -137,23 +142,27 @@ myAltTerminal = "rxvt_unicode"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome-stable"
 myLauncher    = "rofi -matching fuzzy -show run -modi drun,run --disable-history -sidebar-mode -show-icon"
-myAltLauncher = "dmenu_run"
+myAltLauncher = "rofi -matching fuzzy -show drun -modi drun,run --disable-history -sidebar-mode -show-icon"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -matching fuzzy -show window -modi window,windowcd -sidebar-mode -show-icon"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
 
+----------------------------------------------------------------------------}}}
+-- Scratchpads                                                              {{{
+-------------------------------------------------------------------------------
 
-
-scratchpads = [ 
-                NS "htop" spawnHtop findHtop manageHtop
-              , NS "weather" spawnWeather findWeather manageWeather
-              , NS "task" spawnTask findTask manageTask
+myScratchpads = [ 
+                NS "htop"  spawnHtop findHtop manageHtop
+              , NS "task"  spawnTask findTask manageTask
+              , NS "mixer" spawnMixer findMixer managerMixer
               ]
 
     where
-        spawnHtop  = "alacritty --class=scratch-htop -e htop"
-        findHtop   = resource =? "scratch-htop"
+        hasName = stringProperty "WM_NAME"
+
+        spawnHtop  = myTerminal ++ " --class=htop -e htop"
+        findHtop   = resource =? "htop"
         manageHtop = customFloating $ W.RationalRect x y w h
             where
                 w, h, x, y :: Rational
@@ -161,8 +170,9 @@ scratchpads = [
                 w = 1/2
                 x = (1-w)/2
                 y = (1-h)/2
-        spawnWeather  = "alacritty --class=scratch-weather -e weather"
-        findWeather   = resource =? "scratch-weather"
+
+        spawnWeather  = myTerminal ++ "--class=weather -e weather"
+        findWeather   = resource =? "weather"
         manageWeather = customFloating $ W.RationalRect x y w h
             where
                 w, h, x, y :: Rational
@@ -170,8 +180,9 @@ scratchpads = [
                 w = 1/2
                 x = (1-w)/2
                 y = (1-h)/2
-        spawnTask = "alacritty --class=scratch-task -e task"
-        findTask = resource =? "scratch-task"
+
+        spawnTask = myTerminal ++ " --class=task -e tasksh"
+        findTask = resource =? "task"
         manageTask = customFloating $ W.RationalRect x y w h
             where 
                 w, h, x, y :: Rational
@@ -179,7 +190,16 @@ scratchpads = [
                 w = 1/2
                 x = (1 - w)/2
                 y = (1 - h)/2
-        hasName = stringProperty "WM_NAME"
+
+        spawnMixer = myTerminal ++ " --class=volume -e alsamixer"
+        findMixer = resource =? "volume" <||> title=? "alsamixer"
+        managerMixer = customFloating $ W.RationalRect x y w h
+            where
+                w, h, x, y :: Rational
+                h = 1/3
+                w = 1/2
+                x = (1-w)
+                y = 0
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -208,19 +228,7 @@ green   = "#859900"
 white   = "#FFFFFF"
 black   = "#000000"
 
--- sizes
-gap    = 4
-topbar = 4
-baseBorder = 0
-prompt = 20
-status = 20
 
-myBorder = Border
-    { top = gap
-    , bottom = gap
-    , right = gap
-    , left = gap
-    }
 
 myNormalBorderColor  = base02
 myFocusedBorderColor = active
@@ -231,13 +239,24 @@ inactive     = base02
 focuscolor   = blue
 unfocuscolor = base02
 
+-- fonts
+
 mySmallFont = "xft:Fira Code:style=Regular:size=6:hinting=true"
 myFont      = "xft:Fira Code:style=Regular:size=8:hinting=true"
 myBigFont   = "xft:Fira Code:style=Regular:size=10:hinting=true"
 
+-- sizes
+gap    = 4
+topbar = 4
+toptitle = 22
+baseBorder = 0
+prompt = 20
+status = 20
+myBorder = Border{ top = gap, bottom = gap , right = gap , left = gap }
+
 -- this is a "fake title" used as a highlight bar in lieu of full borders
--- (I find this a cleaner and less visually intrusive solution)
-topBarTheme = def
+myTopBarTheme :: Theme
+myTopBarTheme = def
     { fontName              = myFont
     , inactiveBorderColor   = base03
     , inactiveColor         = base03
@@ -250,14 +269,18 @@ topBarTheme = def
     , decoHeight            = topbar
     }
 
+myTabTheme :: Theme
 myTabTheme = def
     { fontName              = myFont
     , activeColor           = active
-    , inactiveColor         = base02
+    , inactiveColor         = base03
+    , urgentColor           = red
     , activeBorderColor     = active
-    , inactiveBorderColor   = base02
-    , activeTextColor       = base03
-    , inactiveTextColor     = base00
+    , inactiveBorderColor   = base03
+    , urgentBorderColor     = red
+    , activeTextColor       = active
+    , inactiveTextColor     = base03
+    , urgentTextColor       = red
     }
 
 myPromptTheme = def
@@ -291,52 +314,148 @@ myShowWNameTheme = def
     , swn_color             = "#FFFFFF"
     }
 
+myButtonTheme :: Theme
+myButtonTheme = defaultThemeWithImageButtons
+    { fontName              = myFont
+    , activeColor           = green
+    , inactiveColor         = base03
+    , urgentColor           = red
+    , activeBorderColor     = base03
+    , inactiveBorderColor   = base1
+    , urgentBorderColor     = base1
+    , activeTextColor       = base03
+    , inactiveTextColor     = base1
+    , urgentTextColor       = base1
+    , decoHeight            = toptitle
+    , windowTitleIcons      = [ (menuButton , CenterLeft   3)
+                              , (closeButton, CenterRight  3)
+                              , (maxiButton , CenterRight 18)
+                              , (miniButton , CenterRight 33)
+                              ]
+    }
+    where  -- Button definitions                                          --{{{
+        menuButton'  :: [[Int]]
+        menuButton'  =  [[0,0,0,0,0,0,0,0,0,0],
+                         [0,1,0,0,0,0,0,0,1,0],
+                         [0,0,1,1,0,0,1,1,0,0],
+                         [0,0,1,0,0,0,0,1,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,1,0,0,0,0,1,0,0],
+                         [0,0,1,1,0,0,1,1,0,0],
+                         [0,1,0,0,0,0,0,0,1,0],
+                         [0,0,0,0,0,0,0,0,0,0]] 
+        miniButton'  :: [[Int]]
+        miniButton'  =  [[0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0],
+                         [0,0,0,0,0,0,0,0,0,0]]
+        maxiButton'  :: [[Int]]
+        maxiButton'  =  [[0,0,0,0,0,0,0,0,0,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,1,1,1,1,1,1,1,1,0],
+                         [0,0,0,0,0,0,0,0,0,0]]
+        closeButton' :: [[Int]] 
+        closeButton' =  [[0,0,0,0,0,0,0,0,0,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,1,1,1,0,0,1,1,1,0],
+                         [0,0,1,1,1,1,1,1,0,0],
+                         [0,0,0,1,1,1,1,0,0,0],
+                         [0,0,0,1,1,1,1,0,0,0],
+                         [0,0,1,1,1,1,1,1,0,0],
+                         [0,1,1,1,0,0,1,1,1,0],
+                         [0,1,1,0,0,0,0,1,1,0],
+                         [0,0,0,0,0,0,0,0,0,0]]
+        convertToBool :: [Int] -> [Bool]
+        convertToBool = map (\x -> x == 1)
+        menuButton  = map convertToBool menuButton'
+        miniButton  = map convertToBool miniButton'
+        maxiButton  = map convertToBool maxiButton'
+        closeButton = map convertToBool closeButton'
+        --------------------------------------------------------------------}}}
+
 ----------------------------------------------------------------------------}}}
 -- Layouts                                                                  {{{
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
-                     $ fullScreenToggle
-                     $ tall ||| tabs
+    $ fullScreenToggle
+    $ onWorkspace wsgame float
+    $ onWorkspace wsmedia ( float ||| tabs )
+    $ onWorkspace wscom ( float ||| tall )
+    $ ( tall ||| tripane )
     where
-            showWorkspaceName = showWName' myShowWNameTheme
+        showWorkspaceName = showWName' myShowWNameTheme
 
-            fullScreenToggle = mkToggle (single FULL)
-            addTopBar = noFrillsDeco shrinkText topBarTheme
+        fullScreenToggle = mkToggle (single FULL)
+        addTopBar = noFrillsDeco shrinkText myTopBarTheme
 
-            mySpacing = spacingRaw True myBorder False myBorder True
+        mySpacing = spacingRaw True myBorder False myBorder True
 
-            suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
-            -----------------------------------------------------------------------
-            -- Tabs Layout                                                       --
-            -----------------------------------------------------------------------
-            tabs = named "tabs"
-                     $ avoidStruts
-                     $ addTopBar
-                     $ addTabs shrinkText myTabTheme
-                     $ Simplest
-            -----------------------------------------------------------------------
-            -- Flex                                                              --
-            -----------------------------------------------------------------------
-                    -- --------------------------------------
-                    -- |                  |                 |
-                    -- |                  |      Tabs       |
-                    -- |                  |                 |
-                    -- |      Master      | --------------- |
-                    -- |                  |                 |
-                    -- |                  |      Tabs       |
-                    -- |                  |                 |
-                    -- |                  |                 |
-                    -- --------------------------------------
-            tall = named "tall"
-                     $ avoidStruts
-                     -- Need windowNavigation to merge windows
-                     $ windowNavigation
-                     $ addTopBar
-                     $ addTabs shrinkText myTabTheme
-                     $ subLayout [] (Simplest ||| Accordion)
-                     $ mySpacing
-                     $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [2, 1])
-                 ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (2/3) [])
+        suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
+        -----------------------------------------------------------------------
+        -- Tabs Layout                                                       --
+        -----------------------------------------------------------------------
+        tabs = named "tabs"
+            $ avoidStruts
+            $ addTopBar
+            $ addTabs shrinkText myTabTheme
+            $ Simplest
+        -----------------------------------------------------------------------
+        -- Two Columns Layout                                                --
+        -----------------------------------------------------------------------
+            -- --------------------------------------
+            -- |                  |                 |
+            -- |                  |      Tabs       |
+            -- |                  |                 |
+            -- |      Master      | --------------- |
+            -- |                  |                 |
+            -- |                  |      Tabs       |
+            -- |                  |                 |
+            -- |                  |                 |
+            -- --------------------------------------
+        tall = named "tall"
+            $ avoidStruts
+            -- Need windowNavigation to merge windows
+            $ windowNavigation
+            $ addTopBar
+            $ addTabs shrinkText myTabTheme
+            $ mySpacing
+            $ subLayout [] (Simplest ||| Accordion)
+            $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [2, 1])
+            ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (3/5) [])
+
+        -----------------------------------------------------------------------
+        -- Three Columns Layout
+        -----------------------------------------------------------------------
+        tripane = named "tri"
+            $ avoidStruts
+            $ windowNavigation
+            $ addTopBar
+            $ addTabs shrinkText myTabTheme
+            $ mySpacing
+            $ subLayout [] (Simplest ||| Accordion)
+            $ (suffixed "mid" $ ThreeColMid 1 (3/100) (1/2))
+            ||| (suffixed "left" $ ThreeCol 1 (3/100) (1/2))
+
+        -----------------------------------------------------------------------
+        -- Three Columns Layout
+        -----------------------------------------------------------------------
+        float = named "float"
+            $ avoidStruts
+            $ imageButtonDeco shrinkText myButtonTheme 
+            $ positionStoreFloat
 
 ----------------------------------------------------------------------------}}}
 -- Bindings                                                                 {{{
@@ -485,7 +604,6 @@ myKeys conf = let
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
     ++ zipM  "M-C-"   "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
-    -- ++ zipM  "M-w M-" "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
     ++ zipM' "M-"     "navigate screen"           screenKeys  rstrdirs screenGo True
     ++ zipM' "M-S-"   "move window to screen"     screenKeys  rstrdirs windowToScreen True
     ++ zipM' "M-C-"   "Swap workspaces to screen" screenKeys  rstrdirs screenSwap True
@@ -519,18 +637,25 @@ myKeys conf = let
     , ("M-' M-.",   addName "Increase master windows"  $ sendMessage (IncMasterN 1))
     , ("M-' M-j",   addName "Shrink master"            $ sendMessage (Shrink))
     , ("M-' M-k",   addName "Expand master"            $ sendMessage (Expand))
+    ] ^++^
+    ------------------------------------------------------------------------}}}
+    -- Scratchpads                                                          {{{
+    ---------------------------------------------------------------------------
+    subKeys "scratchpads"
+    [ ("M-s M-p", addName "htop" $ namedScratchpadAction myScratchpads "htop")
+    , ("M-s M-t", addName "task" $ namedScratchpadAction myScratchpads "terminal")
+    , ("M-s M-v", addName "mixer" $ namedScratchpadAction myScratchpads "mixer")
     ]
     ------------------------------------------------------------------------}}}
 
-
 ----------------------------------------------------------------------------}}}
--- Startup                                                                  {{{
+-- Startup Hook                                                             {{{
 -------------------------------------------------------------------------------
 myStartupHook = do
+    spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
     spawn "~/.config/fehbg" -- feh + xrandr script
     spawnOnce "compton" -- TODO: configure settings
     spawnOnce "dunst" -- TODO: configure theme
-    spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
@@ -545,7 +670,7 @@ restartXmonad =
     spawn "xmoand --restart"
 
 ----------------------------------------------------------------------------}}}
--- Log                                                                      {{{
+-- Log Hook                                                                 {{{
 -------------------------------------------------------------------------------
 myLogHook = do
     -- LogHook for multiple screens
@@ -598,38 +723,51 @@ myXmobarLogPP = def
             clickableWorkspaces :: String -> String
             clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
 
-----------------------------------------------------------------------------}}}
--- Actions                                                                  {{{
--------------------------------------------------------------------------------
-myManageHook :: ManageHook
-myManageHook = manageDocks
-
--------------------------------------------------------------------------------
--- New Window Actions                                                       
--------------------------------------------------------------------------------
----------------------------------------------------------------------------
--- X Event Actions
----------------------------------------------------------------------------
-
-myHandleEventHook = docksEventHook
-                -- Create a Status bar for each screen
-                <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer
-
 -- Defining barcreator and destroyer
-myBarCreator   = myXmobarCreator
-myBarDestroyer = myXmobarDestroyer
+myBarCreator   = xmobarCreator
+myBarDestroyer = xmobarDestroyer
 
 -- Xmobar Creator and Destroyer using dynamic bars
-myXmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
-myXmobarCreator (XMonad.S sid) = do
+xmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
+xmobarCreator (XMonad.S sid) = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad myXmobarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("~/.config/xmobar/xmobar -x " ++ show sid ++ " ~/.xmonad/xmobar.hs")
+    XMonad.trace (show t ++ ": XMonad xmobarCreator " ++ show sid) --logging
+    XMonad.Util.Run.spawnPipe ("~/.config/xmobar/xmobar -x " ++ show sid)
 
-myXmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
-myXmobarDestroyer = do
+xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
+xmobarDestroyer = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad myXmobarDestroyer") -- logging
+    XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
+----------------------------------------------------------------------------}}}
+-- Manage Hook                                                              {{{
+-------------------------------------------------------------------------------
+myManageHook :: ManageHook
+myManageHook = myCustomManageHook
+    <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
+    <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
+    <+> XMonad.Layout.Fullscreen.fullscreenManageHook -- Fullscreen managehook
+		<+> positionStoreManageHook (Just defaultThemeWithImageButtons)
+    -- <+> manageHook myConfig
+
+myCustomManageHook :: ManageHook
+myCustomManageHook = composeAll . concat $
+    [
+        -- Fullscreen support
+        [ isFullscreen --> doFullFloat ]
+    ,   [ isDialog --> doCenterFloat ]
+    ]
+
+----------------------------------------------------------------------------}}}
+-- Event Hook                                                               {{{
+-------------------------------------------------------------------------------
+
+myHandleEventHook =
+    XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
+    <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
+    <+> ewmhDesktopsEventHook
+    <+> XMonad.Layout.Fullscreen.fullscreenEventHook -- Full screen event hook
+		<+> positionStoreEventHook
+    -- <+> handleEventHook myConfig
 
 ----------------------------------------------------------------------------}}}
 
