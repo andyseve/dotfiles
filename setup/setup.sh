@@ -1,4 +1,4 @@
-## Last Modified: Thu 16 Apr 2020 06:59:21 PM EDT
+## Last Modified: Thu 23 Apr 2020 09:08:31 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -239,7 +239,7 @@ fi
 # xmobar
 if check xmobar; then
 	IF="$DOTFILES/xmobar"
-	OF="$HOME/bin/xmobar"
+	OF="$CONFIG/xmobar"
 	cdir $OF
 	
 	if [ ! -L $OF/xmobar.hs ]; then
@@ -294,6 +294,17 @@ if check zathura; then
 	link $IF/zathurarc $OF/zathurarc
 else
 	nope zathura
+fi
+
+# dunst
+if check dunst; then
+	IF="$DOTFILES/dunst"
+	OF="$HOME/.config/dunst"
+	cdir $OF
+
+	link $IF/dunstrc $OF/dunstrc
+else
+	nope dunst
 fi
 
 ################################################################################

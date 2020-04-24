@@ -12,9 +12,9 @@ config = defaultConfig {
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 												]
 			 , iconRoot= ".xmonad/icons"
-       , bgColor = "#002b36"
+       , bgColor = "#000000"
        , fgColor = "#93a1a1"
-       , alpha = 0
+       , alpha = 150
        , position = Top
        , lowerOnStart = True
        , hideOnStart = False
@@ -65,11 +65,11 @@ config = defaultConfig {
 																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
 																	] 10
 										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
-										, Run $ StdinReader
+										, Run $ UnsafeStdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-			 , template = " %StdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
+			 , template = " %UnsafeStdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
        }
 
 main :: IO ()
