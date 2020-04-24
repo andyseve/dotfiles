@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 09 Apr 2020 12:21:42 AM EDT
+" Last Updated: Thu 23 Apr 2020 09:34:58 PM EDT
 
 set nocompatible
 
@@ -157,7 +157,7 @@ set nocompatible
 "                                                                           }}}
 " # Fold Settings                                                           {{{
   set foldenable
-  set foldlevelstart=3
+	set foldlevel=0
 
 "                                                                           }}}
 " # Plugin Configurations and Bindings                                      {{{

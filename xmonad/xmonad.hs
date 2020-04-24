@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 23 Apr 2020 09:11:04 PM EDT
+-- Last Modified: Thu 23 Apr 2020 09:35:24 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -10,7 +10,6 @@
     * Add manage hook, moving applications around
     * scratchpads
     * restructure xmobar
-    * xmobar clickable workspaces
     * xmobar music
     * xmobar weather
     -}
@@ -638,4 +637,4 @@ myXmobarDestroyer = do
 
 ----------------------------------------------------------------------------}}}
 
--- vim: ft=haskell:foldmethod=marker:foldlevel=4:expandtab:ts=4:sts=4:shiftwidth=4
+-- vim: ft=haskell:foldmethod=marker:expandtab:ts=4:sts=4:shiftwidth=4

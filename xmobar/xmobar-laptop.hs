@@ -12,9 +12,9 @@ config = defaultConfig {
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 												]
 			 , iconRoot= ".xmonad/icons"
-       , bgColor = "#002b36"
+       , bgColor = "#000000"
        , fgColor = "#93a1a1"
-       , alpha = 0
+       , alpha = 150
        , position = Top
        , lowerOnStart = True
        , hideOnStart = False
