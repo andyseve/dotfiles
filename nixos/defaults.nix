@@ -111,6 +111,7 @@ in
 		w3m
 		youtube-dl
 		taskwarrior timewarrior tasksh
+    # mopidy mopidy-gmusic # install failing
 
 		
 		# Dev Tools
@@ -125,6 +126,7 @@ in
         mysql-connector
 			])
 		)
+    pypi2nix
 		(unstable.haskellPackages.ghcWithPackages # installing ghc with packges
 			(haskellPackages: with haskellPackages; [
 				xmonad xmonad-contrib xmonad-extras
