@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 24 Apr 2020 07:14:39 PM EDT
+-- Last Modified: Sat 25 Apr 2020 02:44:48 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -672,7 +672,7 @@ restartXmonad =
 ----------------------------------------------------------------------------}}}
 -- Log Hook                                                                 {{{
 -------------------------------------------------------------------------------
-myLogHook = do
+myLogHook =
     -- LogHook for multiple screens
     -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
@@ -746,8 +746,8 @@ myManageHook = myCustomManageHook
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook -- Fullscreen managehook
-		<+> positionStoreManageHook (Just defaultThemeWithImageButtons)
-    -- <+> manageHook myConfig
+    <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
+    <+> manageHook def
 
 myCustomManageHook :: ManageHook
 myCustomManageHook = composeAll . concat $
@@ -766,8 +766,8 @@ myHandleEventHook =
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> ewmhDesktopsEventHook
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook -- Full screen event hook
-		<+> positionStoreEventHook
-    -- <+> handleEventHook myConfig
+	<+> positionStoreEventHook
+    <+> handleEventHook def
 
 ----------------------------------------------------------------------------}}}
 
