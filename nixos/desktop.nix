@@ -46,7 +46,7 @@
     geoclue2                         # location
 
 		# Desktop Programs
-		firefox google-chrome vivaldi
+		firefox google-chrome 
 		vlc
 		zathura
     vimHugeX emacs
@@ -67,7 +67,7 @@
     redshift = {
       enable = true;
       temperature.day = 6500;
-      temperature.night = 3500;
+      temperature.night = 3000;
     };
     geoclue2.enable = true;
   };
