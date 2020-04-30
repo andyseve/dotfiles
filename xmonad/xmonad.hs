@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 24 Apr 2020 07:14:39 PM EDT
+-- Last Modified: Sun 26 Apr 2020 07:54:50 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -152,44 +152,33 @@ myEditor      = "gvim"
 -- Scratchpads                                                              {{{
 -------------------------------------------------------------------------------
 
-myScratchpads = [ 
-                NS "htop"  spawnHtop findHtop manageHtop
-              , NS "task"  spawnTask findTask manageTask
-              , NS "mixer" spawnMixer findMixer managerMixer
-              ]
+myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
+                , NS "task"  spawnTask findTask manageTask
+                , NS "mixer" spawnMixer findMixer managerMixer
+                , NS "ranger" spawnRanger findRanger manageRanger
+                ]
 
     where
         hasName = stringProperty "WM_NAME"
+        centerFloating = customFloating $ W.RationalRect x y w h
+            where
+                w, h, x, y :: Rational
+                h = 1/2
+                w = 1/2
+                x = (1-w)/2
+                y = (1-h)/2
 
         spawnHtop  = myTerminal ++ " --class=htop -e htop"
         findHtop   = resource =? "htop"
-        manageHtop = customFloating $ W.RationalRect x y w h
-            where
-                w, h, x, y :: Rational
-                h = 1/2
-                w = 1/2
-                x = (1-w)/2
-                y = (1-h)/2
+        manageHtop = centerFloating
 
         spawnWeather  = myTerminal ++ "--class=weather -e weather"
         findWeather   = resource =? "weather"
-        manageWeather = customFloating $ W.RationalRect x y w h
-            where
-                w, h, x, y :: Rational
-                h = 1/2
-                w = 1/2
-                x = (1-w)/2
-                y = (1-h)/2
+        manageWeather = centerFloating
 
         spawnTask = myTerminal ++ " --class=task -e tasksh"
         findTask = resource =? "task"
-        manageTask = customFloating $ W.RationalRect x y w h
-            where 
-                w, h, x, y :: Rational
-                h = 1/2
-                w = 1/2
-                x = (1 - w)/2
-                y = (1 - h)/2
+        manageTask = centerFloating
 
         spawnMixer = myTerminal ++ " --class=volume -e alsamixer"
         findMixer = resource =? "volume" <||> title=? "alsamixer"
@@ -200,6 +189,9 @@ myScratchpads = [
                 w = 1/2
                 x = (1-w)
                 y = 0
+        spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
+        findRanger = resource =? "ranger"
+        manageRanger = centerFloating
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -437,8 +429,10 @@ myLayoutHook = showWorkspaceName
             ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (3/5) [])
 
         -----------------------------------------------------------------------
-        -- Three Columns Layout
+        -- Three Columns Layout                                              --
         -----------------------------------------------------------------------
+            -- 3 Columns: master on left
+            -- 3 Columns master in middle
         tripane = named "tri"
             $ avoidStruts
             $ windowNavigation
@@ -571,13 +565,13 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "launchers"
     [ ("M-p"          , addName "launcher"      $ spawn myLauncher)
-    , ("M-S-p"        , addName "alt-launcher"  $ spawn myAltLauncher)
+    , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher)
     , ("M-/"          , addName "window search" $ spawn myWinSearch)
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal)
     , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal)
     , ("M-\\"         , addName "browser"       $ spawn myBrowser)
     , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh")
-    , ("M-e"          , addName "files"         $ spawn myFiles)
+    , ("M-e"          , addName "files"         $ namedScratchpadAction myScratchpads "ranger")
     , ("M-z"          , addName "logout"        $ spawn "rofi-session")
     , ("M-S-o"        , addName "launcher"      $ spawn "rofi-run")
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher)
@@ -642,9 +636,10 @@ myKeys conf = let
     -- Scratchpads                                                          {{{
     ---------------------------------------------------------------------------
     subKeys "scratchpads"
-    [ ("M-s M-p", addName "htop" $ namedScratchpadAction myScratchpads "htop")
-    , ("M-s M-t", addName "task" $ namedScratchpadAction myScratchpads "terminal")
-    , ("M-s M-v", addName "mixer" $ namedScratchpadAction myScratchpads "mixer")
+    [ ("M-s M-p", addName "htop"   $ namedScratchpadAction myScratchpads "htop")
+    , ("M-s M-t", addName "task"   $ namedScratchpadAction myScratchpads "terminal")
+    , ("M-s M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer")
+    , ("M-s M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger")
     ]
     ------------------------------------------------------------------------}}}
 
@@ -672,7 +667,7 @@ restartXmonad =
 ----------------------------------------------------------------------------}}}
 -- Log Hook                                                                 {{{
 -------------------------------------------------------------------------------
-myLogHook = do
+myLogHook =
     -- LogHook for multiple screens
     -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
@@ -746,8 +741,8 @@ myManageHook = myCustomManageHook
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook -- Fullscreen managehook
-		<+> positionStoreManageHook (Just defaultThemeWithImageButtons)
-    -- <+> manageHook myConfig
+    <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
+    <+> manageHook def
 
 myCustomManageHook :: ManageHook
 myCustomManageHook = composeAll . concat $
@@ -766,8 +761,8 @@ myHandleEventHook =
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> ewmhDesktopsEventHook
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook -- Full screen event hook
-		<+> positionStoreEventHook
-    -- <+> handleEventHook myConfig
+	<+> positionStoreEventHook
+    <+> handleEventHook def
 
 ----------------------------------------------------------------------------}}}
 

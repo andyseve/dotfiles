@@ -11,7 +11,7 @@ env:
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used
   TERM: xterm-256color
-  WINIT_HIDPI_FACTOR: "1"
+  WINIT_X11_SCALE_FACTOR: "1.0"
 
 window:
   # Window dimensions (changes require restart)
@@ -78,18 +78,6 @@ scrolling:
   # scrollback is enabled (history > 0).
   multiplier: 3
 
-  # Scroll to the bottom when new text is written to the terminal.
-  auto_scroll: false
-
-# Spaces per Tab (changes require restart)
-#
-# This setting defines the width of a tab in cells.
-#
-# Some applications, like Emacs, rely on knowing about the width of a tab.
-# To prevent unexpected behavior in these applications, it's also required to
-# change the `it` value in terminfo when altering this setting.
-tabspaces: 4
-
 # Font configuration (changes require restart)
 font:
   # Normal (roman) font face
@@ -128,7 +116,7 @@ font:
     style: Italic
 
   # Point size
-  size: 10.0
+  size: 10
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -402,7 +390,7 @@ debug:
   #   - Info
   #   - Debug
   #   - Trace
-  log_level: Warn
+  log_level: Info
 
   # Print all received window events.
   print_events: false
