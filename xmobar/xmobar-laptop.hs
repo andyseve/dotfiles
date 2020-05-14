@@ -12,7 +12,6 @@ config = defaultConfig {
 													"xft:FontAwesome5Brands:style=Solid:size=10"
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 												]
-			 , iconRoot= ".xmonad/icons"
        , bgColor = "#000000"
        , fgColor = "#93a1a1"
        , alpha = 150
@@ -74,6 +73,7 @@ config = defaultConfig {
        }
 
 main :: IO ()
-main = xmobar config
+main = do
+	configFromArgs config >>= xmobar
 
 -- vim:ft=haskell
