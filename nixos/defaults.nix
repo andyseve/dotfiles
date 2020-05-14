@@ -21,13 +21,6 @@ in
   # logitech
   hardware.logitech.enable=true;
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # boot settings
-  boot.loader.grub.default = "saved";
-  boot.plymouth.enable = true;
 
 	# Timezone settings
 	time.timeZone = "America/New_York";
@@ -118,22 +111,25 @@ in
 		gnumake cmake
 		gcc clang llvm ccls
     (python3.withPackages # installing python3 with packages
-			(ps: with ps; [
-				pip virtualenv
-				pylint
-				numpy scipy matplotlib
+      (ps: with ps; [
+        pip
+        pylint
+        numpy scipy matplotlib
         jupyter notebook
-        mysql-connector
-			])
-		)
+        jedi # for autocompletion
+      ])
+    )
     pypi2nix
-		(unstable.haskellPackages.ghcWithPackages # installing ghc with packges
-			(haskellPackages: with haskellPackages; [
-				xmonad xmonad-contrib xmonad-extras
-				xmobar
+    (unstable.haskellPackages.ghcWithPackages # installing ghc with packges
+      (haskellPackages: with haskellPackages; [
+        xmonad xmonad-contrib xmonad-extras
+        xmobar
         hoogle
-			])
-		)
+      ])
+    )
+    unstable.haskellPackages.ghc
+    unstable.haskellPackages.xmonad unstable.haskellPackages.xmonad-extras unstable.haskellPackages.xmonad-contrib
+    unstable.haskellPackages.xmobar
 		unstable.haskellPackages.hoogle
 		all-hies.latest
 		openjdk nodejs
