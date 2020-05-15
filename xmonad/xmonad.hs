@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 26 Apr 2020 07:54:50 PM EDT
+-- Last Modified: Thu 30 Apr 2020 06:18:21 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -440,7 +440,7 @@ myLayoutHook = showWorkspaceName
             $ addTabs shrinkText myTabTheme
             $ mySpacing
             $ subLayout [] (Simplest ||| Accordion)
-            $ (suffixed "mid" $ ThreeColMid 1 (3/100) (1/2))
+            $ (suffixed "mid" $ ThreeColMid 1 (3/100) (1/3))
             ||| (suffixed "left" $ ThreeCol 1 (3/100) (1/2))
 
         -----------------------------------------------------------------------
