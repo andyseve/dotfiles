@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 14 May 2020 10:38:20 PM EDT
+-- Last Modified: Thu 14 May 2020 10:48:28 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -385,7 +385,7 @@ myLayoutHook = showWorkspaceName
     $ fullScreenToggle
     $ onWorkspace wsgame float
     $ onWorkspace wsmedia ( float ||| tabs )
-    $ onWorkspace wscom ( float ||| tall )
+    $ onWorkspace wscom ( tall ||| float )
     $ ( tall ||| tripane )
     where
         showWorkspaceName = showWName' myShowWNameTheme
