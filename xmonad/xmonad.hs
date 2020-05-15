@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 30 Apr 2020 06:18:21 PM EDT
+-- Last Modified: Thu 14 May 2020 10:38:20 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -126,7 +126,7 @@ wswww   = "www"
 wscom   = "com"
 wsmedia = "media"
 wssys   = "sys"
-wsmin   = "min"
+wsmin   = "NSP"
 
 myWorkspaces :: [String]
 myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, wsmin ]
@@ -712,7 +712,7 @@ myXmobarLogPP = def
             workspaceToIcons "com"   = "<fn=1>\xf075</fn>" -- 
             workspaceToIcons "media" = "<fn=2>\xf3b5</fn>" -- 
             workspaceToIcons "sys"   = "<fn=1>\xf120</fn>" -- 
-            workspaceToIcons "min"   = "<fn=1>\xf328</fn>" -- 
+            workspaceToIcons "NSP"   = "<fn=1>\xf328</fn>" -- 
             workspaceToIcons _       = "<fn=1>\xf714</fn>" -- 
 
             clickableWorkspaces :: String -> String
