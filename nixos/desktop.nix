@@ -53,7 +53,7 @@
 		libreoffice
 		gimp
 		alacritty rxvt_unicode-with-plugins
-    unstable.steam
+    steam
 		unstable.discord unstable.zoom-us unstable.slack
 		deluge
 		unstable.google-play-music-desktop-player
