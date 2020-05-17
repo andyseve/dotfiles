@@ -1,5 +1,5 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Fri 01 May 2020 09:38:51 AM EDT
+-- Last Modified: Sun 17 May 2020 03:50:12 PM EDT
 -- Author: Anish Sevekari
 
 import Xmobar
@@ -42,7 +42,7 @@ config = defaultConfig {
 											 , "--on-icon-pattern"   , "<fn=1>\xf0e7</fn>" --
 											 , "--idle-icon-pattern" , "<fn=1>\xf0e9</fn>" --
 											 , "-A" , "5"
-											 , "-a" , "notify-send -u critical --hint=string:x-dunst-stack-tag:low_battery -a Battery \"Battery Low\" \"Your computer will turn of soon\""
+											 , "-a" , "notify-send -u critical --hint=string:x-dunst-stack-tag:low_battery -a Battery -i /run/current-system/sw/share/icons/Papirus-Dark/48x48/status/battery-empty.svg \"Battery Low\" \"Your computer will turn of soon\""
 											 ] 50
 										, Run $ Date "%a %d %b %H:%M" "date" 20
 										, Run $ Volume "default" "Master" [

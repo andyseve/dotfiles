@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 14 May 2020 10:48:28 PM EDT
+-- Last Modified: Sun 17 May 2020 02:26:02 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -141,10 +141,10 @@ myTerminal    = "alacritty"
 myAltTerminal = "rxvt_unicode"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome-stable"
-myLauncher    = "rofi -matching fuzzy -show run -modi drun,run --disable-history -sidebar-mode -show-icon"
-myAltLauncher = "rofi -matching fuzzy -show drun -modi drun,run --disable-history -sidebar-mode -show-icon"
+myLauncher    = "rofi -show drun -modi drun,run"
+myAltLauncher = "rofi -show run -modi drun,run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
-myWinSearch   = "rofi -matching fuzzy -show window -modi window,windowcd -sidebar-mode -show-icon"
+myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
 
@@ -383,8 +383,8 @@ myButtonTheme = defaultThemeWithImageButtons
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
     $ fullScreenToggle
-    $ onWorkspace wsgame float
-    $ onWorkspace wsmedia ( float ||| tabs )
+    $ onWorkspace wsgame ( tabs ||| float )
+    $ onWorkspace wsmedia ( tabs ||| float )
     $ onWorkspace wscom ( tall ||| float )
     $ ( tall ||| tripane )
     where
@@ -648,9 +648,9 @@ myKeys conf = let
 -------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
-    spawn "~/.config/fehbg" -- feh + xrandr script
-    spawnOnce "compton" -- TODO: configure settings
-    spawnOnce "dunst" -- TODO: configure theme
+    spawnOnce "~/.config/fehbg" -- feh + xrandr script
+    spawnOnce "picom"
+    spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()

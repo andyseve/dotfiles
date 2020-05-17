@@ -1,4 +1,4 @@
-## Last Modified: Thu 23 Apr 2020 09:08:31 PM EDT
+## Last Modified: Sat 16 May 2020 10:29:38 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -305,6 +305,17 @@ if check dunst; then
 	link $IF/dunstrc $OF/dunstrc
 else
 	nope dunst
+fi
+
+# picom
+if check picom; then
+	IF="$DOTFILES/picom"
+	OF="$HOME/.config/picom"
+	cdir $OF
+
+	link $IF/picom.conf $OF/picom.conf
+else
+	nope rofi
 fi
 
 ################################################################################

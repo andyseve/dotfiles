@@ -1,4 +1,12 @@
 configuration {
-	theme: "solarized_alternate";
 	font: "fira code 12";
+	theme: "purple";
+	show-icons: true;
+	icon-theme: "Papirus-Dark";
+	matching: "fuzzy";
+	width: 50;
+	lines: 30;
+	drun-match-fields: "name,exec,categories";
+	sidebar-mode: true;
+	sort: true;
 }

@@ -36,7 +36,7 @@
 		# WindowManager Core
 		unstable.haskellPackages.xmobar
 		rofi
-		compton                          # transparancy
+		picom                            # transparancy
 		dunst libnotify                  # notifications
 		feh
 		xdotool xorg.xmodmap xorg.xrandr
@@ -45,19 +45,27 @@
     redshift                         # for night light
     geoclue2                         # location
 
+    papirus-icon-theme               # Papirus-icons
+    numix-solarized-gtk-theme        # Numix theme
+
 		# Desktop Programs
 		firefox google-chrome 
 		vlc
 		zathura
     vimHugeX emacs
 		libreoffice
-		gimp
+		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     steam
 		unstable.discord unstable.zoom-us unstable.slack
 		deluge
 		unstable.google-play-music-desktop-player
 	];
+
+  environment.variables = {
+    GTK_THEME = "NumixSolarizedDarkBlue";
+    GTK_ICON_THEME = "Papirus-Dark";
+  };
 
   services = {
     physlock = {

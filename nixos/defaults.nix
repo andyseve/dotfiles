@@ -116,6 +116,7 @@ in
         pylint
         numpy scipy matplotlib
         jupyter notebook
+        tensorflow pytorch
         jedi # for autocompletion
       ])
     )
