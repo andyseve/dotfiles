@@ -11,27 +11,8 @@
 			/etc/nixos/defaults.nix
 			/etc/nixos/desktop.nix
       /etc/nixos/nvidia.nix
+      /etc/nixos/ssh.nix
     ];
-
-  # firmware settings
-  # additional firmware drivers
-  boot.kernelModules = [ "iwlwifi" ];
-  # iwlwifi settings
-  # needed to stop multiple physical restarts.
-  boot.extraModprobeConfig = ''
-    options iwlwifi power_save=0 swcrypto=1 11n_disable=8
-    options iwlmvm power_scheme=1
-    '';
-  # logitech
-  hardware.logitech.enable=true;
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-  };
-
-  boot.plymouth.enable = true;
 
 	# Timezone settings
 	time.timeZone = "America/New_York";
@@ -66,30 +47,8 @@
 
   # List services that you want to enable:
 
-  # OpenSSH daemon.
-  services.openssh = {
-		enable = true;
-		allowSFTP = true;
-		forwardX11 = true;
-		logLevel = "VERBOSE";
-		ports = [ 22 ];
-		permitRootLogin = "no";
-		passwordAuthentication = false;
-		extraConfig = ''
-      # Authentication
-      LoginGraceTime 2m
-      StrictModes yes
-       MaxAuthTries 3
-      MaxSessions 5
-
-      PubkeyAuthentication yes
-      PermitEmptyPasswords no
-
-      # Config
-      PrintLastLog yes
-      TCPKeepAlive yes
-		'';
-	};
+  # SSHD
+  # Add /etc/nixos/ssh.nix to imports
 
   # Firewall.
   networking.firewall.enable = true;

@@ -1,13 +1,12 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 17 May 2020 02:26:02 AM EDT
+-- Last Modified: Wed 20 May 2020 04:46:41 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
     {-
     * Add urgency hook
-    * Add manage hook, moving applications around
     * scratchpads
     * restructure xmobar
     * xmobar music
@@ -62,6 +61,7 @@ import XMonad.Prompt.ConfirmPrompt
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.EwmhDesktops
+import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.PositionStoreHooks
@@ -81,20 +81,22 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Image
 import XMonad.Util.NamedActions as NA
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.NamedWindows
 import XMonad.Util.Run
 import XMonad.Util.Scratchpad
 import XMonad.Util.SpawnOnce
 import XMonad.Util.WorkspaceCompare
 
 ------------------------------------------------------------------------}}}
--- Main                                                                 {{{
----------------------------------------------------------------------------
+-- Main                                                                     {{{
+-------------------------------------------------------------------------------
 
 main = do
     xmonad
          $ withNavigation2DConfig myNav2DConf
-         $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         $ withUrgencyHook LibNotifyUrgencyHook
          $ ewmh
+         $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
          $ myConfig
 
 
@@ -147,6 +149,7 @@ myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
+myMusic       = "google-play-music-desktop-player"
 
 ----------------------------------------------------------------------------}}}
 -- Scratchpads                                                              {{{
@@ -159,14 +162,20 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
                 ]
 
     where
-        hasName = stringProperty "WM_NAME"
         centerFloating = customFloating $ W.RationalRect x y w h
             where
                 w, h, x, y :: Rational
-                h = 1/2
-                w = 1/2
-                x = (1-w)/2
-                y = (1-h)/2
+                h = 0.5
+                w = 0.5
+                x = 0.25
+                y = 0.25
+        rightFloating = customFloating $ W.RationalRect x y w h
+            where
+                w, h, x, y :: Rational
+                h = 0.25
+                w = 0.25
+                x = 0.73
+                y = 0.02
 
         spawnHtop  = myTerminal ++ " --class=htop -e htop"
         findHtop   = resource =? "htop"
@@ -182,13 +191,8 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
 
         spawnMixer = myTerminal ++ " --class=volume -e alsamixer"
         findMixer = resource =? "volume" <||> title=? "alsamixer"
-        managerMixer = customFloating $ W.RationalRect x y w h
-            where
-                w, h, x, y :: Rational
-                h = 1/3
-                w = 1/2
-                x = (1-w)
-                y = 0
+        managerMixer = rightFloating
+
         spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
         findRanger = resource =? "ranger"
         manageRanger = centerFloating
@@ -267,12 +271,12 @@ myTabTheme = def
     , activeColor           = active
     , inactiveColor         = base03
     , urgentColor           = red
-    , activeBorderColor     = active
-    , inactiveBorderColor   = base03
-    , urgentBorderColor     = red
-    , activeTextColor       = active
-    , inactiveTextColor     = base03
-    , urgentTextColor       = red
+    , activeBorderColor     = base03
+    , inactiveBorderColor   = base1
+    , urgentBorderColor     = base1
+    , activeTextColor       = base03
+    , inactiveTextColor     = base1
+    , urgentTextColor       = base1
     }
 
 myPromptTheme = def
@@ -309,7 +313,7 @@ myShowWNameTheme = def
 myButtonTheme :: Theme
 myButtonTheme = defaultThemeWithImageButtons
     { fontName              = myFont
-    , activeColor           = green
+    , activeColor           = active
     , inactiveColor         = base03
     , urgentColor           = red
     , activeBorderColor     = base03
@@ -385,7 +389,7 @@ myLayoutHook = showWorkspaceName
     $ fullScreenToggle
     $ onWorkspace wsgame ( tabs ||| float )
     $ onWorkspace wsmedia ( tabs ||| float )
-    $ onWorkspace wscom ( tall ||| float )
+    $ onWorkspace wscom ( tabs ||| float )
     $ ( tall ||| tripane )
     where
         showWorkspaceName = showWName' myShowWNameTheme
@@ -569,32 +573,32 @@ myKeys conf = let
     , ("M-/"          , addName "window search" $ spawn myWinSearch)
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal)
     , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal)
-    , ("M-\\"         , addName "browser"       $ spawn myBrowser)
+    , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox"))
     , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh")
-    , ("M-e"          , addName "files"         $ namedScratchpadAction myScratchpads "ranger")
     , ("M-z"          , addName "logout"        $ spawn "rofi-session")
-    , ("M-S-o"        , addName "launcher"      $ spawn "rofi-run")
+    , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher)
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher)
     , ("M-o M-b"      , addName "browser"       $ spawn myBrowser)
     , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser)
     , ("M-o M-f"      , addName "files"         $ spawn myFiles)
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal)
     , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal)
+    , ("M-m"          , addName "Music"         $ runOrRaise myMusic (className =? "Google Play Music Desktop Player"))
     ] ^++^
     ------------------------------------------------------------------------}}}
     -- Windows                                                              {{{
     ---------------------------------------------------------------------------
     subKeys "Windows"
     (
-    [ ("M-<Backspace>" , addName "kill" kill)
-    , ("M-C-<Backspace>", addName "kill all" $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll)
-    , ("M-m" , addName "Focus Master" $ windows W.focusMaster)
-    , ("M-n" , addName "Focus Urgent" $ focusUrgent)
-    , ("M-u" , addName "Tabs D" $ onGroup W.focusDown')
-    , ("M-i" , addName "Tabs U" $ onGroup W.focusUp')
-    , ("M-g" , addName "Unmerge" $ withFocused (sendMessage . UnMerge))
+    [ ("M-<Backspace>" ,  addName "kill"                   $ kill)
+    , ("M-C-<Backspace>", addName "kill all"               $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll)
+    , ("M-g M-m" ,        addName "Focus Master"           $ windows W.focusMaster)
+    , ("M-g M-n" ,        addName "Focus Urgent"           $ focusUrgent)
+    , ("M-g M-t",         addName "toggle floating window" $ withFocused toggleFloat)
+    , ("M-u" ,            addName "Tabs D"                 $ onGroup W.focusDown')
+    , ("M-i" ,            addName "Tabs U"                 $ onGroup W.focusUp')
+    , ("M-g M-g" ,        addName "Unmerge"                $ withFocused (sendMessage . UnMerge))
     ] 
-
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
     ++ zipM  "M-C-"   "merge w/sublayout"         fulldirKeys fulldirs (sendMessage . pullGroup)
@@ -622,7 +626,6 @@ myKeys conf = let
     [ ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout)
     , ("M-S-<Tab>", addName "cycle sublayout"           $ toSubl NextLayout)
     , ("M-C-<Tab>", addName "reset layout"              $ setLayout $ XMonad.layoutHook conf)
-    , ("M-t",       addName "toggle floating window"    $ withFocused toggleFloat)
     , ("M-S-t",     addName "tile all floating windows" $ sinkAll)
     , ("M-S-=",     addName "fullscreen"                $ sequence_ [ (withFocused $ windows . W.sink)
                                                                     , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL)
@@ -636,10 +639,10 @@ myKeys conf = let
     -- Scratchpads                                                          {{{
     ---------------------------------------------------------------------------
     subKeys "scratchpads"
-    [ ("M-s M-p", addName "htop"   $ namedScratchpadAction myScratchpads "htop")
-    , ("M-s M-t", addName "task"   $ namedScratchpadAction myScratchpads "terminal")
-    , ("M-s M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer")
-    , ("M-s M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger")
+    [ ("M-q", addName "htop"   $ namedScratchpadAction myScratchpads "htop")
+    , ("M-t", addName "task"   $ namedScratchpadAction myScratchpads "task")
+    , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer")
+    , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger")
     ]
     ------------------------------------------------------------------------}}}
 
@@ -652,6 +655,9 @@ myStartupHook = do
     spawnOnce "picom"
     spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
+    spawnOnce "Discord"
+    spawnOnce "Slack"
+    spawnOnce "google-play-music-desktop-player"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -667,10 +673,12 @@ restartXmonad =
 ----------------------------------------------------------------------------}}}
 -- Log Hook                                                                 {{{
 -------------------------------------------------------------------------------
-myLogHook =
+myLogHook = do
     -- LogHook for multiple screens
     -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
+    ewmhDesktopsLogHook
+    fadeWindowsLogHook myFadeHook
 
 myLogPP :: XMonad.Hooks.DynamicLog.PP
 myLogPP = myXmobarLogPP
@@ -733,6 +741,20 @@ xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
 xmobarDestroyer = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
     XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
+
+-- FadeHook
+myFadeHook = composeAll
+    [ opaque
+    , isUnfocused         --> opacity 0.95
+    , isDialog            --> opaque
+    , isFloating          --> opacity 0.85
+    , isRole =? "browser" --> opacity 1
+    , className =? "vlc"  --> opacity 1
+    , className =? "feh"  --> opacity 1
+    ]
+        where
+            isRole = stringProperty "WM_WINDOW_ROLE"
+
 ----------------------------------------------------------------------------}}}
 -- Manage Hook                                                              {{{
 -------------------------------------------------------------------------------
@@ -740,17 +762,35 @@ myManageHook :: ManageHook
 myManageHook = myCustomManageHook
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
-    <+> XMonad.Layout.Fullscreen.fullscreenManageHook -- Fullscreen managehook
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
+    <+> XMonad.Layout.Fullscreen.fullscreenManageHook
     <+> manageHook def
 
 myCustomManageHook :: ManageHook
 myCustomManageHook = composeAll . concat $
-    [
-        -- Fullscreen support
-        [ isFullscreen --> doFullFloat ]
-    ,   [ isDialog --> doCenterFloat ]
+    [ [ className =? c <||> title=? c --> doF (W.shift wswww)                            |  c <- myWebShifts   ]
+    , [ className =? c                --> doF (W.view wsgame)                            |  c <- myGameShifts  ]
+    , [ className =? c                --> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
+    , [ className =? c                --> doF (W.shift wscom)                            |  c <- myComShifts   ]
+    , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
+    , [ className =? c                --> doF (W.view wsmedia)                           |  c <- myMediaViews  ]
+    , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaViews  ]
+    , [ className =? c                --> doCenterFloat                                  |  c <- myCFloats     ]
+    , [ className =? c                --> doRectFloat (W.RationalRect 0.73 0 0.25 0.25)  |  c <- myRFloats     ]
+        -- Handling specific conditions
+    , [ isFullscreen --> doFullFloat ]
+    , [ isDialog --> doCenterFloat ]
+    , [ isRole =? "pop-up" --> doCenterFloat ]
     ]
+        where
+            isRole = stringProperty "WM_WINDOW_ROLE"
+            myWebShifts = ["Firefox", "google-chrome"]
+            myGameShifts = ["dota2", "Steam"]
+            myComShifts = ["Slack", "Discord", "weechat"]
+            myMediaViews = ["vlc"]
+            myMediaShifts = ["Google Play Music Desktop Player"]
+            myCFloats = ["feh"]
+            myRFloats = ["ikhal"]
 
 ----------------------------------------------------------------------------}}}
 -- Event Hook                                                               {{{
@@ -760,9 +800,22 @@ myHandleEventHook =
     XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> ewmhDesktopsEventHook
-    <+> XMonad.Layout.Fullscreen.fullscreenEventHook -- Full screen event hook
 	<+> positionStoreEventHook
+    <+> XMonad.Layout.Fullscreen.fullscreenEventHook
     <+> handleEventHook def
+
+----------------------------------------------------------------------------}}}
+-- Urgency Hook                                                             {{{
+-------------------------------------------------------------------------------
+-- from https://pbrisbin.com/posts/using_notify_osd_for_xmonad_notifications/
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+        let cmd = "notify-send -a Urgent \"Workspace " ++ idx ++ "\" \"" ++ (show name) ++ "\""
+        spawn cmd
 
 ----------------------------------------------------------------------------}}}
 

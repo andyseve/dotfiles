@@ -21,10 +21,14 @@ in
   # logitech
   hardware.logitech.enable=true;
 
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+  };
 
-	# Timezone settings
-	time.timeZone = "America/New_York";
-	time.hardwareClockInLocalTime = true;
+  boot.plymouth.enable = true;
+
   # location
   location.provider = "geoclue2";
 
@@ -104,6 +108,8 @@ in
 		w3m
 		youtube-dl
 		taskwarrior timewarrior tasksh
+    khal
+    vdirsyncer
     # mopidy mopidy-gmusic # install failing
 
 		
