@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 20 May 2020 04:37:46 PM EDT
+-- Last Modified: Wed 20 May 2020 05:04:16 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -533,12 +533,12 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "system"
     [ 
-      ("M-x M-r"           , addName "restart XMonad"           $ spawn "xmonad --restart")
-    , ("M-x M-S-r"         , addName "rebuild & restart XMonad" $ spawn "xmonad --recompile && xmonad --restart")
-    , ("M-x M-e"           , addName "edit xmonad.hs"           $ spawn (myEditor ++ " ~/.xmonad/xmonad.hs"))
-    , ("M-x M-l"           , addName "lock screen"              $ spawn "physlock")
-    , ("M1-C-l"            , addName "lock screen"              $ spawn "physlock")
-    , ("M-x M-q"           , addName "Quit XMonad"              $ confirmPrompt hotPromptTheme "Quit XMonad"      $ io (exitWith ExitSuccess))
+      ("M-x M-r"           , addName "restart XMonad"           $ spawn "xmonad --restart"                                                     )
+    , ("M-x M-S-r"         , addName "rebuild & restart XMonad" $ spawn "xmonad --recompile && xmonad --restart"                               )
+    , ("M-x M-e"           , addName "edit xmonad.hs"           $ spawn (myEditor ++ " ~/.xmonad/xmonad.hs")                                   )
+    , ("M-x M-l"           , addName "lock screen"              $ spawn "physlock"                                                             )
+    , ("M1-C-l"            , addName "lock screen"              $ spawn "physlock"                                                             )
+    , ("M-x M-q"           , addName "Quit XMonad"              $ confirmPrompt hotPromptTheme "Quit XMonad"      $ io (exitWith ExitSuccess)  )
     ] ^++^
 
     ------------------------------------------------------------------------}}}
@@ -547,17 +547,17 @@ myKeys conf = let
     subKeys "actions"
     [
     -- sound
-      ("M-<Page_Up>"             , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
-    , ("M-<Page_Down>"           , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
-    , ("M-<End>"                 , addName "mute/unmute"                 $ spawn "amixer -q set Master toggle")
-    , ("<XF86AudioRaiseVolume>"  , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute")
-    , ("<XF86AudioLowerVolume>"  , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute")
-    , ("<XF86AudioMute>"         , addName "mute/unmute"                 $ spawn "amixer set Master toggle")
+      ("M-<Page_Up>"             , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute" )
+    , ("M-<Page_Down>"           , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute" )
+    , ("M-<End>"                 , addName "mute/unmute"                 $ spawn "amixer -q set Master toggle"  )
+    , ("<XF86AudioRaiseVolume>"  , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute" )
+    , ("<XF86AudioLowerVolume>"  , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute" )
+    , ("<XF86AudioMute>"         , addName "mute/unmute"                 $ spawn "amixer set Master toggle"     )
     -- brightness
-    , ("<XF86MonBrightnessDown>"   , addName "brightness -5"  $ spawn "light -U 5")
-    , ("<XF86MonBrightnessUp>"     , addName "brightness +5"  $ spawn "light -A 5")
-    , ("M-<XF86MonBrightnessDown>" , addName "brightness min" $ spawn "light -S 5")
-    , ("M-<XF86MonBrightnessUp>"   , addName "brightness max"  $ spawn "light -S 100")
+    , ("<XF86MonBrightnessDown>"   , addName "brightness -5"  $ spawn "light -U 5"    )
+    , ("<XF86MonBrightnessUp>"     , addName "brightness +5"  $ spawn "light -A 5"    )
+    , ("M-<XF86MonBrightnessDown>" , addName "brightness min" $ spawn "light -S 5"    )
+    , ("M-<XF86MonBrightnessUp>"   , addName "brightness max"  $ spawn "light -S 100" )
     -- screenshots
     , ("<Print>"                 , addName "screenshot window"           $ spawn "scrot -u \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
     , ("M-<Print>"               , addName "screenshot fullscreen"       $ spawn "scrot \"%Y-%m-%d-%r.jpg\" -e 'mv \"$f\" ~/Pictures/screenshots/.'")
@@ -568,36 +568,36 @@ myKeys conf = let
     -- Launchers                                                            {{{
     ---------------------------------------------------------------------------
     subKeys "launchers"
-    [ ("M-p"          , addName "launcher"      $ spawn myLauncher)
-    , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher)
-    , ("M-/"          , addName "window search" $ spawn myWinSearch)
-    , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal)
-    , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal)
-    , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox"))
-    , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh")
-    , ("M-z"          , addName "logout"        $ spawn "rofi-session")
-    , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher)
-    , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher)
-    , ("M-o M-b"      , addName "browser"       $ spawn myBrowser)
-    , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser)
-    , ("M-o M-f"      , addName "files"         $ spawn myFiles)
-    , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal)
-    , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal)
-    , ("M-m"          , addName "Music"         $ runOrRaise myMusic (className =? "Google Play Music Desktop Player"))
+    [ ("M-p"          , addName "launcher"      $ spawn myLauncher                                                      )
+    , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher                                                   )
+    , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
+    , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
+    , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox")                         )
+    , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh"                                                      )
+    , ("M-z"          , addName "logout"        $ spawn "rofi-session"                                                  )
+    , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher                                                   )
+    , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher                                                      )
+    , ("M-o M-b"      , addName "browser"       $ spawn myBrowser                                                       )
+    , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser                                                    )
+    , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
+    , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
+    , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-m"          , addName "Music"         $ runOrRaise myMusic (className =? "Google Play Music Desktop Player")  )
     ] ^++^
     ------------------------------------------------------------------------}}}
     -- Windows                                                              {{{
     ---------------------------------------------------------------------------
     subKeys "Windows"
     (
-    [ ("M-<Backspace>" ,  addName "kill"                   $ kill)
-    , ("M-C-<Backspace>", addName "kill all"               $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll)
-    , ("M-g M-m" ,        addName "Focus Master"           $ windows W.focusMaster)
-    , ("M-g M-n" ,        addName "Focus Urgent"           $ focusUrgent)
-    , ("M-g M-t",         addName "toggle floating window" $ withFocused toggleFloat)
-    , ("M-u" ,            addName "Tabs D"                 $ onGroup W.focusDown')
-    , ("M-i" ,            addName "Tabs U"                 $ onGroup W.focusUp')
-    , ("M-g M-g" ,        addName "Unmerge"                $ withFocused (sendMessage . UnMerge))
+    [ ("M-<Backspace>" ,  addName "kill"                   $ kill                                                       )
+    , ("M-C-<Backspace>", addName "kill all"               $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll )
+    , ("M-g M-m" ,        addName "Focus Master"           $ windows W.focusMaster                                      )
+    , ("M-g M-n" ,        addName "Focus Urgent"           $ focusUrgent                                                )
+    , ("M-g M-t",         addName "toggle floating window" $ withFocused toggleFloat                                    )
+    , ("M-u" ,            addName "Tabs D"                 $ onGroup W.focusDown'                                       )
+    , ("M-i" ,            addName "Tabs U"                 $ onGroup W.focusUp'                                         )
+    , ("M-g M-g" ,        addName "Unmerge"                $ withFocused (sendMessage . UnMerge)                        )
     ] 
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
@@ -611,9 +611,9 @@ myKeys conf = let
     ---------------------------------------------------------------------------
     subKeys "workspaces"
     (
-    [ ("M-' M-n", addName "next non-empty workspace" $ nextHidWS)
-    , ("M-' M-p", addName "prev non-empty workspace" $ prevHidWS)
-    , ("M-' M-'", addName "select workspace" $ selectWorkspace myPromptTheme)
+    [ ("M-' M-n", addName "next non-empty workspace" $ nextHidWS             )
+    , ("M-' M-p", addName "prev non-empty workspace" $ prevHidWS             )
+    , ("M-' M-'", addName "select workspace" $ selectWorkspace myPromptTheme )
     ]
     ++ zipM "M-"     "view workspace"           wsKeys [0..] (withNthWorkspace W.greedyView)
     ++ zipM "M-S-"   "move window to workspace" wsKeys [0..] (withNthWorkspace W.shift)
@@ -623,26 +623,26 @@ myKeys conf = let
     -- Layouts and SubLayouts                                               {{{
     ---------------------------------------------------------------------------
     subKeys "layouts"
-    [ ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout)
-    , ("M-S-<Tab>", addName "cycle sublayout"           $ toSubl NextLayout)
-    , ("M-C-<Tab>", addName "reset layout"              $ setLayout $ XMonad.layoutHook conf)
-    , ("M-S-t",     addName "tile all floating windows" $ sinkAll)
+    [ ("M-<Tab>",   addName "cycle all layouts"         $ sendMessage NextLayout                                           )
+    , ("M-S-<Tab>", addName "cycle sublayout"           $ toSubl NextLayout                                                )
+    , ("M-C-<Tab>", addName "reset layout"              $ setLayout $ XMonad.layoutHook conf                               )
+    , ("M-S-t",     addName "tile all floating windows" $ sinkAll                                                          )
     , ("M-S-=",     addName "fullscreen"                $ sequence_ [ (withFocused $ windows . W.sink)
                                                                     , (sendMessage $ XMonad.Layout.MultiToggle.Toggle FULL)
-                                                                    ])
-    , ("M-' M-,",   addName "Decrease master windows"  $ sendMessage (IncMasterN (-1)))
-    , ("M-' M-.",   addName "Increase master windows"  $ sendMessage (IncMasterN 1))
-    , ("M-' M-j",   addName "Shrink master"            $ sendMessage (Shrink))
-    , ("M-' M-k",   addName "Expand master"            $ sendMessage (Expand))
+                                                                    ]                                                      )
+    , ("M-' M-,",   addName "Decrease master windows"  $ sendMessage (IncMasterN (-1))                                     )
+    , ("M-' M-.",   addName "Increase master windows"  $ sendMessage (IncMasterN 1)                                        )
+    , ("M-' M-j",   addName "Shrink master"            $ sendMessage (Shrink)                                              )
+    , ("M-' M-k",   addName "Expand master"            $ sendMessage (Expand)                                              )
     ] ^++^
     ------------------------------------------------------------------------}}}
     -- Scratchpads                                                          {{{
     ---------------------------------------------------------------------------
     subKeys "scratchpads"
-    [ ("M-q", addName "htop"   $ namedScratchpadAction myScratchpads "htop")
-    , ("M-t", addName "task"   $ namedScratchpadAction myScratchpads "task")
-    , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer")
-    , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger")
+    [ ("M-r", addName "htop"   $ namedScratchpadAction myScratchpads "htop"   )
+    , ("M-t", addName "task"   $ namedScratchpadAction myScratchpads "task"   )
+    , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer"  )
+    , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger" )
     ]
     ------------------------------------------------------------------------}}}
 
@@ -745,12 +745,14 @@ xmobarDestroyer = do
 -- FadeHook
 myFadeHook = composeAll
     [ opaque
-    , isUnfocused         --> opacity 0.95
-    , isDialog            --> opaque
-    , isFloating          --> opacity 0.85
-    , isRole =? "browser" --> opacity 1
-    , className =? "vlc"  --> opacity 1
-    , className =? "feh"  --> opacity 1
+    , isUnfocused          --> opacity 0.95
+    , isDialog             --> opaque
+    , isFloating           --> opacity 0.85
+    , isRole =? "browser"  --> opacity 1
+    , isFullscreen         --> opacity 1
+    , className =? "vlc"   --> opacity 1
+    , className =? "feh"   --> opacity 1
+    , className =? "dota2" --> opacity 1
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
