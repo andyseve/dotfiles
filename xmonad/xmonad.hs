@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 20 May 2020 04:46:41 AM EDT
+-- Last Modified: Wed 20 May 2020 04:36:54 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -786,7 +786,7 @@ myCustomManageHook = composeAll . concat $
             isRole = stringProperty "WM_WINDOW_ROLE"
             myWebShifts = ["Firefox", "google-chrome"]
             myGameShifts = ["dota2", "Steam"]
-            myComShifts = ["Slack", "Discord", "weechat"]
+            myComShifts = ["Slack", "discord", "weechat"]
             myMediaViews = ["vlc"]
             myMediaShifts = ["Google Play Music Desktop Player"]
             myCFloats = ["feh"]
