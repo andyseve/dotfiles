@@ -110,6 +110,7 @@ in
 		taskwarrior timewarrior tasksh
     khal
     vdirsyncer
+    pass
     # mopidy mopidy-gmusic # install failing
 
 		
@@ -127,17 +128,13 @@ in
       ])
     )
     pypi2nix
-    (unstable.haskellPackages.ghcWithPackages # installing ghc with packges
-      (haskellPackages: with haskellPackages; [
-        xmonad xmonad-contrib xmonad-extras
-        xmobar
-        hoogle
-      ])
-    )
-    unstable.haskellPackages.ghc
-    unstable.haskellPackages.xmonad unstable.haskellPackages.xmonad-extras unstable.haskellPackages.xmonad-contrib
-    unstable.haskellPackages.xmobar
-		unstable.haskellPackages.hoogle
+    #(unstable.haskellPackages.ghcWithPackages # installing ghc with packges
+      #(haskellPackages: with haskellPackages; [
+        #xmonad xmonad-contrib xmonad-extras
+        #xmobar
+        #hoogle
+      #])
+    #)
 		all-hies.latest
 		openjdk nodejs
     gdb

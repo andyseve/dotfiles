@@ -25,7 +25,6 @@
         haskellPackages.xmonad-contrib
         haskellPackages.xmonad-extras
         haskellPackages.xmonad
-        haskellPackages.xmobar
       ];
 		};
 	};
@@ -34,16 +33,14 @@
 
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
-		unstable.haskellPackages.xmobar
-		rofi
+    haskellPackages.xmobar # This is already added in ghc-with-packages
+		rofi rofi-pass
 		picom                            # transparancy
 		dunst libnotify                  # notifications
 		feh
 		xdotool xorg.xmodmap xorg.xrandr
 		scrot                            # screenshots
     xclip
-    redshift                         # for night light
-    geoclue2                         # location
 
     papirus-icon-theme               # Papirus-icons
     numix-solarized-gtk-theme        # Numix theme

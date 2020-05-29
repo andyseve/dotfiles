@@ -1,13 +1,11 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 20 May 2020 05:04:16 PM EDT
+-- Last Modified: Thu 28 May 2020 11:58:55 PM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
     {-
-    * Add urgency hook
-    * scratchpads
     * restructure xmobar
     * xmobar music
     * xmobar weather
@@ -159,6 +157,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
                 , NS "task"  spawnTask findTask manageTask
                 , NS "mixer" spawnMixer findMixer managerMixer
                 , NS "ranger" spawnRanger findRanger manageRanger
+                , NS "khal" spawnKhal findKhal manageKhal
                 ]
 
     where
@@ -196,6 +195,10 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
         findRanger = resource =? "ranger"
         manageRanger = centerFloating
+
+        spawnKhal = myTerminal ++ " --class=khal -e ikhal"
+        findKhal = resource =? "khal"
+        manageKhal = rightFloating
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -398,7 +401,8 @@ myLayoutHook = showWorkspaceName
         addTopBar = noFrillsDeco shrinkText myTopBarTheme
 
         mySpacing = spacingRaw True myBorder False myBorder True
-
+        
+        named n    = renamed [(XMonad.Layout.Renamed.Replace n)]
         suffixed n = renamed [(XMonad.Layout.Renamed.AppendWords n)]
         -----------------------------------------------------------------------
         -- Tabs Layout                                                       --
@@ -643,6 +647,7 @@ myKeys conf = let
     , ("M-t", addName "task"   $ namedScratchpadAction myScratchpads "task"   )
     , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer"  )
     , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger" )
+    , ("M-c", addName "khal"   $ namedScratchpadAction myScratchpads "khal"   )
     ]
     ------------------------------------------------------------------------}}}
 
@@ -656,7 +661,7 @@ myStartupHook = do
     spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
     spawnOnce "Discord"
-    spawnOnce "Slack"
+    spawnOnce "slack"
     spawnOnce "google-play-music-desktop-player"
 
 quitXmonad :: X ()
@@ -746,13 +751,13 @@ xmobarDestroyer = do
 myFadeHook = composeAll
     [ opaque
     , isUnfocused          --> opacity 0.95
-    , isDialog             --> opaque
     , isFloating           --> opacity 0.85
-    , isRole =? "browser"  --> opacity 1
-    , isFullscreen         --> opacity 1
-    , className =? "vlc"   --> opacity 1
-    , className =? "feh"   --> opacity 1
-    , className =? "dota2" --> opacity 1
+    , isDialog             --> opaque
+    , isRole =? "browser"  --> opaque
+    , isFullscreen         --> opaque
+    , className =? "vlc"   --> opaque
+    , className =? "feh"   --> opaque
+    , className =? "dota2" --> opaque
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
@@ -778,6 +783,7 @@ myCustomManageHook = composeAll . concat $
     , [ className =? c                --> doF (W.view wsmedia)                           |  c <- myMediaViews  ]
     , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaViews  ]
     , [ className =? c                --> doCenterFloat                                  |  c <- myCFloats     ]
+    , [ className =? "steam" <&&> title/=? "Steam" --> doCenterFloat ]
     , [ className =? c                --> doRectFloat (W.RationalRect 0.73 0 0.25 0.25)  |  c <- myRFloats     ]
         -- Handling specific conditions
     , [ isFullscreen --> doFullFloat ]

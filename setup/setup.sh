@@ -1,4 +1,4 @@
-## Last Modified: Sat 16 May 2020 10:29:38 PM EDT
+## Last Modified: Mon 25 May 2020 01:34:39 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -315,7 +315,32 @@ if check picom; then
 
 	link $IF/picom.conf $OF/picom.conf
 else
-	nope rofi
+	nope picom
+fi
+
+# vdirsyncer
+if check vdirsyncer; then
+	IF="$DOTFILES/vdirsyncer"
+	OF="$HOME/.config/vdirsyncer"
+	cdir $OF
+	
+	link $IF/config $OF/config
+	vdirsyncer discover
+	vdirsyncer sync
+	vdirsyncer metasync
+else
+	nope vdirsyncer
+fi
+
+# khal
+if check khal; then
+	IF="$DOTFILES/khal"
+	OF="$HOME/.config/khal"
+	cdir $OF
+	
+	link $IF/config $OF/config
+else
+	nope khal
 fi
 
 ################################################################################
