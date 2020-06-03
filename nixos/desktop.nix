@@ -1,5 +1,10 @@
-{ configs, pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+	unstableOverlay = (self: super: {
+		unstable = import <unstable> { config = config.nixpkgs.config; };
+	});
+in
 {
   # Xserver settings
 	services.xserver = {
@@ -27,6 +32,9 @@
         haskellPackages.xmonad
       ];
 		};
+
+    # Wacom
+    wacom.enable = true;
 	};
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];
@@ -41,6 +49,7 @@
 		xdotool xorg.xmodmap xorg.xrandr
 		scrot                            # screenshots
     xclip
+    networkmanagerapplet
 
     papirus-icon-theme               # Papirus-icons
     numix-solarized-gtk-theme        # Numix theme
@@ -57,6 +66,9 @@
 		unstable.discord unstable.zoom-us unstable.slack
 		deluge
 		unstable.google-play-music-desktop-player
+
+    # Helper CLI tools
+    streamlink
 	];
 
   environment.variables = {

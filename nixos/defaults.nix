@@ -85,14 +85,17 @@ in
 		pciutils usbutils lshw
 		smartmontools
 
+    # Volume
+    pavucontrol
+
 		# Networking
 		inetutils
 		nmap wireshark
 		tor openvpn
 		wget curl rsync unison
+    networkmanager networkmanager-openvpn
 
 		# Linux shell utils
-		zsh bash
 		fzf silver-searcher
 		neofetch
 		tree
@@ -112,6 +115,7 @@ in
     vdirsyncer
     pass
     # mopidy mopidy-gmusic # install failing
+    fswebcam
 
 		
 		# Dev Tools
@@ -166,4 +170,5 @@ in
 
 	# backlight using light
 	programs.light.enable = true;
+  programs.zsh.enable = true;
 }

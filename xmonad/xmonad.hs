@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 28 May 2020 11:58:55 PM EDT
+-- Last Modified: Tue 02 Jun 2020 11:41:59 AM EDT
 -- Based on : https://github.com/altercation
 --
 -- TODO                                                                     {{{
@@ -14,6 +14,7 @@
 -- Modules                                                                  {{{
 -------------------------------------------------------------------------------
 -- Core
+import Control.Monad (liftM2)
 import qualified Data.Map as M
 import Data.Function (on)
 import Data.Maybe
@@ -141,8 +142,8 @@ myTerminal    = "alacritty"
 myAltTerminal = "rxvt_unicode"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome-stable"
-myLauncher    = "rofi -show drun -modi drun,run"
-myAltLauncher = "rofi -show run -modi drun,run"
+myLauncher    = "rofi -show run -modi drun,run"
+myAltLauncher = "rofi -show drun -modi drun,run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
@@ -158,6 +159,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
                 , NS "mixer" spawnMixer findMixer managerMixer
                 , NS "ranger" spawnRanger findRanger manageRanger
                 , NS "khal" spawnKhal findKhal manageKhal
+                , NS "music" spawnMusic findMusic manageMusic
                 ]
 
     where
@@ -171,7 +173,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         rightFloating = customFloating $ W.RationalRect x y w h
             where
                 w, h, x, y :: Rational
-                h = 0.25
+                h = 0.50
                 w = 0.25
                 x = 0.73
                 y = 0.02
@@ -184,12 +186,12 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         findWeather   = resource =? "weather"
         manageWeather = centerFloating
 
-        spawnTask = myTerminal ++ " --class=task -e tasksh"
+        spawnTask = myTerminal ++ " --class=task"
         findTask = resource =? "task"
         manageTask = centerFloating
 
-        spawnMixer = myTerminal ++ " --class=volume -e alsamixer"
-        findMixer = resource =? "volume" <||> title=? "alsamixer"
+        spawnMixer = "pavucontrol"
+        findMixer = resource =? "pavucontrol"
         managerMixer = rightFloating
 
         spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
@@ -198,7 +200,11 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
 
         spawnKhal = myTerminal ++ " --class=khal -e ikhal"
         findKhal = resource =? "khal"
-        manageKhal = rightFloating
+        manageKhal = centerFloating
+
+        spawnMusic = myMusic
+        findMusic = className =? "Google Play Music Desktop Player"
+        manageMusic = rightFloating
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -443,6 +449,7 @@ myLayoutHook = showWorkspaceName
             -- 3 Columns master in middle
         tripane = named "tri"
             $ avoidStruts
+            -- Need windowNavigation to merge windows
             $ windowNavigation
             $ addTopBar
             $ addTabs shrinkText myTabTheme
@@ -463,6 +470,8 @@ myLayoutHook = showWorkspaceName
 -- Bindings                                                                 {{{
 -------------------------------------------------------------------------------
 myModMask = mod4Mask -- super key (win)
+
+-- Navconf and Helper functions                                             {{{
 myNav2DConf = def
     { defaultTiledNavigation = centerNavigation
     , floatNavigation = centerNavigation
@@ -502,9 +511,8 @@ myToggle = windows $ W.view =<< W.tag . head . filter
 -- toggling between floating and non-floating
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 then W.sink w s
-                else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (4/5)) s))
+                else (W.float w s))
 
-                
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/blob/master/.xmonad/lib/XMonad/Config/A00001.hs
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
 showKeybindings x = addName "show keybindings" $ io $ do
@@ -512,6 +520,8 @@ showKeybindings x = addName "show keybindings" $ io $ do
     hPutStr h (unlines $ showKm x)
     hClose h
     return ()
+
+----------------------------------------------------------------------------}}}
 
 myKeys conf = let
     subKeys str ks = subtitle str : mkNamedKeymap conf ks
@@ -587,7 +597,6 @@ myKeys conf = let
     , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
-    , ("M-m"          , addName "Music"         $ runOrRaise myMusic (className =? "Google Play Music Desktop Player")  )
     ] ^++^
     ------------------------------------------------------------------------}}}
     -- Windows                                                              {{{
@@ -648,6 +657,7 @@ myKeys conf = let
     , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer"  )
     , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger" )
     , ("M-c", addName "khal"   $ namedScratchpadAction myScratchpads "khal"   )
+    , ("M-m", addName "music"  $ namedScratchpadAction myScratchpads "music"  )
     ]
     ------------------------------------------------------------------------}}}
 
@@ -662,7 +672,6 @@ myStartupHook = do
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
     spawnOnce "Discord"
     spawnOnce "slack"
-    spawnOnce "google-play-music-desktop-player"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -751,13 +760,14 @@ xmobarDestroyer = do
 myFadeHook = composeAll
     [ opaque
     , isUnfocused          --> opacity 0.95
-    , isFloating           --> opacity 0.85
+    , isFloating           --> opacity 0.95
     , isDialog             --> opaque
-    , isRole =? "browser"  --> opaque
     , isFullscreen         --> opaque
     , className =? "vlc"   --> opaque
     , className =? "feh"   --> opaque
     , className =? "dota2" --> opaque
+    -- 0.95 on browsers is visibile enough.
+    --, isRole =? "browser"  --> opaque -- Makes browser oqaque
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
@@ -767,24 +777,23 @@ myFadeHook = composeAll
 -------------------------------------------------------------------------------
 myManageHook :: ManageHook
 myManageHook = myCustomManageHook
-    <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
+    <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook
     <+> manageHook def
 
 myCustomManageHook :: ManageHook
 myCustomManageHook = composeAll . concat $
     [ [ className =? c <||> title=? c --> doF (W.shift wswww)                            |  c <- myWebShifts   ]
-    , [ className =? c                --> doF (W.view wsgame)                            |  c <- myGameShifts  ]
     , [ className =? c                --> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
+    , [ className =? c                --> doF (liftM2 (.) W.greedyView W.shift wsgame)   |  c <- myGameViews   ]
     , [ className =? c                --> doF (W.shift wscom)                            |  c <- myComShifts   ]
     , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
-    , [ className =? c                --> doF (W.view wsmedia)                           |  c <- myMediaViews  ]
-    , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaViews  ]
+    , [ className =? c                --> doF (liftM2 (.) W.greedyView W.shift wsmedia)  |  c <- myMediaViews  ]
     , [ className =? c                --> doCenterFloat                                  |  c <- myCFloats     ]
-    , [ className =? "steam" <&&> title/=? "Steam" --> doCenterFloat ]
-    , [ className =? c                --> doRectFloat (W.RationalRect 0.73 0 0.25 0.25)  |  c <- myRFloats     ]
+    , [ className =? c                --> doRRectFloat                                   |  c <- myRFloats     ]
+    -- , [ className =? "Steam" <&&> title/=? "Steam" --> doRRectFloat ] -- floats steam messages and everything else.
         -- Handling specific conditions
     , [ isFullscreen --> doFullFloat ]
     , [ isDialog --> doCenterFloat ]
@@ -793,24 +802,28 @@ myCustomManageHook = composeAll . concat $
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
             myWebShifts = ["Firefox", "google-chrome"]
-            myGameShifts = ["dota2", "Steam"]
+            myGameShifts = ["Steam"]
+            myGameViews = ["dota2"]
             myComShifts = ["Slack", "discord", "weechat"]
             myMediaViews = ["vlc"]
-            myMediaShifts = ["Google Play Music Desktop Player"]
+            myMediaShifts = []
             myCFloats = ["feh"]
-            myRFloats = ["ikhal"]
+            myRFloats = ["ikhal", "pavucontrol"]
 
+            doRRectFloat = doRectFloat (W.RationalRect 0.73 0 0.25 0.50)
 ----------------------------------------------------------------------------}}}
 -- Event Hook                                                               {{{
 -------------------------------------------------------------------------------
 
-myHandleEventHook =
-    XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
+myHandleEventHook = myCustomEventHook
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> ewmhDesktopsEventHook
 	<+> positionStoreEventHook
+    <+> XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
     <+> handleEventHook def
+
+myCustomEventHook = mempty
 
 ----------------------------------------------------------------------------}}}
 -- Urgency Hook                                                             {{{
@@ -822,7 +835,7 @@ instance UrgencyHook LibNotifyUrgencyHook where
     urgencyHook LibNotifyUrgencyHook w = do
         name <- getName w
         Just idx <- fmap (W.findTag w) $ gets windowset
-        let cmd = "notify-send -a Urgent \"Workspace " ++ idx ++ "\" \"" ++ (show name) ++ "\""
+        let cmd = "notify-send -u critical -a Urgent \"Workspace " ++ idx ++ "\" \"" ++ (show name) ++ "\""
         spawn cmd
 
 ----------------------------------------------------------------------------}}}

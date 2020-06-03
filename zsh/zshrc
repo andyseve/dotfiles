@@ -1,9 +1,9 @@
 # Author: Anish Sevekari
-# Last Edited: Mon 04 May 2020 03:43:40 AM EDT
+# Last Edited: Sun 31 May 2020 02:40:14 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
 # zinit ######################################################################
@@ -23,6 +23,7 @@ zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure
 zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
 zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
+zinit light spwhitt/nix-zsh-completions 
 
 ################################################################################
 # Settings #####################################################################
@@ -150,15 +151,6 @@ if _has nvim; then
 else
 	export EDITOR='vim'
 fi
-
-#PATH="$HOME/bin:$PATH" # add my scripts to bin
-#PATH="$HOME/.local/bin:$PATH" # numpy scripts
-#if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	#PATH="$HOME/bin/miniconda3/bin:$PATH" # add anaconda to path
-#fi
-#if [ -e "$HOME/.cabal/bin" ]; then
-	#PATH="$HOME/.cabal/bin:$PATH" # add cabal to path
-#fi
 
 
 ################################################################################
