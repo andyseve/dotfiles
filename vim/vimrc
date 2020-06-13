@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 04 Feb 2020 03:18:37 PM EST
+" Last Updated: 6/13/2020 8:29:48 AM
 
 set nocompatible
 
@@ -58,6 +58,7 @@ set nocompatible
   set background=dark
 	syntax enable
   set synmaxcol=0
+	set renderoptions=type:directx
   set encoding=utf-8
   filetype plugin indent on
 	" Setting Colorscheme
@@ -65,7 +66,7 @@ set nocompatible
     set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
-      set guifont=Consolas:h10:cANSI
+      set guifont=Fira_Code:h10:cANSI:qDRAFT
 			set visualbell
     else
       set guifont=Fira\ Code\ Regular\ 10
