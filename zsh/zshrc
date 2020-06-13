@@ -1,28 +1,29 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 31 Oct 2019 12:34:00 PM EDT
+# Last Edited: Sun 31 May 2020 02:40:14 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
-# Zplugin ######################################################################
+# zinit ######################################################################
 ################################################################################
 
-source $HOME/.zplugin/bin/zplugin.zsh
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
+source $HOME/.zinit/bin/zinit.zsh
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-zplugin light hlissner/zsh-autopair
-zplugin light jeffwalter/zsh-plugin-cd-ssh
-zplugin light arzzen/calc.plugin.zsh
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light srijanshetty/zsh-pip-completion
-zplugin ice atclone"./install.py"; zplugin light wting/autojump
-zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
-zplugin ice from"gh-r" as"command"; zplugin load junegunn/fzf-bin
-zplugin light zdharma/fast-syntax-highlighting
-zplugin light zsh-users/zsh-history-substring-search
+zinit light hlissner/zsh-autopair
+zinit light jeffwalter/zsh-plugin-cd-ssh
+zinit light arzzen/calc.plugin.zsh
+zinit light zsh-users/zsh-autosuggestions
+zinit light srijanshetty/zsh-pip-completion
+zinit ice atclone"./install.py"; zinit light wting/autojump
+zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure 
+zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
+zinit light zdharma/fast-syntax-highlighting
+zinit light zsh-users/zsh-history-substring-search
+zinit light spwhitt/nix-zsh-completions 
 
 ################################################################################
 # Settings #####################################################################
@@ -111,7 +112,7 @@ fi
 ################################################################################
 
 # use colored versions of commands by default
-if [ -x /usr/bin/dircolors ]; then
+if check dircolors; then
 	if test -r ~/.zsh/dircolors; then
 		eval "$(dircolors -b ~/.zsh/dircolors)"
 	else
@@ -145,11 +146,10 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
-
-PATH="$PATH:$HOME/bin" # add my scripts to bin
-if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
 fi
 
 

@@ -1,33 +1,34 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 24 Oct 2019 12:50:37 PM EDT
+" Last Updated: Sat 14 Mar 2020 04:13:30 PM EDT
 
 set nocompatible
 
 "                                                                           }}}
 " # Core Settings                                                           {{{
-  syntax enable
-	set synmaxcol=200
+  set background=dark
+	syntax enable
+  set synmaxcol=0
   set encoding=utf-8
   filetype plugin indent on
-	" ## Setting Colorscheme
+	" Setting Colorscheme
   if(has("gui_running"))
     set background=dark
     colorscheme solarized
     if has("win64") || has("win32")
-      set guifont=Consolas:h12:cANSI
+      set guifont=Consolas:h10:cANSI
 			set visualbell
     else
-      set guifont=ubuntu\ Mono\ 12
+      set guifont=Fira\ Code\ Regular\ 10
     endif
   else
-    set background=dark
+		set background=dark
     colorscheme desert
   endif
-	
+
   set backspace=indent,eol,start
   set ruler " Display cursor position
 
-  " ## Numbering Settings and functions
+  " Numbering Settings and functions
   set number
   " Toggle between relative and absolute numbers
   function! RelativeNumber()
@@ -53,27 +54,30 @@ set nocompatible
   set wildmenu
   set wildmode=full
   set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+	set showcmd              " Show (partial) command in status line
   set showmatch            " Highlight matching braces
   set modeline             " Enables modlines (File specific vim settings)
   set modelines=1          " Read only the last line for vim specific options
   set autoread             " Read changes from outside automatically
+	set autowrite            " Automatically save before commands like :next and :make
   set nomousehide          " To fix a bug that causes cursor to dissapear
   set mouse=a              " Enable mouse
   set textwidth=0          " Textwidth to infinite
   set spelllang=en_us      " Set US English for spellchecking
   set nospell
-  set viewoptions-=options " Saves folds and cursor
+  set viewoptions-=options " Excludes options (like working dir) from view
   set updatetime=1000
+	set hidden               " Hide buffers when they are abandoned
 
   let mapleader = "\\"
 
-  " ## Gui Options
+  " Gui Options
   set guioptions-=L " Remove left scrollbar
   set guioptions-=T " Remove Toolbar
   set guioptions-=m " Remove Menubar
 
 
-  " ## Back up directories
+  " Back up directories
   if has("win64") || has("win32")
 	set undodir=~/vimfiles/.undo//
 	set backupdir=~/vimfiles/.backup//
@@ -91,6 +95,7 @@ set nocompatible
   set autoindent
   set smartindent
   set breakindent
+  set showbreak=↳\
 
   set shiftwidth=2
   set softtabstop=2
@@ -101,6 +106,8 @@ set nocompatible
 " # Search Settings                                                         {{{
   set hlsearch " Highlight searches
   set incsearch " Incremental search (As characters are entered)
+	set ignorecase " Do case insensitive matching
+	set smartcase " Do smart case matching
 
 "                                                                           }}}
 " # Fold Settings                                                           {{{
@@ -186,9 +193,8 @@ set nocompatible
 " # Autocommands                                                            {{{
   augroup Anishs
     autocmd!
-		"foldouts handles view calls
-		"autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-		"autocmd BufReadPre ?* silent loadview
+		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		autocmd BufWinEnter ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch

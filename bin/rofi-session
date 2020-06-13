@@ -23,16 +23,16 @@ confirm() {
 
 case "$SELECTION" in
 	"lock screen" )
-		gnome-screensaver-command -l
+		slimlock
 		;;
 	"log out" )
-		confirm && gnome-session-quit --logout
+		confirm && xmonad --quit
 		;;
 	"suspend" )
-		confirm && systemctl suspend
+		confirm && slimlock && systemctl suspend
 		;;
 	"hibernate" )
-		confirm && systemctl hibernate
+		confirm && slimlock && systemctl hibernate
 		;;
 	"reboot" )
 		confirm && systemctl reboot

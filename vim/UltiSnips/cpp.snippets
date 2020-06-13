@@ -2,6 +2,7 @@
 snippet code "Main template" b
 #include<iostream>
 #include<iomanip>
+#include<cstdio>
 #include<cstdlib>
 #include<algorithm>
 #include<cassert>
@@ -12,6 +13,7 @@ snippet code "Main template" b
 #include<queue>
 #include<set>
 #include<bitset>
+#include<cstring>
 
 #include<cmath>
 #include<complex>
@@ -352,9 +354,9 @@ void ${8:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = $4;}
 endsnippet
 snippet segtreei "Inside function segment tree" b
 ${1:int} ${2:seg}[2 * ${3:N}];
-function<int(int,int)> ${5:query} = [&](int l, int r){
+function<$1(int,int)> ${5:query} = [&](int l, int r){
 	l += $3, r+= $3; //can be replace by actual upperbound
-	int ans = ${4:0};
+	$1 ans = ${4:0};
 	while(l < r){
 		if( l & 1 ) ans += $2[l++];
 		if( r & 1 ) ans += $2[--r];
@@ -362,7 +364,7 @@ function<int(int,int)> ${5:query} = [&](int l, int r){
 	}
 	return ans;
 };
-function<void(int,int)> ${6:update} = [&](int i, int val){
+function<void(int,$1)> ${6:update} = [&](int i, int val){
 	i += $3; // can be replaced by actual upperbound
 	$2[i] = val; i >>= 1;
 	while(i > 0){
@@ -371,6 +373,18 @@ function<void(int,int)> ${6:update} = [&](int i, int val){
 	}
 };
 function<void()> ${7:fill} = [&] {for(int i=0; i < 2 * $3; ++i) $2[i] = $4;};
+endsnippet
+snippet fenwick "Fenwick Tree" b
+// index starting at 1
+${1:int} ${2:fen}[${3:N}];
+$1 ${4:query}(int i){
+	$1 ret = 0;
+	for(int j = i; j; j -= j & -j) ret += $2[j];
+	return ret;
+}
+void ${5:add}(int i, $1 x){
+	for(int j = i; j < N; j += j & -j) $2[j] += x;
+}
 endsnippet
 # }}}
 # # Algorithms {{{
@@ -404,7 +418,7 @@ template<class T> struct mat{
 	mat operator*=(const mat& m){ return *this=(*this)*m; }
 };
 endsnippet
-snippet bsl "Binary Search" b
+snippet bsl "Binary Search Least" b
 // returns smallest index with >= s;
 int ${1:bs}(int s, int l, int r){
 	if(l == r) return l;
@@ -413,7 +427,7 @@ int ${1:bs}(int s, int l, int r){
 	else return $1(s, l, mid);
 }
 endsnippet
-snippet bsg "Binary Search" b
+snippet bsg "Binary Search Greatest" b
 // returns largest index with >= s;
 int ${1:bs}(int s, int l, int r){
 	if(l == r) return l;

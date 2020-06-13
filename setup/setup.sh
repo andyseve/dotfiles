@@ -1,4 +1,4 @@
-## Last Modified: Tue 05 Nov 2019 08:07:57 PM EST
+## Last Modified: Mon 25 May 2020 01:34:39 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -65,7 +65,6 @@ fi
 # Configs ######################################################################
 ################################################################################
 
-cdir $CONFIG/systemd/user
 echo -e "\nlinking configs..."
 
 # bash
@@ -102,18 +101,18 @@ if check zsh; then
 		link $OF/zshrc $HOME/.zshrc
 	fi
 
-	# zplugin setup
-	if [ -z "$ZPLG_HOME" ]; then
-		ZPLG_HOME="${ZDOTDIR:-$HOME}/.zplugin"
+	# zinit setup
+	if [ -z "$ZINIT_HOME" ]; then
+		ZINIT_HOME="${ZDOTDIR:-$HOME}/.zinit"
 	fi
-	cdir $ZPLG_HOME
-	chmod g-rwX $ZPLG_HOME
-	if test -d "$ZPLG_HOME/bin/.git"; then
-		cd "$ZPLG_HOME/bin"
+	cdir $ZINIT_HOME
+	chmod g-rwX $ZINIT_HOME
+	if test -d "$ZINIT_HOME/bin/.git"; then
+		cd "$ZINIT_HOME/bin"
 		git pull origin master
 	else
-		cd "$ZPLG_HOME"
-		git clone --depth 10 https://github.com/zdharma/zplugin.git bin
+		cd "$ZINIT_HOME"
+		git clone https://github.com/zdharma/zinit.git bin
 	fi
 else
 	nope zsh
@@ -156,6 +155,7 @@ if check vim; then
 	link $IF/vimrc.lite $OF/vimrc.lite
 	link $IF/vimrc.testing $OF/vimrc.testing
 	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
+	link $IF/coc-settings.json $OF/coc-settings.json
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
@@ -172,6 +172,18 @@ if check vim; then
 	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
 else
 	nope vim
+fi
+
+# nvim
+if check nvim; then
+	IF=$DOTFILES/nvim
+	OF=$HOME/.config/nvim
+	
+	cdir $OF
+	link $IF/init.vim $OF/init.vim
+	link $DOTFILES/vim/coc-settings.json $OF/coc-settings.json
+else
+	nope neovim
 fi
 
 # neofetch
@@ -220,14 +232,26 @@ if check xmonad; then
 	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
-	link $IF/xmobar.conf $OF/xmobar.conf
-	
-	FOLDERS=(lib scripts icons)
-	for fol in ${FOLDERS[@]}; do
-		link "$IF/$fol" "$OF/$fol"
-	done
 else
 	nope xmonad
+fi
+
+# xmobar
+if check xmobar; then
+	IF="$DOTFILES/xmobar"
+	OF="$CONFIG/xmobar"
+	cdir $OF
+	
+	if [ ! -L $OF/xmobar.hs ]; then
+		echo "Choose the xmobar file to link"
+		select opt in $IF/*.hs
+		do
+			link $opt $OF/xmobar.hs
+			break
+		done
+	fi
+else
+	nope xmobar
 fi
 
 # xfce
@@ -238,6 +262,86 @@ else
 	nope xfce4-terminal
 fi
 
+# ranger
+if check ranger; then
+	IF="$DOTFILES/ranger"
+	OF="$HOME/.config/ranger"
+	cdir $OF
+	
+	link $IF/rc.conf $OF/rc.conf
+	link $IF/commands.py $OF/commands.py
+else
+	nope ranger
+fi
+
+# rofi
+if check rofi; then
+	IF="$DOTFILES/rofi"
+	OF="$HOME/.config/rofi"
+	cdir $OF
+
+	link $IF/config.rasi $OF/config.rasi
+else
+	nope rofi
+fi
+
+# zathura
+if check zathura; then
+	IF="$DOTFILES/zathura"
+	OF="$HOME/.config/zathura"
+	cdir $OF
+
+	link $IF/zathurarc $OF/zathurarc
+else
+	nope zathura
+fi
+
+# dunst
+if check dunst; then
+	IF="$DOTFILES/dunst"
+	OF="$HOME/.config/dunst"
+	cdir $OF
+
+	link $IF/dunstrc $OF/dunstrc
+else
+	nope dunst
+fi
+
+# picom
+if check picom; then
+	IF="$DOTFILES/picom"
+	OF="$HOME/.config/picom"
+	cdir $OF
+
+	link $IF/picom.conf $OF/picom.conf
+else
+	nope picom
+fi
+
+# vdirsyncer
+if check vdirsyncer; then
+	IF="$DOTFILES/vdirsyncer"
+	OF="$HOME/.config/vdirsyncer"
+	cdir $OF
+	
+	link $IF/config $OF/config
+	vdirsyncer discover
+	vdirsyncer sync
+	vdirsyncer metasync
+else
+	nope vdirsyncer
+fi
+
+# khal
+if check khal; then
+	IF="$DOTFILES/khal"
+	OF="$HOME/.config/khal"
+	cdir $OF
+	
+	link $IF/config $OF/config
+else
+	nope khal
+fi
 
 ################################################################################
 # Themes #######################################################################

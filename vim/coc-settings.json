@@ -1,0 +1,45 @@
+{
+	"coc.preferences.highlightTimeout": 300,
+
+	"coc.source.vimtex.enable": true,
+	"coc.source.vimtex.priority": 99,
+
+	"snippets.priority": 100,
+	"snippets.snipmate.enable": false,
+	"snippets.ultisnips.enable": true,
+
+	
+
+	"languageserver": {
+		"ccls": {
+			"command": "ccls",
+			"filetypes": ["c", "cpp", "objc", "objcpp"],
+			"rootPatterns": [".ccls-root", "compile_commands.json", ".git/", ".hg"],
+			"initializationOptions": {
+				"cache": {
+					"directory": "/tmp/ccls"
+				},
+				"client": {
+					"snippetSupport": true
+				}
+			}
+		},
+
+		"haskell": {
+			"command": "hie-wrapper",
+			"args": ["--lsp"],
+			"filetypes": [
+				"hs",
+				"lhs",
+				"haskell"
+			],
+			"initializationOptions": {
+				"languageServerHaskell": {
+					"hlintOn": true
+				}
+			}
+		}
+  },
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true
+}

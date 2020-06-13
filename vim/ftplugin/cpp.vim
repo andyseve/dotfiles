@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Tue 10 Sep 2019 07:03:30 PM EDT
+" Last Modified: Mon 24 Feb 2020 09:07:44 AM EST
 " Cpp specific vim settings
 
 " # Core Settings
@@ -27,14 +27,14 @@
 	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -Wno-unused-result -O3 -pthread -lm'
 
 " # Abbreviations
-	iab vi vector<int>
-	iab vm vector<modular>
+	ab vi vector<int>
+	ab vm vector<modular>
 	ab ll long long
-	iab vll vector<long long>
-	iab pii pair<int,int>
-	iab vpii vector<pair<int,int>>
-	iab cd complex<double>
-	iab vcd vector<complex<double>>
+	ab vll vector<long long>
+	ab pii pair<int,int>
+	ab vpii vector<pair<int,int>>
+	ab cd complex<double>
+	ab vcd vector<complex<double>>
 	ab pb push_back(
 	ab mp make_pair(
 	ab cendl cout << endl

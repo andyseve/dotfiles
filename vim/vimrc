@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: 6/13/2020 8:29:48 AM
+" Last Updated: 6/13/2020 8:32:31 AM
 
 set nocompatible
 
@@ -25,11 +25,12 @@ set nocompatible
   endfunc
   call plug#begin(bundle_path)
   Plug 'hecal3/vim-leader-guide'
-  Plug 'ervandew/supertab'
-  Plug 'SirVer/ultisnips'
-  Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
-  Plug 'w0rp/ale'
-  Plug 'lervag/vimtex',                   { 'for': 'latex' }
+  "Plug 'ervandew/supertab'
+  "Plug 'SirVer/ultisnips'
+  "Plug 'Valloric/YouCompleteMe',          { 'do': function('BuildYCM') }
+  "Plug 'w0rp/ale'
+	Plug 'neoclide/coc.nvim',								{ 'branch': 'release' }
+	Plug 'lervag/vimtex',                   { 'for': 'latex' }
   Plug 'sjl/gundo.vim'
   Plug 'mileszs/ack.vim'
   Plug 'junegunn/fzf',                    { 'do':'./install --bin' }
@@ -50,6 +51,7 @@ set nocompatible
 	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
 	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
 	Plug 'Konfekt/FastFold'
+	Plug 'LnL7/vim-nix',                    { 'for': 'nix' }
 
 	call plug#end()
 
@@ -61,20 +63,13 @@ set nocompatible
 	set renderoptions=type:directx
   set encoding=utf-8
   filetype plugin indent on
-	" Setting Colorscheme
-  if(has("gui_running"))
-    set background=dark
-    colorscheme solarized
-    if has("win64") || has("win32")
-      set guifont=Fira_Code:h10:cANSI:qDRAFT
-			set visualbell
-    else
-      set guifont=Fira\ Code\ Regular\ 10
-    endif
-  else
-		set background=dark
-    colorscheme solarized
-  endif
+	" Setting visualbell for windows
+	if has("win64") || has("win32")
+    set guifont=Fira_Code:h10:cANSI:qDRAFT
+		set visualbell
+	else
+		set guifont=Fira\ Code\ Regular\ 10
+	endif
 
   set backspace=indent,eol,start
   set ruler " Display cursor position
@@ -110,15 +105,17 @@ set nocompatible
   set modeline             " Enables modlines (File specific vim settings)
   set modelines=1          " Read only the last line for vim specific options
   set autoread             " Read changes from outside automatically
-	set autowrite            " Automaticall save before commands like :next and :make
+	set autowrite            " Automatically save before commands like :next and :make
   set nomousehide          " To fix a bug that causes cursor to dissapear
   set mouse=a              " Enable mouse
   set textwidth=0          " Textwidth to infinite
   set spelllang=en_us      " Set US English for spellchecking
   set nospell
   set viewoptions-=options " Excludes options (like working dir) from view
-  set updatetime=1000
+  set updatetime=300
 	set hidden               " Hide buffers when they are abandoned
+	set cmdheight=2          " Setting command height 2 for more space
+	set shortmess+=c         " Messages should be short
 
   let mapleader = "\\"
 
@@ -130,21 +127,21 @@ set nocompatible
 
   " Back up directories
   if has("win64") || has("win32")
-	set undodir=~/vimfiles/.undo//
-	set backupdir=~/vimfiles/.backup//
-	set directory=~/vimfiles/.swp//
-	set viewdir=~/vimfiles/view//
+		set undodir=~/vimfiles/.undo//
+		set backupdir=~/vimfiles/.backup//
+		set directory=~/vimfiles/.swp//
+		set viewdir=~/vimfiles/.view//
   else
-	set undodir=~/.vim/.undo//
-	set backupdir=~/.vim/.backup//
-	set directory=~/.vim/.swp//
-	set viewdir=~/.vim/view//
+		set undodir=~/.vim/.undo//
+		set backupdir=~/.vim/.backup//
+		set directory=~/.vim/.swp//
+		set viewdir=~/.vim/.view//
   endif
 " # indent settings
   set autoindent
   set smartindent
   set breakindent
-  set showbreak=↳\
+  set showbreak=↳\ 
 
   set shiftwidth=2
   set softtabstop=2
@@ -161,7 +158,7 @@ set nocompatible
 "                                                                           }}}
 " # Fold Settings                                                           {{{
   set foldenable
-  set foldlevelstart=3
+	set foldlevel=0
 
 "                                                                           }}}
 " # Plugin Configurations and Bindings                                      {{{
@@ -181,63 +178,131 @@ set nocompatible
 
 
 	"                                                                         }}}
-  " ## Ultisnips Configuration                                              {{{
-	if has("win64") || has("win32")
-		set rtp+=~/vimfiles
-		let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
-	else
-		set rtp+=~/.vim
-		let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
-	endif
-  let g:UltiSnipsExpandTrigger="<c-space>"
-  let g:UltiSnipsJumpForwardTrigger="<tab>"
-  let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  let g:UltiSnipsListSnippets="<c-l>"
+  " ## Ultisnips Configuration  --Disabled in favor of COC                  {{{
+	"if has("win64") || has("win32")
+		"set rtp+=~/vimfiles
+		"let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
+	"else
+		"set rtp+=~/.vim
+		"let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
+	"endif
+  "let g:UltiSnipsExpandTrigger="<c-space>"
+  "let g:UltiSnipsJumpForwardTrigger="<tab>"
+  "let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+  "let g:UltiSnipsListSnippets="<c-l>"
 
-  let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
-  let g:UltiSnipsEditSplit="horizontal"
-
-	"                                                                         }}}
-  " ## YouCompleteMe Configuration                                          {{{
-  if has("win64") || has("win32")
-    let g:ycm_server_python_interpreter = 'python'
-  else
-    let g:ycm_server_python_interpreter = 'python3'
-  endif
-
-	let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-	let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-	let g:SuperTabDefaultCompletionType = '<C-n>'
-
-  let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
-  let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
-	let g:ycm_confirm_extra_conf = 0
-
-  let g:ycm_collect_identifiers_from_tag_files = 1
-  let g:ycm_seed_identifier_with_syntax = 1
-	let g:ycm_complete_in_comments = 1
-	let g:ycm_cache_omnifunc = 1
-
-	let g:ycm_show_diagnostic_ui = 0
-
-  if !exists('g:ycm_sematics_triggers')
-    let g:ycm_semantic_triggers = {}
-  endif
-  let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
-  let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
+  "let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
+  "let g:UltiSnipsEditSplit="horizontal"
 
 	"                                                                         }}}
-  " ## ALE Configuration                                                    {{{
-	let g:ale_line_on_text_changed = 'never'
-	let g:ale_on_enter = 1
-	let g:ale_on_save = 1
+	" ## YouCompleteMe Configuration  --Disabled in favor of COC              {{{
+	"set signcolumn=yes " signcolumn is turned on to avoid toggle
+  "if has("win64") || has("win32")
+    "let g:ycm_server_python_interpreter = 'python'
+  "else
+    "let g:ycm_server_python_interpreter = 'python3'
+  "endif
 
-	if !exists('g:ale_linters')
-		let g:ale_linters = {}
-	endif
-	let g:ale_linters.haskell = ['ghc-mod', 'hlint']
+	"let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+	"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+	"let g:SuperTabDefaultCompletionType = '<C-n>'
+
+  "let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
+  "let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
+	"let g:ycm_confirm_extra_conf = 0
+
+  "let g:ycm_collect_identifiers_from_tag_files = 1
+  "let g:ycm_seed_identifier_with_syntax = 1
+	"let g:ycm_complete_in_comments = 1
+	"let g:ycm_cache_omnifunc = 1
+
+	"let g:ycm_show_diagnostic_ui = 0
+
+  "if !exists('g:ycm_sematics_triggers')
+    "let g:ycm_semantic_triggers = {}
+  "endif
+  "let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
+  "let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
 
 	"                                                                         }}}
+  " ## ALE Configuration  --Disabled in favor of COC                        {{{
+	"set signcolumn=yes " signcolumn is turned on to avoid toggle
+	"let g:ale_line_on_text_changed = 'never'
+	"let g:ale_on_enter = 1
+	"let g:ale_on_save = 1
+
+	"if !exists('g:ale_linters')
+		"let g:ale_linters = {}
+	"endif
+	"let g:ale_linters.haskell = ['ghc-mod', 'hlint']
+
+	""                                                                         }}}
+	" ## COC Configuration                                                    {{{
+	set signcolumn=yes " signcolumn is turned on to avoid toggle
+
+	" extensions
+	let g:coc_global_extensions = [
+		\'coc-emoji',
+		\'coc-dictionary',
+		\'coc-tag',
+		\'coc-snippets',
+		\'coc-json',
+		\'coc-html',
+		\'coc-css',
+		\'coc-python',
+		\'coc-vimtex'
+		\]
+	
+	" binding <tab> to select
+	function! s:check_back_space() abort
+		let col = col('.') - 1
+		return !col || getline('.')[col - 1] =~ '\s'
+	endfunction
+
+	"snippet mappings
+	imap <c-l> <Plug>(coc-snippets-expand)
+	vmap <c-k> <Plug>(coc-snippets-select)
+	let g:coc_snippet_next = '<c-k>'
+	let g:coc_snippet_prev = '<c-j>'
+	imap <c-k> <Plug>(coc-snippets-expand-jump)
+
+	imap <silent><expr> <tab>
+		\ coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" :
+		\ pumvisible() ? "\<c-n>":
+		\ <SID>check_back_space() ? "\<tab>" :
+		\ coc#refresh()
+	let g:coc_snippet_next = '<tab>'
+
+	inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
+	inoremap <silent><expr> <c-space> coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" : coc#refresh()
+	inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+	
+	nmap <silent> [g <Plug>(coc-diagnostic-prev)
+	nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+	" Use K to show documentation in preview window.
+	function! s:show_documentation()
+		if (index(['vim','help'], &filetype) >= 0)
+			execute 'h '.expand('<cword>')
+		else
+			call CocAction('doHover')
+		endif
+	endfunction
+
+	nnoremap <silent> K :call <SID>show_documentation()<cr>
+	nnoremap <Plug>(show-documentation) :call <SID>show_documentation()<cr>
+	nmap <silent> <leader>dk <Plug>(show-documentation)
+
+	" GoTo code navigation.
+	nmap <silent> <leader>dd <Plug>(coc-definition)
+	nmap <silent> <leader>dy <Plug>(coc-type-definition)
+	nmap <silent> <leader>di <Plug>(coc-implementation)
+	nmap <silent> <leader>dr <Plug>(coc-references)
+
+	let g:lmap.d = {'name': 'GoTo'}
+
+
+	"																																					}}}
   " ## Vimtex configuration                                                 {{{
   let g:vimtex_enabled = 1
   let g:vimtex_view_automatic = 1
@@ -245,6 +310,8 @@ set nocompatible
 	let g:vimtex_toc_depth = 1
 	let g:vimtex_toc_show_included_files = 1
 	let g:vimtex_toc_fold = 1
+
+	let g:vimtex_cache_root = '/tmp/vimtex'
 
 	" LeaderGuide
 	let g:lmap.l = {
@@ -266,11 +333,15 @@ set nocompatible
 		let g:vimtex_view_general_viewer = 'zathura'
     let g:vimtex_view_method = 'zathura'
   endif
+	
+	if has("nvim")
+		let g:vimtex_compiler_progname = 'nvr'
+	endif
 
 	"                                                                         }}}
   " ## Gundo Configuration                                                  {{{
   let g:gundo_prefer_python3 = 1
-  nnoremap <leader>u :GundoToggle<CR>
+	let g:lmap.u = [ 'GundoToggle', "undo"	]
 
 	"                                                                         }}}
   " ## FZF and Ag configuration                                             {{{
@@ -332,16 +403,19 @@ set nocompatible
 
 	"                                                                         }}}
   " ## Solarized Config for Terminal                                        {{{
-  let g:solarized_termtrans = 1
-  let g:solarized_termcolors = 256
-  let g:solarized_contrast = 'normal'
+	let g:solarized_termtrans=1
+	let g:solarized_termcolors=16
+  let g:solarized_contrast="normal"
+	set background=dark
+	colorscheme solarized
 
-	"                                                                         }}}
-  " ## Foldout                                                              {{{
-		"let g:foldout_save = 1
-
-		"map <leader>n <Plug>FoldoutNavigation
-		"let g:lmap.n = ['<Plug>FoldoutNavigation<CR>','Navigation']
+	" ## FZF and Ag configuration
+	if executable('ag')
+		set grepprg=ag\ --vimgrep
+		let g:ackprg='ag --vimgrep'
+		let g:ctrlp_user_command='ag --vimgrep -g'
+	endif
+	noremap <c-p> :FZF<CR>
 
 	"                                                                         }}}
 
@@ -433,7 +507,7 @@ set nocompatible
   augroup Anishs
     autocmd!
 		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-		autocmd BufWinEnter ?* silent loadview
+		autocmd WinEnter ?* silent loadview
     " Update last modified tags at start of the file
     autocmd BufWritePre * silent! call UpdateLastModified() | redraw
     autocmd BufEnter * :nohlsearch
@@ -441,4 +515,4 @@ set nocompatible
 
 "                                                                           }}}
 
-" vim:foldmethod=marker
+" vim:foldmethod=marker:syntax=vim
