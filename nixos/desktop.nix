@@ -49,7 +49,8 @@ in
 		xdotool xorg.xmodmap xorg.xrandr
 		scrot                            # screenshots
     xclip
-    networkmanagerapplet
+
+    networkmanager_dmenu
 
     papirus-icon-theme               # Papirus-icons
     numix-solarized-gtk-theme        # Numix theme

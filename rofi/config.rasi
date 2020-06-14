@@ -9,4 +9,5 @@ configuration {
 	drun-match-fields: "name,exec,categories";
 	sidebar-mode: true;
 	sort: true;
+	terminal: "alacritty";
 }

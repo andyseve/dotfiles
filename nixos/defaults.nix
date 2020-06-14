@@ -15,8 +15,7 @@ in
   # iwlwifi settings
   # needed to stop multiple physical restarts.
   boot.extraModprobeConfig = ''
-    options iwlwifi power_save=0 swcrypto=1 11n_disable=8
-    options iwlmvm power_scheme=1
+    options iwlwifi 11n_disable=8
     '';
   # logitech
   hardware.logitech.enable=true;
@@ -76,7 +75,7 @@ in
     firmwareLinuxNonfree
 
 		# Version Control / Archive
-		git subversion mercurial bazaar
+		git subversion
 		unzip zip unrar
 
 		# Debug / Monitor / Analysis
@@ -110,17 +109,17 @@ in
 		vim neovim emacs26-nox
 		w3m
 		youtube-dl
-		taskwarrior timewarrior tasksh
-    khal
+		taskwarrior timewarrior
+    khal khard
     vdirsyncer
     pass
-    # mopidy mopidy-gmusic # install failing
-    fswebcam
+    fswebcam 
+    neomutt
 
 		
 		# Dev Tools
-		gnumake cmake
-		gcc clang llvm ccls
+		gnumake
+		gcc
     (python3.withPackages # installing python3 with packages
       (ps: with ps; [
         pip
@@ -141,7 +140,6 @@ in
     #)
 		all-hies.latest
 		openjdk nodejs
-    gdb
 
 		# Latex
 		texlive.combined.scheme-full

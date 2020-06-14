@@ -1,8 +1,8 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 02 Jun 2020 11:41:59 AM EDT
+-- Last Modified: Tue 09 Jun 2020 05:52:43 PM EDT
 -- Based on : https://github.com/altercation
---
+  
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
     {-
@@ -72,7 +72,6 @@ import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.Navigation2D
-import XMonad.Actions.PerWorkspaceKeys
 import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll
 -- Util
@@ -155,8 +154,7 @@ myMusic       = "google-play-music-desktop-player"
 -------------------------------------------------------------------------------
 
 myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
-                , NS "task"  spawnTask findTask manageTask
-                , NS "mixer" spawnMixer findMixer managerMixer
+                , NS "terminal"  spawnTerminal findTerminal manageTerminal
                 , NS "ranger" spawnRanger findRanger manageRanger
                 , NS "khal" spawnKhal findKhal manageKhal
                 , NS "music" spawnMusic findMusic manageMusic
@@ -186,13 +184,9 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         findWeather   = resource =? "weather"
         manageWeather = centerFloating
 
-        spawnTask = myTerminal ++ " --class=task"
-        findTask = resource =? "task"
-        manageTask = centerFloating
-
-        spawnMixer = "pavucontrol"
-        findMixer = resource =? "pavucontrol"
-        managerMixer = rightFloating
+        spawnTerminal = myTerminal ++ " --class=term"
+        findTerminal = resource =? "term"
+        manageTerminal = centerFloating
 
         spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
         findRanger = resource =? "ranger"
@@ -200,7 +194,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
 
         spawnKhal = myTerminal ++ " --class=khal -e ikhal"
         findKhal = resource =? "khal"
-        manageKhal = centerFloating
+        manageKhal = rightFloating
 
         spawnMusic = myMusic
         findMusic = className =? "Google Play Music Desktop Player"
@@ -398,7 +392,7 @@ myLayoutHook = showWorkspaceName
     $ fullScreenToggle
     $ onWorkspace wsgame ( tabs ||| float )
     $ onWorkspace wsmedia ( tabs ||| float )
-    $ onWorkspace wscom ( tabs ||| float )
+    $ onWorkspace wscom ( tabs_tall ||| float )
     $ ( tall ||| tripane )
     where
         showWorkspaceName = showWName' myShowWNameTheme
@@ -417,6 +411,12 @@ myLayoutHook = showWorkspaceName
             $ avoidStruts
             $ addTopBar
             $ addTabs shrinkText myTabTheme
+            $ Simplest
+        tabs_tall = named "tabs"
+            $ avoidStruts
+            $ windowNavigation
+            $ addTabs shrinkText myTabTheme
+            $ subLayout [] (mySpacing $ ResizableTall 1 (1/20) (2/3) [])
             $ Simplest
         -----------------------------------------------------------------------
         -- Two Columns Layout                                                --
@@ -438,7 +438,7 @@ myLayoutHook = showWorkspaceName
             $ addTopBar
             $ addTabs shrinkText myTabTheme
             $ mySpacing
-            $ subLayout [] (Simplest ||| Accordion)
+            $ subLayout [] (Accordion ||| Simplest)
             $ (suffixed "1/2" $ ResizableTall 1 (1/20) (1/2) [2, 1])
             ||| (suffixed "2/3" $ ResizableTall 1 (1/20) (3/5) [])
 
@@ -454,7 +454,7 @@ myLayoutHook = showWorkspaceName
             $ addTopBar
             $ addTabs shrinkText myTabTheme
             $ mySpacing
-            $ subLayout [] (Simplest ||| Accordion)
+            $ subLayout [] (Accordion ||| Simplest)
             $ (suffixed "mid" $ ThreeColMid 1 (3/100) (1/3))
             ||| (suffixed "left" $ ThreeCol 1 (3/100) (1/2))
 
@@ -511,7 +511,7 @@ myToggle = windows $ W.view =<< W.tag . head . filter
 -- toggling between floating and non-floating
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 then W.sink w s
-                else (W.float w s))
+                else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (2/3)) s))
 
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/blob/master/.xmonad/lib/XMonad/Config/A00001.hs
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
@@ -521,6 +521,28 @@ showKeybindings x = addName "show keybindings" $ io $ do
     hClose h
     return ()
 
+-------------------------------------------------------------------------------
+-- Modified BindOn function                                                  --
+-------------------------------------------------------------------------------
+data XCond = WS | LD
+
+chooseAction :: XCond -> (String -> X()) -> X()
+chooseAction WS f = withWindowSet (f . W.currentTag)
+chooseAction LD f = withWindowSet (f . description . W.layout . W.workspace . W.current)
+
+bindOn :: XCond -> [(String, X())] -> X()
+bindOn xc bindings = chooseAction xc $ chooser
+    where
+        chooser xc = case find ((xc==).fst) bindings of
+                       Just (_, action) -> action
+                       Nothing -> case find ((""==).fst) bindings of
+                                    Just (_,action) -> action
+                                    Nothing -> return ()
+
+-- Tabs navigatoin functions
+myFocusUp   = bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')]
+myFocusDown = bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')]
+
 ----------------------------------------------------------------------------}}}
 
 myKeys conf = let
@@ -528,7 +550,7 @@ myKeys conf = let
 
     wsIndices = [ 1, 5, 2, 3, 4, 6, 7, 8, 0 ]
     wsKeys = map show $ wsIndices
-    screenKeys = ["q","w"]
+    screenKeys = ["a","s"]
     dirKeys = ["j","k","h","l"]
     arrowKeys = ["<D>", "<U>", "<L>", "<R>"]
     fulldirKeys = ["j", "<D>", "k", "<U>", "h", "<L>", "l", "<R>"]
@@ -588,7 +610,6 @@ myKeys conf = let
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
     , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox")                         )
-    , ("M-s"          , addName "ssh"           $ spawn "rofi-ssh"                                                      )
     , ("M-z"          , addName "logout"        $ spawn "rofi-session"                                                  )
     , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher                                                      )
@@ -599,18 +620,31 @@ myKeys conf = let
     , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
     ] ^++^
     ------------------------------------------------------------------------}}}
+    -- Settings Apps                                                        {{{
+    ---------------------------------------------------------------------------
+    subKeys "settings"
+    [ ("M-z M-v"      , addName "volume"         $ spawn "pavucontrol"                                                  )
+    , ("M-z M-w"      , addName "wifi"           $ spawn "nm-applet"                                                    )
+    , ("M-z M-s"      , addName "ssh"            $ spawn "rofi-ssh"                                                     )
+    ] ^++^
+    ------------------------------------------------------------------------}}}
     -- Windows                                                              {{{
     ---------------------------------------------------------------------------
     subKeys "Windows"
     (
-    [ ("M-<Backspace>" ,  addName "kill"                   $ kill                                                       )
+    [ ("M-<Backspace>"  , addName "kill"                   $ kill                                                       )
     , ("M-C-<Backspace>", addName "kill all"               $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll )
-    , ("M-g M-m" ,        addName "Focus Master"           $ windows W.focusMaster                                      )
-    , ("M-g M-n" ,        addName "Focus Urgent"           $ focusUrgent                                                )
-    , ("M-g M-t",         addName "toggle floating window" $ withFocused toggleFloat                                    )
-    , ("M-u" ,            addName "Tabs D"                 $ onGroup W.focusDown'                                       )
-    , ("M-i" ,            addName "Tabs U"                 $ onGroup W.focusUp'                                         )
-    , ("M-g M-g" ,        addName "Unmerge"                $ withFocused (sendMessage . UnMerge)                        )
+    , ("M-g M-m"        , addName "Focus Master"           $ windows W.focusMaster                                      )
+    , ("M-g M-n"        , addName "Focus Urgent"           $ focusUrgent                                                )
+    , ("M-g M-t"        , addName "toggle floating window" $ withFocused toggleFloat                                    )
+    , ("M-g M-g"        , addName "Unmerge"                $ withFocused (sendMessage . UnMerge)                        )
+    , ("M-u"            , addName "Navigate tabs U"        $ myFocusUp                                                  )
+    , ("M-i"            , addName "Navigate tabs D"        $ myFocusDown                                                )
+    -- impliment the tab switching functions below.
+    , ("M-S-u"          , addName "Switch tabs U"          $ myFocusUp                                                  )
+    , ("M-S-i"          , addName "Switch tabs D"          $ myFocusDown                                                )
+    , ("M-C-u"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusDown')          )
+    , ("M-C-i"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusUp')            )
     ] 
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
@@ -652,12 +686,12 @@ myKeys conf = let
     -- Scratchpads                                                          {{{
     ---------------------------------------------------------------------------
     subKeys "scratchpads"
-    [ ("M-r", addName "htop"   $ namedScratchpadAction myScratchpads "htop"   )
-    , ("M-t", addName "task"   $ namedScratchpadAction myScratchpads "task"   )
-    , ("M-v", addName "mixer"  $ namedScratchpadAction myScratchpads "mixer"  )
-    , ("M-e", addName "ranger" $ namedScratchpadAction myScratchpads "ranger" )
-    , ("M-c", addName "khal"   $ namedScratchpadAction myScratchpads "khal"   )
-    , ("M-m", addName "music"  $ namedScratchpadAction myScratchpads "music"  )
+    [ ("M-r", addName "htop"     $ namedScratchpadAction myScratchpads "htop"     )
+    , ("M-t", addName "terminal" $ namedScratchpadAction myScratchpads "terminal" )
+    , ("M-v", addName "mixer"    $ namedScratchpadAction myScratchpads "mixer"    )
+    , ("M-e", addName "ranger"   $ namedScratchpadAction myScratchpads "ranger"   )
+    , ("M-c", addName "khal"     $ namedScratchpadAction myScratchpads "khal"     )
+    , ("M-m", addName "music"    $ namedScratchpadAction myScratchpads "music"    )
     ]
     ------------------------------------------------------------------------}}}
 
@@ -672,6 +706,7 @@ myStartupHook = do
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
     spawnOnce "Discord"
     spawnOnce "slack"
+    spawnOnce "zoom-us"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -766,8 +801,7 @@ myFadeHook = composeAll
     , className =? "vlc"   --> opaque
     , className =? "feh"   --> opaque
     , className =? "dota2" --> opaque
-    -- 0.95 on browsers is visibile enough.
-    --, isRole =? "browser"  --> opaque -- Makes browser oqaque
+    , isRole =? "browser"  --> opaque -- Makes browser oqaque, important for videos
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
@@ -784,20 +818,20 @@ myManageHook = myCustomManageHook
     <+> manageHook def
 
 myCustomManageHook :: ManageHook
-myCustomManageHook = composeAll . concat $
-    [ [ className =? c <||> title=? c --> doF (W.shift wswww)                            |  c <- myWebShifts   ]
-    , [ className =? c                --> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
-    , [ className =? c                --> doF (liftM2 (.) W.greedyView W.shift wsgame)   |  c <- myGameViews   ]
-    , [ className =? c                --> doF (W.shift wscom)                            |  c <- myComShifts   ]
-    , [ className =? c                --> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
-    , [ className =? c                --> doF (liftM2 (.) W.greedyView W.shift wsmedia)  |  c <- myMediaViews  ]
-    , [ className =? c                --> doCenterFloat                                  |  c <- myCFloats     ]
-    , [ className =? c                --> doRRectFloat                                   |  c <- myRFloats     ]
-    -- , [ className =? "Steam" <&&> title/=? "Steam" --> doRRectFloat ] -- floats steam messages and everything else.
+myCustomManageHook = composeOne . concat $
+    [ [ className =? c <||> resource =? c -?> doF (W.shift wswww)                            |  c <- myWebShifts   ]
+    , [ className =? c <||> resource =? c -?> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
+    , [ className =? c <||> resource =? c -?> doF (liftM2 (.) W.greedyView W.shift wsgame)   |  c <- myGameViews   ]
+    , [ className =? c <||> resource =? c -?> doF (W.shift wscom)                            |  c <- myComShifts   ]
+    , [ className =? c <||> resource =? c -?> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
+    , [ className =? c <||> resource =? c -?> doF (liftM2 (.) W.greedyView W.shift wsmedia)  |  c <- myMediaViews  ]
+    , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
+    , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
         -- Handling specific conditions
-    , [ isFullscreen --> doFullFloat ]
-    , [ isDialog --> doCenterFloat ]
-    , [ isRole =? "pop-up" --> doCenterFloat ]
+    , [ transience ]
+    , [ isFullscreen       -?> doFullFloat ]
+    , [ isDialog           -?> doCenterFloat ]
+    , [ isRole =? "pop-up" -?> doCenterFloat ]
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
