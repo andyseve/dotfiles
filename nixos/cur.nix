@@ -49,7 +49,7 @@
   # List services that you want to enable:
 
   # SSHD
-  # Add /etc/nixos/ssh.nix to imports
+  # Add /etc/nixos/modules/ssh.nix to imports
 
   # Firewall.
   networking.firewall.enable = true;
@@ -68,10 +68,8 @@
     }
   ];
 
-	security.sudo.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  # User account info is in ./modules/users.nix
+  # Add /etc/nixos/modules/users.nix
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
