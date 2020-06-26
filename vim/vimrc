@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 26 Jun 2020 03:38:52 PM EDT
+" Last Updated: Fri 26 Jun 2020 03:40:24 PM EDT
 
 set nocompatible
 
@@ -60,12 +60,12 @@ set nocompatible
   set background=dark
 	syntax enable
   set synmaxcol=0
-	set renderoptions=type:directx
   set encoding=utf-8
   filetype plugin indent on
 	" Setting visualbell for windows
 	if has("win64") || has("win32")
     set guifont=Fira_Code:h10:cANSI:qDRAFT
+		set renderoptions=type:directx
 		set visualbell
 	else
 		set guifont=Fira\ Code\ Regular\ 10
