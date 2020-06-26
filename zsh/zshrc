@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sun 31 May 2020 02:40:14 AM EDT
+# Last Edited: Tue 23 Jun 2020 10:57:02 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -24,6 +24,7 @@ zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
 zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
 zinit light spwhitt/nix-zsh-completions 
+zinit light chisui/zsh-nix-shell
 
 ################################################################################
 # Settings #####################################################################
@@ -163,12 +164,27 @@ PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
 PROMPT='%F{white}%* '$PROMPT
 
 precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}"
+	RPROMPT="%F{red}${(j.|.)pipestatus}%f"
        if [[ ${(j.|.)pipestatus} = 0 ]]; then
               RPROMPT=""
        fi
 }
+
+precmd_nix_shell() {
+	if [[ -n "$IN_NIX_SHELL" ]]; then
+		if [[ -n $name ]]; then
+			RPROMPT=$RPROMPT' %F{red}[${name}]%f'
+		else
+			RPROMPT=$RPROMPT' %F{red}[nix-shell]%f'
+		fi
+	fi
+}
+
 add-zsh-hook precmd precmd_pipestatus
+add-zsh-hook precmd precmd_nix_shell
+
+zstyle :prompt:pure:git:stash show yes
+
 
 ################################################################################
 # Completions ##################################################################
