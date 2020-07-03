@@ -2,6 +2,8 @@ let
   pkgs = import <nixos> {};
 in 
   pkgs.mkShell {
+    name = "python-for-dota_info";
+
     buildInputs = [
       pkgs.python3
       pkgs.python3Packages.pip

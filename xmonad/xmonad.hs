@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 26 Jun 2020 05:25:53 AM EDT
+-- Last Modified: Fri 03 Jul 2020 02:58:42 AM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -198,7 +198,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
 
         spawnMusic = myMusic
         findMusic = className =? "Google Play Music Desktop Player"
-        manageMusic = rightFloating
+        manageMusic = centerFloating
 
 ----------------------------------------------------------------------------}}}
 -- Theme                                                                    {{{
@@ -704,9 +704,6 @@ myStartupHook = do
     spawnOnce "picom"
     spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
-    spawnOnce "Discord"
-    spawnOnce "slack"
-    spawnOnce "zoom-us"
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -792,7 +789,7 @@ xmobarDestroyer = do
     XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
 
 -- FadeHook
-myFadeHook = composeAll
+myFadeHook = composeAll $ 
     [ opaque
     , isUnfocused          --> opacity 0.95
     , isFloating           --> opacity 0.95
@@ -803,8 +800,11 @@ myFadeHook = composeAll
     , className =? "dota2" --> opaque
     , isRole =? "browser"  --> opaque -- Makes browser oqaque, important for videos
     ]
+    ++
+    [ className =? c --> opaque | c <- myOpaques ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
+            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub"]
 
 ----------------------------------------------------------------------------}}}
 -- Manage Hook                                                              {{{
@@ -821,10 +821,10 @@ myCustomManageHook :: ManageHook
 myCustomManageHook = composeOne . concat $
     [ [ className =? c <||> resource =? c -?> doF (W.shift wswww)                            |  c <- myWebShifts   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
-    , [ className =? c <||> resource =? c -?> doF (liftM2 (.) W.greedyView W.shift wsgame)   |  c <- myGameViews   ]
+    , [ className =? c <||> resource =? c -?> doF (shiftView wsgame)                         |  c <- myGameViews   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wscom)                            |  c <- myComShifts   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
-    , [ className =? c <||> resource =? c -?> doF (liftM2 (.) W.greedyView W.shift wsmedia)  |  c <- myMediaViews  ]
+    , [ className =? c <||> resource =? c -?> doF (shiftView wsmedia)                        |  c <- myMediaViews  ]
     , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
     , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
         -- Handling specific conditions
@@ -837,7 +837,7 @@ myCustomManageHook = composeOne . concat $
             isRole = stringProperty "WM_WINDOW_ROLE"
             myWebShifts = ["Firefox", "google-chrome"]
             myGameShifts = ["Steam"]
-            myGameViews = ["dota2"]
+            myGameViews = ["dota2", "Civ6Sub"]
             myComShifts = ["Slack", "discord", "weechat"]
             myMediaViews = ["vlc"]
             myMediaShifts = []
@@ -845,6 +845,7 @@ myCustomManageHook = composeOne . concat $
             myRFloats = ["ikhal", "pavucontrol"]
 
             doRRectFloat = doRectFloat (W.RationalRect 0.73 0 0.25 0.50)
+            shiftView = liftM2 (.) W.greedyView W.shift 
 ----------------------------------------------------------------------------}}}
 -- Event Hook                                                               {{{
 -------------------------------------------------------------------------------
