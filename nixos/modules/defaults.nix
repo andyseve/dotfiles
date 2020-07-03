@@ -95,6 +95,7 @@
 
 		# Encryption
 		gnupg
+    pinentry
 		
 		# CLI programs
 		ranger
@@ -139,8 +140,6 @@
 
 		# Man Pages
 		man man-pages
-
-    anish-dotfiles
   ];
 
   # Enable CUPS to print documents.
@@ -161,7 +160,20 @@
 	hardware.pulseaudio.support32Bit = true;
 	hardware.steam-hardware.enable = true;
 
-	# backlight using light
-	programs.light.enable = true;
-  programs.zsh.enable = true;
+  programs = {
+    # zsh
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+    };
+    # backlight
+    light.enable = true;
+    # gnupg
+    gnupg.agent = {
+      enable = true;
+      enableBrowserSocket = true;
+      enableSSHSupport = true;
+      pinentryFlavor = "curses";
+    };
+  };
 }

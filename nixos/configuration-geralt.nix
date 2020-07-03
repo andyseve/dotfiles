@@ -24,7 +24,7 @@
   fileSystems."/media/storage" =
   { device = "/dev/disk/by-label/Storage";
     fsType = "ntfs";
-    options = [ "auto" "rw" "exec" "nosuid" "nofail" "user" "uid=1000" "gid=100" ];
+    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" ];
   };
 
   networking.hostName = "geralt"; # Define your hostname.
