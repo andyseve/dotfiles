@@ -1,5 +1,10 @@
-{ configs, pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+	unstableOverlay = (self: super: {
+		unstable = import <unstable> { config = config.nixpkgs.config; };
+	});
+in
 {
   # Xserver settings
 	services.xserver = {
@@ -25,25 +30,27 @@
         haskellPackages.xmonad-contrib
         haskellPackages.xmonad-extras
         haskellPackages.xmonad
-        haskellPackages.xmobar
       ];
 		};
+
+    # Wacom
+    wacom.enable = true;
 	};
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];
 
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
-		unstable.haskellPackages.xmobar
-		rofi
+    haskellPackages.xmobar
+		rofi rofi-pass
 		picom                            # transparancy
 		dunst libnotify                  # notifications
 		feh
 		xdotool xorg.xmodmap xorg.xrandr
 		scrot                            # screenshots
     xclip
-    redshift                         # for night light
-    geoclue2                         # location
+
+    networkmanager_dmenu
 
     papirus-icon-theme               # Papirus-icons
     numix-solarized-gtk-theme        # Numix theme
@@ -52,7 +59,6 @@
 		firefox google-chrome 
 		vlc
 		zathura
-    vimHugeX emacs
 		libreoffice
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
@@ -60,6 +66,9 @@
 		unstable.discord unstable.zoom-us unstable.slack
 		deluge
 		unstable.google-play-music-desktop-player
+
+    # Helper CLI tools
+    streamlink
 	];
 
   environment.variables = {

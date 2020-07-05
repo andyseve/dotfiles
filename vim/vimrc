@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 30 Apr 2020 07:27:30 AM EDT
+" Last Updated: Fri 26 Jun 2020 03:40:24 PM EDT
 
 set nocompatible
 
@@ -64,7 +64,8 @@ set nocompatible
   filetype plugin indent on
 	" Setting visualbell for windows
 	if has("win64") || has("win32")
-		set guifont=Consolas:h10:cANSI
+    set guifont=Fira_Code:h10:cANSI:qDRAFT
+		set renderoptions=type:directx
 		set visualbell
 	else
 		set guifont=Fira\ Code\ Regular\ 10
@@ -249,7 +250,8 @@ set nocompatible
 		\'coc-html',
 		\'coc-css',
 		\'coc-python',
-		\'coc-vimtex'
+		\'coc-vimtex',
+		\'coc-diagnostic'
 		\]
 	
 	" binding <tab> to select

@@ -1,0 +1,1 @@
+/home/stranger/dotfiles/nixos/dotfiles.nix

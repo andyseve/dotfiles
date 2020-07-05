@@ -8,10 +8,11 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-			/etc/nixos/defaults.nix
-			/etc/nixos/desktop.nix
-      /etc/nixos/nvidia.nix
-      /etc/nixos/ssh.nix
+			./modules/defaults.nix
+			./modules/desktop.nix
+      ./modules/nvidia.nix
+      ./modules/ssh.nix
+      ./modules/users.nix
     ];
 
 	# Timezone settings
@@ -23,11 +24,11 @@
   fileSystems."/media/storage" =
   { device = "/dev/disk/by-label/Storage";
     fsType = "ntfs";
-    options = [ "auto" "rw" "exec" "nosuid" "nofail" "user" "uid=1000" "gid=100" ];
+    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" ];
   };
 
   networking.hostName = "geralt"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -67,18 +68,10 @@
     }
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
 	security.sudo.enable = true;
-  users.users.stranger = {
-    isNormalUser = true;
-		home = "/home/stranger";
-		description = "Anish Sevekari";
-    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
-		createHome = true;
-		shell = "${pkgs.zsh}/bin/zsh";
-  };
-	users.users.root.shell = "${pkgs.zsh}/bin/zsh";
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User account info is in ./modules/users.nix
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

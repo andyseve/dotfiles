@@ -1,9 +1,9 @@
 # Author: Anish Sevekari
-# Last Edited: Mon 04 May 2020 03:43:40 AM EDT
+# Last Edited: Tue 23 Jun 2020 10:57:02 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
 # zinit ######################################################################
@@ -23,6 +23,8 @@ zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure
 zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
 zinit light zdharma/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
+zinit light spwhitt/nix-zsh-completions 
+zinit light chisui/zsh-nix-shell
 
 ################################################################################
 # Settings #####################################################################
@@ -151,15 +153,6 @@ else
 	export EDITOR='vim'
 fi
 
-#PATH="$HOME/bin:$PATH" # add my scripts to bin
-#PATH="$HOME/.local/bin:$PATH" # numpy scripts
-#if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	#PATH="$HOME/bin/miniconda3/bin:$PATH" # add anaconda to path
-#fi
-#if [ -e "$HOME/.cabal/bin" ]; then
-	#PATH="$HOME/.cabal/bin:$PATH" # add cabal to path
-#fi
-
 
 ################################################################################
 # Prompt #######################################################################
@@ -171,12 +164,27 @@ PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
 PROMPT='%F{white}%* '$PROMPT
 
 precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}"
+	RPROMPT="%F{red}${(j.|.)pipestatus}%f"
        if [[ ${(j.|.)pipestatus} = 0 ]]; then
               RPROMPT=""
        fi
 }
+
+precmd_nix_shell() {
+	if [[ -n "$IN_NIX_SHELL" ]]; then
+		if [[ -n $name ]]; then
+			RPROMPT=$RPROMPT' %F{red}[${name}]%f'
+		else
+			RPROMPT=$RPROMPT' %F{red}[nix-shell]%f'
+		fi
+	fi
+}
+
 add-zsh-hook precmd precmd_pipestatus
+add-zsh-hook precmd precmd_nix_shell
+
+zstyle :prompt:pure:git:stash show yes
+
 
 ################################################################################
 # Completions ##################################################################

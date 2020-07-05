@@ -1,13 +1,5 @@
 { config, pkgs, ... }:
 
-let
-	allHieOverlay = (self: super: {
-		all-hies = import <all-hie> {};
-	});
-	unstableOverlay = (self: super: {
-		unstable = import <unstable> { config = config.nixpkgs.config; };
-	});
-in
 {
   # firmware settings
   # additional firmware drivers
@@ -15,8 +7,7 @@ in
   # iwlwifi settings
   # needed to stop multiple physical restarts.
   boot.extraModprobeConfig = ''
-    options iwlwifi power_save=0 swcrypto=1 11n_disable=8
-    options iwlmvm power_scheme=1
+    options iwlwifi 11n_disable=8
     '';
   # logitech
   hardware.logitech.enable=true;
@@ -67,7 +58,8 @@ in
 	nixpkgs.config = {
 		allowUnfree = true;
 	};
-	nixpkgs.overlays = [ allHieOverlay unstableOverlay ];
+
+	nixpkgs.overlays = import ../overlays;
 
   environment.enableDebugInfo = true;
   # List packages installed in system profile.
@@ -76,23 +68,26 @@ in
     firmwareLinuxNonfree
 
 		# Version Control / Archive
-		git subversion mercurial bazaar
+		git subversion
 		unzip zip unrar
 
 		# Debug / Monitor / Analysis
 		htop iotop powertop iftop
 		ltrace strace
 		pciutils usbutils lshw
-		smartmontools
+		smartmontools lm_sensors
+
+    # Volume
+    pavucontrol
 
 		# Networking
-		inetutils
+    iputils
 		nmap wireshark
 		tor openvpn
 		wget curl rsync unison
+    networkmanager networkmanager-openvpn
 
 		# Linux shell utils
-		zsh bash
 		fzf silver-searcher
 		neofetch
 		tree
@@ -100,6 +95,7 @@ in
 
 		# Encryption
 		gnupg
+    pinentry-gtk2
 		
 		# CLI programs
 		ranger
@@ -107,40 +103,37 @@ in
 		vim neovim emacs26-nox
 		w3m
 		youtube-dl
-		taskwarrior timewarrior tasksh
-    khal
-    vdirsyncer
-    # mopidy mopidy-gmusic # install failing
+		taskwarrior timewarrior
+    khal khard # calendars and contacts
+    vdirsyncer # vdirsyncer
+    fswebcam 
+    neomutt
+    pubs # biblography manager
+    pass # password manager
 
 		
 		# Dev Tools
-		gnumake cmake
-		gcc clang llvm ccls
+		gnumake
+		gcc ccls
     (python3.withPackages # installing python3 with packages
       (ps: with ps; [
-        pip
-        pylint
+        pylint jedi
         numpy scipy matplotlib
         jupyter notebook
-        tensorflow pytorch
-        jedi # for autocompletion
       ])
     )
+    python3Packages.pip
     pypi2nix
-    (unstable.haskellPackages.ghcWithPackages # installing ghc with packges
-      (haskellPackages: with haskellPackages; [
-        xmonad xmonad-contrib xmonad-extras
-        xmobar
-        hoogle
-      ])
-    )
-    unstable.haskellPackages.ghc
-    unstable.haskellPackages.xmonad unstable.haskellPackages.xmonad-extras unstable.haskellPackages.xmonad-contrib
-    unstable.haskellPackages.xmobar
-		unstable.haskellPackages.hoogle
-		all-hies.latest
+
+    haskellPackages.ghc
+    haskellPackages.hoogle
+    haskellPackages.hlint
+    # haskellPackages.hsimport -- broken
+    haskellPackages.cabal-install
+    cabal2nix
+    # all-hies.latest
+
 		openjdk nodejs
-    gdb
 
 		# Latex
 		texlive.combined.scheme-full
@@ -167,6 +160,20 @@ in
 	hardware.pulseaudio.support32Bit = true;
 	hardware.steam-hardware.enable = true;
 
-	# backlight using light
-	programs.light.enable = true;
+  programs = {
+    # zsh
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+    };
+    # backlight
+    light.enable = true;
+    # gnupg
+    gnupg.agent = {
+      enable = true;
+      enableBrowserSocket = true;
+      enableSSHSupport = true;
+      pinentryFlavor = "gtk2";
+    };
+  };
 }

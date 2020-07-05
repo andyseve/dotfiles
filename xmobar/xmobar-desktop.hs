@@ -43,7 +43,7 @@ config = defaultConfig {
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " %UnsafeStdinReader%} %date% %weather% {%wlp4s0wi% %default:Master% "
+       , template = " %UnsafeStdinReader%} <action=xdotool key Super+c>%date%</action> %weather% {%wlp4s0wi% %default:Master% "
        }
 
 main :: IO ()
