@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Jul 2020 02:58:42 AM EDT
+-- Last Modified: Fri 03 Jul 2020 07:23:36 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -810,23 +810,37 @@ myFadeHook = composeAll $
 -- Manage Hook                                                              {{{
 -------------------------------------------------------------------------------
 myManageHook :: ManageHook
-myManageHook = myCustomManageHook
+myManageHook = myCustomShiftHook <+> myCustomPlaceHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook
     <+> manageHook def
 
-myCustomManageHook :: ManageHook
-myCustomManageHook = composeOne . concat $
+myCustomShiftHook :: ManageHook
+myCustomShiftHook = composeOne . concat $
     [ [ className =? c <||> resource =? c -?> doF (W.shift wswww)                            |  c <- myWebShifts   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wsgame)                           |  c <- myGameShifts  ]
     , [ className =? c <||> resource =? c -?> doF (shiftView wsgame)                         |  c <- myGameViews   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wscom)                            |  c <- myComShifts   ]
     , [ className =? c <||> resource =? c -?> doF (W.shift wsmedia)                          |  c <- myMediaShifts ]
     , [ className =? c <||> resource =? c -?> doF (shiftView wsmedia)                        |  c <- myMediaViews  ]
-    , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
+    ]
+        where
+            myWebShifts = ["Firefox", "google-chrome"]
+            myGameShifts = ["Steam"]
+            myGameViews = ["dota2", "Civ6Sub"]
+            myComShifts = ["Slack", "discord", "weechat"]
+            myMediaViews = ["vlc"]
+            myMediaShifts = []
+
+            shiftView = liftM2 (.) W.greedyView W.shift 
+
+myCustomPlaceHook :: ManageHook
+myCustomPlaceHook = composeOne . concat $ 
+    [ [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
     , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
+    , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
         -- Handling specific conditions
     , [ transience ]
     , [ isFullscreen       -?> doFullFloat ]
@@ -835,17 +849,12 @@ myCustomManageHook = composeOne . concat $
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
-            myWebShifts = ["Firefox", "google-chrome"]
-            myGameShifts = ["Steam"]
-            myGameViews = ["dota2", "Civ6Sub"]
-            myComShifts = ["Slack", "discord", "weechat"]
-            myMediaViews = ["vlc"]
-            myMediaShifts = []
             myCFloats = ["feh"]
             myRFloats = ["ikhal", "pavucontrol"]
+            myFullFloats = ["dota2", "Civ6Sub"]
 
             doRRectFloat = doRectFloat (W.RationalRect 0.73 0 0.25 0.50)
-            shiftView = liftM2 (.) W.greedyView W.shift 
+
 ----------------------------------------------------------------------------}}}
 -- Event Hook                                                               {{{
 -------------------------------------------------------------------------------

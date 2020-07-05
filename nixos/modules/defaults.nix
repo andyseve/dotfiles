@@ -75,7 +75,7 @@
 		htop iotop powertop iftop
 		ltrace strace
 		pciutils usbutils lshw
-		smartmontools
+		smartmontools lm_sensors
 
     # Volume
     pavucontrol
@@ -95,7 +95,7 @@
 
 		# Encryption
 		gnupg
-    pinentry
+    pinentry-gtk2
 		
 		# CLI programs
 		ranger
@@ -173,7 +173,7 @@
       enable = true;
       enableBrowserSocket = true;
       enableSSHSupport = true;
-      pinentryFlavor = "curses";
+      pinentryFlavor = "gtk2";
     };
   };
 }

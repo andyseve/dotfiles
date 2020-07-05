@@ -1,4 +1,4 @@
-## Last Modified: Fri 26 Jun 2020 03:27:30 PM EDT
+## Last Modified: Sun 05 Jul 2020 02:26:18 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -142,13 +142,14 @@ fi
 if check vim; then
 	IF=$DOTFILES/vim
 	OF=$HOME/.vim
-	FOLDERS=(ftdetect ftplugin spell syntax UltiSnips)
+	FOLDERS=(ftdetect ftplugin spell syntax)
 
 	cdir $OF
 	cdir $OF/.swp
 	cdir $OF/.backup
 	cdir $OF/.undo
 	cdir $OF/view
+	cdir $CONFIG/coc/ultisnips
 
 	link $IF/vimrc $OF/vimrc
 	link $IF/vimrc.noplugin $OF/vimrc.noplugin
@@ -156,6 +157,7 @@ if check vim; then
 	link $IF/vimrc.testing $OF/vimrc.testing
 	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
 	link $IF/coc-settings.json $OF/coc-settings.json
+	link $IF/ultisnips $CONFIG/coc/ultisnips
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
