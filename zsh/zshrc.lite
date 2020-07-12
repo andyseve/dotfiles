@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 24 Oct 2019 12:55:16 PM EDT
+# Last Edited: Sat 14 Mar 2020 06:01:07 PM EDT
 # Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
@@ -101,14 +101,18 @@ fi
 
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+	if test -r ~/.zsh/dircolors; then
+		eval "$(dircolors -b ~/.zsh/dircolors)"
+	else
+		eval "$(dircolors -b)"
+	fi
+	alias ls='ls --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
@@ -130,8 +134,14 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
+fi
 
+PATH="$PATH:$HOME/bin" # add my scripts to bin
+PATH="$PATH:$HOME/.local/bin" # numpy scripts
 if [ -e "$HOME/bin/miniconda3/bin" ]; then
 	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
 fi
@@ -153,6 +163,7 @@ precmd_pipestatus() {
        fi
 }
 add-zsh-hook precmd precmd_pipestatus
+
 ################################################################################
 # Completions ##################################################################
 ################################################################################
@@ -165,7 +176,6 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s

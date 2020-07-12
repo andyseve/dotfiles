@@ -1,0 +1,22 @@
+#!/run/current-system/sw/bin/bash
+
+while getopts ":u:p:g:h" opt; do
+	case ${opt} in
+		u )
+			echo $(pass $OPTARG | grep username | awk -F "username: " '{print $2}')
+			;;
+		p )
+			echo $(pass $OPTARG | sed -n 1p)
+			;;
+		g )
+			user=$(pass $OPTARG | grep username | awk -F "username: " '{print $2}')
+			pass=$(pass $OPTARG | sed -n 1p)
+			echo "username = ${user}"
+			echo "password = ${pass}"
+			;;
+		h | : | *)
+			echo "Usage: getpass [-u|-p] pass/store/path"
+			exit 2
+			;;
+	esac
+done

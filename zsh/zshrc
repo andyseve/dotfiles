@@ -1,28 +1,30 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 27 Feb 2020 02:36:44 PM EST
+# Last Edited: Tue 23 Jun 2020 10:57:02 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
-# Zplugin ######################################################################
+# zinit ######################################################################
 ################################################################################
 
-source $HOME/.zplugin/bin/zplugin.zsh
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
+source $HOME/.zinit/bin/zinit.zsh
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
-zplugin light hlissner/zsh-autopair
-zplugin light jeffwalter/zsh-plugin-cd-ssh
-zplugin light arzzen/calc.plugin.zsh
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light srijanshetty/zsh-pip-completion
-zplugin ice atclone"./install.py"; zplugin light wting/autojump
-zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
-zplugin ice from"gh-r" as"command"; zplugin load junegunn/fzf-bin
-zplugin light zdharma/fast-syntax-highlighting
-zplugin light zsh-users/zsh-history-substring-search
+zinit light hlissner/zsh-autopair
+zinit light jeffwalter/zsh-plugin-cd-ssh
+zinit light arzzen/calc.plugin.zsh
+zinit light zsh-users/zsh-autosuggestions
+zinit light srijanshetty/zsh-pip-completion
+zinit ice atclone"./install.py"; zinit light wting/autojump
+zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure 
+zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
+zinit light zdharma/fast-syntax-highlighting
+zinit light zsh-users/zsh-history-substring-search
+zinit light spwhitt/nix-zsh-completions 
+zinit light chisui/zsh-nix-shell
 
 ################################################################################
 # Settings #####################################################################
@@ -111,7 +113,7 @@ fi
 ################################################################################
 
 # use colored versions of commands by default
-if [ -x /usr/bin/dircolors ]; then
+if check dircolors; then
 	if test -r ~/.zsh/dircolors; then
 		eval "$(dircolors -b ~/.zsh/dircolors)"
 	else
@@ -145,12 +147,10 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
-
-PATH="$PATH:$HOME/bin" # add my scripts to bin
-PATH="$PATH:$HOME/.local/bin" # numpy scripts
-if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
 fi
 
 
@@ -164,21 +164,34 @@ PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
 PROMPT='%F{white}%* '$PROMPT
 
 precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}"
+	RPROMPT="%F{red}${(j.|.)pipestatus}%f"
        if [[ ${(j.|.)pipestatus} = 0 ]]; then
               RPROMPT=""
        fi
 }
+
+precmd_nix_shell() {
+	if [[ -n "$IN_NIX_SHELL" ]]; then
+		if [[ -n $name ]]; then
+			RPROMPT=$RPROMPT' %F{red}[${name}]%f'
+		else
+			RPROMPT=$RPROMPT' %F{red}[nix-shell]%f'
+		fi
+	fi
+}
+
 add-zsh-hook precmd precmd_pipestatus
+add-zsh-hook precmd precmd_nix_shell
+
+zstyle :prompt:pure:git:stash show yes
+
 
 ################################################################################
 # Completions ##################################################################
 ################################################################################
 
 # Use modern completion system
-autoload -Uz compinit bashcompinit
-compinit -u
-bashcompinit
+autoload -Uz compinit && compinit -u
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -196,8 +209,5 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-
-# pubs autocomplete
-eval "$(register-python-argcomplete pubs)"
 
 # vim:ft=zsh

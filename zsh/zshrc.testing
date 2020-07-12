@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 11 Jul 2019 12:12:26 PM DST
+# Last Edited: Sat 14 Mar 2020 06:03:45 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -9,7 +9,7 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 # Zplugin ######################################################################
 ################################################################################
 
-source '/home/stranger/.zplugin/bin/zplugin.zsh'
+source $HOME/.zplugin/bin/zplugin.zsh
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 
@@ -18,8 +18,9 @@ zplugin light jeffwalter/zsh-plugin-cd-ssh
 zplugin light arzzen/calc.plugin.zsh
 zplugin light zsh-users/zsh-autosuggestions
 zplugin light srijanshetty/zsh-pip-completion
-zplugin ice from"gh-r" as"program"; zplugin light junegunn/fzf-bin
+zplugin ice atclone"./install.py"; zplugin light wting/autojump
 zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
+zplugin ice from"gh-r" as"command"; zplugin load junegunn/fzf-bin
 zplugin light zdharma/fast-syntax-highlighting
 zplugin light zsh-users/zsh-history-substring-search
 
@@ -47,6 +48,10 @@ SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
 
+# zsh/autosuggestions color change
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
+
+
 
 ################################################################################
 # Keybindings ##################################################################
@@ -56,8 +61,8 @@ HISTFILE=~/.zsh_history
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
 # history search keybindings
-bindkey '${key[up]}' history-substring-search-up
-bindkey '${key[down]}' history-substring-search-down
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 
@@ -85,7 +90,7 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # loading autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] & source $HOME/.autojump/etc/profile.d/autojump.sh
+[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
 
 
 
@@ -107,14 +112,18 @@ fi
 
 # use colored versions of commands by default
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
+	if test -r ~/.zsh/dircolors; then
+		eval "$(dircolors -b ~/.zsh/dircolors)"
+	else
+		eval "$(dircolors -b)"
+	fi
+	alias ls='ls --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
 fi
 
 # some more ls aliases
@@ -136,8 +145,14 @@ done
 ################################################################################
 
 export PAGER='less'
-export EDITOR='vim'
+if _has nvim; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
+fi
 
+PATH="$PATH:$HOME/bin" # add my scripts to bin
+PATH="$PATH:$HOME/.local/bin" # numpy scripts
 if [ -e "$HOME/bin/miniconda3/bin" ]; then
 	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
 fi
@@ -159,6 +174,7 @@ precmd_pipestatus() {
        fi
 }
 add-zsh-hook precmd precmd_pipestatus
+
 ################################################################################
 # Completions ##################################################################
 ################################################################################
@@ -171,7 +187,6 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -184,3 +199,4 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# vim:ft=zsh

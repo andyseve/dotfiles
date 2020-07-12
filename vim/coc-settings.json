@@ -1,0 +1,109 @@
+{
+	"coc.preferences.highlightTimeout": 300,
+
+	"coc.source.vimtex.enable": true,
+	"coc.source.vimtex.priority": 99,
+
+	"snippets.priority": 100,
+	"snippets.snipmate.enable": false,
+	"snippets.ultisnips.enable": true,
+
+	
+
+	"languageserver": {
+		"ccls": {
+			"command": "ccls",
+			"filetypes": ["c", "cpp", "objc", "objcpp"],
+			"rootPatterns": [".ccls-root", "compile_commands.json", ".git/", ".hg"],
+			"initializationOptions": {
+				"cache": {
+					"directory": "/tmp/ccls"
+				},
+				"client": {
+					"snippetSupport": true
+				}
+			}
+		},
+
+		"haskell": {
+			"command": "hie-wrapper",
+			"args": ["--lsp"],
+			"filetypes": [
+				"hs",
+				"lhs",
+				"haskell"
+			],
+			"initializationOptions": {
+				"languageServerHaskell": {
+					"hlintOn": true
+				}
+			}
+		},
+
+		"dls": {
+			"command": "diagnostic-languageserver",
+			"args": ["--stdio"],
+			"filetypes": [ "sh", "email", "dart" ],
+			"initializationOptions": {
+				"linters": {
+					"shellcheck": {
+						"command": "shellcheck",
+						"debounce": 100,
+						"args": [ "--format=gcc", "-"],
+						"offsetLine": 0,
+						"offsetColumn": 0,
+						"sourceName": "shellcheck",
+						"formatLines": 1,
+						"formatPattern": [
+							"^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
+							{
+								"line": 1,
+								"column": 2,
+								"message": 4,
+								"security": 3
+							}
+						],
+						"securities": {
+							"error": "error",
+							"warning": "warning",
+							"note": "info"
+						}
+					},
+					"languagetool": {
+						"command": "languagetool",
+						"debounce": 200,
+						"args": ["-"],
+						"offsetLine": 0,
+						"offsetColumn": 0,
+						"sourceName": "languagetool",
+						"formatLines": 2,
+						"formatPattern": [
+							"^\\d+?\\.\\)\\s+Line\\s+(\\d+),\\s+column\\s+(\\d+),\\s+([^\\n]+)\nMessage:\\s+(.*)$",
+							{
+								"line": 1,
+								"column": 2,
+								"message": [4, 3]
+							}
+						]
+					}
+				},
+				"formatters": {
+					"dartfmt": {
+						"command": "dartfmt",
+						"args": [ "--fix" ]
+					}
+				},
+				"filetypes": {
+					"sh": "shellcheck",
+					"email": "languagetool"
+				},
+				"formatFiletypes": {
+					"dart": "dartfmt"
+				}
+			}
+		}
+	},
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true
+
+}

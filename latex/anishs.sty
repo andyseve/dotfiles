@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Sun 09 Feb 2020 06:39:06 PM EST
+% Last Modified: Mon 04 May 2020 08:51:11 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -137,7 +137,7 @@
 	% Not really sure that the micro modification always works.
 	% Not using modifications below
 	% TODO this breaks certain things, which I should replace.
-	\DeclarePairedDelimiterStar\paren{(}{)} % Resizable paranthesis
+	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
 	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
 	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
 	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
@@ -369,6 +369,7 @@
         \newtheorem{conjecture}[theorem]{Conjecture}
         \newtheorem{definition}[theorem]{Definition}
         \newtheorem{fact}[theorem]{Fact}
+				\newtheorem{obs}[theorem]{Observation}
         \newtheorem{answer}[theorem]{Answer}
         \newtheorem{case}[theorem]{Case}
         \newtheorem{ques}[theorem]{Question}

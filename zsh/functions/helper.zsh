@@ -58,7 +58,7 @@ checkpkg() {
 }
 # echos that command isn't installed
 nope() {
-	echo "$1 is not installed"
+	echo -e "$1 is\e[31m not installed\e[0m"
 }
 # cloning git repo $1 to folder $2
 clone() {
