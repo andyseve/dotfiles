@@ -163,6 +163,16 @@ snippet primal-dual "Primal and Dual LP" b
 \end{array}\]
 endsnippet
 
+# Matrices
+snippet vandermonde "Vandermonde matrix" b
+\begin{bmatrix} 
+	1 && ${1:x}_1 && $1_1^2 && \cdots && $1_1^{${2:m-1}}\\\\
+	1 && x_2 && x_2^2 && \cdots && x_2^{$2}\\\\
+	\vdots && \vdots && \vdots && \ddots && \vdots\\\\
+	1 && x_{${3:m}} && x_{$3}^2 && \cdots && x_{$3}^{$2}
+\end{bmatrix}
+endsnippet
+
 # Toggle snippets between two commands
 snippet epsilon "varepsilon" w
 varepsilon

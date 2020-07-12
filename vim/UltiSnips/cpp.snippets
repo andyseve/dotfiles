@@ -12,6 +12,7 @@ snippet code "Main template" b
 #include<queue>
 #include<set>
 #include<bitset>
+#include<cstring>
 
 #include<cmath>
 #include<complex>
@@ -325,6 +326,20 @@ struct point{
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
 };
+endsnippet
+# }}}
+# # String {{{
+snippet buildz "z function" b
+inline void buildZ(char* s, int* z){
+	// Computes Z function (common-prefix)
+	// tested
+	int n = strlen(s);
+	for(int i = 1, l = 0, r = 0; i < n; ++i){
+		if(i<=r) z[i] = (z[i-l] < r-i+1 ? z[i-l] : r-i+1 );
+		while(i + z[i] < n and s[z[i]] == s[i+z[i]]) ++z[i];
+		if(i + z[i] - 1 > r) l=i, r=i+z[i]-1;
+	}
+}
 endsnippet
 # }}}
 # # Data Structures {{{

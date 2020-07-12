@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Mon 17 Feb 2020 02:02:37 PM EST
+# Last Edited: Thu 27 Feb 2020 02:36:44 PM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -176,7 +176,9 @@ add-zsh-hook precmd precmd_pipestatus
 ################################################################################
 
 # Use modern completion system
-autoload -Uz compinit && compinit -u
+autoload -Uz compinit bashcompinit
+compinit -u
+bashcompinit
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -194,5 +196,8 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# pubs autocomplete
+eval "$(register-python-argcomplete pubs)"
 
 # vim:ft=zsh
