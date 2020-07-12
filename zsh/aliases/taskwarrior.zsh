@@ -1,4 +1,4 @@
-alias taskr="task project:Research"
+alias taskr="task project:research"
 alias taskn="task +next"
-alias taskt="task project:TA"
-alias tasks="task project:Setup"
+alias taskt="task project:ta"
+alias tasks="task project:setup"

@@ -123,6 +123,7 @@
       ])
     )
     python3Packages.pip
+    python3Packages.argcomplete
     pypi2nix
 
     haskellPackages.ghc

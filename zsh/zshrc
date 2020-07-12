@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Tue 23 Jun 2020 10:57:02 PM EDT
+# Last Edited: Sat 11 Jul 2020 11:17:19 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -191,7 +191,11 @@ zstyle :prompt:pure:git:stash show yes
 ################################################################################
 
 # Use modern completion system
-autoload -Uz compinit && compinit -u
+autoload -Uz compinit bashcompinit
+compinit -u
+bashcompinit -u
+
+eval "$(register-python-argcomplete pubs)"
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
