@@ -67,7 +67,7 @@ tag = cyan
 # bibliographic fields
 author = bold
 title = ""
-publisher = "blue"
+publisher = blue
 year = bold
 volume = bold
 pages = ""
@@ -76,7 +76,7 @@ pages = ""
 [plugins]
 # Comma-separated list of the plugins to load.
 # Currently pubs comes with built-in plugins alias and git.
-active = alias, git
+active = alias,
 
 [[alias]]
 # new subcommands can be defined, e.g.:
@@ -112,9 +112,21 @@ manual = False
 # if True, color will be conserved from git output (this add `-c color:always`
 # to the git invocation).
 force_color = True
+# new subcommands can be defined, e.g.:
+# print = open --with lp
+# evince = open --with evince
 
+# shell commands can also be defined, by prefixing them with a bang `!`, e.g:
+# count = !pubs list -k | wc -l
+
+# aliases can also be defined with descriptions using the following configobj
+# subsectioning.  NOTE: any aliases defined this way should come after all other
+# aliases, otherwise simple aliases will be ignored.
+# [[[count]]]
+# command = !pubs list -k | wc -l
+# description = lists number of pubs in repo
 
 [internal]
 # The version of this configuration file. Do not edit.
-version = 0.8.3
+version = 0.8.2
 

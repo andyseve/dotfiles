@@ -8,8 +8,9 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-			/etc/nixos/defaults.nix
-			/etc/nixos/desktop.nix
+			/etc/nixos/modules/users.nix
+      /etc/nixos/modules/defaults.nix
+      /etc/nixos/modules/desktop.nix
     ];
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -41,7 +42,7 @@
   };
 
   networking.hostName = "ziraeal"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;  # Enables wireless support via nm
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -71,16 +72,6 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
 	#
   # Define a user account. Don't forget to set a password with ‘passwd’.
-	security.sudo.enable = true;
-  users.users.stranger = {
-    isNormalUser = true;
-		home = "/home/stranger";
-		description = "Anish Sevekari";
-    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
-		createHome = true;
-		shell = "${pkgs.zsh}/bin/zsh";
-  };
-	users.users.root.shell = "${pkgs.zsh}/bin/zsh";
 
 	# power actions
 	services.logind = {
@@ -96,6 +87,6 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "19.09"; # Did you read the comment?
+  system.stateVersion = "20.03"; # Did you read the comment?
 }
 
