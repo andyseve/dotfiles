@@ -1,6 +1,6 @@
 #!/run/current-system/sw/bin/bash
 
-while getopts ":u:p:g:h" opt; do
+while getopts ":u:p:g:l:h" opt; do
 	case ${opt} in
 		u )
 			echo $(pass $OPTARG | grep username | awk -F "username: " '{print $2}')
@@ -13,6 +13,9 @@ while getopts ":u:p:g:h" opt; do
 			pass=$(pass $OPTARG | sed -n 1p)
 			echo "username = ${user}"
 			echo "password = ${pass}"
+			;;
+		l )
+			echo $(pass $3 | grep $OPTARG | awk -F "$OPTARG: " '{print $2}')
 			;;
 		h | : | *)
 			echo "Usage: getpass [-u|-p] pass/store/path"

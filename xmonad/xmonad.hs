@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Jul 2020 07:23:36 PM EDT
+-- Last Modified: Thu 16 Jul 2020 01:59:37 AM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -63,6 +63,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.PositionStoreHooks
 import XMonad.Hooks.UrgencyHook
 -- Actions
@@ -71,6 +72,7 @@ import XMonad.Actions.ConstrainedResize as Sqr
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.CycleWS
 import XMonad.Actions.DynamicWorkspaces
+import XMonad.Actions.GroupNavigation
 import XMonad.Actions.Navigation2D
 import XMonad.Actions.WindowGo
 import XMonad.Actions.WithAll
@@ -161,20 +163,8 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
                 ]
 
     where
-        centerFloating = customFloating $ W.RationalRect x y w h
-            where
-                w, h, x, y :: Rational
-                h = 0.5
-                w = 0.5
-                x = 0.25
-                y = 0.25
-        rightFloating = customFloating $ W.RationalRect x y w h
-            where
-                w, h, x, y :: Rational
-                h = 0.50
-                w = 0.25
-                x = 0.73
-                y = 0.02
+        centerFloating = customFloating $ W.RationalRect 0.25 0.25 0.5 0.5
+        rightFloating = customFloating $ W.RationalRect 0.73 0.02 0.25 0.50
 
         spawnHtop  = myTerminal ++ " --class=htop -e htop"
         findHtop   = resource =? "htop"
@@ -390,7 +380,7 @@ myButtonTheme = defaultThemeWithImageButtons
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
     $ fullScreenToggle
-    $ onWorkspace wsgame ( tabs ||| float )
+    $ onWorkspace wsgame ( Full ||| tabs )
     $ onWorkspace wsmedia ( tabs ||| float )
     $ onWorkspace wscom ( tabs_tall ||| float )
     $ ( tall ||| tripane )
@@ -412,6 +402,9 @@ myLayoutHook = showWorkspaceName
             $ addTopBar
             $ addTabs shrinkText myTabTheme
             $ Simplest
+            -- This is a combined layout to stack applications inside tabs.
+            -- Specifically useful to handle zoom.
+            -- Not going to have functions to move around: one tab is the main one
         tabs_tall = named "tabs"
             $ avoidStruts
             $ windowNavigation
@@ -540,8 +533,8 @@ bindOn xc bindings = chooseAction xc $ chooser
                                     Nothing -> return ()
 
 -- Tabs navigatoin functions
-myFocusUp   = bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')]
-myFocusDown = bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')]
+myFocusUp    = bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')]
+myFocusDown  = bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')]
 
 ----------------------------------------------------------------------------}}}
 
@@ -618,6 +611,7 @@ myKeys conf = let
     , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-o M-p"      , addName "passwords"     $ spawn "rofi-pass"                                                     )
     ] ^++^
     ------------------------------------------------------------------------}}}
     -- Settings Apps                                                        {{{
@@ -635,16 +629,19 @@ myKeys conf = let
     [ ("M-<Backspace>"  , addName "kill"                   $ kill                                                       )
     , ("M-C-<Backspace>", addName "kill all"               $ confirmPrompt hotPromptTheme "kill all windows?" $ killAll )
     , ("M-g M-m"        , addName "Focus Master"           $ windows W.focusMaster                                      )
+    , ("M-g M-S-m"      , addName "Promote to Master"      $ windows W.swapMaster <+> windows W.focusMaster             )
     , ("M-g M-n"        , addName "Focus Urgent"           $ focusUrgent                                                )
     , ("M-g M-t"        , addName "toggle floating window" $ withFocused toggleFloat                                    )
     , ("M-g M-g"        , addName "Unmerge"                $ withFocused (sendMessage . UnMerge)                        )
+    , ("M-g M-s"        , addName "merge all"              $ withFocused (sendMessage . MergeAll)                       )
     , ("M-u"            , addName "Navigate tabs U"        $ myFocusUp                                                  )
     , ("M-i"            , addName "Navigate tabs D"        $ myFocusDown                                                )
-    -- impliment the tab switching functions below.
-    , ("M-S-u"          , addName "Switch tabs U"          $ myFocusUp                                                  )
-    , ("M-S-i"          , addName "Switch tabs D"          $ myFocusDown                                                )
+    , ("M-S-u"          , addName "Switch tabs U"          $ windows W.swapUp                                           )
+    , ("M-S-i"          , addName "Switch tabs D"          $ windows W.swapDown                                         )
     , ("M-C-u"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusDown')          )
     , ("M-C-i"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusUp')            )
+    , ("M1-<Tab>"       , addName "cycle windows"          $ nextMatch Forward (return True)                            )
+    , ("M1-<grave>"     , addName "cycle apps"             $ nextMatchWithThis History className                        )
     ] 
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
@@ -724,6 +721,7 @@ myLogHook = do
     -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
     multiPP myLogPP myLogPP
     ewmhDesktopsLogHook
+    historyHook
     fadeWindowsLogHook myFadeHook
 
 myLogPP :: XMonad.Hooks.DynamicLog.PP
@@ -795,9 +793,6 @@ myFadeHook = composeAll $
     , isFloating           --> opacity 0.95
     , isDialog             --> opaque
     , isFullscreen         --> opaque
-    , className =? "vlc"   --> opaque
-    , className =? "feh"   --> opaque
-    , className =? "dota2" --> opaque
     , isRole =? "browser"  --> opaque -- Makes browser oqaque, important for videos
     ]
     ++
@@ -810,7 +805,7 @@ myFadeHook = composeAll $
 -- Manage Hook                                                              {{{
 -------------------------------------------------------------------------------
 myManageHook :: ManageHook
-myManageHook = myCustomShiftHook <+> myCustomPlaceHook
+myManageHook = myCustomPlaceHook <+> myCustomShiftHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
@@ -843,15 +838,21 @@ myCustomPlaceHook = composeOne . concat $
     , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
         -- Handling specific conditions
     , [ transience ]
-    , [ isFullscreen       -?> doFullFloat ]
+    , [ isFullscreen       -?> doFullFloat   ]
     , [ isDialog           -?> doCenterFloat ]
     , [ isRole =? "pop-up" -?> doCenterFloat ]
+    , [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
+    , [ pure True          -?> tileBelow     ]
     ]
         where
+            tileBelowNoFocus = insertPosition Below Older
+            tileBelow = insertPosition Below Newer
             isRole = stringProperty "WM_WINDOW_ROLE"
+
             myCFloats = ["feh"]
             myRFloats = ["ikhal", "pavucontrol"]
-            myFullFloats = ["dota2", "Civ6Sub"]
+            myFullFloats = ["steam", "dota2", "Civ6Sub"]
+            myViewers = ["Zathura", "evince"]
 
             doRRectFloat = doRectFloat (W.RationalRect 0.73 0 0.25 0.50)
 
