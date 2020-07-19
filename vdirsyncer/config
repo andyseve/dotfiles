@@ -1,0 +1,41 @@
+# vdirsyncer config: sync carddav and caldav servers
+[general]
+status_path = "~/.config/vdirsyncer/status/"
+
+[pair calendars]
+a = "google_calendar"
+b = "calendar_local"
+collections = [["default", "andyseve3.1415@gmail.com", "personal"], ["codechef", "codechef.com_3ilksfmv45aqr3at9ckm95td5g@group.calendar.google.com", "codechef"], ["topcoder", "appirio.com_bhga3musitat85mhdrng9035jg@group.calendar.google.com", "topcoder"], ["codeforces", "k23j233gtcvau7a8ulk2p360m4@group.calendar.google.com", "codeforces"], ["cmu_tcs", "a1hmhmo8houlor4or7344gk59g@group.calendar.google.com", "cmu_cs"], ["cmu_mcs", "i8bkts58ngahfdvbl0o86omkofu166ro@import.calendar.google.com", "cmu_mcs"]]
+metadata = ["color", "displayname"]
+conflict_resolution = ["command", "vimdiff"]
+
+[pair contacts]
+a = "google_contacts"
+b = "contacts_local"
+metadata = ["displayname"]
+collections = [["default", "default", "personal"]]
+conflict_resolution = "a wins"
+
+[storage contacts_local]
+type = "filesystem"
+path = "~/.local/share/google_contacts/"
+fileext = ".vcf"
+
+[storage calendar_local]
+type = "filesystem"
+path = "~/.local/share/google_calendars/"
+fileext = ".ics"
+
+[storage google_calendar]
+type = "google_calendar"
+token_file = "~/.config/vdirsyncer/google_calendar"
+client_id.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_id", "api/google/andyseve"]
+client_secret.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_secret", "api/google/andyseve"]
+
+[storage google_contacts]
+type = "google_contacts"
+token_file = "~/.config/vdirsyncer/google_contacts"
+client_id.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_id", "api/google/andyseve"]
+client_secret.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_secret", "api/google/andyseve"]
+
+# vim:ft=cfg

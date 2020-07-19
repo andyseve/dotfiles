@@ -1,4 +1,4 @@
-## Last Modified: Sun 05 Jul 2020 08:16:50 PM EDT
+## Last Modified: Sat 18 Jul 2020 08:29:45 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -119,14 +119,33 @@ else
 fi
 
 # bin
-IF=$DOTFILES/bin
-OF=$HOME/bin
 
-cdir $OF
+while true; do
+	read -p "Do you want to install scripts in bin[y|n]" install_bin
+	printf "\n"
+	case $install_bin in
+		[Yy]*)
+			IF=$DOTFILES/bin
+			OF=$HOME/bin
 
-for file in "$IF"/*; do
-	link $file $OF/${file##*/}
+			cdir $OF
+
+			for file in "$IF"/*; do
+				link $file $OF/${file##*/}
+			done
+			break;;
+		[Nn]*)
+			break;;
+		*)
+			echo "Please enter a valid selection"
+			;;
+	esac
 done
+
+# git
+if check git; then
+	link $DOTFILES/git/gitconfig $HOME/.gitconfig
+fi
 
 # alacritty
 if check alacritty; then
@@ -351,6 +370,17 @@ if check khal; then
 	link $IF/config $OF/config
 else
 	nope khal
+fi
+
+# khard
+if check khard; then
+	IF="$DOTFILES/khard"
+	OF="$HOME/.config/khard"
+	cdir $OF
+
+	link $IF/khard.conf $OF/khard.conf
+else
+	nope khard
 fi
 
 ################################################################################
