@@ -68,6 +68,12 @@
     }
   ];
 
+	# power actions
+	services.logind = {
+		killUserProcesses = false;
+		extraConfig = "IdleAction=suspend\nIdleActionSec=300\n";
+	};
+  
 	security.sudo.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.

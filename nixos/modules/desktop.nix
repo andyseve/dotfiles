@@ -1,10 +1,5 @@
 { config, pkgs, ... }:
 
-let
-	unstableOverlay = (self: super: {
-		unstable = import <unstable> { config = config.nixpkgs.config; };
-	});
-in
 {
   # Xserver settings
 	services.xserver = {

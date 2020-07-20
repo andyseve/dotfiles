@@ -12,7 +12,7 @@ alias vimt="vim -u $HOME/dotfiles/vim/vimrc.testing"
 alias rtorrent-attach="tmux -L rtorrent -S /tmp/rtorrent attach -t rtorrent"
 
 # directories
-alias cmu='cd ~/Documents/CMU'
+alias cmu='cd ~/Documents/cmu'
 alias books='cd ~/Documents/Books\ and\ Papers'
 alias dotfiles='cd ~/dotfiles'
 
