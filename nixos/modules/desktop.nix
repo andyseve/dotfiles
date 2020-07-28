@@ -58,7 +58,7 @@
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     steam
-		unstable.discord unstable.zoom-us unstable.slack
+    discord unstable.zoom-us slack
 		deluge
 		unstable.google-play-music-desktop-player
 

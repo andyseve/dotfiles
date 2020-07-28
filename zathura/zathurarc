@@ -6,7 +6,6 @@ set pages-per-row 1
 
 #stop at page boundries
 set scroll-page-aware "true"
-set smooth-scroll "true"
 set scroll-full-overlap 0.01
 set scroll-step 100
 
@@ -43,7 +42,7 @@ set statusbar-fg                "#93a1a1" # base1
 
 set highlight-color             "#657b83" # base00  # hightlight match when search keyword(vim's /)
 set highlight-active-color      "#268bd2" # blue
-set highlight-transperency 0.7
+set highlight-transparency 0.5
 
 set default-bg                  "#073642" # base02
 set default-fg                  "#93a1a1" # base1
