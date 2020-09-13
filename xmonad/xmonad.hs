@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 13 Sep 2020 01:56:11 AM EDT
+-- Last Modified: Sun 13 Sep 2020 04:15:20 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -697,9 +697,9 @@ myKeys conf = let
 -------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
-    --spawnOnce "~/.config/fehbg" -- feh + xrandr script
-    --spawnOnce "picom"
-    --spawnOnce "dunst"
+    spawnOnce "~/.config/fehbg" -- feh + xrandr script
+    spawnOnce "picom"
+    spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()

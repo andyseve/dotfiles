@@ -34,9 +34,9 @@
 		enableFontDir = true;
 		fonts = with pkgs; [
 			inconsolata
-      ubuntu_font_family
-			fira
-			fira-mono
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
 			fira-code
 			fira-code-symbols
 			powerline-fonts
@@ -109,8 +109,7 @@
     vdirsyncer # vdirsyncer
     fswebcam 
     neomutt
-    #pubs # biblography manager
-    anish-pubs
+    pubs # biblography manager
     pass # password manager
 
 		
