@@ -34,22 +34,24 @@
 		enableFontDir = true;
 		fonts = with pkgs; [
 			inconsolata
-      ubuntu_font_family
-			fira
-			fira-mono
-			fira-code
-			fira-code-symbols
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      fira-code
+      fira-code-symbols
 			powerline-fonts
 			font-awesome-ttf
 			lohit-fonts.marathi
 		];
 
-		fontconfig = {
-			penultimate.enable = false;
-			defaultFonts = {
-				monospace = [ "Fira Code" ];
-			};
-		};
+    fontconfig = {
+      penultimate.enable = false;
+      defaultFonts = {
+        monospace = [ "Fira Code" ];
+        #serif = [ "Fira Code" "Lohit Marathi" ];
+        #sansSerif = [ "Fira Code" "Lohit Marathi" ];
+      };
+    };
 	};
 
   # Allow non-free drivers
