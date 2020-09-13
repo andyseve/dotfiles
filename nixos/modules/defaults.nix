@@ -111,8 +111,7 @@
     vdirsyncer # vdirsyncer
     fswebcam 
     neomutt
-    #pubs # biblography manager
-    anish-pubs
+    unstable.pubs # biblography manager
     pass # password manager
 
 		
