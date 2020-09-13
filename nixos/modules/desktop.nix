@@ -18,15 +18,15 @@
     desktopManager.xterm.enable = false;
 		displayManager.sddm.enable = true;
     displayManager.defaultSession = "none+xmonad";
-		windowManager.xmonad = {
-			enable = true;
-			enableContribAndExtras = true;
+    windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
       extraPackages = haskellPackages: [
         haskellPackages.xmonad-contrib
         haskellPackages.xmonad-extras
         haskellPackages.xmonad
       ];
-		};
+    };
 
     # Wacom
     wacom.enable = true;

@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 20 Jul 2020 04:05:27 PM EDT
+-- Last Modified: Sun 13 Sep 2020 01:56:11 AM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -230,9 +230,9 @@ unfocuscolor = base02
 
 -- fonts
 
-mySmallFont = "xft:Fira Code:style=Regular:size=6:hinting=true"
-myFont      = "xft:Fira Code:style=Regular:size=8:hinting=true"
-myBigFont   = "xft:Fira Code:style=Regular:size=10:hinting=true"
+mySmallFont = "xft:Fira Code:style=Regular:size=6"
+myFont      = "xft:Fira Code:style=Regular:size=8"
+myBigFont   = "xft:Fira Code:style=Regular:size=10"
 
 -- sizes
 gap    = 4
@@ -697,9 +697,9 @@ myKeys conf = let
 -------------------------------------------------------------------------------
 myStartupHook = do
     spawnOnce "xsetroot -cursor_name left_ptr" -- removing cross cursor
-    spawnOnce "~/.config/fehbg" -- feh + xrandr script
-    spawnOnce "picom"
-    spawnOnce "dunst"
+    --spawnOnce "~/.config/fehbg" -- feh + xrandr script
+    --spawnOnce "picom"
+    --spawnOnce "dunst"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()

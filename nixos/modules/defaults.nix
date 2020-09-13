@@ -34,6 +34,7 @@
 		enableFontDir = true;
 		fonts = with pkgs; [
 			inconsolata
+      ubuntu_font_family
 			fira
 			fira-mono
 			fira-code
