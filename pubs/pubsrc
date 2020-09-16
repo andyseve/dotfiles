@@ -128,5 +128,5 @@ force_color = True
 
 [internal]
 # The version of this configuration file. Do not edit.
-version = 0.8.2
+version = 0.8.3
 
