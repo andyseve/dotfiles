@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 13 Sep 2020 04:54:00 PM EDT
+-- Last Modified: Tue 29 Sep 2020 07:25:33 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -30,6 +30,7 @@ import XMonad.StackSet ( Stack(Stack), StackSet )
 import qualified XMonad.StackSet as W
 -- Layout
 import XMonad.Layout.Accordion
+import XMonad.Layout.BorderResize
 import XMonad.Layout.Decoration
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
@@ -460,6 +461,7 @@ myLayoutHook = showWorkspaceName
         float = named "float"
             $ avoidStruts
             $ imageButtonDeco shrinkText myButtonTheme 
+            $ borderResize
             $ positionStoreFloat
 
 ----------------------------------------------------------------------------}}}
