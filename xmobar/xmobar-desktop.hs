@@ -6,7 +6,7 @@ import System.Environment
 
 config :: Config
 config = defaultConfig { 
-         font    = "xft:Fira Code:style=Bold:size=10:antialias=true"
+         font    = "xft:FiraCode:style=Bold:size=10:antialias=true"
        , additionalFonts = [
                           "xft:FontAwesome5Free:style=Solid:size=10",
                           "xft:FontAwesome5Brands:style=Solid:size=10"

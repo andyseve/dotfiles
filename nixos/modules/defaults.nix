@@ -30,29 +30,29 @@
   };
   i18n.defaultLocale = "en_US.UTF-8";
 
-	fonts = {
-		enableFontDir = true;
-		fonts = with pkgs; [
-			inconsolata
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      inconsolata
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
       fira-code
       fira-code-symbols
-			powerline-fonts
-			font-awesome-ttf
-			lohit-fonts.marathi
-		];
+      powerline-fonts
+      font-awesome-ttf
+      lohit-fonts.marathi
+    ];
 
-    fontconfig = {
-      penultimate.enable = false;
-      defaultFonts = {
-        monospace = [ "Fira Code" ];
-        #serif = [ "Fira Code" "Lohit Marathi" ];
-        #sansSerif = [ "Fira Code" "Lohit Marathi" ];
-      };
-    };
-	};
+    #fontconfig = {
+      #penultimate.enable = false;
+      #defaultFonts = {
+        #monospace = [ "Fira Code" ];
+        ##serif = [ "Fira Code" "Lohit Marathi" ];
+        ##sansSerif = [ "Fira Code" "Lohit Marathi" ];
+      #};
+    #};
+  };
 
   # Allow non-free drivers
   hardware.enableRedistributableFirmware = true;
@@ -89,6 +89,7 @@
 		tor openvpn
 		wget curl rsync unison
     networkmanager networkmanager-openvpn
+    blueman
 
 		# Linux shell utils
 		fzf silver-searcher
