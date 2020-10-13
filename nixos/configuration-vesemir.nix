@@ -7,13 +7,13 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./modules/defaults.nix
-      ./modules/desktop.nix
-      ./modules/nvidia-legacy.nix
-      ./modules/users.nix
-      ./modules/ssh.nix
-      ./modules/git.nix
+      /etc/nixos/hardware-configuration.nix
+      /etc/nixos/modules/defaults.nix
+      /etc/nixos/modules/desktop.nix
+      /etc/nixos/modules/nvidia-legacy.nix
+      /etc/nixos/modules/users.nix
+      /etc/nixos/modules/ssh.nix
+      /etc/nixos/modules/git.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
