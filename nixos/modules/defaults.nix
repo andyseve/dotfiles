@@ -43,15 +43,6 @@
       font-awesome-ttf
       lohit-fonts.marathi
     ];
-
-    #fontconfig = {
-      #penultimate.enable = false;
-      #defaultFonts = {
-        #monospace = [ "Fira Code" ];
-        ##serif = [ "Fira Code" "Lohit Marathi" ];
-        ##sansSerif = [ "Fira Code" "Lohit Marathi" ];
-      #};
-    #};
   };
 
   # Allow non-free drivers
@@ -113,7 +104,11 @@
     fswebcam 
     neomutt
     unstable.pubs # biblography manager
-    pass # password manager
+    (pass.withExtensions
+      (exts: [
+      exts.pass-otp 
+      ])
+    ) # password manager
 
 		
 		# Dev Tools
