@@ -10,7 +10,7 @@
     options iwlwifi 11n_disable=8
     '';
   # logitech
-  hardware.logitech.wireless.enable=true;
+  hardware.logitech.enable=true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
