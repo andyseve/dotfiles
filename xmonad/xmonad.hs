@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 29 Sep 2020 07:25:33 PM EDT
+-- Last Modified: Mon 05 Oct 2020 09:41:31 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -705,6 +705,7 @@ myStartupHook = do
     spawnOnce "~/.config/fehbg" -- feh + xrandr script
     spawnOnce "picom"
     spawnOnce "dunst"
+    spawnOnce "slack"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()

@@ -8,8 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-			./modules/defaults.nix
-			./modules/desktop.nix
+      ./modules/defaults.nix
+      ./modules/desktop.nix
       ./modules/nvidia.nix
       ./modules/ssh.nix
       ./modules/users.nix
@@ -24,7 +24,7 @@
   fileSystems."/media/storage" =
   { device = "/dev/disk/by-label/Storage";
     fsType = "ntfs";
-    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" ];
+    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" "umask=022"];
   };
 
   networking.hostName = "geralt"; # Define your hostname.
