@@ -10,7 +10,7 @@
     options iwlwifi 11n_disable=8
     '';
   # logitech
-  hardware.logitech.enable=true;
+  hardware.logitech.wireless.enable=true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -80,7 +80,6 @@
 		tor openvpn
 		wget curl rsync unison
     networkmanager networkmanager-openvpn
-    blueman
 
 		# Linux shell utils
 		fzf silver-searcher
@@ -131,7 +130,6 @@
     # haskellPackages.hsimport -- broken
     haskellPackages.cabal-install
     cabal2nix
-    # all-hies.latest
 
 		openjdk nodejs
 
