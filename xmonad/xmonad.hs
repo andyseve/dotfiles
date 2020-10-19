@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 05 Oct 2020 09:41:31 PM EDT
+-- Last Modified: Sat 17 Oct 2020 05:18:54 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -96,8 +96,8 @@ main = do
     xmonad
          $ withNavigation2DConfig myNav2DConf
          $ withUrgencyHook LibNotifyUrgencyHook
-         $ ewmh
          $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         $ ewmh
          $ myConfig
 
 
@@ -868,10 +868,11 @@ myCustomPlaceHook = composeOne . concat $
 
 myHandleEventHook = myCustomEventHook
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
-    <+> ewmhDesktopsEventHook
-	<+> positionStoreEventHook
     <+> XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
+    <+> XMonad.Hooks.EwmhDesktops.ewmhDesktopsEventHook
+    <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
+	<+> positionStoreEventHook
     <+> handleEventHook def
 
 myCustomEventHook = mempty
