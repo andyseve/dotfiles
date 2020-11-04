@@ -5,3 +5,6 @@
 [credential "https://git.overleaf.com"]
 	username = anish.sevekari@gmail.com
 	helper = "!f() { test $1 = get && echo password=`/home/stranger/dotfiles/bin/getpass -p tools/overleaf`;}; f"
+
+[pull]
+	rebase = false
