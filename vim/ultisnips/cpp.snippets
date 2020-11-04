@@ -8,18 +8,20 @@ snippet code "Main template" b
 #include<cassert>
 #include<ctime>
 #include<cwctype>
+#include<chrono>
+#include<random>
 
+#include<cstring>
 #include<vector>
 #include<queue>
 #include<set>
+#include<map>
 #include<bitset>
-#include<cstring>
 
 #include<cmath>
 #include<complex>
 
 using namespace std;
-
 #define szof(x) ((int) x.size())
 
 int main(){
@@ -52,10 +54,23 @@ endsnippet
 snippet infl "infinity" b
 const long long ${1:inf} = 1ll << 62;
 endsnippet
+snippet testcases "Testcases" b
+int T; cin >> T;
+for(int tt = 0; tt < T; ++tt){
+	$0
+}
+endsnippet
+snippet google "Google output" b
+int T; cin >> T;
+for(int tt = 0; tt < T; ++tt){
+	$0
+	cout << "Case #" << tt + 1 << ": " << $1 << endl;
+}
+endsnippet
 # }}}
 # # Common functions {{{
 snippet forg  "General for loop"
-for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$2})
+for(${1:int} ${2:i} = ${4:0} ; $2 < ${5:n}; ${6:++$2})
 endsnippet
 snippet for "Basic for loop" 
 for(int ${1:i} = 0; $1 < ${2:n}; ++$1)
@@ -68,6 +83,10 @@ for(int ${1:i} = ${2:n-1}; $1 >= ${3:0}; --$1)
 endsnippet
 snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
+endsnippet
+snippet imax "Inplace max" b
+inline void imax(int &a, int &b){a = max(a,b);}
+inline void imin(int &a, int &b){a = min(a,b);}
 endsnippet
 # }}}
 # # Number Theory {{{
@@ -210,6 +229,34 @@ modular binom(int n, int k){
 	return fac[n] * fac_inv[k] * fac_inv[n-k];
 }
 endsnippet
+snippet nth_perm "nth permutation" b
+void ${3:factorial_pre}(){
+	${1:factorial}[0] = 1;
+	for(int i = 1; i < 20; ++i){
+		$1[i] = i * $1[i-1];
+	}
+}
+
+void ${4:nth_perm}(long long xx, int n){
+	long long x = xx;
+	int i = 0;
+	while($1[i] <= xx) i++;
+	int ff[i];
+	for(int j = 0; j < i; ++j){
+		ff[j] = x % (j + 1);
+		x = x / (j + 1);
+	}
+	int used[i];
+	for(int j = 0; j < i; ++j) used[j] = 1;
+	for(int j = i-1; j >= 0; --j){
+		int sum = 0, k = 0;
+		while(sum < ff[j]+1) sum += used[k++];
+		used[k-1] = 0;
+		${2:perm}[n-1-j] = k + n - i;
+	}
+}
+$0
+endsnippet
 # }}}
 # # Geometry {{{
 snippet 3dvec "3D vectors" b
@@ -341,6 +388,62 @@ inline void buildZ(char* s, int* z){
 		if(i + z[i] - 1 > r) l=i, r=i+z[i]-1;
 	}
 }
+endsnippet
+snippet aho_corasick_struct "aho_corasick struct" b
+struct ${1:aho_corasick} {
+	struct node {
+		map<int, int> next, go;
+		int p, pch;
+		bool term;
+		int suf;
+
+		node(){
+			next.clear(); go.clear();
+			term = false;
+			p = -1, pch = -1;
+			suf = -1;
+		}
+	};
+
+	vector<node> nodes;
+
+	$1(){
+		nodes = vector<node>(1, node());
+	}
+	int add(const string& s){
+		int v = 0;
+		for(char cc : s){
+			int c = cc - 'a';
+			if(nodes[v].next.count(c) == 0){
+				nodes[v].next[c] = szof(nodes);
+				nodes.emplace_back();
+				nodes.back().p = v;
+				nodes.back().pch = c;
+			}
+			v = nodes[v].next[c];
+		}
+		nodes[v].term = true;
+		return v;
+	}
+	int go(int v, char cc){return go(v, cc - 'a');}
+	int go(int v, int c){
+		if(nodes[v].go.count(c)) return nodes[v].go[c];
+		if(nodes[v].next.count(c)) return nodes[v].go[c] = nodes[v].next[c];
+		else return nodes[v].go[c] = (v == 0 ? 0 : go(suf(v),c));
+	}
+	int suf(int v){
+		if(nodes[v].suf != -1) return nodes[v].suf;
+		if(v == 0 || nodes[v].p == 0) return nodes[v].suf = 0;
+		return nodes[v].suf = go(suf(nodes[v].p), nodes[v].pch);
+	}
+	int feed(const string &s){
+		int v = 0;
+		for(char cc : s){
+			v = go(v,cc);
+			${0://main works goes here}
+		}
+	}
+};
 endsnippet
 # }}}
 # # Data Structures {{{

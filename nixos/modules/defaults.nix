@@ -113,6 +113,7 @@
 		# Dev Tools
 		gnumake
 		gcc ccls
+
     (python3.withPackages # installing python3 with packages
       (ps: with ps; [
         pylint jedi
@@ -124,11 +125,10 @@
     python3Packages.argcomplete
     pypi2nix
 
-    haskellPackages.ghc
-    haskellPackages.hoogle
-    haskellPackages.hlint
-    # haskellPackages.hsimport -- broken
-    haskellPackages.cabal-install
+    unstable.haskellPackages.ghc
+    unstable.haskellPackages.hoogle
+    unstable.haskellPackages.cabal-install
+    unstable.haskellPackages.haskell-language-server
     cabal2nix
 
 		openjdk nodejs

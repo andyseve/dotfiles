@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sat 17 Oct 2020 05:18:54 PM EDT
+-- Last Modified: Sat 31 Oct 2020 02:53:42 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -15,6 +15,7 @@
 -------------------------------------------------------------------------------
 -- Core
 import Control.Monad (liftM2)
+import Control.Applicative (liftA2)
 import qualified Data.Map as M
 import Data.Function (on)
 import Data.Maybe
@@ -519,9 +520,7 @@ showKeybindings x = addName "show keybindings" $ io $ do
     hClose h
     return ()
 
--------------------------------------------------------------------------------
--- Modified BindOn function                                                  --
--------------------------------------------------------------------------------
+-- Modified BindOn function
 data XCond = WS | LD
 
 chooseAction :: XCond -> (String -> X()) -> X()
@@ -540,6 +539,20 @@ bindOn xc bindings = chooseAction xc $ chooser
 -- Tabs navigatoin functions
 myFocusUp    = bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')]
 myFocusDown  = bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')]
+
+-- Visible workspace query
+-- https://github.com/xmonad/xmonad-contrib/issues/293
+-- 
+isOnVisibleWS :: Query Bool
+isOnVisibleWS = do
+    w <- ask
+    ws <- liftX $ gets windowset
+    let allVisible = concat $ (maybe [] W.integrate) . W.stack . W.workspace <$> W.current ws:W.visible ws
+        visibleWs = w `elem` allVisible
+    return $ visibleWs
+
+classNameWS :: Query (String, Bool)
+classNameWS = liftM2 (\x y -> (x,y)) className isOnVisibleWS
 
 ----------------------------------------------------------------------------}}}
 
@@ -607,7 +620,7 @@ myKeys conf = let
     , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
-    , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox")                         )
+    , ("M-\\"         , addName "browser"       $ nextMatchOrDo Forward (className =? "Firefox") (spawn myBrowser)      )
     , ("M-z"          , addName "logout"        $ spawn "rofi-session"                                                  )
     , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher                                                      )
@@ -645,8 +658,9 @@ myKeys conf = let
     , ("M-S-i"          , addName "Switch tabs D"          $ windows W.swapDown                                         )
     , ("M-C-u"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusDown')          )
     , ("M-C-i"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusUp')            )
-    , ("M1-<Tab>"       , addName "cycle windows"          $ nextMatch Forward (return True)                            )
-    , ("M1-<grave>"     , addName "cycle apps"             $ nextMatchWithThis History className                        )
+    , ("M1-<Tab>"       , addName "cycle windows"          $ nextMatch Forward isOnVisibleWS                            )
+    , ("M1-S-<Tab>"     , addName "cycle windows"          $ nextMatch Backward isOnVisibleWS                           )
+    , ("M1-`"           , addName "cycle apps"             $ nextMatchWithThis Forward classNameWS                      )
     ] 
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
