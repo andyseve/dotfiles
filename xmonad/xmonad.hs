@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sat 31 Oct 2020 02:53:42 PM EDT
+-- Last Modified: Wed 11 Nov 2020 02:11:51 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -618,9 +618,11 @@ myKeys conf = let
     [ ("M-p"          , addName "launcher"      $ spawn myLauncher                                                      )
     , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
-    , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
-    , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-<Return>"   , addName "terminal"      $ nextMatchOrDo History (className =? "Alacritty") (spawn myTerminal)   )
+    , ("M-S-<Return>" , addName "terminal"      $ spawn myTerminal                                                      )
+    , ("M1-C-t"       , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-\\"         , addName "browser"       $ nextMatchOrDo Forward (className =? "Firefox") (spawn myBrowser)      )
+    , ("M-S-\\"       , addName "browser"       $ spawn myBrowser                                                       )
     , ("M-z"          , addName "logout"        $ spawn "rofi-session"                                                  )
     , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher                                                      )
@@ -628,7 +630,7 @@ myKeys conf = let
     , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser                                                    )
     , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
-    , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-o M-S-t"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
     , ("M-o M-p"      , addName "passwords"     $ spawn "rofi-pass"                                                     )
     ] ^++^
     ------------------------------------------------------------------------}}}
@@ -750,14 +752,14 @@ myLogPP = myXmobarLogPP
 myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
 myXmobarLogPP = def
     { ppCurrent = xmobarColor blue "" . clickableWorkspaces
-    , ppTitle   = xmobarColor green "" . shorten 60
+    , ppTitle   = xmobarColor green "" . (xmobarFont 3) . shorten 45
     , ppVisible = xmobarColor blue "" . clickableWorkspaces
     , ppUrgent  = xmobarColor red "" . clickableWorkspaces
     , ppHidden  = xmobarColor white "" . clickableWorkspaces
     , ppHiddenNoWindows = xmobarColor base01 "" . clickableWorkspaces
-    , ppSep     = " <fn=1>\xf101</fn> "
-    , ppWsSep   = " "
-    , ppLayout  = xmobarColor yellow ""
+    , ppSep     = "<fn=3> </fn><fn=1>\xf101</fn><fn=3> </fn>" 
+    , ppWsSep   = "<fn=3> </fn>"
+    , ppLayout  = xmobarColor yellow "" . (xmobarFont 3) . shorten 5
     , ppSort    = mkWsSort wsCompare
     }
         where
@@ -780,7 +782,7 @@ myXmobarLogPP = def
             workspaceToIcons "latex" = "<fn=1>\xf70e</fn>" -- 
             workspaceToIcons "code"  = "<fn=1>\xf121</fn>" -- 
             workspaceToIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
-            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" --  
+            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" -- 
             workspaceToIcons "com"   = "<fn=1>\xf075</fn>" -- 
             workspaceToIcons "media" = "<fn=2>\xf3b5</fn>" -- 
             workspaceToIcons "sys"   = "<fn=1>\xf120</fn>" -- 
@@ -789,6 +791,10 @@ myXmobarLogPP = def
 
             clickableWorkspaces :: String -> String
             clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
+
+            xmobarFont :: Int -> String -> String
+            xmobarFont i ws = "<fn=" ++ show(i) ++ ">" ++ ws ++ "</fn>"
+            -- Looks too complicated to use xmobar action here
 
 -- Defining barcreator and destroyer
 myBarCreator   = xmobarCreator
