@@ -6,7 +6,8 @@
     home = "/home/git";
     description = "User that manages git";
     extraGroups = [ "git" ];
-    createHome = true;    
+    createHome = true;  
+		shell = "${pkgs.git}/bin/git-shell";	
   };
-  users.users.stranger.extraGroups = [ "git" ];
+	users.groups.git.members = [ "git" "stranger" ];
 }
