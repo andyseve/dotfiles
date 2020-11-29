@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 11 Nov 2020 02:11:51 PM EST
+-- Last Modified: Sat 21 Nov 2020 07:04:25 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -618,8 +618,8 @@ myKeys conf = let
     [ ("M-p"          , addName "launcher"      $ spawn myLauncher                                                      )
     , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
-    , ("M-<Return>"   , addName "terminal"      $ nextMatchOrDo History (className =? "Alacritty") (spawn myTerminal)   )
-    , ("M-S-<Return>" , addName "terminal"      $ spawn myTerminal                                                      )
+    , ("M-S-<Return>" , addName "terminal"      $ nextMatchOrDo History (className =? "Alacritty") (spawn myTerminal)   )
+    , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M1-C-t"       , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-\\"         , addName "browser"       $ nextMatchOrDo Forward (className =? "Firefox") (spawn myBrowser)      )
     , ("M-S-\\"       , addName "browser"       $ spawn myBrowser                                                       )

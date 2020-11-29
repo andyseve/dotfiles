@@ -180,7 +180,7 @@
     ### Misc/Advanced ###
 
     # dmenu path.
-    dmenu = "/run/current-system/sw/bin/rofi -theme solarized -location 3 -width 25 -xoffset -30 -show Dunst"
+    dmenu = "/run/current-system/sw/bin/rofi -theme solarized -location 3 -width 25 -xoffset -30"
 
     # Browser for opening urls in context menu.
     browser = /run/current-system/sw/bin/firefox -new-tab
@@ -270,7 +270,8 @@
     history = ctrl+grave
 
     # Context menu.
-    context = shift+space
+    context = mod4+space
+		do_action = mod4+shift+space
 
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
@@ -366,6 +367,7 @@
 		msg_urgency = critical
 		fullscreen = show
 
+# Icons
 [slack_icon]
 	desktop_entry = "Slack"
 	new_icon = "/run/current-system/sw/share/icons/Papirus-Dark/48x48/apps/slack.svg"
