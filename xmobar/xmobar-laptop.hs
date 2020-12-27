@@ -1,15 +1,16 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Sun 17 May 2020 03:50:12 PM EDT
+-- Last Modified: Wed 11 Nov 2020 02:04:36 PM EST
 -- Author: Anish Sevekari
 
 import Xmobar
 
 config :: Config
 config = defaultConfig { 
-				 font    = "xft:Fira Code:style=Bold:size=10:antialias=true"
+				 font    = "xft:Fira Code:style=Bold:size=12:antialias=true"
 			 , additionalFonts = [
-													"xft:FontAwesome5Free:style=Solid:size=10",
-													"xft:FontAwesome5Brands:style=Solid:size=10"
+													"xft:FontAwesome5Free:style=Solid:size=12:antialias=true",
+													"xft:FontAwesome5Brands:style=Solid:size=12:antialias=true",
+													"xft:Fira Code:style=Bold:size=10:antialias=true;"
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 												]
        , bgColor = "#000000"

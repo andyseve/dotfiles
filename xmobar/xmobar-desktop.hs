@@ -6,10 +6,11 @@ import System.Environment
 
 config :: Config
 config = defaultConfig { 
-         font    = "xft:FiraCode:style=Bold:size=10:antialias=true"
+         font    = "xft:FiraCode:style=Bold:size=12:antialias=true"
        , additionalFonts = [
-                          "xft:FontAwesome5Free:style=Solid:size=10",
-                          "xft:FontAwesome5Brands:style=Solid:size=10"
+                          "xft:FontAwesome5Free:style=Solid:size=12",
+                          "xft:FontAwesome5Brands:style=Solid:size=12",
+													"xft:Fira Code:style=Bold:size=10:antialias=true"
                           -- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
                         ]
        , bgColor = "#000000"
