@@ -142,6 +142,11 @@
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.printing.drivers = with pkgs; [
+    gutenprint
+    hplip
+    hplipWithPlugin
+  ];
 
   # Enable sound.
   sound.enable = true;
