@@ -132,7 +132,7 @@
     unstable.haskellPackages.haskell-language-server
     cabal2nix
 
-		openjdk nodejs
+		jdk11 nodejs
 
 		# Latex
 		texlive.combined.scheme-full
