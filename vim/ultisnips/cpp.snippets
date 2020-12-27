@@ -84,8 +84,8 @@ snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
 endsnippet
 snippet imax "Inplace max" b
-inline void imax(int &a, int &b){a = max(a,b);}
-inline void imin(int &a, int &b){a = min(a,b);}
+inline void imax(${1:int} &a, $1 b){a = max(a,b);}
+inline void imin($1 &a, $1 b){a = min(a,b);}
 endsnippet
 # }}}
 # # Number Theory {{{
@@ -553,11 +553,11 @@ int ${1:bs}(int s, int l, int r){
 }
 endsnippet
 snippet bs "Binary Search" b
-${1:int} ${2:bl} = ${3:0}, ${4:br} = ${5:n};
+${1:int} ${2:bl} = ${3:0}, ${4:br} = ${5:n}; // ensure $2 <= ans <= $4
 while($2 < $4){
 	$1 ${6:bm} = ($2 + $4) / 2;
-	if ( $0 ) $2 = $6 + 1;
-	else $4 = $6;
+	if ( $0 ) $4 = $6;
+	else $2 = $6 + 1;
 }
 endsnippet
 snippet fft "Fast Fourier Transform Inplace"

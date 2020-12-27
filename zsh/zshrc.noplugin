@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat 14 Mar 2020 06:03:28 PM EDT
+# Last Edited: Sun 13 Dec 2020 10:46:45 PM EST
 # Zshrc with only color and completiong settings
 
 # Set zsh variables and source corresponding settings
@@ -114,7 +114,7 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='tput bell'
 
 # Importing Aliases
 for file in $ZSH_HOME/aliases/*.zsh; do

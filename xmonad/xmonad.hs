@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sat 21 Nov 2020 07:04:25 PM EST
+-- Last Modified: Sun 13 Dec 2020 10:49:20 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -9,6 +9,8 @@
     * restructure xmobar
     * xmobar music
     * xmobar weather
+    * vlc moving with mouse between screens.
+    * steam messages window popping up when opening steam.
     -}
 ----------------------------------------------------------------------------}}}
 -- Modules                                                                  {{{
@@ -96,7 +98,7 @@ import XMonad.Util.WorkspaceCompare
 main = do
     xmonad
          $ withNavigation2DConfig myNav2DConf
-         $ withUrgencyHook LibNotifyUrgencyHook
+         $ withUrgencyHook LibNotifyUrgencyHook 
          $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
          $ ewmh
          $ myConfig
@@ -825,7 +827,7 @@ myFadeHook = composeAll $
     [ className =? c --> opaque | c <- myOpaques ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
-            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub"]
+            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub", "Terraria.bin.x86_64"]
 
 ----------------------------------------------------------------------------}}}
 -- Manage Hook                                                              {{{
@@ -850,10 +852,10 @@ myCustomShiftHook = composeOne . concat $
         where
             myWebShifts = ["Firefox", "google-chrome"]
             myGameShifts = ["Steam"]
-            myGameViews = ["dota2", "Civ6Sub"]
+            myGameViews = ["dota2", "Civ6Sub", "Terraria.bin.x86_64"]
             myComShifts = ["Slack", "discord", "weechat", "zoom"]
-            myMediaViews = ["vlc"]
-            myMediaShifts = []
+            myMediaViews = []
+            myMediaShifts = ["vlc"]
 
             shiftView = liftM2 (.) W.greedyView W.shift 
 
@@ -892,7 +894,7 @@ myHandleEventHook = myCustomEventHook
     <+> XMonad.Hooks.EwmhDesktops.ewmhDesktopsEventHook
     <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
-	<+> positionStoreEventHook
+    <+> positionStoreEventHook
     <+> handleEventHook def
 
 myCustomEventHook = mempty

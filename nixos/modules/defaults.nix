@@ -10,7 +10,7 @@
     options iwlwifi 11n_disable=8
     '';
   # logitech
-  hardware.logitech.enable=true;
+  hardware.logitech.wireless.enable=true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -31,7 +31,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   fonts = {
-    enableFontDir = true;
     fonts = with pkgs; [
       inconsolata
       noto-fonts
@@ -118,6 +117,8 @@
       (ps: with ps; [
         pylint jedi
         numpy scipy matplotlib
+        scikitlearn
+        pandas
         jupyter notebook
       ])
     )
