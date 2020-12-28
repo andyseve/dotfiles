@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 02 Nov 2020 02:05:34 PM EST
+" Last Updated: Sun 13 Dec 2020 12:40:40 AM EST
 
 set nocompatible
 
@@ -256,7 +256,7 @@ set nocompatible
 
 	" snippet mappings
 	map <c-l> <c-o>:CocList snippets<CR>
-	vmap <c-k> <Plug>(coc-snippets-select)
+	vmap <c-j> <Plug>(coc-snippets-select)
 	let g:coc_snippet_next = '<tab>'
 	let g:coc_snippet_prev = '<s-tab>'
 	xmap <leader>ex <Plug>(coc-convert-snippet)
