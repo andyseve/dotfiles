@@ -6,3 +6,5 @@ vim/vim/.swp/**
 vim/vim/autoload/dein.vim
 
 **/*.swp
+
+picom/picom.conf
