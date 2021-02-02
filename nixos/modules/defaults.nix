@@ -139,6 +139,9 @@
 
 		# Man Pages
 		man man-pages
+
+    # Gurobi
+    gurobi
   ];
 
   # Enable CUPS to print documents.

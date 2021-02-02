@@ -16,6 +16,8 @@ snippet code "Main template" b
 #include<queue>
 #include<set>
 #include<map>
+#include<unordered_set>
+#include<unordered_map>
 #include<bitset>
 
 #include<cmath>
@@ -151,10 +153,16 @@ $0
 endsnippet
 # modular class copied from Benq
 snippet modular "modular class" b
+/**
+ * Description: modular arithmetic operations
+ * Source: Benq modular template
+ * Testing: Tested - problem url here
+ */
 const int ${1:MOD} = ${2:1000000007};
+const int ${3:RT} =  ${4:5}; // 5 is primitive root for common mods
 struct modular {
 	long long val;
-	explicit operator long long() const { return val; }
+	explicit operator int() const { return val; }
 	modular() { val = 0; }
 	modular(const long long & v){
 		val = (-$1 <= v && v <= $1) ? v : v % $1;
@@ -211,6 +219,268 @@ inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b){
 			mul(a.second, b.second)
 			);
 }
+endsnippet
+# }}}
+# # Graphs {{{
+snippet dinic "Dinics algorithm" b
+template<typename T>
+struct dinic {
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+	
+	int n, s, t;
+	T flow;
+	vector<int> lst;
+	vector<int> d;
+	vector<vector<edge>> g;
+
+	// to use the scaling trick to optimize flow computation
+	T scaling_lim;
+	bool scaling;
+
+	dinic() {};
+	dinic(int n, int s, int t, bool scaling = false): n(n), s(s), t(t), scaling(scaling) {
+		g.resize(n);
+		d.resize(n);
+		lst.resize(n);
+		flow = 0;
+	}
+
+	void add_edge(int v, int u, int cap, bool directed = true) {
+		g[v].emplace_back(u, szof(g[u]), cap);
+		g[u].emplace_back(v, szof(g[v]) - 1, directed ? 0 : cap);
+	}
+
+	T dfs(int v, T flow){
+		if(v == t) return flow;
+		if(flow == 0) return 0;
+		T ret = 0;
+		for(;lst[v] < szof(g[v]); ++lst[v]){
+			edge& e = g[v][lst[v]];
+			if(d[e.u] != d[v] + 1) continue;
+			T add = dfs(e.u, min(flow, e.cap - e.flow));
+			if(add > 0){
+				ret += add;
+				flow -= add;
+				e.flow += add;
+				g[e.u][e.rev].flow -= add;
+			}
+			if (flow == 0) break;
+		}
+		return ret;
+	}
+
+	bool bfs(){
+		fill(d.begin(), d.end(), -1);
+		queue<int> q;
+		q.push(s);
+		d[s] = 0;
+		while(!q.empty() && d[t] == -1) {
+			int v = q.front(); q.pop();
+			for(edge& e : g[v]){
+				if(d[e.u] == -1 && e.cap - e.flow >= scaling_lim){
+					q.push(e.u);
+					d[e.u] = d[v] + 1;
+				}
+			}
+		}
+		return d[t] != -1;
+	}
+
+	T calc() {
+		T max_lim = numeric_limits<T>::max() / 2 + 1;
+		for(scaling_lim = scaling ? max_lim : 1; scaling_lim > 0; scaling_lim >>= 1){
+			while(bfs()){
+				fill(lst.begin(), lst.end(), 0);
+				T add;
+				while((add = dfs(s,numeric_limits<T>::max())) > 0) flow += add;
+			}
+		}
+		return flow;
+	}
+};
+endsnippet
+snippet push_relable "Push relable" b
+template<typename T>
+struct push_relable {
+	const T inf = numeric_limits<T>::max();
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+
+	int n;
+	vector<int> count, dist;
+	vector<T> excess;
+	int b = 0;
+	vector<bool> active;
+	vector<vector<edge>> g;
+	vector<vector<int>> B;
+
+	push_relable() {};
+	push_relable(int n): n(n) {
+		count.resize(2 * n + 1,0);
+		dist.resize(n,0);
+		active.resize(n,0);
+		excess.resize(n,0);
+		g.resize(n);
+		B.resize(2 * n + 1);
+	}
+
+	void add_edge(int v, int u, T cap, bool directed = true) {
+		edge a(u, szof(g[u]), cap), b(v, szof(g[v]), directed ? 0 : cap);
+		g[v].push_back(a), g[u].push_back(b);
+	}
+
+	void enqueue(int v) {
+		if(!active[v] && excess[v] > 0 && dist[v] < n){
+			active[v] = 1;
+			B[dist[v]].push_back(v);
+			b = max(b, dist[v]);
+		}
+	}
+
+	void push(int v, edge& e) {
+		T d = min(excess[v], e.cap - e.flow);
+		if(dist[v] == dist[e.u] + 1 && d > 0){
+			e.flow += d, g[e.u][e.rev].flow -= d;
+			excess[e.u] += d, excess[v] -= d;
+			enqueue(e.u);
+		}
+	}
+
+	void relable(int v) {
+		count[dist[v]]--; dist[v] = 2 * n;
+		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
+		count[dist[v]]++;
+		enqueue(v);
+	}
+
+	void discharge(int v) {
+		for(edge& e : g[v]){
+			if(excess[v] > 0) push(v,e);
+			else break;
+		}
+		if(excess[v] > 0){
+			relable(v);
+		}
+	}
+
+	T max_flow(int s, int t){
+		for(edge& e : g[s]) excess[s] += e.cap;
+		count[0] = n;
+		enqueue(s); active[t] = 1;
+
+		while(b >= 0){
+			if(szof(B[b])){
+				int v = B[b].back(); B[b].pop_back();
+				active[v] = 0; discharge(v);
+			}
+			else b--;
+		}
+		return excess[t];
+	}
+
+};
+endsnippet
+snippet push_relable_gap "Push relable algorithm - gap heuristic" b
+template<typename T>
+struct push_relable {
+	const T inf = numeric_limits<T>::max();
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+
+	int n;
+	vector<int> count, dist;
+	vector<T> excess;
+	int b = 0;
+	vector<bool> active;
+	vector<vector<edge>> g;
+	vector<vector<int>> B;
+
+	push_relable() {};
+	push_relable(int n): n(n) {
+		count.resize(n+1,0);
+		dist.resize(n,0);
+		active.resize(n,0);
+		excess.resize(n,0);
+		g.resize(n);
+		B.resize(2 * n + 1);
+	}
+
+	void add_edge(int v, int u, T cap, bool directed = true) {
+		edge a(u, szof(g[u]), cap), b(v, szof(g[v]), directed ? 0 : cap);
+		g[v].push_back(a), g[u].push_back(b);
+	}
+
+	void enqueue(int v) {
+		if(!active[v] && excess[v] > 0 && dist[v] < n){
+			active[v] = 1;
+			B[dist[v]].push_back(v);
+			b = max(b, dist[v]);
+		}
+	}
+
+	void push(int v, edge& e) {
+		T d = min(excess[v], e.cap - e.flow);
+		if(dist[v] == dist[e.u] + 1 && d > 0){
+			e.flow += d, g[e.u][e.rev].flow -= d;
+			excess[e.u] += d, excess[v] -= d;
+			enqueue(e.u);
+		}
+	}
+
+	// gap heuristic
+	void gap(int k) {
+		for(int v = 0; v < n; ++v) if(dist[v] >= k){
+			count[dist[v]]--;
+			dist[v] = n;
+			count[dist[v]]++;
+			enqueue(v);
+		}
+	}
+
+	void relable(int v) {
+		count[dist[v]]--; dist[v] = 2 * n;
+		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
+		count[dist[v]]++;
+		enqueue(v);
+	}
+
+	void discharge(int v) {
+		for(edge& e : g[v]){
+			if(excess[v] > 0) push(v,e);
+			else break;
+		}
+		if(excess[v] > 0){
+			if(count[dist[v]] == 1) gap(dist[v]);
+			else relable(v);
+		}
+	}
+
+	T max_flow(int s, int t){
+		for(edge& e : g[s]) excess[s] += e.cap;
+		count[0] = n;
+		enqueue(s); active[t] = 1;
+
+		while(b >= 0){
+			if(szof(B[b])){
+				int v = B[b].back(); B[b].pop_back();
+				active[v] = 0; discharge(v);
+			}
+			else b--;
+		}
+		return excess[t];
+	}
+
+};
 endsnippet
 # }}}
 # # Combinatorics {{{
@@ -446,21 +716,45 @@ struct ${1:aho_corasick} {
 endsnippet
 # }}}
 # # Data Structures {{{
-snippet segtreeg "General Segment tree" b
+snippet segtree "Segment tree" b
+${1:int} ${2:seg}[2 * ${3:N}];
+$1 ${4:query}(int l, int r){
+	l += $3, r+= $3; //can be replace by actual upperbound
+	$1 ans = 0; //identity element under operation (addition)
+	while(l < r){ // Combine has to be assosiative
+		if( l & 1 ) ans += $2[l++]; //l++
+		if( r & 1 ) ans += $2[--r]; //--r
+		l >>= 1 , r >>= 1;
+	}
+	return ans;
+}
+void ${5:update}(int i, $1 val){
+	i += $3; // can be replaced by actual upperbound
+	$2[i] = val; i >>= 1;
+	while(i > 0){
+		$2[i] = $2[2 * i] + $2[2 * i + 1];
+		i >>= 1;
+	}
+}
+void ${6:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = 0;}
+endsnippet
+snippet segtree_struct "Segment tree struct" b
+endsnippet
+snippet segtree_general "General Segment tree" b
 ${1:int} ${2:seg}[2 * ${3:N}];
 $1 ${6:query}(int l, int r){
 	l += $3, r+= $3; //can be replace by actual upperbound
 	$1 ans = ${4:0}; //identity element under $5
 	while(l < r){ // Combine has to be assosiative
-		if( l & 1 ) ans = ${5:combine($2[l++],ans);} //l++
-		if( r & 1 ) ans = ${6:combine($2[--r],ans);} //--r
+		if( l & 1 ) ans = ${5:combine}($2[l++],ans); //l++
+		if( r & 1 ) ans = $5($2[--r],ans); //--r
 		l >>= 1 , r >>= 1;
 	}
 	return ans;
 }
 void ${7:update}(int i, $1 val){
 	i += $3; // can be replaced by actual upperbound
-	$1[i] = val; i >>= 1;
+	$2[i] = val; i >>= 1;
 	while(i > 0){
 		$2[i] = $5($2[2 * i], $2[2 * i + 1]);
 		i >>= 1;
@@ -468,7 +762,7 @@ void ${7:update}(int i, $1 val){
 }
 void ${8:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = $4;}
 endsnippet
-snippet segtreei "Inside function segment tree" b
+snippet segtree_inside "Inside function segment tree" b
 ${1:int} ${2:seg}[2 * ${3:N}];
 function<$1(int,int)> ${5:query} = [&](int l, int r){
 	l += $3, r+= $3; //can be replace by actual upperbound

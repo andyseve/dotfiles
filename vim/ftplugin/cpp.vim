@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Modified: Thu 19 Nov 2020 09:39:26 PM EST
+" Last Modified: Wed 27 Jan 2021 03:30:30 AM EST
 " Cpp specific vim settings
 
 " # Core Settings
@@ -28,6 +28,7 @@
 
 " # Abbreviations
 	ab vi vector<int>
+	ab vvi vector<vector<int>>
 	ab vm vector<modular>
 	ab ll long long
 	ab 1ll 1ll
