@@ -69,6 +69,7 @@
 		ltrace strace
 		pciutils usbutils lshw
 		smartmontools lm_sensors
+    dmidecode
 
     # Volume
     pavucontrol
