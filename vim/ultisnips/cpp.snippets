@@ -68,6 +68,9 @@ for(int tt = 0; tt < T; ++tt){
 	cout << "Case #" << tt + 1 << ": " << $1 << endl;
 }
 endsnippet
+snippet yesno "Yes no output" b
+cout << (${1:ok} ? "YES" : "NO") << endl;
+endsnippet
 # }}}
 # # Common functions {{{
 snippet forg  "General for loop"
@@ -596,9 +599,9 @@ endsnippet
 snippet pointi "Point template int" b
 struct point{
 	int x,y;
-	point(int xx,int yy) {x=xx;y=yy;}
+	point(int x,int y): x(x), y(y) {}
 	point() : point(0,0) {}
-	point(const point& a) {x = a.x; y = a.y;}
+	point(const point& a): x(a.x), y(a.y) {}
 
 	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
 	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
@@ -617,14 +620,18 @@ struct point{
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
 };
+
+long long dot(const point &a, const point &b) {
+	return 1ll * a.x * b.x + 1ll * a.y * b.y;
+}
 endsnippet
-snippet pointd "Point template int" b
+snippet pointd "Point template double" b
 double eps = ${1:1e-6};
 struct point{
 	double x,y;
-	point(double xx,double yy) {x=xx;y=yy;}
+	point(double x,double y): x(x), y(y) {}
 	point() : point(0,0) {}
-	point(const point& a) {x = a.x; y = a.y;}
+	point(const point& a): x(a.x), y(a.y) {}
 
 	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
 	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
@@ -643,6 +650,10 @@ struct point{
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
 };
+
+double dot(const point &a, const point &b) {
+	return a.x * b.x + a.y * b.y;
+}
 endsnippet
 # }}}
 # # String {{{
@@ -717,11 +728,12 @@ endsnippet
 # }}}
 # # Data Structures {{{
 snippet segtree "Segment tree" b
-${1:int} ${2:seg}[2 * ${3:N}];
+${1:int} ${2:seg}[4 * ${3:N}];
 $1 ${4:query}(int l, int r){
-	l += $3, r+= $3; //can be replace by actual upperbound
-	$1 ans = 0; //identity element under operation (addition)
-	while(l < r){ // Combine has to be assosiative
+	// query range l <= x < r
+	l += $3, r+= $3;
+	$1 ans = 0;
+	while(l < r){
 		if( l & 1 ) ans += $2[l++]; //l++
 		if( r & 1 ) ans += $2[--r]; //--r
 		l >>= 1 , r >>= 1;
@@ -736,34 +748,109 @@ void ${5:update}(int i, $1 val){
 		i >>= 1;
 	}
 }
-void ${6:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = 0;}
+void ${6:fill}() {for(int i=0; i < 4 * N; ++i) $2[i] = 0;}
 endsnippet
 snippet segtree_struct "Segment tree struct" b
-endsnippet
-snippet segtree_general "General Segment tree" b
-${1:int} ${2:seg}[2 * ${3:N}];
-$1 ${6:query}(int l, int r){
-	l += $3, r+= $3; //can be replace by actual upperbound
-	$1 ans = ${4:0}; //identity element under $5
-	while(l < r){ // Combine has to be assosiative
-		if( l & 1 ) ans = ${5:combine}($2[l++],ans); //l++
-		if( r & 1 ) ans = $5($2[--r],ans); //--r
-		l >>= 1 , r >>= 1;
+/* Segtree struct template + lazy variant
+ * copied from tourist
+ * todo: switch to 0 indexing at some point.
+ */
+
+struct segtree{
+	struct node{
+		${1:int} sum = 0;
+		${2:$1} tag = 0;
+		bool put = false;
+
+		node() {};
+		node($1 sum): sum(sum){};
+
+		void modify(int l, int r, ${3:$1} v){
+			// update range l <= x < r
+			${4:sum = (r - l) * v;
+			tag = v;
+			put = true;}
+		}
+
+		void unite(const node &a, const node &b){
+			${5:sum = a.sum + b.sum;}
+		}
+	};
+
+	node unite(const node &a, const node &b) const {
+		node ret;
+		ret.unite(a,b);
+		return ret;
 	}
-	return ans;
-}
-void ${7:update}(int i, $1 val){
-	i += $3; // can be replaced by actual upperbound
-	$2[i] = val; i >>= 1;
-	while(i > 0){
-		$2[i] = $5($2[2 * i], $2[2 * i + 1]);
-		i >>= 1;
+
+	int n;
+	vector<node> tree;
+
+	segtree(int n): n(n), tree(n << 2, node(0)) {}
+	segtree(int n, $1 val): n(n), tree(n << 2,node(val)) {}
+
+	inline void pull(int p){
+		tree[p].unite(tree[p << 1], tree[(p << 1) + 1]);
 	}
-}
-void ${8:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = $4;}
+
+	inline void push(int p, int l, int r){
+		int m = (l + r) >> 1;
+		if(tree[p].put){
+			tree[p << 1].modify(l, m, tree[p].tag);
+			tree[(p << 1) + 1].modify(m, r, tree[p].tag);
+			tree[p].put = false;
+		}
+	}
+
+	void build(int p, int l, int r, const vector<${6:$1}> &v){
+		// build range l <= x <= r
+		if( l == r - 1 ){
+			if(l < szof(v)) tree[p].modify(l,r,v[l]);
+			return;
+		}
+		int m = (l + r) >> 1;
+		build(p << 1, l, m, v);
+		build((p << 1) + 1, m, r, v);
+		pull(p);
+	}
+
+	//query and modify need to be top down to ensure updates go through.	
+
+	void modify(int p, int l, int r, int ll, int rr, ${7:$1} v){
+		// modifies range l <= x < r
+		if(ll <= l && r <= rr){
+			tree[p].modify(l,r,v);
+			return;
+		}
+		int m = (l + r) >> 1;
+		push(p, l, r);
+		if(ll < m) modify(p << 1, l, m, ll, rr, v);
+		if(rr > m) modify((p << 1) + 1, m, r, ll, rr, v);
+		pull(p);
+	}
+
+	node query(int p, int l, int r, int ll, int rr){
+		// query range l <= x < r
+		if(ll <= l && r <= rr) return tree[p];
+		int m = (l + r) >> 1;
+		push(p, l, r);
+		node ret;
+		if(ll < m && rr > m) ret = unite(query(p << 1, l, m, ll, rr), query((p << 1) + 1, m, r, ll, rr));
+		else if(ll < m) ret = query(p << 1, l, m, ll, rr);
+		else if(rr > m) ret = query((p << 1) + 1, m, r, ll, rr);
+		pull(p);
+		return ret;
+	}
+
+	inline void build(int p, int l, int r) {build(p,l,r, vector<int>());}
+	inline void build(int l, int r) {build(1,l,r);}
+	inline void modify(int l, int r, ${8:$1} v) {modify(1,0,n,l,r,v);}
+	inline node query(int l, int r) {return query(1,0,n,l,r);}
+	inline node get(int i) {return query(i,i+1);}
+};
 endsnippet
-snippet segtree_inside "Inside function segment tree" b
-${1:int} ${2:seg}[2 * ${3:N}];
+snippet segtree_func "Inside function segment tree" b
+${1:int} ${2:seg}[4 * ${3:N}];
 function<$1(int,int)> ${5:query} = [&](int l, int r){
 	l += $3, r+= $3; //can be replace by actual upperbound
 	$1 ans = ${4:0};

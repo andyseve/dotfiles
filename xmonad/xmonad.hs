@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 13 Dec 2020 10:49:20 PM EST
+-- Last Modified: Fri 19 Feb 2021 12:43:11 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -861,16 +861,17 @@ myCustomShiftHook = composeOne . concat $
 
 myCustomPlaceHook :: ManageHook
 myCustomPlaceHook = composeOne . concat $ 
-    [ [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
-    , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
-    , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
         -- Handling specific conditions
-    , [ transience ]
+    [ [ transience ]
     , [ isFullscreen       -?> doFullFloat   ]
     , [ isDialog           -?> doCenterFloat ]
     , [ isRole =? "pop-up" -?> doCenterFloat ]
     , [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
     , [ pure True          -?> tileBelow     ]
+        -- Handling special programs
+    , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
+    , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
+    , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
     ]
         where
             tileBelowNoFocus = insertPosition Below Older
