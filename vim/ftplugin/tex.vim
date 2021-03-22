@@ -1,10 +1,11 @@
 " Author: Anish Sevekari
-" Last Updated: Tue 10 Sep 2019 04:43:22 PM EDT
+" Last Updated: Wed 03 Mar 2021 12:17:03 AM EST
 " tex specific vim settings
 
 " Core Settings {{{
 	set spelllang=en_us
 	set nospell
+	set textwidth=100
 	set colorcolumn=100
 " }}}
 " Key bindings and leader guide settings{{{
@@ -33,6 +34,7 @@
 			" Need not support more complicated commands!
 			" Do a search over all the commands and import these commands.
 			" autocmd to check for new commands in anishs.sty
+			" might be better to write a python function instead of one in vim.
 	endfunction
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell

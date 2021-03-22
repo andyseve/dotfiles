@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 13 Dec 2020 12:40:40 AM EST
+" Last Updated: Wed 03 Mar 2021 12:20:48 AM EST
 
 set nocompatible
 
@@ -116,6 +116,7 @@ set nocompatible
 	set hidden               " Hide buffers when they are abandoned
 	set cmdheight=2          " Setting command height 2 for more space
 	set shortmess+=c         " Messages should be short
+	set whichwrap+=<,>,h,l,[,] " Wraping around the lines
 
   let mapleader = "\\"
 

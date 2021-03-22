@@ -14,7 +14,7 @@ a = "google_contacts"
 b = "contacts_local"
 metadata = ["displayname"]
 collections = [["default", "default", "personal"]]
-conflict_resolution = "a wins"
+conflict_resolution = ["command", "vimdiff"]
 
 [storage contacts_local]
 type = "filesystem"
