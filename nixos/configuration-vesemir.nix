@@ -8,52 +8,47 @@
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-			/etc/nixos/modules/users.nix
       /etc/nixos/modules/defaults.nix
       /etc/nixos/modules/desktop.nix
+      /etc/nixos/modules/nvidia-legacy.nix
+      /etc/nixos/modules/users.nix
+      /etc/nixos/modules/ssh.nix
+      /etc/nixos/modules/git.nix
+      /etc/nixos/modules/taskserver.nix
+      /etc/nixos/modules/factorio-server.nix
     ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-  };
+  boot.loader.efi.canTouchEfiVariables = true;
 
   boot.plymouth.enable = true;
 
-	# Timezone settings
-	time.timeZone = "America/New_York";
-	time.hardwareClockInLocalTime = true;
+  # Timezone settings
+  time.timeZone = "America/New_York";
+  time.hardwareClockInLocalTime = false;  
 
   # Defining mount points
-	# Mounting Home
+  # Mounting Home
   fileSystems."/home" =
   { device = "/dev/disk/by-label/home";
     fsType = "ext4";
     options = [ "defaults" ];
   };
-	# Mounting Storage
-  fileSystems."/media/storage" =
-  { device = "/dev/disk/by-label/storage";
-    fsType = "ntfs";
-    options = [ "auto" "rw" "exec" "nosuid" "nofail" "user" "uid=1000" "gid=100" ];
-  };
 
-  networking.hostName = "ziraeal"; # Define your hostname.
-  networking.networkmanager.enable = true;  # Enables wireless support via nm
+  networking.hostName = "vesemir"; # Define your hostname.
+  networking.networkmanager.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.wlp1s0.useDHCP = true;
+  networking.interfaces.enp2s0f1.useDHCP = true;
+  networking.interfaces.wlp3s0f0.useDHCP = true;
 
-  # Network Proxy
+  # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-	
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -62,25 +57,22 @@
 
   # List services that you want to enable:
 
-  # OpenSSH daemon.
-  # services.openssh.enable = true;
+  # Enable the OpenSSH daemon.
+  # Import /etc/nixos/ssh.nix
 
-  # Firewall.
+  # Open ports in the firewall.
   networking.firewall.enable = true;
-	networking.firewall.allowPing = false;
+  networking.firewall.allowPing = false;
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-	#
-  # Define a user account. Don't forget to set a password with ‘passwd’.
 
-	# power actions
-	services.logind = {
-		killUserProcesses = false;
-		lidSwitch = "hibernate";
-		lidSwitchExternalPower = "suspend";
-		lidSwitchDocked = "ignore";
-		extraConfig = "IdleAction=suspend\nIdleActionSec=300\n";
-	};
+  # Power actions
+  services.logind = {
+    killUserProcesses = false;
+    lidSwitch = "hibernate";
+    lidSwitchExternalPower = "ignore";
+    lidSwitchDocked = "ignore";
+  };
 
 
   # This value determines the NixOS release with which your system is to be

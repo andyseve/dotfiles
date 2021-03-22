@@ -20,7 +20,7 @@ open_cmd = xdg-open
 # "kate --block"
 # If set to an empty string (default) pubs uses the value of the environment
 # variable $EDITOR.
-edit_cmd = ""
+edit_cmd = "nvim"
 
 # Which default extension to use when creating a note file.
 note_extension = txt
@@ -67,7 +67,7 @@ tag = cyan
 # bibliographic fields
 author = bold
 title = ""
-publisher = blue
+publisher = "blue"
 year = bold
 volume = bold
 pages = ""
@@ -75,13 +75,13 @@ pages = ""
 
 [plugins]
 # Comma-separated list of the plugins to load.
-# Currently pubs comes with built-in plugins alias and git.
-active = alias,
+# The only current available plugin is alias.
+active = alias, git,
 
 [[alias]]
 # new subcommands can be defined, e.g.:
 print = open --with lp
-evince = open --with evince
+zathura = open --with zathura
 
 # shell commands can also be defined, by prefixing them with a bang `!`, e.g:
 # count = !pubs list -k | wc -l
@@ -93,40 +93,8 @@ evince = open --with evince
 command = !pubs list -k | wc -l
 description = lists number of pubs in repo
 
-[[git]]
-# The git plugin will commit changes to the repository in a git repository
-# created at the root of the pubs directory. All detected changes will be
-# commited every time a change is made by a pubs command.
-# The plugin also propose the `pubs git` subcommand, to directly send git
-# commands to the pubs repository. Therefore, `pubs git status` is equivalent
-# to `git -C <pubsdir> status`, with the `-C` flag instructing
-# to invoke git as if the current directory was <pubsdir>. Note that a
-# limitation of the subcommand is that you cannot use git commands with the
-# `-c` option (pubs will interpret it first.)
-
-# if False, will display git output when automatic commit are made.
-# Invocation of `pubs git` will always have output displayed.
-quiet = True
-# if True, git will not automatically commit changes
-manual = False
-# if True, color will be conserved from git output (this add `-c color:always`
-# to the git invocation).
-force_color = True
-# new subcommands can be defined, e.g.:
-# print = open --with lp
-# evince = open --with evince
-
-# shell commands can also be defined, by prefixing them with a bang `!`, e.g:
-# count = !pubs list -k | wc -l
-
-# aliases can also be defined with descriptions using the following configobj
-# subsectioning.  NOTE: any aliases defined this way should come after all other
-# aliases, otherwise simple aliases will be ignored.
-# [[[count]]]
-# command = !pubs list -k | wc -l
-# description = lists number of pubs in repo
-
 [internal]
 # The version of this configuration file. Do not edit.
-version = 0.8.2
+version = 0.8.3
 
+# vim:ft=cfg

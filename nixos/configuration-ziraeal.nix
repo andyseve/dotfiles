@@ -2,39 +2,53 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-      ./modules/defaults.nix
-      ./modules/desktop.nix
-      ./modules/nvidia.nix
-      ./modules/ssh.nix
-      ./modules/users.nix
+			/etc/nixos/modules/users.nix
+      /etc/nixos/modules/defaults.nix
+      /etc/nixos/modules/desktop.nix
     ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi = {
+    canTouchEfiVariables = true;
+  };
+
+  boot.plymouth.enable = true;
 
 	# Timezone settings
 	time.timeZone = "America/New_York";
 	time.hardwareClockInLocalTime = true;
 
   # Defining mount points
+	# Mounting Home
+  fileSystems."/home" =
+  { device = "/dev/disk/by-label/home";
+    fsType = "ext4";
+    options = [ "defaults" ];
+  };
 	# Mounting Storage
   fileSystems."/media/storage" =
-  { device = "/dev/disk/by-label/Storage";
+  { device = "/dev/disk/by-label/storage";
     fsType = "ntfs";
-    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" "umask=022"];
+    options = [ "auto" "rw" "exec" "nosuid" "nofail" "user" "uid=1000" "gid=100" ];
   };
 
-  networking.hostName = "geralt"; # Define your hostname.
+  networking.hostName = "ziraeal"; # Define your hostname.
   networking.networkmanager.enable = true;  # Enables wireless support via nm
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.wlp4s0.useDHCP = true;
+  networking.interfaces.wlp1s0.useDHCP = true;
 
   # Network Proxy
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -48,36 +62,26 @@
 
   # List services that you want to enable:
 
-  # SSHD
-  # Add /etc/nixos/ssh.nix to imports
+  # OpenSSH daemon.
+  # services.openssh.enable = true;
 
   # Firewall.
   networking.firewall.enable = true;
 	networking.firewall.allowPing = false;
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-
-  # Xrandr settings
-  services.xserver.xrandrHeads = [ 
-    {
-      output = "DP-4";
-      primary = true;
-    }
-    {
-      output = "HDMI-0";
-    }
-  ];
+	#
+  # Define a user account. Don't forget to set a password with ‘passwd’.
 
 	# power actions
 	services.logind = {
 		killUserProcesses = false;
+		lidSwitch = "hibernate";
+		lidSwitchExternalPower = "suspend";
+		lidSwitchDocked = "ignore";
 		extraConfig = "IdleAction=suspend\nIdleActionSec=300\n";
 	};
-  
-	security.sudo.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # User account info is in ./modules/users.nix
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database

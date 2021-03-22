@@ -10,7 +10,7 @@
     options iwlwifi 11n_disable=8
     '';
   # logitech
-  hardware.logitech.enable=true;
+  hardware.logitech.wireless.enable=true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -30,26 +30,19 @@
   };
   i18n.defaultLocale = "en_US.UTF-8";
 
-	fonts = {
-		enableFontDir = true;
-		fonts = with pkgs; [
-			inconsolata
-			fira
-			fira-mono
-			fira-code
-			fira-code-symbols
-			powerline-fonts
-			font-awesome-ttf
-			lohit-fonts.marathi
-		];
-
-		fontconfig = {
-			penultimate.enable = false;
-			defaultFonts = {
-				monospace = [ "Fira Code" ];
-			};
-		};
-	};
+  fonts = {
+    fonts = with pkgs; [
+      inconsolata
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      fira-code
+      fira-code-symbols
+      powerline-fonts
+      font-awesome-ttf
+      lohit-fonts.marathi
+    ];
+  };
 
   # Allow non-free drivers
   hardware.enableRedistributableFirmware = true;
@@ -76,6 +69,7 @@
 		ltrace strace
 		pciutils usbutils lshw
 		smartmontools lm_sensors
+    dmidecode
 
     # Volume
     pavucontrol
@@ -108,18 +102,24 @@
     vdirsyncer # vdirsyncer
     fswebcam 
     neomutt
-    #pubs # biblography manager
-    anish-pubs
-    pass # password manager
+    unstable.pubs # biblography manager
+    (pass.withExtensions
+      (exts: [
+      exts.pass-otp 
+      ])
+    ) # password manager
 
 		
 		# Dev Tools
 		gnumake
 		gcc ccls
+
     (python3.withPackages # installing python3 with packages
       (ps: with ps; [
         pylint jedi
         numpy scipy matplotlib
+        scikitlearn
+        pandas
         jupyter notebook
       ])
     )
@@ -127,25 +127,31 @@
     python3Packages.argcomplete
     pypi2nix
 
-    haskellPackages.ghc
-    haskellPackages.hoogle
-    haskellPackages.hlint
-    # haskellPackages.hsimport -- broken
-    haskellPackages.cabal-install
+    unstable.haskellPackages.ghc
+    unstable.haskellPackages.hoogle
+    unstable.haskellPackages.cabal-install
+    unstable.haskellPackages.haskell-language-server
     cabal2nix
-    # all-hies.latest
 
-		openjdk nodejs
+		jdk11 nodejs
 
 		# Latex
 		texlive.combined.scheme-full
 
 		# Man Pages
 		man man-pages
+
+    # Gurobi
+    gurobi
   ];
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
+  services.printing.drivers = with pkgs; [
+    gutenprint
+    hplip
+    hplipWithPlugin
+  ];
 
   # Enable sound.
   sound.enable = true;

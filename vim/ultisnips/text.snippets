@@ -24,11 +24,11 @@
 #
 # Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
 
-snippet template "basic template for pass" b
-$1
+snippet pass "basic template for pass" b
+${VISUAL}
 ---
 ${3:title}
-username: ${2:username}
-password: ${1:pass}
+user: ${2:username}
+pass: ${VISUAL}
 url: ${4:url}
 endsnippet

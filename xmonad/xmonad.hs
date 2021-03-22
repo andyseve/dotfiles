@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 20 Jul 2020 04:05:27 PM EDT
+-- Last Modified: Mon 08 Mar 2021 07:31:00 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -9,12 +9,15 @@
     * restructure xmobar
     * xmobar music
     * xmobar weather
+    * vlc moving with mouse between screens.
+    * steam messages window popping up when opening steam.
     -}
 ----------------------------------------------------------------------------}}}
 -- Modules                                                                  {{{
 -------------------------------------------------------------------------------
 -- Core
 import Control.Monad (liftM2)
+import Control.Applicative (liftA2)
 import qualified Data.Map as M
 import Data.Function (on)
 import Data.Maybe
@@ -30,6 +33,7 @@ import XMonad.StackSet ( Stack(Stack), StackSet )
 import qualified XMonad.StackSet as W
 -- Layout
 import XMonad.Layout.Accordion
+import XMonad.Layout.BorderResize
 import XMonad.Layout.Decoration
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.Gaps
@@ -94,9 +98,9 @@ import XMonad.Util.WorkspaceCompare
 main = do
     xmonad
          $ withNavigation2DConfig myNav2DConf
-         $ withUrgencyHook LibNotifyUrgencyHook
-         $ ewmh
+         $ withUrgencyHook LibNotifyUrgencyHook 
          $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         $ ewmh
          $ myConfig
 
 
@@ -230,9 +234,12 @@ unfocuscolor = base02
 
 -- fonts
 
-mySmallFont = "xft:Fira Code:style=Regular:size=6:hinting=true"
-myFont      = "xft:Fira Code:style=Regular:size=8:hinting=true"
-myBigFont   = "xft:Fira Code:style=Regular:size=10:hinting=true"
+--mySmallFont   = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+--myFont        = mySmallFont
+--myBigFont     = mySmallFont
+mySmallFont = "xft:Fira Code:style=Regular:size=6"
+myFont      = "xft:Fira Code:style=Regular:size=8"
+myBigFont   = "xft:Fira Code:style=Regular:size=10"
 
 -- sizes
 gap    = 4
@@ -381,8 +388,9 @@ myButtonTheme = defaultThemeWithImageButtons
 myLayoutHook = showWorkspaceName
     $ fullScreenToggle
     $ onWorkspace wsgame ( Full ||| tabs )
-    $ onWorkspace wsmedia ( tabs ||| float )
+    $ onWorkspace wsmedia ( Full ||| float )
     $ onWorkspace wscom ( tabs_tall ||| float )
+    $ onWorkspace wswww ( tabs_tall ||| tall )
     $ ( tall ||| tripane )
     where
         showWorkspaceName = showWName' myShowWNameTheme
@@ -457,6 +465,7 @@ myLayoutHook = showWorkspaceName
         float = named "float"
             $ avoidStruts
             $ imageButtonDeco shrinkText myButtonTheme 
+            $ borderResize
             $ positionStoreFloat
 
 ----------------------------------------------------------------------------}}}
@@ -514,9 +523,7 @@ showKeybindings x = addName "show keybindings" $ io $ do
     hClose h
     return ()
 
--------------------------------------------------------------------------------
--- Modified BindOn function                                                  --
--------------------------------------------------------------------------------
+-- Modified BindOn function
 data XCond = WS | LD
 
 chooseAction :: XCond -> (String -> X()) -> X()
@@ -535,6 +542,20 @@ bindOn xc bindings = chooseAction xc $ chooser
 -- Tabs navigatoin functions
 myFocusUp    = bindOn LD [("tabs", windows W.focusUp), ("", onGroup W.focusUp')]
 myFocusDown  = bindOn LD [("tabs", windows W.focusDown), ("", onGroup W.focusDown')]
+
+-- Visible workspace query
+-- https://github.com/xmonad/xmonad-contrib/issues/293
+-- 
+isOnVisibleWS :: Query Bool
+isOnVisibleWS = do
+    w <- ask
+    ws <- liftX $ gets windowset
+    let allVisible = concat $ (maybe [] W.integrate) . W.stack . W.workspace <$> W.current ws:W.visible ws
+        visibleWs = w `elem` allVisible
+    return $ visibleWs
+
+classNameWS :: Query (String, Bool)
+classNameWS = liftM2 (\x y -> (x,y)) className isOnVisibleWS
 
 ----------------------------------------------------------------------------}}}
 
@@ -600,9 +621,11 @@ myKeys conf = let
     [ ("M-p"          , addName "launcher"      $ spawn myLauncher                                                      )
     , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
+    , ("M-S-<Return>" , addName "terminal"      $ nextMatchOrDo History (className =? "Alacritty") (spawn myTerminal)   )
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
-    , ("M-S-<Return>" , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
-    , ("M-\\"         , addName "browser"       $ runOrRaise myBrowser (className =? "Firefox")                         )
+    , ("M1-C-t"       , addName "terminal"      $ spawn myTerminal                                                      )
+    , ("M-\\"         , addName "browser"       $ nextMatchOrDo Forward (className =? "Firefox") (spawn myBrowser)      )
+    , ("M-S-\\"       , addName "browser"       $ spawn myBrowser                                                       )
     , ("M-z"          , addName "logout"        $ spawn "rofi-session"                                                  )
     , ("M-S-o"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-o M-o"      , addName "launcher"      $ spawn myLauncher                                                      )
@@ -610,7 +633,7 @@ myKeys conf = let
     , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser                                                    )
     , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
-    , ("M-o M-S-T"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
+    , ("M-o M-S-t"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
     , ("M-o M-p"      , addName "passwords"     $ spawn "rofi-pass"                                                     )
     ] ^++^
     ------------------------------------------------------------------------}}}
@@ -640,8 +663,9 @@ myKeys conf = let
     , ("M-S-i"          , addName "Switch tabs D"          $ windows W.swapDown                                         )
     , ("M-C-u"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusDown')          )
     , ("M-C-i"          , addName "merge w/sublayout"      $ withFocused (sendMessage . mergeDir W.focusUp')            )
-    , ("M1-<Tab>"       , addName "cycle windows"          $ nextMatch Forward (return True)                            )
-    , ("M1-<grave>"     , addName "cycle apps"             $ nextMatchWithThis History className                        )
+    , ("M1-<Tab>"       , addName "cycle windows"          $ nextMatch Forward isOnVisibleWS                            )
+    , ("M1-S-<Tab>"     , addName "cycle windows"          $ nextMatch Backward isOnVisibleWS                           )
+    , ("M1-`"           , addName "cycle apps"             $ nextMatchWithThis Forward classNameWS                      )
     ] 
     ++ zipM' "M-"     "navigate window"           fulldirKeys fulldirs windowGo True
     ++ zipM' "M-S-"   "move window"               fulldirKeys fulldirs windowSwap True
@@ -700,6 +724,7 @@ myStartupHook = do
     spawnOnce "~/.config/fehbg" -- feh + xrandr script
     spawnOnce "picom"
     spawnOnce "dunst"
+    spawnOnce "slack"
     XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
@@ -730,14 +755,14 @@ myLogPP = myXmobarLogPP
 myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
 myXmobarLogPP = def
     { ppCurrent = xmobarColor blue "" . clickableWorkspaces
-    , ppTitle   = xmobarColor green "" . shorten 60
+    , ppTitle   = xmobarColor green "" . (xmobarFont 3) . shorten 45
     , ppVisible = xmobarColor blue "" . clickableWorkspaces
     , ppUrgent  = xmobarColor red "" . clickableWorkspaces
     , ppHidden  = xmobarColor white "" . clickableWorkspaces
     , ppHiddenNoWindows = xmobarColor base01 "" . clickableWorkspaces
-    , ppSep     = " <fn=1>\xf101</fn> "
-    , ppWsSep   = " "
-    , ppLayout  = xmobarColor yellow ""
+    , ppSep     = "<fn=3> </fn><fn=1>\xf101</fn><fn=3> </fn>" 
+    , ppWsSep   = "<fn=3> </fn>"
+    , ppLayout  = xmobarColor yellow "" . (xmobarFont 3) . shorten 5
     , ppSort    = mkWsSort wsCompare
     }
         where
@@ -760,7 +785,7 @@ myXmobarLogPP = def
             workspaceToIcons "latex" = "<fn=1>\xf70e</fn>" -- 
             workspaceToIcons "code"  = "<fn=1>\xf121</fn>" -- 
             workspaceToIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
-            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" --  
+            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" -- 
             workspaceToIcons "com"   = "<fn=1>\xf075</fn>" -- 
             workspaceToIcons "media" = "<fn=2>\xf3b5</fn>" -- 
             workspaceToIcons "sys"   = "<fn=1>\xf120</fn>" -- 
@@ -769,6 +794,10 @@ myXmobarLogPP = def
 
             clickableWorkspaces :: String -> String
             clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
+
+            xmobarFont :: Int -> String -> String
+            xmobarFont i ws = "<fn=" ++ show(i) ++ ">" ++ ws ++ "</fn>"
+            -- Looks too complicated to use xmobar action here
 
 -- Defining barcreator and destroyer
 myBarCreator   = xmobarCreator
@@ -799,7 +828,7 @@ myFadeHook = composeAll $
     [ className =? c --> opaque | c <- myOpaques ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
-            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub"]
+            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub", "Terraria.bin.x86_64"]
 
 ----------------------------------------------------------------------------}}}
 -- Manage Hook                                                              {{{
@@ -824,25 +853,26 @@ myCustomShiftHook = composeOne . concat $
         where
             myWebShifts = ["Firefox", "google-chrome"]
             myGameShifts = ["Steam"]
-            myGameViews = ["dota2", "Civ6Sub"]
+            myGameViews = ["dota2", "Civ6Sub", "Terraria.bin.x86_64"]
             myComShifts = ["Slack", "discord", "weechat", "zoom"]
-            myMediaViews = ["vlc"]
-            myMediaShifts = []
+            myMediaViews = []
+            myMediaShifts = ["vlc"]
 
             shiftView = liftM2 (.) W.greedyView W.shift 
 
 myCustomPlaceHook :: ManageHook
 myCustomPlaceHook = composeOne . concat $ 
-    [ [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
-    , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
-    , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
         -- Handling specific conditions
-    , [ transience ]
+    [ [ transience ]
     , [ isFullscreen       -?> doFullFloat   ]
     , [ isDialog           -?> doCenterFloat ]
     , [ isRole =? "pop-up" -?> doCenterFloat ]
     , [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
     , [ pure True          -?> tileBelow     ]
+        -- Handling special programs
+    , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
+    , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
+    , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
     ]
         where
             tileBelowNoFocus = insertPosition Below Older
@@ -862,10 +892,11 @@ myCustomPlaceHook = composeOne . concat $
 
 myHandleEventHook = myCustomEventHook
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
-    <+> ewmhDesktopsEventHook
-	<+> positionStoreEventHook
     <+> XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
+    <+> XMonad.Hooks.EwmhDesktops.ewmhDesktopsEventHook
+    <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
+    <+> positionStoreEventHook
     <+> handleEventHook def
 
 myCustomEventHook = mempty

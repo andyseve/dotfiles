@@ -8,23 +8,27 @@ snippet code "Main template" b
 #include<cassert>
 #include<ctime>
 #include<cwctype>
+#include<chrono>
+#include<random>
 
+#include<cstring>
 #include<vector>
 #include<queue>
 #include<set>
+#include<map>
+#include<unordered_set>
+#include<unordered_map>
 #include<bitset>
-#include<cstring>
 
 #include<cmath>
 #include<complex>
 
 using namespace std;
-
 #define szof(x) ((int) x.size())
 
 int main(){
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+	cin.tie(nullptr);
 	$0
 }
 endsnippet
@@ -42,8 +46,7 @@ $0
 endsnippet
 snippet ios "optimized ios" b
 ios_base::sync_with_stdio(false);
-cin.tie(NULL);
-cout.tie(NULL);
+cin.tie(nullptr);
 $0
 endsnippet
 snippet infi "infinity" b
@@ -52,10 +55,26 @@ endsnippet
 snippet infl "infinity" b
 const long long ${1:inf} = 1ll << 62;
 endsnippet
+snippet testcases "Testcases" b
+int T; cin >> T;
+for(int tt = 0; tt < T; ++tt){
+	$0
+}
+endsnippet
+snippet google "Google output" b
+int T; cin >> T;
+for(int tt = 0; tt < T; ++tt){
+	$0
+	cout << "Case #" << tt + 1 << ": " << $1 << endl;
+}
+endsnippet
+snippet yesno "Yes no output" b
+cout << (${1:ok} ? "YES" : "NO") << endl;
+endsnippet
 # }}}
 # # Common functions {{{
 snippet forg  "General for loop"
-for(${1:int} ${2:i} = ${4:0} ; $2 < ${4:n}; ${5:++$2})
+for(${1:int} ${2:i} = ${4:0} ; $2 < ${5:n}; ${6:++$2})
 endsnippet
 snippet for "Basic for loop" 
 for(int ${1:i} = 0; $1 < ${2:n}; ++$1)
@@ -68,6 +87,10 @@ for(int ${1:i} = ${2:n-1}; $1 >= ${3:0}; --$1)
 endsnippet
 snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
+endsnippet
+snippet imax "Inplace max" b
+inline void imax(${1:int} &a, $1 b){a = max(a,b);}
+inline void imin($1 &a, $1 b){a = min(a,b);}
 endsnippet
 # }}}
 # # Number Theory {{{
@@ -133,10 +156,16 @@ $0
 endsnippet
 # modular class copied from Benq
 snippet modular "modular class" b
+/**
+ * Description: modular arithmetic operations
+ * Source: Benq modular template
+ * Testing: Tested - problem url here
+ */
 const int ${1:MOD} = ${2:1000000007};
+const int ${3:RT} =  ${4:5}; // 5 is primitive root for common mods
 struct modular {
 	long long val;
-	explicit operator long long() const { return val; }
+	explicit operator int() const { return val; }
 	modular() { val = 0; }
 	modular(const long long & v){
 		val = (-$1 <= v && v <= $1) ? v : v % $1;
@@ -195,6 +224,268 @@ inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b){
 }
 endsnippet
 # }}}
+# # Graphs {{{
+snippet dinic "Dinics algorithm" b
+template<typename T>
+struct dinic {
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+	
+	int n, s, t;
+	T flow;
+	vector<int> lst;
+	vector<int> d;
+	vector<vector<edge>> g;
+
+	// to use the scaling trick to optimize flow computation
+	T scaling_lim;
+	bool scaling;
+
+	dinic() {};
+	dinic(int n, int s, int t, bool scaling = false): n(n), s(s), t(t), scaling(scaling) {
+		g.resize(n);
+		d.resize(n);
+		lst.resize(n);
+		flow = 0;
+	}
+
+	void add_edge(int v, int u, int cap, bool directed = true) {
+		g[v].emplace_back(u, szof(g[u]), cap);
+		g[u].emplace_back(v, szof(g[v]) - 1, directed ? 0 : cap);
+	}
+
+	T dfs(int v, T flow){
+		if(v == t) return flow;
+		if(flow == 0) return 0;
+		T ret = 0;
+		for(;lst[v] < szof(g[v]); ++lst[v]){
+			edge& e = g[v][lst[v]];
+			if(d[e.u] != d[v] + 1) continue;
+			T add = dfs(e.u, min(flow, e.cap - e.flow));
+			if(add > 0){
+				ret += add;
+				flow -= add;
+				e.flow += add;
+				g[e.u][e.rev].flow -= add;
+			}
+			if (flow == 0) break;
+		}
+		return ret;
+	}
+
+	bool bfs(){
+		fill(d.begin(), d.end(), -1);
+		queue<int> q;
+		q.push(s);
+		d[s] = 0;
+		while(!q.empty() && d[t] == -1) {
+			int v = q.front(); q.pop();
+			for(edge& e : g[v]){
+				if(d[e.u] == -1 && e.cap - e.flow >= scaling_lim){
+					q.push(e.u);
+					d[e.u] = d[v] + 1;
+				}
+			}
+		}
+		return d[t] != -1;
+	}
+
+	T calc() {
+		T max_lim = numeric_limits<T>::max() / 2 + 1;
+		for(scaling_lim = scaling ? max_lim : 1; scaling_lim > 0; scaling_lim >>= 1){
+			while(bfs()){
+				fill(lst.begin(), lst.end(), 0);
+				T add;
+				while((add = dfs(s,numeric_limits<T>::max())) > 0) flow += add;
+			}
+		}
+		return flow;
+	}
+};
+endsnippet
+snippet push_relable "Push relable" b
+template<typename T>
+struct push_relable {
+	const T inf = numeric_limits<T>::max();
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+
+	int n;
+	vector<int> count, dist;
+	vector<T> excess;
+	int b = 0;
+	vector<bool> active;
+	vector<vector<edge>> g;
+	vector<vector<int>> B;
+
+	push_relable() {};
+	push_relable(int n): n(n) {
+		count.resize(2 * n + 1,0);
+		dist.resize(n,0);
+		active.resize(n,0);
+		excess.resize(n,0);
+		g.resize(n);
+		B.resize(2 * n + 1);
+	}
+
+	void add_edge(int v, int u, T cap, bool directed = true) {
+		edge a(u, szof(g[u]), cap), b(v, szof(g[v]), directed ? 0 : cap);
+		g[v].push_back(a), g[u].push_back(b);
+	}
+
+	void enqueue(int v) {
+		if(!active[v] && excess[v] > 0 && dist[v] < n){
+			active[v] = 1;
+			B[dist[v]].push_back(v);
+			b = max(b, dist[v]);
+		}
+	}
+
+	void push(int v, edge& e) {
+		T d = min(excess[v], e.cap - e.flow);
+		if(dist[v] == dist[e.u] + 1 && d > 0){
+			e.flow += d, g[e.u][e.rev].flow -= d;
+			excess[e.u] += d, excess[v] -= d;
+			enqueue(e.u);
+		}
+	}
+
+	void relable(int v) {
+		count[dist[v]]--; dist[v] = 2 * n;
+		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
+		count[dist[v]]++;
+		enqueue(v);
+	}
+
+	void discharge(int v) {
+		for(edge& e : g[v]){
+			if(excess[v] > 0) push(v,e);
+			else break;
+		}
+		if(excess[v] > 0){
+			relable(v);
+		}
+	}
+
+	T max_flow(int s, int t){
+		for(edge& e : g[s]) excess[s] += e.cap;
+		count[0] = n;
+		enqueue(s); active[t] = 1;
+
+		while(b >= 0){
+			if(szof(B[b])){
+				int v = B[b].back(); B[b].pop_back();
+				active[v] = 0; discharge(v);
+			}
+			else b--;
+		}
+		return excess[t];
+	}
+
+};
+endsnippet
+snippet push_relable_gap "Push relable algorithm - gap heuristic" b
+template<typename T>
+struct push_relable {
+	const T inf = numeric_limits<T>::max();
+	struct edge {
+		int u, rev;
+		T cap, flow = 0;
+		edge(int u, int rev, T cap, T flow = 0): u(u), rev(rev), cap(cap), flow(flow) {};
+	};
+
+	int n;
+	vector<int> count, dist;
+	vector<T> excess;
+	int b = 0;
+	vector<bool> active;
+	vector<vector<edge>> g;
+	vector<vector<int>> B;
+
+	push_relable() {};
+	push_relable(int n): n(n) {
+		count.resize(n+1,0);
+		dist.resize(n,0);
+		active.resize(n,0);
+		excess.resize(n,0);
+		g.resize(n);
+		B.resize(2 * n + 1);
+	}
+
+	void add_edge(int v, int u, T cap, bool directed = true) {
+		edge a(u, szof(g[u]), cap), b(v, szof(g[v]), directed ? 0 : cap);
+		g[v].push_back(a), g[u].push_back(b);
+	}
+
+	void enqueue(int v) {
+		if(!active[v] && excess[v] > 0 && dist[v] < n){
+			active[v] = 1;
+			B[dist[v]].push_back(v);
+			b = max(b, dist[v]);
+		}
+	}
+
+	void push(int v, edge& e) {
+		T d = min(excess[v], e.cap - e.flow);
+		if(dist[v] == dist[e.u] + 1 && d > 0){
+			e.flow += d, g[e.u][e.rev].flow -= d;
+			excess[e.u] += d, excess[v] -= d;
+			enqueue(e.u);
+		}
+	}
+
+	// gap heuristic
+	void gap(int k) {
+		for(int v = 0; v < n; ++v) if(dist[v] >= k){
+			count[dist[v]]--;
+			dist[v] = n;
+			count[dist[v]]++;
+			enqueue(v);
+		}
+	}
+
+	void relable(int v) {
+		count[dist[v]]--; dist[v] = 2 * n;
+		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
+		count[dist[v]]++;
+		enqueue(v);
+	}
+
+	void discharge(int v) {
+		for(edge& e : g[v]){
+			if(excess[v] > 0) push(v,e);
+			else break;
+		}
+		if(excess[v] > 0){
+			if(count[dist[v]] == 1) gap(dist[v]);
+			else relable(v);
+		}
+	}
+
+	T max_flow(int s, int t){
+		for(edge& e : g[s]) excess[s] += e.cap;
+		count[0] = n;
+		enqueue(s); active[t] = 1;
+
+		while(b >= 0){
+			if(szof(B[b])){
+				int v = B[b].back(); B[b].pop_back();
+				active[v] = 0; discharge(v);
+			}
+			else b--;
+		}
+		return excess[t];
+	}
+
+};
+endsnippet
+# }}}
 # # Combinatorics {{{
 snippet binom "fast binom" b
 modular fac[${1:N}];
@@ -209,6 +500,34 @@ modular binom(int n, int k){
 	if(n == k) return 1;
 	return fac[n] * fac_inv[k] * fac_inv[n-k];
 }
+endsnippet
+snippet nth_perm "nth permutation" b
+void ${3:factorial_pre}(){
+	${1:factorial}[0] = 1;
+	for(int i = 1; i < 20; ++i){
+		$1[i] = i * $1[i-1];
+	}
+}
+
+void ${4:nth_perm}(long long xx, int n){
+	long long x = xx;
+	int i = 0;
+	while($1[i] <= xx) i++;
+	int ff[i];
+	for(int j = 0; j < i; ++j){
+		ff[j] = x % (j + 1);
+		x = x / (j + 1);
+	}
+	int used[i];
+	for(int j = 0; j < i; ++j) used[j] = 1;
+	for(int j = i-1; j >= 0; --j){
+		int sum = 0, k = 0;
+		while(sum < ff[j]+1) sum += used[k++];
+		used[k-1] = 0;
+		${2:perm}[n-1-j] = k + n - i;
+	}
+}
+$0
 endsnippet
 # }}}
 # # Geometry {{{
@@ -280,9 +599,9 @@ endsnippet
 snippet pointi "Point template int" b
 struct point{
 	int x,y;
-	point(int xx,int yy) {x=xx;y=yy;}
+	point(int x,int y): x(x), y(y) {}
 	point() : point(0,0) {}
-	point(const point& a) {x = a.x; y = a.y;}
+	point(const point& a): x(a.x), y(a.y) {}
 
 	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
 	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
@@ -301,14 +620,18 @@ struct point{
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
 };
+
+long long dot(const point &a, const point &b) {
+	return 1ll * a.x * b.x + 1ll * a.y * b.y;
+}
 endsnippet
-snippet pointd "Point template int" b
+snippet pointd "Point template double" b
 double eps = ${1:1e-6};
 struct point{
 	double x,y;
-	point(double xx,double yy) {x=xx;y=yy;}
+	point(double x,double y): x(x), y(y) {}
 	point() : point(0,0) {}
-	point(const point& a) {x = a.x; y = a.y;}
+	point(const point& a): x(a.x), y(a.y) {}
 
 	friend ostream& operator<<(ostream& os, const point& a) { return os << a.x << " " << a.y; }
 	friend istream& operator>>(istream& in, point& a) { return in >> a.x >> a.y; }
@@ -327,6 +650,10 @@ struct point{
 	friend point operator+(point a, point b){ return a+=b; }
 	friend point operator-(point a, point b){ return a-=b; }
 };
+
+double dot(const point &a, const point &b) {
+	return a.x * b.x + a.y * b.y;
+}
 endsnippet
 # }}}
 # # String {{{
@@ -342,32 +669,188 @@ inline void buildZ(char* s, int* z){
 	}
 }
 endsnippet
+snippet aho_corasick_struct "aho_corasick struct" b
+struct ${1:aho_corasick} {
+	struct node {
+		map<int, int> next, go;
+		int p, pch;
+		bool term;
+		int suf;
+
+		node(){
+			next.clear(); go.clear();
+			term = false;
+			p = -1, pch = -1;
+			suf = -1;
+		}
+	};
+
+	vector<node> nodes;
+
+	$1(){
+		nodes = vector<node>(1, node());
+	}
+	int add(const string& s){
+		int v = 0;
+		for(char cc : s){
+			int c = cc - 'a';
+			if(nodes[v].next.count(c) == 0){
+				nodes[v].next[c] = szof(nodes);
+				nodes.emplace_back();
+				nodes.back().p = v;
+				nodes.back().pch = c;
+			}
+			v = nodes[v].next[c];
+		}
+		nodes[v].term = true;
+		return v;
+	}
+	int go(int v, char cc){return go(v, cc - 'a');}
+	int go(int v, int c){
+		if(nodes[v].go.count(c)) return nodes[v].go[c];
+		if(nodes[v].next.count(c)) return nodes[v].go[c] = nodes[v].next[c];
+		else return nodes[v].go[c] = (v == 0 ? 0 : go(suf(v),c));
+	}
+	int suf(int v){
+		if(nodes[v].suf != -1) return nodes[v].suf;
+		if(v == 0 || nodes[v].p == 0) return nodes[v].suf = 0;
+		return nodes[v].suf = go(suf(nodes[v].p), nodes[v].pch);
+	}
+	int feed(const string &s){
+		int v = 0;
+		for(char cc : s){
+			v = go(v,cc);
+			${0://main works goes here}
+		}
+	}
+};
+endsnippet
 # }}}
 # # Data Structures {{{
-snippet segtreeg "General Segment tree" b
-${1:int} ${2:seg}[2 * ${3:N}];
-$1 ${6:query}(int l, int r){
-	l += $3, r+= $3; //can be replace by actual upperbound
-	$1 ans = ${4:0}; //identity element under $5
-	while(l < r){ // Combine has to be assosiative
-		if( l & 1 ) ans = ${5:combine($2[l++],ans);} //l++
-		if( r & 1 ) ans = ${6:combine($2[--r],ans);} //--r
+snippet segtree "Segment tree" b
+${1:int} ${2:seg}[4 * ${3:N}];
+$1 ${4:query}(int l, int r){
+	// query range l <= x < r
+	l += $3, r+= $3;
+	$1 ans = 0;
+	while(l < r){
+		if( l & 1 ) ans += $2[l++]; //l++
+		if( r & 1 ) ans += $2[--r]; //--r
 		l >>= 1 , r >>= 1;
 	}
 	return ans;
 }
-void ${7:update}(int i, $1 val){
+void ${5:update}(int i, $1 val){
 	i += $3; // can be replaced by actual upperbound
-	$1[i] = val; i >>= 1;
+	$2[i] = val; i >>= 1;
 	while(i > 0){
-		$2[i] = $5($2[2 * i], $2[2 * i + 1]);
+		$2[i] = $2[2 * i] + $2[2 * i + 1];
 		i >>= 1;
 	}
 }
-void ${8:fill}() {for(int i=0; i < 2 * N; ++i) $2[i] = $4;}
+void ${6:fill}() {for(int i=0; i < 4 * N; ++i) $2[i] = 0;}
 endsnippet
-snippet segtreei "Inside function segment tree" b
-${1:int} ${2:seg}[2 * ${3:N}];
+snippet segtree_struct "Segment tree struct" b
+/* Segtree struct template + lazy variant
+ * copied from tourist
+ * todo: switch to 0 indexing at some point.
+ */
+
+struct segtree{
+	struct node{
+		${1:int} sum = 0;
+		${2:$1} tag = 0;
+		bool put = false;
+
+		node() {};
+		node($1 sum): sum(sum){};
+
+		void modify(int l, int r, ${3:$1} v){
+			// update range l <= x < r
+			${4:sum = (r - l) * v;
+			tag = v;
+			put = true;}
+		}
+
+		void unite(const node &a, const node &b){
+			${5:sum = a.sum + b.sum;}
+		}
+	};
+
+	node unite(const node &a, const node &b) const {
+		node ret;
+		ret.unite(a,b);
+		return ret;
+	}
+
+	int n;
+	vector<node> tree;
+
+	segtree(int n): n(n), tree(n << 2, node(0)) {}
+	segtree(int n, $1 val): n(n), tree(n << 2,node(val)) {}
+
+	inline void pull(int p){
+		tree[p].unite(tree[p << 1], tree[(p << 1) + 1]);
+	}
+
+	inline void push(int p, int l, int r){
+		int m = (l + r) >> 1;
+		if(tree[p].put){
+			tree[p << 1].modify(l, m, tree[p].tag);
+			tree[(p << 1) + 1].modify(m, r, tree[p].tag);
+			tree[p].put = false;
+		}
+	}
+
+	void build(int p, int l, int r, const vector<${6:$1}> &v){
+		// build range l <= x <= r
+		if( l == r - 1 ){
+			if(l < szof(v)) tree[p].modify(l,r,v[l]);
+			return;
+		}
+		int m = (l + r) >> 1;
+		build(p << 1, l, m, v);
+		build((p << 1) + 1, m, r, v);
+		pull(p);
+	}
+
+	//query and modify need to be top down to ensure updates go through.	
+
+	void modify(int p, int l, int r, int ll, int rr, ${7:$1} v){
+		// modifies range l <= x < r
+		if(ll <= l && r <= rr){
+			tree[p].modify(l,r,v);
+			return;
+		}
+		int m = (l + r) >> 1;
+		push(p, l, r);
+		if(ll < m) modify(p << 1, l, m, ll, rr, v);
+		if(rr > m) modify((p << 1) + 1, m, r, ll, rr, v);
+		pull(p);
+	}
+
+	node query(int p, int l, int r, int ll, int rr){
+		// query range l <= x < r
+		if(ll <= l && r <= rr) return tree[p];
+		int m = (l + r) >> 1;
+		push(p, l, r);
+		node ret;
+		if(ll < m && rr > m) ret = unite(query(p << 1, l, m, ll, rr), query((p << 1) + 1, m, r, ll, rr));
+		else if(ll < m) ret = query(p << 1, l, m, ll, rr);
+		else if(rr > m) ret = query((p << 1) + 1, m, r, ll, rr);
+		pull(p);
+		return ret;
+	}
+
+	inline void build(int p, int l, int r) {build(p,l,r, vector<int>());}
+	inline void build(int l, int r) {build(1,l,r);}
+	inline void modify(int l, int r, ${8:$1} v) {modify(1,0,n,l,r,v);}
+	inline node query(int l, int r) {return query(1,0,n,l,r);}
+	inline node get(int i) {return query(i,i+1);}
+};
+endsnippet
+snippet segtree_func "Inside function segment tree" b
+${1:int} ${2:seg}[4 * ${3:N}];
 function<$1(int,int)> ${5:query} = [&](int l, int r){
 	l += $3, r+= $3; //can be replace by actual upperbound
 	$1 ans = ${4:0};
@@ -450,12 +933,12 @@ int ${1:bs}(int s, int l, int r){
 	else return $1(s, mid, r);
 }
 endsnippet
-snippet bs "Binary Search" 
-int ${1:a} = ${2:0}, ${3:b} = ${4:n};
-while($1 < $2){
-	int m = ($1 + $2) / 2;
-	if ( $0 ) a = m + 1;
-	else b = m;
+snippet bs "Binary Search" b
+${1:int} ${2:bl} = ${3:0}, ${4:br} = ${5:n}; // ensure $2 <= ans <= $4
+while($2 < $4){
+	$1 ${6:bm} = ($2 + $4) / 2;
+	if ( $0 ) $4 = $6;
+	else $2 = $6 + 1;
 }
 endsnippet
 snippet fft "Fast Fourier Transform Inplace"

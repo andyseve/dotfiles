@@ -1,4 +1,4 @@
-## Last Modified: Sat 18 Jul 2020 08:29:45 PM EDT
+## Last Modified: Tue 10 Nov 2020 08:35:22 AM EST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -381,6 +381,17 @@ if check khard; then
 	link $IF/khard.conf $OF/khard.conf
 else
 	nope khard
+fi
+
+# networkmanager
+if check networkmanager_dmenu; then
+	IF="$DOTFILES/networkmanager"
+	OF="$HOME/.config/networkmanager-dmenu"
+	cdir $OF
+
+	link $IF/config.ini $OF/config.ini
+else
+	nope networkmanager_dmenu
 fi
 
 ################################################################################

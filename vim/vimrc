@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 26 Jun 2020 03:40:24 PM EDT
+" Last Updated: Wed 03 Mar 2021 12:20:48 AM EST
 
 set nocompatible
 
@@ -116,6 +116,7 @@ set nocompatible
 	set hidden               " Hide buffers when they are abandoned
 	set cmdheight=2          " Setting command height 2 for more space
 	set shortmess+=c         " Messages should be short
+	set whichwrap+=<,>,h,l,[,] " Wraping around the lines
 
   let mapleader = "\\"
 
@@ -253,30 +254,31 @@ set nocompatible
 		\'coc-vimtex',
 		\'coc-diagnostic'
 		\]
+
+	" snippet mappings
+	map <c-l> <c-o>:CocList snippets<CR>
+	vmap <c-j> <Plug>(coc-snippets-select)
+	let g:coc_snippet_next = '<tab>'
+	let g:coc_snippet_prev = '<s-tab>'
+	xmap <leader>ex <Plug>(coc-convert-snippet)
 	
 	" binding <tab> to select
+	" helper function to check if previous entry is a whitespace.
 	function! s:check_back_space() abort
 		let col = col('.') - 1
 		return !col || getline('.')[col - 1] =~ '\s'
 	endfunction
 
-	"snippet mappings
-	imap <c-l> <Plug>(coc-snippets-expand)
-	vmap <c-k> <Plug>(coc-snippets-select)
-	let g:coc_snippet_next = '<c-k>'
-	let g:coc_snippet_prev = '<c-j>'
-	imap <c-k> <Plug>(coc-snippets-expand-jump)
-
+	" Use tab to navigate manu and snippets
 	imap <silent><expr> <tab>
 		\ coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" :
 		\ pumvisible() ? "\<c-n>":
 		\ <SID>check_back_space() ? "\<tab>" :
 		\ coc#refresh()
-	let g:coc_snippet_next = '<tab>'
 
 	inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
-	inoremap <silent><expr> <c-space> coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" : coc#refresh()
-	inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+	inoremap <silent><expr> <c-space> coc#refresh()
+	inoremap <expr> <cr> pumvisible() ? coc#_select_confirm() : "\<c-g>u\<cr>"
 	
 	nmap <silent> [g <Plug>(coc-diagnostic-prev)
 	nmap <silent> ]g <Plug>(coc-diagnostic-next)
@@ -291,8 +293,8 @@ set nocompatible
 	endfunction
 
 	nnoremap <silent> K :call <SID>show_documentation()<cr>
-	nnoremap <Plug>(show-documentation) :call <SID>show_documentation()<cr>
-	nmap <silent> <leader>dk <Plug>(show-documentation)
+	nnoremap <Plug>(coc-show-documentation) :call <SID>show_documentation()<cr>
+	nmap <silent> <leader>dk <Plug>(coc-show-documentation)
 
 	" GoTo code navigation.
 	nmap <silent> <leader>dd <Plug>(coc-definition)
@@ -453,7 +455,7 @@ set nocompatible
 	" Quick Edits
 	let g:lmap.e = {
 				\'name': 'Quick Edit',
-				\'s':['UltiSnipsEdit', 'Snippets'],
+				\'s':['CocCommand snippets.editSnippets', 'Snippets'],
 				\'v':['vsplit ~/.vimrc', 'Vimrc'],
 				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
 				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],

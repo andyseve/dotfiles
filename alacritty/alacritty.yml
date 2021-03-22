@@ -11,7 +11,7 @@ env:
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used
   TERM: xterm-256color
-  WINIT_X11_SCALE_FACTOR: "1.0"
+  WINIT_X11_SCALE_FACTOR: "1.0" #Ignore HiDPI
 
 window:
   # Window dimensions (changes require restart)
@@ -88,7 +88,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux) monospace
     #   - (Windows) Consolas
-    family: firacode
+    family: Fira Code
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -99,7 +99,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: firacode
+    family: Fira Code
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -110,7 +110,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: firacode
+    family: Fira Code
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -252,9 +252,9 @@ colors: *dark
 #   - Linear
 #
 # Specifying a `duration` of `0` will disable the visual bell.
-visual_bell:
+bell:
   animation: EaseOutExpo
-  duration: 0
+  duration: 100
   color: '0xffffff'
 
 # Background opacity
@@ -322,7 +322,7 @@ selection:
   save_to_clipboard: false
 
 # Allow terminal applications to change Alacritty's window title.
-dynamic_title: true
+window.dynamic_title: true
 
 cursor:
   # Cursor style

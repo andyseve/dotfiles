@@ -1,6 +1,6 @@
-name:                my-xmobar
-version:             0.1
-description:         my xmobar
+name:                xmobar-anish
+version:             1.0
+description:         xmobar tweaked by anish sevekari
 author:              Anish Sevekari
 build-type:          Simple
 cabal-version:       >=1.10
