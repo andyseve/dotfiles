@@ -61,6 +61,7 @@
     discord unstable.zoom-us slack
 		deluge
 		unstable.google-play-music-desktop-player
+    unstable.dropbox
 
     # Helper CLI tools
     streamlink

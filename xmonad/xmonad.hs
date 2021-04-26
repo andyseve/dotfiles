@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 08 Mar 2021 07:31:00 PM EST
+-- Last Modified: Sun 25 Apr 2021 06:05:59 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -65,10 +65,11 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FadeWindows
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.PositionStoreHooks
+import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.UrgencyHook
 -- Actions
 import XMonad.Actions.Commands
@@ -387,6 +388,7 @@ myButtonTheme = defaultThemeWithImageButtons
 -------------------------------------------------------------------------------
 myLayoutHook = showWorkspaceName
     $ fullScreenToggle
+    $ refocusLastLayoutHook
     $ onWorkspace wsgame ( Full ||| tabs )
     $ onWorkspace wsmedia ( Full ||| float )
     $ onWorkspace wscom ( tabs_tall ||| float )
@@ -834,7 +836,7 @@ myFadeHook = composeAll $
 -- Manage Hook                                                              {{{
 -------------------------------------------------------------------------------
 myManageHook :: ManageHook
-myManageHook = myCustomPlaceHook <+> myCustomShiftHook
+myManageHook = myCustomPlaceHook <+> myCustomShiftHook <+> myCustomStackHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
     <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
@@ -867,16 +869,12 @@ myCustomPlaceHook = composeOne . concat $
     , [ isFullscreen       -?> doFullFloat   ]
     , [ isDialog           -?> doCenterFloat ]
     , [ isRole =? "pop-up" -?> doCenterFloat ]
-    , [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
-    , [ pure True          -?> tileBelow     ]
         -- Handling special programs
     , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
     , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
     , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
     ]
         where
-            tileBelowNoFocus = insertPosition Below Older
-            tileBelow = insertPosition Below Newer
             isRole = stringProperty "WM_WINDOW_ROLE"
 
             myCFloats = ["feh"]
@@ -886,11 +884,23 @@ myCustomPlaceHook = composeOne . concat $
 
             doRRectFloat = doRectFloat (W.RationalRect 0.73 0 0.25 0.50)
 
+myCustomStackHook :: ManageHook
+myCustomStackHook = composeOne . concat $
+    [ [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
+    , [ pure True          -?> tileBelow     ]
+    ]
+        where
+            tileBelowNoFocus = insertPosition Below Older
+            tileBelow = insertPosition Below Newer
+
+            myViewers = ["Zathura", "evince"]
+
 ----------------------------------------------------------------------------}}}
 -- Event Hook                                                               {{{
 -------------------------------------------------------------------------------
 
 myHandleEventHook = myCustomEventHook
+    <+> refocusLastWhen myRefocusPred
     <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
     <+> XMonad.Hooks.EwmhDesktops.ewmhDesktopsEventHook
@@ -900,6 +910,7 @@ myHandleEventHook = myCustomEventHook
     <+> handleEventHook def
 
 myCustomEventHook = mempty
+myRefocusPred = refocusingIsActive
 
 ----------------------------------------------------------------------------}}}
 -- Urgency Hook                                                             {{{
