@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Tue 27 Apr 2021 12:35:40 AM EDT
+# Last Edited: Tue 29 Jun 2021 02:40:19 PM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
