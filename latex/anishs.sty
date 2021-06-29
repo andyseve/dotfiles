@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 31 Mar 2021 05:55:57 PM EDT
+% Last Modified: Thu 22 Apr 2021 11:29:45 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -18,6 +18,7 @@
 \newif\ifanishsthm\anishsthmtrue%Theorem Defs
 \newif\ifanishspage\anishspagefalse%Margins
 \newif\ifanishstodo\anishstodofalse%Todonotes
+\newif\ifanishsauthblk\anishsauthblkfalse%Authblk
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -48,6 +49,8 @@
 \DeclareOption{colorlinks}{\anishsnicelinkstrue}
 
 \DeclareOption{asy}{\anishsasytrue}
+
+\DeclareOption{authblk}{\anishsauthblktrue}
 
 
 \ProcessOptions\relax
@@ -253,9 +256,7 @@
   \ifanishspkg%
     \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
     \usepackage{listings} % listings allows to convert source codes into latex
-		% TODO Listings support
-    \usepackage{mathrsfs}
-    \usepackage{textcomp}
+	% TODO Listings support
     \lstset{basicstyle=\footnotesize\ttfamily,
       numbers=left,
       numbersep=5pt,
@@ -273,19 +274,24 @@
       breakatwhitespace=true,
       frame=none
     }
+    \usepackage{mathrsfs}
+    \usepackage{textcomp}
     \usepackage[shortlabels]{enumitem} % for better lists
-		\usepackage{mathtools}
-		\usepackage{microtype}
-		\usepackage{upgreek}
-		\usepackage{import}
-		\usepackage{graphicx} % for small tweaks
-		\usepackage{bbm} % Adding support for \mathbbm{1}
+	\usepackage{mathtools}
+	\usepackage{microtype}
+	\usepackage{upgreek}
+	\usepackage{import}
+	\usepackage{graphicx} % for small tweaks
+	\usepackage{bbm} % Adding support for \mathbbm{1}
 
-		% Better Tables
-		\usepackage{tabularx, booktabs}
+	% Better Tables
+	\usepackage{tabularx, booktabs}
   \fi
+    \ifanishsauthblk
+        \usepackage{authblk}
+    \fi
   \ifanishspage% Geometry of the Page
-		\setlength{\headheight}{1.5em}
+	\setlength{\headheight}{1.5em}
     \setlength{\topmargin}{1em}
     \setlength{\topmargin}{\topmargin minus \headheight}
     \setlength{\topmargin}{\topmargin minus \headsep}
@@ -304,15 +310,20 @@
 		% This fancy page style is mainly for assignments and homeworks.
 		% Configures others manually since those occurrences are rare.
 		% Might have to branch this in future
-    \pagestyle{fancy}
-    \lhead{\thetitle}
-    \chead{}
-		\rhead{\theauthor}
-    \lfoot{}
-    \cfoot{\thepage}
-    \rfoot{}
+    \pagestyle{fancy}{%
+    \fancyhead[L]{\thetitle}
+    \fancyhead[C]{}
+    \ifanishsauthblk
+        \fancyhead[R]{}
+    \else
+	    \fancyhead[R]{\theauthor}
+	\fi
+	\fancyfoot[L,R]{}
+	\fancyfoot[C]{\thepage}
+	}
     \fancypagestyle{plain}{%
       \fancyhead{}
+      \fancyfoot[C]{\thepage}
       \renewcommand{\headrulewidth}{0pt}
     }
 	\fi

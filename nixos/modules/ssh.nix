@@ -10,6 +10,7 @@
 		ports = [ 22 ];
 		permitRootLogin = "no";
 		passwordAuthentication = false;
+
 		extraConfig = ''
       # Authentication
       LoginGraceTime 2m
@@ -26,4 +27,9 @@
 		'';
 	};
 
+  # ssh agent
+  #programs.ssh = {
+    #startAgent = true;
+    #agentTimeout = "30m";
+  #};
 }
