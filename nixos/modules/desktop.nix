@@ -10,8 +10,10 @@
 		# Touchpad
 		libinput = {
 			enable = true;
-			accelProfile = "flat";
-			disableWhileTyping = true;
+      touchpad = {
+        accelProfile = "flat";
+        disableWhileTyping = true;
+      };
 		};
 
     # Desktop

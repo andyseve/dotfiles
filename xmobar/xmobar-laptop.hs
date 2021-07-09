@@ -1,8 +1,9 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Wed 11 Nov 2020 02:04:36 PM EST
+-- Last Modified: Thu 08 Jul 2021 11:11:53 PM EDT
 -- Author: Anish Sevekari
 
 import Xmobar
+import System.Environment
 
 config :: Config
 config = defaultConfig { 
@@ -24,7 +25,23 @@ config = defaultConfig {
        , border = NoBorder
        , borderWidth = 0
        , commands = [  
-											Run $ Battery [
+										  Run $ Date "%a %d %b %H:%M" "date" 20
+										, Run $ Volume "default" "Master" [
+																						"-t", "<status> <volume>%"
+																					, "--"
+																					, "-o", "<fn=1>\xf6a9</fn>" --
+																					, "-O", ""
+																					, "-h", "<fn=1>\xf028</fn>" --
+																					, "-m", "<fn=1>\xf027</fn>" --
+																					, "-l", "<fn=1>\xf026</fn>" --
+																					, "-c", "#dc322f"
+																					, "-C", "#93a1a1"
+																					] 10
+										, Run $ Wireless "wlp1s0" [
+																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
+																	] 10
+										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
+										,	Run $ Battery [
 											   "--template" , "<acstatus> (<timeleft>)"
 											 , "--Low"      , "25"
 											 , "--High"     , "50"
@@ -45,32 +62,16 @@ config = defaultConfig {
 											 , "-A" , "5"
 											 , "-a" , "notify-send -u critical --hint=string:x-dunst-stack-tag:low_battery -a Battery -i /run/current-system/sw/share/icons/Papirus-Dark/48x48/status/battery-empty.svg \"Battery Low\" \"Your computer will turn of soon\""
 											 ] 50
-										, Run $ Date "%a %d %b %H:%M" "date" 20
-										, Run $ Volume "default" "Master" [
-																						"-t", "<status> <volume>%"
-																					, "--"
-																					, "-o", "<fn=1>\xf6a9</fn>" --
-																					, "-O", ""
-																					, "-h", "<fn=1>\xf028</fn>" --
-																					, "-m", "<fn=1>\xf027</fn>" --
-																					, "-l", "<fn=1>\xf026</fn>" --
-																					, "-c", "#dc322f"
-																					, "-C", "#93a1a1"
-																					] 10
 										, Run $ Brightness [
 													   "-t", "<fn=1>\xf185</fn> <percent>%" --
 													 , "--"
 													 , "-D", "intel_backlight"
 													 ] 10
-										, Run $ Wireless "wlp1s0" [
-																		"-t", "<fn=1>\xf1eb</fn> <quality>" --
-																	] 10
-										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
 										, Run $ UnsafeStdinReader
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-			 , template = " %UnsafeStdinReader%} %date% %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
+			 , template = " %UnsafeStdinReader%} <action=xdotool key Super+c>%date%</action> %weather% {%wlp1s0wi% %default:Master% %bright% %battery%"
        }
 
 main :: IO ()
