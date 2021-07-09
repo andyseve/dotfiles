@@ -17,7 +17,7 @@ while getopts ":u:p:g:l:h" opt; do
 		l )
 			echo $(pass $3 | grep $OPTARG | awk -F "$OPTARG: " '{print $2}')
 			;;
-		h | : | *)
+		h | : | * )
 			echo "Usage: getpass [-u|-p] pass/store/path"
 			exit 2
 			;;
