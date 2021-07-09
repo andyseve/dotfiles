@@ -9,16 +9,17 @@
 \usepackage{cleveref} % for better referencing systems
 
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
-%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
 
 %arguments
 \newif\ifanishssetup\anishssetuptrue%Setup the page
 \newif\ifanishspkg\anishspkgtrue%Add small packages
+\newif\ifanishsalg\anishsalgtrue%algorithms
 \newif\ifanishsfancy\anishsfancytrue%fancy page setup
 \newif\ifanishsthm\anishsthmtrue%Theorem Defs
 \newif\ifanishspage\anishspagefalse%Margins
 \newif\ifanishstodo\anishstodofalse%Todonotes
 \newif\ifanishsauthblk\anishsauthblkfalse%Authblk
+\newif\ifanishsnatbib\anishsnatbibtrue%natbib
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -34,6 +35,7 @@
 \DeclareOption{nosetup}{\anishssetupfalse}
 \DeclareOption{pkg}{\anishspkgtrue}
 \DeclareOption{nopkg}{\anishspkgfalse}
+\DeclareOption{noalg}{\anishsalgfalse}
 \DeclareOption{fancy}{\anishsfancytrue}
 \DeclareOption{nofancy}{\anishsfancyfalse}
 \DeclareOption{savepaper}{\anishspagetrue}
@@ -51,6 +53,7 @@
 \DeclareOption{asy}{\anishsasytrue}
 
 \DeclareOption{authblk}{\anishsauthblktrue}
+\DeclareOption{nonatbib}{\anishsnatbibfalse}
 
 
 \ProcessOptions\relax
@@ -235,7 +238,7 @@
 
 	% Number systems
 	\newcommand{\R}{\ensuremath{\mathbb{R}}}
-	\newcommand{\C}{\ensuremath{\mathbb{C}}}
+	%\newcommand{\C}{\ensuremath{\mathbb{C}}}
 	\newcommand{\N}{\ensuremath{\mathbb{N}}}
 	\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 	\newcommand{\F}{\ensuremath{\mathbb{F}}}
@@ -254,7 +257,9 @@
   \fi
 	% Setting up commonly used packages
   \ifanishspkg%
-    \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
+    \ifanishsalg%
+        \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
+    \fi
     \usepackage{listings} % listings allows to convert source codes into latex
 	% TODO Listings support
     \lstset{basicstyle=\footnotesize\ttfamily,
@@ -286,6 +291,10 @@
 
 	% Better Tables
 	\usepackage{tabularx, booktabs}
+	% Better citations
+	\ifanishsnatbib
+	    \usepackage[round]{natbib}
+	\fi
   \fi
     \ifanishsauthblk
         \usepackage{authblk}
@@ -328,7 +337,7 @@
     }
 	\fi
 	\ifanishstodo
-		\setlength{\marginparwidth}{2cm}
+		%\setlength{\marginparwidth}{2cm}
 		\usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
 	\fi
   \ifanishsthm%Theorem settings
@@ -446,7 +455,7 @@
       colorlinks   = true, %Colours links instead of ugly boxes
       urlcolor     = blue, %Colour for external hyperlinks
       linkcolor    = blue, %Colour of internal links
-      citecolor    = red,  %Colour of citations
+      citecolor    = blue,  %Colour of citations
     }
   \fi
 \fi
