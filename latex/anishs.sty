@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 18 Jun 2021 12:32:20 PM EDT
+% Last Modified: Thu 08 Jul 2021 08:22:46 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -19,7 +19,10 @@
 \newif\ifanishspage\anishspagefalse%Margins
 \newif\ifanishstodo\anishstodofalse%Todonotes
 \newif\ifanishsauthblk\anishsauthblkfalse%Authblk
+<<<<<<< HEAD
 \newif\ifanishsnatbib\anishsnatbibtrue%natbib
+=======
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -53,7 +56,10 @@
 \DeclareOption{asy}{\anishsasytrue}
 
 \DeclareOption{authblk}{\anishsauthblktrue}
+<<<<<<< HEAD
 \DeclareOption{nonatbib}{\anishsnatbibfalse}
+=======
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
 
 
 \ProcessOptions\relax
@@ -262,7 +268,11 @@
     \fi
 
     \usepackage{listings} % listings allows to convert source codes into latex
+<<<<<<< HEAD
 		% TODO Listings support
+=======
+	% TODO Listings support
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
     \lstset{basicstyle=\footnotesize\ttfamily,
       numbers=left,
       numbersep=5pt,
@@ -280,17 +290,21 @@
       breakatwhitespace=true,
       frame=none
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
     \usepackage{mathrsfs}
     \usepackage{textcomp}
     \usepackage[shortlabels]{enumitem} % for better lists
-		\usepackage{mathtools}
-		\usepackage{microtype}
-		\usepackage{upgreek}
-		\usepackage{import}
-		\usepackage{graphicx} % for small tweaks
-		\usepackage{bbm} % Adding support for \mathbbm{1}
+	\usepackage{mathtools}
+	\usepackage{microtype}
+	\usepackage{upgreek}
+	\usepackage{import}
+	\usepackage{graphicx} % for small tweaks
+	\usepackage{bbm} % Adding support for \mathbbm{1}
 
+<<<<<<< HEAD
 		% Better Tables
 		\usepackage{tabularx, booktabs}
 		% Better citations
@@ -300,9 +314,29 @@
   \fi
   \ifanishsauthblk
 		\usepackage{authblk}
+=======
+	% Better Tables
+	\usepackage{tabularx, booktabs}
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
   \fi
+    \ifanishsauthblk
+        \usepackage{authblk}
+    \fi
   \ifanishspage% Geometry of the Page
+<<<<<<< HEAD
 		\usepackage{fullpage}
+=======
+	\setlength{\headheight}{1.5em}
+    \setlength{\topmargin}{1em}
+    \setlength{\topmargin}{\topmargin minus \headheight}
+    \setlength{\topmargin}{\topmargin minus \headsep}
+    \setlength{\oddsidemargin}{0in}
+    \setlength{\evensidemargin}{\oddsidemargin}
+    \setlength{\textwidth}{6.5in}
+    \setlength{\marginparwidth}{0.5in}
+    \setlength{\parskip}{1.5ex}
+    \setlength{\parindent}{0in}
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
   \fi
   \ifanishsfancy%Fancy Page Setup
     \usepackage{titling}
@@ -313,6 +347,7 @@
 		% Configures others manually since those occurrences are rare.
 		% Might have to branch this in future
     \pagestyle{fancy}{%
+<<<<<<< HEAD
 			\fancyhead[L]{\thetitle}
 			\fancyhead[C]{}
 			\ifanishsauthblk
@@ -323,6 +358,18 @@
 			\fancyfoot[L,R]{}
 			\fancyfoot[C]{\thepage}
 		}
+=======
+    \fancyhead[L]{\thetitle}
+    \fancyhead[C]{}
+    \ifanishsauthblk
+        \fancyhead[R]{}
+    \else
+	    \fancyhead[R]{\theauthor}
+	\fi
+	\fancyfoot[L,R]{}
+	\fancyfoot[C]{\thepage}
+	}
+>>>>>>> 055ab549a8a469d92dc5cb80edec6f1d28f42067
     \fancypagestyle{plain}{%
       \fancyhead{}
       \fancyfoot[C]{\thepage}

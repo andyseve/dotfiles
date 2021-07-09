@@ -750,7 +750,16 @@ void ${5:update}(int i, $1 val){
 }
 void ${6:fill}() {for(int i=0; i < 4 * N; ++i) $2[i] = 0;}
 endsnippet
-snippet segtree_struct "Segment tree struct" b
+snippet segtree_struct "Segment tree stuct" b
+/* Segtree struct template
+ * todo: switch to 0 indexing at some point
+ */
+
+struct segtree{
+	struct node{semi built seg tree}
+}
+endsnippet
+snippet segtree_struct_lazy "Lazy segment tree struct" b
 /* Segtree struct template + lazy variant
  * copied from tourist
  * todo: switch to 0 indexing at some point.

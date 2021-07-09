@@ -237,7 +237,7 @@
     # * close_current: Close current notification.
     # * close_all: Close all notifications.
     mouse_left_click = do_action
-    mouse_middle_click = close_all
+    mouse_middle_click = context
     mouse_right_click = close
 
 # Experimental features that may or may not work correctly. Do not expect them
@@ -270,7 +270,7 @@
     history = ctrl+grave
 
     # Context menu.
-    context = mod4+space
+    Context = mod4+space
 		do_action = mod4+shift+space
 
 [urgency_low]
@@ -279,7 +279,7 @@
 		frame_color = "#93a1a1"
     foreground  = "#93a1a1"
     background  = "#073642"
-    timeout     = 4
+    timeout     = 6
     # Icon for notifications with low urgency, uncomment to enable
     #icon = /path/to/icon
 
@@ -287,7 +287,7 @@
 		frame_color = "#859900"
     foreground  = "#859900"
     background  = "#073642"
-    timeout     = 6
+    timeout     = 10
     # Icon for notifications with normal urgency, uncomment to enable
     #icon = /path/to/icon
 
@@ -295,7 +295,7 @@
 		frame_color = "#DC322F"
     foreground  = "#DC322F"
     background  = "#073642"
-    timeout     = 10
+    timeout     = 14
     # Icon for notifications with critical urgency, uncomment to enable
     #icon = /path/to/icon
 
