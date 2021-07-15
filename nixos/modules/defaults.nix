@@ -47,6 +47,19 @@
   # Allow non-free drivers
   hardware.enableRedistributableFirmware = true;
 
+  # Nix configuration
+  nix = {
+    autoOptimiseStore = true;
+
+
+    # Garbage Collector
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
 	# NixPkgs Configuration
 	nixpkgs.config = {
 		allowUnfree = true;

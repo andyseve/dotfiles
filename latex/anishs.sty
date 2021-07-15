@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Fri 09 Jul 2021 12:17:37 PM EDT
+% Last Modified: Thu 15 Jul 2021 03:17:22 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -59,16 +59,19 @@
 
 % Page Setup
 \ifanishspage
-	\usepackage{fullpage}
+	\usepackage[margin=2cm,includehead,includefoot]{geometry}
 \fi
 \ifanishsfancy
 	\usepackage{titling}
 	\usepackage{fancyhdr}
 	\renewcommand{\headrulewidth}{0.5pt}
 	\renewcommand{\footrulewidth}{0.0pt}
+
+	% Changing head length to fit fancyhdr
 	% This fancy page style is mainly for assignments and homeworks.
 	% Configures others manually since those occurrences are rare.
 	% Might have to branch this in future
+
 	\pagestyle{fancy}{%
 		\fancyhead[L]{\thetitle}
 		\fancyhead[C]{}
@@ -267,7 +270,7 @@
 	}
 \fi
 
-\ifanishsmicros
+\ifanishsmicro
 	% Common Micros
 	\newcommand\ts{\textstyle}
 	\newcommand\ds{\displaystyle} 
@@ -321,6 +324,8 @@
 	% Defines two commands, for example: PAIREDabs, abs
 	% abs checks for a star or options and then calles the right version of PAIREDabs
 
+	% If this starts giving too much trouble then I will have to stick with the starred versions.
+
 	\def\DeclarePairedDelimiterStar#1#2#3{%
 		\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
 		\newcommand#1{%
@@ -348,59 +353,33 @@
 			}%
 		}%
 	}
-	% Not really sure that the micro modification always works.
-	% Not using modifications below
-	% TODO this breaks certain things, which I should replace.
-	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
-	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
-	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
-	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
-	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
-	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
-	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Norm
-	\DeclarePairedDelimiterXPP\normp[2]{}{\lVert}{\rVert}{\ifblank{#2}{}{_{#2}}}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
-	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
 
-	% Defining such that symbol. Most of this is picked up from mathtoold documentation.
-	% I don't really understand why this works, just some parts of it.
+	% Not really sure that the micro modification always works.
+	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
+	\DeclarePairedDelimiterStar\sbrac{[}{]} % Square brackets
+	\DeclarePairedDelimiterStar\ceil{\lceil}{\rceil} % Ceiling function
+	\DeclarePairedDelimiterStar\floor{\lfloor}{\rfloor} % Floor function
+	\DeclarePairedDelimiterStar\gen{\langle}{\rangle} % Generators
+	\DeclarePairedDelimiterStar\abs{\lvert}{\rvert} % Absoulte Value
+	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
+	\DeclarePairedDelimiterStarX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
+	\DeclarePairedDelimiterStarX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
+
+	% Copied from mathtools documentation
 	% We define another local function called given which places this symbol whenever needed.
-	\providecommand\given{}
-	\newcommand\st[1][]{
-		\nonscript\:#1\vert
-		\allowbreak
-		\nonscript\:
-		\mathopen{}
-	}
-	\DeclarePairedDelimiterX\set[1]{\{}{\}}{ % Sets
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{
-		\renewcommand\given{\st[\delimsize]}
-		#1 \given #2
-	}
-	\DeclarePairedDelimiterXPP\pr[1]{\mathbb{P}}{[}{]}{}{ % Probability
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterXPP\prob[2]{
-		\underset{#1}{\mathbb{P}}}{[}{]}{}{
-		\renewcommand\given{\st[\delimsize]}
-		#2
-	}
-	\DeclarePairedDelimiterXPP\ex[1]{\mathbb{E}}{[}{]}{}{ % Expectation
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterXPP\expect[2]{
-		\underset{#1}{\mathbb{E}}}{[}{]}{}{
-		\renewcommand\given{\st[\delimsize]}
-		#2
-	}
-	\DeclarePairedDelimiterXPP\var[1]{\textbf{Var}}{[}{]}{}{ % Variance
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
+	\providecommand\st{}
+	\newcommand\stSymbol[1][]{\nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
+	% Sets
+	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \given #2}
+	% Probability 
+	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarXPP\prob[2]{\underset{#1}{\mathbb{P}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	% Expectation
+	\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarXPP\expect[2]{\underset{#1}{\mathbb{E}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	% Variance
+	\DeclarePairedDelimiterStarXPP\var[1]{\textbf{Var}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
 
 	% Operators
 	\DeclareMathOperator*{\argmin}{argmin}
