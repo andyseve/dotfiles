@@ -293,7 +293,7 @@ mouse:
   # If this is `true`, the cursor is temporarily hidden when typing.
   hide_when_typing: false
 
-  url:
+  hints:
     # URL launcher
     #
     # This program is executed when clicking on a text which is recognized as a URL.
@@ -492,15 +492,15 @@ debug:
 #   - AppKeypad
 key_bindings:
   # (Windows/Linux only)
-  - { key: V,        mods: Control|Shift, action: Paste            }
-  - { key: C,        mods: Control|Shift, action: Copy             }
-  - { key: Insert,   mods: Shift,         action: PasteSelection   }
-  - { key: Key0,     mods: Control,       action: ResetFontSize    }
-  - { key: Equals,   mods: Control,       action: IncreaseFontSize }
-  - { key: Add,      mods: Control,       action: IncreaseFontSize }
-  - { key: Subtract, mods: Control,       action: DecreaseFontSize }
-  - { key: Minus,    mods: Control,       action: DecreaseFontSize }
-  - { key: Return,   mods: Alt,           action: ToggleFullscreen }
+  - { key: V,              mods: Control|Shift, action: Paste            }
+  - { key: C,              mods: Control|Shift, action: Copy             }
+  - { key: Insert,         mods: Shift,         action: PasteSelection   }
+  - { key: Key0,           mods: Control,       action: ResetFontSize    }
+  - { key: Equals,         mods: Control,       action: IncreaseFontSize }
+  - { key: Plus,           mods: Control,       action: IncreaseFontSize }
+  - { key: NumpadSubtract, mods: Control,       action: DecreaseFontSize }
+  - { key: Minus,          mods: Control,       action: DecreaseFontSize }
+  - { key: Return,         mods: Alt,           action: ToggleFullscreen }
 
   # (macOS only)
   #- { key: Key0,   mods: Command,         action: ResetFontSize    }
@@ -515,6 +515,9 @@ key_bindings:
   #- { key: Q,      mods: Command,         action: Quit             }
   #- { key: W,      mods: Command,         action: Quit             }
   #- { key: F,      mods: Command|Control, action: ToggleFullscreen }
+  
+  # some other common mappings
+  # most are different whitespaces, possibly to move around.
 
   - { key: Paste,                   action: Paste                            }
   - { key: Copy,                    action: Copy                             }
