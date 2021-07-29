@@ -1,0 +1,30 @@
+#!/run/current-system/sw/bin/bash
+
+ft=""
+baseurl="https://raw.githubusercontent.com/github/gitignore/master/"
+outfile=".gitignore"
+
+while getopts ":o:h" opt; do
+	case ${opt} in
+		o )
+			outfile=$OPTARG
+			;;
+		h )
+			echo "Usage: gitignore [-o=filename] filetype"
+			exit 2
+			;;
+	esac
+done
+shift $((OPTIND-1))
+
+ft=$1
+url=$baseurl${ft^}".gitignore"
+
+if [ -e "$outfile" ]; then
+	echo "$outfile already exists, appending gitignore data"
+	echo "##### copied from $url" >> $outfile
+	curl $url >> $outfile
+else
+	echo "Adding gitignore data to $outfile"
+	curl $url > $outfile
+fi

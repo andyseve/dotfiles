@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Wed 31 Mar 2021 05:55:57 PM EDT
+% Last Modified: Thu 15 Jul 2021 03:17:22 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -9,15 +9,17 @@
 \usepackage{cleveref} % for better referencing systems
 
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
-%TODO: add an argument for allowing or removing "blabber" which are informal remarks for giving insight and stuff
 
 %arguments
-\newif\ifanishssetup\anishssetuptrue%Setup the page
+\newif\ifanishsmicro\anishsmicrotrue%Adding micros
 \newif\ifanishspkg\anishspkgtrue%Add small packages
+\newif\ifanishsalg\anishsalgtrue%algorithms
 \newif\ifanishsfancy\anishsfancytrue%fancy page setup
 \newif\ifanishsthm\anishsthmtrue%Theorem Defs
 \newif\ifanishspage\anishspagefalse%Margins
 \newif\ifanishstodo\anishstodofalse%Todonotes
+\newif\ifanishsauthblk\anishsauthblkfalse%Authblk
+\newif\ifanishsnatbib\anishsnatbibtrue%natbib
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -29,10 +31,11 @@
 \newif\ifanishsasy\anishsasyfalse%Asymptote support
 
 %Recieving arguments
-\DeclareOption{setup}{\anishssetuptrue}
-\DeclareOption{nosetup}{\anishssetupfalse}
+\DeclareOption{micro}{\anishsmicrotrue}
+\DeclareOption{nomicro}{\anishsmicrofalse}
 \DeclareOption{pkg}{\anishspkgtrue}
 \DeclareOption{nopkg}{\anishspkgfalse}
+\DeclareOption{noalg}{\anishsalgfalse}
 \DeclareOption{fancy}{\anishsfancytrue}
 \DeclareOption{nofancy}{\anishsfancyfalse}
 \DeclareOption{savepaper}{\anishspagetrue}
@@ -49,11 +52,225 @@
 
 \DeclareOption{asy}{\anishsasytrue}
 
+\DeclareOption{authblk}{\anishsauthblktrue}
+\DeclareOption{nonatbib}{\anishsnatbibfalse}
 
 \ProcessOptions\relax
 
-% Page Setup and Environments etc
-\ifanishssetup%
+% Page Setup
+\ifanishspage
+	\usepackage[margin=2cm,includehead,includefoot]{geometry}
+\fi
+\ifanishsfancy
+	\usepackage{titling}
+	\usepackage{fancyhdr}
+	\renewcommand{\headrulewidth}{0.5pt}
+	\renewcommand{\footrulewidth}{0.0pt}
+
+	% Changing head length to fit fancyhdr
+	% This fancy page style is mainly for assignments and homeworks.
+	% Configures others manually since those occurrences are rare.
+	% Might have to branch this in future
+
+	\pagestyle{fancy}{%
+		\fancyhead[L]{\thetitle}
+		\fancyhead[C]{}
+		\ifanishsauthblk
+			\fancyhead[R]{}
+		\else
+			\fancyhead[R]{\theauthor}
+		\fi
+		\fancyfoot[L,R]{}
+		\fancyfoot[C]{\thepage}
+	}
+	\fancypagestyle{plain}{%
+		\fancyhead{}
+		\fancyfoot[C]{\thepage}
+		\renewcommand{\headrulewidth}{0pt}
+	}
+\fi
+
+% Better citations
+\ifanishsnatbib
+	\usepackage[round]{natbib}
+\fi
+
+% Multiple Author support
+\ifanishsauthblk
+	\usepackage{authblk}
+	% Currently has an issue with fanypage, titlepage gets defined incorrectly.
+\fi
+
+% Algorithms
+\ifanishsalg%
+	\usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
+	% Need to add more specific formats and commands
+\fi
+
+% Asymptote Setup
+\ifanishsasy
+	\usepackage{asymptote}
+	\usepackage{asycolors}
+	% Add other useful asymptote functions
+\fi
+
+% Tikz Setup
+\ifanishstikz
+	\usepackage{tikz}
+	\usetikzlibrary{calc}
+	\usetikzlibrary{cd}
+	% fun stuff
+	\newcommand{\shrug}[1][]{%
+		\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+			\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
+			\draw \arm;
+			\draw[xscale=-1] \arm;
+			\def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
+			\draw \headpart;
+			\draw[xscale=-1] \headpart;
+			\def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
+			\draw[shift={(-0.3,0.8)}] \eye;
+			\draw[shift={(0,0.85)}] \eye;
+			% draw mouth
+			\draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
+		\end{tikzpicture}
+	}
+\fi
+
+% Theorems and Environments
+\ifanishsthm
+	\ifanishsfancythm%
+		% TODO: Complete fancy theorem settings
+		\usepackage{thmtools}
+		\usepackage[framemethod=TikZ]{mdframed}
+	\else
+		\usepackage{thmtools}
+		\usepackage[framemethod=TikZ]{mdframed}
+		\mdfdefinestyle{mdproblemlines}{%
+			linecolor=black,
+			linewidth=0.5pt,
+			skipabove=1ex,
+			innertopmargin = 1.5ex,
+			rightline=false,leftline=false,
+			frametitlefont=\bfseries,
+			frametitlerule=true
+		}
+		\declaretheoremstyle[
+		headfont=\bfseries,
+		notefont=\bfseries,
+		notebraces=\empty,
+		headpunct=\empty,
+		mdframed={style=mdproblemlines},
+		bodyfont=\normalfont%
+		]{problemlines}
+		\declaretheorem[style=problemlines,name=Problem]{asgnproblem}
+		\newtheorem*{asgnproblem*}{asgnproblem}
+		\ifanishssecthm%index theorem by section
+			\newtheorem{theorem}{Theorem}[section]
+		\else
+			\ifanishssubsecthm
+				\newtheorem{theorem}{Theorem}[subsection]
+			\else
+				\newtheorem{theorem}{Theorem}
+			\fi
+		\fi
+
+		\theoremstyle{plain}
+		\newtheorem{lemma}[theorem]{Lemma}
+		\newtheorem{proposition}[theorem]{Proposition}
+		\newtheorem{corollary}[theorem]{Corollary}
+		\newtheorem*{theorem*}{Theorem}
+		\newtheorem*{lemma*}{Lemma}
+		\newtheorem*{proposition*}{Proposition}
+		\newtheorem*{corollary*}{Corollary}
+		%Def-style theorems
+		\theoremstyle{definition}
+		\newtheorem{claim}[theorem]{Claim}
+		\newtheorem{conjecture}[theorem]{Conjecture}
+		\newtheorem{definition}[theorem]{Definition}
+		\newtheorem{fact}[theorem]{Fact}
+		\newtheorem{obs}[theorem]{Observation}
+		\newtheorem{answer}[theorem]{Answer}
+		\newtheorem{case}[theorem]{Case}
+		\newtheorem{ques}[theorem]{Question}
+		\newtheorem{exercise}[theorem]{Exercise}
+		\newtheorem{problem}[theorem]{Problem}
+		\newtheorem{subproblem}{Part}[problem]
+		\newtheorem*{answer*}{Answer}
+		\newtheorem*{case*}{Case}
+		\newtheorem*{claim*}{Claim}
+		\newtheorem*{conjecture*}{Conjecture}
+		\newtheorem*{definition*}{Definition}
+		\newtheorem*{fact*}{Fact}
+		\newtheorem*{joke*}{Joke}
+		\newtheorem*{ques*}{Question}
+		\newtheorem*{exercise*}{Exercise}
+		\newtheorem*{problem*}{Problem}
+		\newtheorem*{subproblem*}{Part}
+		\newtheorem{example}[theorem]{Example}
+		\newtheorem*{example*}{Example}
+		% Remark-style theorems
+		\theoremstyle{remark}
+		\newtheorem{note}[theorem]{Note}
+		\newtheorem{remark}[theorem]{Remark}
+		\newtheorem*{note*}{Note}
+		\newtheorem*{remark*}{Remark}
+		\newenvironment{subproof}[1][Proof]{%
+		\begin{proof}[#1] \renewcommand{\qedsymbol}{$\blacksquare$}}%
+		{\end{proof}} %From Math 55 and Math 145 at Harvard; SubProofs
+		\newenvironment{solution}[1][Proof]{%
+		\begin{proof}[Solution] }%
+		{\end{proof}} %Solutions
+	\fi
+\fi
+
+% Setting up commonly used packages
+\ifanishspkg%
+	\usepackage{listings} % listings allows to convert source codes into latex
+	% TODO Listings support
+	\lstset{basicstyle=\footnotesize\ttfamily,
+		numbers=left,
+		numbersep=5pt,
+		numberstyle=\tiny,
+		keywordstyle=\bfseries,
+		% title=\lstname,
+		showstringspaces=false,
+		tabsize=4,
+		frame=single,
+		keywordstyle=\bfseries\color{blue},
+		commentstyle=\color{green!70!black},
+		identifierstyle=\color{green!20!black},
+		stringstyle=\color{orange},
+		breaklines=true,
+		breakatwhitespace=true,
+		frame=none
+	}
+	\usepackage{mathrsfs}
+	\usepackage{textcomp}
+	\usepackage[shortlabels]{enumitem} % for better lists
+	\usepackage{mathtools}
+	\usepackage{microtype}
+	\usepackage{upgreek}
+	\usepackage{import}
+	\usepackage{graphicx} % for small tweaks
+	\usepackage{bbm} % Adding support for \mathbbm{1}
+
+	% Better Tables
+	\usepackage{tabularx, booktabs}
+
+\fi
+
+%Hyperref setup
+\ifanishsnicelinks%setting up nice looking links
+	\hypersetup{%
+		colorlinks   = true, %Colours links instead of ugly boxes
+		urlcolor     = blue, %Colour for external hyperlinks
+		linkcolor    = blue, %Colour of internal links
+		citecolor    = blue,  %Colour of citations
+	}
+\fi
+
+\ifanishsmicro
 	% Common Micros
 	\newcommand\ts{\textstyle}
 	\newcommand\ds{\displaystyle} 
@@ -107,86 +324,62 @@
 	% Defines two commands, for example: PAIREDabs, abs
 	% abs checks for a star or options and then calles the right version of PAIREDabs
 
+	% If this starts giving too much trouble then I will have to stick with the starred versions.
+
 	\def\DeclarePairedDelimiterStar#1#2#3{%
 		\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
 		\newcommand#1{%
 			\@ifstar{\csname PAIRED\string#1\endcsname}
-							{\@ifnextchar[{\csname PAIRED\string#1\endcsname}
-														{\csname PAIRED\string#1\endcsname*}%
-							}%
+			{\@ifnextchar[{\csname PAIRED\string#1\endcsname}
+				{\csname PAIRED\string#1\endcsname*}%
+			}%
 		}%
 	}
 	\def\DeclarePairedDelimiterStarX#1[#2]#3#4#5{%
 		\expandafter\DeclarePairedDelimiterX\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}%
 		\newcommand#1[#2]{%
 			\@ifstar{\csname PAIREDX\string#1\endcsname}
-							{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
-														{\csname PAIREDX\string#1\endcsname*}%
-							}%
+			{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
+				{\csname PAIREDX\string#1\endcsname*}%
+			}%
 		}%
 	}
 	\def\DeclarePairedDelimiterStarXPP#1[#2]#3#4#5#6#7{%
 		\expandafter\DeclarePairedDelimiterXPP\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}{#6}{#7}%
 		\newcommand#1[#2]{%
 			\@ifstar{\csname PAIREDX\string#1\endcsname}
-							{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
-														{\csname PAIREDX\string#1\endcsname*}%
-							}%
+			{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
+				{\csname PAIREDX\string#1\endcsname*}%
+			}%
 		}%
 	}
-	% Not really sure that the micro modification always works.
-	% Not using modifications below
-	% TODO this breaks certain things, which I should replace.
-	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
-	\DeclarePairedDelimiter\ceil{\lceil}{\rceil} % Ceiling function
-	\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} % Floor function
-	\DeclarePairedDelimiter\gen{\langle}{\rangle} % Generators
-	\DeclarePairedDelimiter\abs{\lvert}{\rvert} % Absoulte Value
-	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
-	\DeclarePairedDelimiterX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Norm
-	\DeclarePairedDelimiterXPP\normp[2]{}{\lVert}{\rVert}{\ifblank{#2}{}{_{#2}}}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
-	\DeclarePairedDelimiterX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
 
-	% Defining such that symbol. Most of this is picked up from mathtoold documentation.
-	% I don't really understand why this works, just some parts of it.
+	% Not really sure that the micro modification always works.
+	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
+	\DeclarePairedDelimiterStar\sbrac{[}{]} % Square brackets
+	\DeclarePairedDelimiterStar\ceil{\lceil}{\rceil} % Ceiling function
+	\DeclarePairedDelimiterStar\floor{\lfloor}{\rfloor} % Floor function
+	\DeclarePairedDelimiterStar\gen{\langle}{\rangle} % Generators
+	\DeclarePairedDelimiterStar\abs{\lvert}{\rvert} % Absoulte Value
+	\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
+	\DeclarePairedDelimiterStarX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
+	\DeclarePairedDelimiterStarX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
+
+	% Copied from mathtools documentation
 	% We define another local function called given which places this symbol whenever needed.
-	\providecommand\given{}
-	\newcommand\st[1][]{
-		\nonscript\:#1\vert
-		\allowbreak
-		\nonscript\:
-		\mathopen{}
-	}
-	\DeclarePairedDelimiterX\set[1]{\{}{\}}{ % Sets
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterX\setof[2]{\{}{\}}{
-		\renewcommand\given{\st[\delimsize]}
-		#1 \given #2
-	}
-	\DeclarePairedDelimiterXPP\pr[1]{\mathbb{P}}{[}{]}{}{ % Probability
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterXPP\prob[2]{
-		\underset{#1}{\mathbb{P}}}{[}{]}{}{
-		\renewcommand\given{\st[\delimsize]}
-		#2
-	}
-	\DeclarePairedDelimiterXPP\ex[1]{\mathbb{E}}{[}{]}{}{ % Expectation
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
-	\DeclarePairedDelimiterXPP\expect[2]{
-		\underset{#1}{\mathbb{E}}}{[}{]}{}{
-		\renewcommand\given{\st[\delimsize]}
-		#2
-	}
-	\DeclarePairedDelimiterXPP\var[1]{\textbf{Var}}{[}{]}{}{ % Variance
-		\renewcommand\given{\st[\delimsize]}
-		#1
-	}
+	\providecommand\st{}
+	\newcommand\stSymbol[1][]{\nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
+	% Sets
+	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \given #2}
+	% Probability 
+	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarXPP\prob[2]{\underset{#1}{\mathbb{P}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	% Expectation
+	\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarXPP\expect[2]{\underset{#1}{\mathbb{E}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	% Variance
+	\DeclarePairedDelimiterStarXPP\var[1]{\textbf{Var}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
 
 	% Operators
 	\DeclareMathOperator*{\argmin}{argmin}
@@ -237,207 +430,7 @@
 	\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 	\newcommand{\F}{\ensuremath{\mathbb{F}}}
 	\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
-	
-  \ifanishspage% Geometry of the Page
-    \setlength{\topmargin}{1ex}
-    \setlength{\topmargin}{\topmargin minus \headheight}
-    \setlength{\topmargin}{\topmargin minus \headsep}
-    \setlength{\oddsidemargin}{0in}
-    \setlength{\evensidemargin}{\oddsidemargin}
-    \setlength{\textwidth}{6.5in}
-    \setlength{\marginparwidth}{0.5in}
-    \setlength{\parskip}{1.5ex}
-    \setlength{\parindent}{0in}
-  \fi
-	% Setting up commonly used packages
-  \ifanishspkg%
-    \usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
-    \usepackage{listings} % listings allows to convert source codes into latex
-		% TODO Listings support
-    \usepackage{mathrsfs}
-    \usepackage{textcomp}
-    \lstset{basicstyle=\footnotesize\ttfamily,
-      numbers=left,
-      numbersep=5pt,
-      numberstyle=\tiny,
-      keywordstyle=\bfseries,
-      % title=\lstname,
-      showstringspaces=false,
-      tabsize=4,
-      frame=single,
-      keywordstyle=\bfseries\color{blue},
-      commentstyle=\color{green!70!black},
-      identifierstyle=\color{green!20!black},
-      stringstyle=\color{orange},
-      breaklines=true,
-      breakatwhitespace=true,
-      frame=none
-    }
-    \usepackage[shortlabels]{enumitem} % for better lists
-		\usepackage{mathtools}
-		\usepackage{microtype}
-		\usepackage{upgreek}
-		\usepackage{import}
-		\usepackage{graphicx} % for small tweaks
-		\usepackage{bbm} % Adding support for \mathbbm{1}
-
-		% Better Tables
-		\usepackage{tabularx, booktabs}
-  \fi
-  \ifanishspage% Geometry of the Page
-		\setlength{\headheight}{1.5em}
-    \setlength{\topmargin}{1em}
-    \setlength{\topmargin}{\topmargin minus \headheight}
-    \setlength{\topmargin}{\topmargin minus \headsep}
-    \setlength{\oddsidemargin}{0in}
-    \setlength{\evensidemargin}{\oddsidemargin}
-    \setlength{\textwidth}{6.5in}
-    \setlength{\marginparwidth}{0.5in}
-    \setlength{\parskip}{1.5ex}
-    \setlength{\parindent}{0in}
-  \fi
-  \ifanishsfancy%Fancy Page Setup
-    \usepackage{titling}
-    \usepackage{fancyhdr}
-    \renewcommand{\headrulewidth}{0.5pt}
-    \renewcommand{\footrulewidth}{0.0pt}
-		% This fancy page style is mainly for assignments and homeworks.
-		% Configures others manually since those occurrences are rare.
-		% Might have to branch this in future
-    \pagestyle{fancy}
-    \lhead{\thetitle}
-    \chead{}
-		\rhead{\theauthor}
-    \lfoot{}
-    \cfoot{\thepage}
-    \rfoot{}
-    \fancypagestyle{plain}{%
-      \fancyhead{}
-      \renewcommand{\headrulewidth}{0pt}
-    }
-	\fi
-	\ifanishstodo
-		\setlength{\marginparwidth}{2cm}
-		\usepackage[obeyFinal,textsize=scriptsize,shadow]{todonotes}
-	\fi
-  \ifanishsthm%Theorem settings
-    \ifanishsfancythm%
-			% TODO: Complete fancy theorem settings
-      \usepackage{thmtools}
-      \usepackage[framemethod=TikZ]{mdframed}
-    \else
-      \usepackage{thmtools}
-			\usepackage[framemethod=TikZ]{mdframed}
-			\mdfdefinestyle{mdproblemlines}{%
-				linecolor=black,
-				linewidth=0.5pt,
-				skipabove=1ex,
-				innertopmargin = 1.5ex,
-				rightline=false,leftline=false,
-				frametitlefont=\bfseries,
-				frametitlerule=true
-			}
-			\declaretheoremstyle[
-				headfont=\bfseries,
-				notefont=\bfseries,
-				notebraces=\empty,
-				headpunct=\empty,
-				mdframed={style=mdproblemlines},
-				bodyfont=\normalfont%
-			]{problemlines}
-			\declaretheorem[style=problemlines,name=Problem]{asgnproblem}
-			\newtheorem*{asgnproblem*}{asgnproblem}
-      \ifanishssecthm%index theorem by section
-        \newtheorem{theorem}{Theorem}[section]
-			\else
-				\ifanishssubsecthm
-					\newtheorem{theorem}{Theorem}[subsection]
-				\else
-					\newtheorem{theorem}{Theorem}
-				\fi
-			\fi
-
-      \theoremstyle{plain}
-        \newtheorem{lemma}[theorem]{Lemma}
-        \newtheorem{proposition}[theorem]{Proposition}
-        \newtheorem{corollary}[theorem]{Corollary}
-        \newtheorem*{theorem*}{Theorem}
-        \newtheorem*{lemma*}{Lemma}
-        \newtheorem*{proposition*}{Proposition}
-        \newtheorem*{corollary*}{Corollary}
-      %Def-style theorems
-      \theoremstyle{definition}
-        \newtheorem{claim}[theorem]{Claim}
-        \newtheorem{conjecture}[theorem]{Conjecture}
-        \newtheorem{definition}[theorem]{Definition}
-        \newtheorem{fact}[theorem]{Fact}
-				\newtheorem{obs}[theorem]{Observation}
-        \newtheorem{answer}[theorem]{Answer}
-        \newtheorem{case}[theorem]{Case}
-        \newtheorem{ques}[theorem]{Question}
-        \newtheorem{exercise}[theorem]{Exercise}
-        \newtheorem{problem}[theorem]{Problem}
-				\newtheorem{subproblem}{Part}[problem]
-        \newtheorem*{answer*}{Answer}
-        \newtheorem*{case*}{Case}
-        \newtheorem*{claim*}{Claim}
-        \newtheorem*{conjecture*}{Conjecture}
-        \newtheorem*{definition*}{Definition}
-        \newtheorem*{fact*}{Fact}
-        \newtheorem*{joke*}{Joke}
-        \newtheorem*{ques*}{Question}
-        \newtheorem*{exercise*}{Exercise}
-        \newtheorem*{problem*}{Problem}
-				\newtheorem*{subproblem*}{Part}
-        \newtheorem{example}[theorem]{Example}
-        \newtheorem*{example*}{Example}
-      % Remark-style theorems
-      \theoremstyle{remark}
-        \newtheorem{note}[theorem]{Note}
-        \newtheorem{remark}[theorem]{Remark}
-        \newtheorem*{note*}{Note}
-        \newtheorem*{remark*}{Remark}
-      \newenvironment{subproof}[1][Proof]{%
-      \begin{proof}[#1] \renewcommand{\qedsymbol}{$\blacksquare$}}%
-      {\end{proof}} %From Math 55 and Math 145 at Harvard; SubProofs
-      \newenvironment{solution}[1][Proof]{%
-      \begin{proof}[Solution] }%
-      {\end{proof}} %Solutions
-    \fi
-  \fi
-  \ifanishstikz%TikZ for diagrams
-    \usepackage{tikz}
-    \usetikzlibrary{calc}
-	\usetikzlibrary{cd}
-		% fun stuff
-		\newcommand{\shrug}[1][]{%
-			\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
-				\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
-				\draw \arm;
-				\draw[xscale=-1] \arm;
-				\def\headpart{(0.6,0) arc[start angle=-40, end angle=40,x radius=0.6,y radius=0.8]};
-				\draw \headpart;
-				\draw[xscale=-1] \headpart;
-				\def\eye{(-0.075,0.15) .. controls (0.02,0) .. (0.075,-0.15)};
-				\draw[shift={(-0.3,0.8)}] \eye;
-				\draw[shift={(0,0.85)}] \eye;
-				% draw mouth
-				\draw (-0.1,0.2) to [out=15,in=-100] (0.4,0.95); 
-		\end{tikzpicture}}
-  \fi
-  \ifanishsasy%Asymptote Setup
-    \usepackage{asymptote}
-    \usepackage{asycolors}
-    % Add other useful asymptote functions
-  \fi
-  \ifanishsnicelinks%setting up nice looking links
-    \hypersetup{%
-      colorlinks   = true, %Colours links instead of ugly boxes
-      urlcolor     = blue, %Colour for external hyperlinks
-      linkcolor    = blue, %Colour of internal links
-      citecolor    = red,  %Colour of citations
-    }
-  \fi
 \fi
+
 
 % vim:foldmethod=marker
