@@ -94,7 +94,7 @@
 		# CLI programs
 		ranger
 		weechat
-		vim neovim emacs26-nox
+		vim neovim
 		w3m
 		youtube-dl
 		taskwarrior timewarrior
@@ -125,7 +125,7 @@
     )
     python3Packages.pip
     python3Packages.argcomplete
-    pypi2nix
+    #pypi2nix
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle

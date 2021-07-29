@@ -7,9 +7,10 @@
 		layout = "us";
 		# xkbOptions = "eurosign:e"
 		
+    libinput.enable = true;
+
 		# Touchpad
-		libinput = {
-			enable = true;
+		libinput.touchpad = {
 			accelProfile = "flat";
 			disableWhileTyping = true;
 		};
