@@ -1,4 +1,4 @@
-## Last Modified: Tue 10 Nov 2020 08:35:22 AM EST
+## Last Modified: Fri 06 Aug 2021 12:31:21 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -273,12 +273,7 @@ if check xmobar; then
 	fi
 	link $IF/my-xmobar.cabal $OF/my-xmobar.cabal
 	link $IF/shell.nix $OF/shell.nix
-	link $IF/default.nix $OF/default.nix
-
-	if check cabal2nix; then
-		cd $OF
-		cabal2nix . > default.nix
-	fi
+	link $IF/hie.yaml $OF/hie.yaml
 else
 	nope xmobar
 fi
