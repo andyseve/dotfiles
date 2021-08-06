@@ -51,7 +51,6 @@
   nix = {
     autoOptimiseStore = true;
 
-
     # Garbage Collector
     gc = {
       automatic = true;
