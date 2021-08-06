@@ -3,6 +3,7 @@
 {
   users.users.git = {
     isNormalUser = false;
+    isSystemUser = true;
     home = "/home/git";
     description = "User that manages git";
     extraGroups = [ "git" ];

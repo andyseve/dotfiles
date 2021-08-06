@@ -7,7 +7,6 @@
 		layout = "us";
 		# xkbOptions = "eurosign:e"
 		
-		# Touchpad
 		libinput = {
 			enable = true;
       touchpad = {

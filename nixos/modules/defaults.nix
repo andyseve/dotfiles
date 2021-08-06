@@ -137,6 +137,7 @@
     )
     python3Packages.pip
     python3Packages.argcomplete
+    #pypi2nix
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle

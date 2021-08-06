@@ -1,11 +1,11 @@
-{ mkDerivation, base, stdenv, xmobar }:
+{ mkDerivation, base, lib, xmobar }:
 mkDerivation {
-  pname = "my-xmobar";
-  version = "0.1";
+  pname = "xmobar-anish";
+  version = "1.0";
   src = ./.;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base xmobar ];
   license = "unknown";
-  hydraPlatforms = stdenv.lib.platforms.none;
+  hydraPlatforms = lib.platforms.none;
 }
