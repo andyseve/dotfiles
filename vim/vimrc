@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 29 Jul 2021 12:52:04 PM EDT
+" Last Updated: Wed 11 Aug 2021 04:14:51 AM EDT
 
 set nocompatible
 
@@ -23,6 +23,7 @@ set nocompatible
 			endif
     endif
   endfunc
+
   call plug#begin(bundle_path)
   Plug 'hecal3/vim-leader-guide'
 	Plug 'neoclide/coc.nvim',								{ 'branch': 'release' }
@@ -35,6 +36,8 @@ set nocompatible
 	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
   Plug 'jiangmiao/auto-pairs'
 	Plug 'tpope/vim-surround'
+	Plug 'preservim/nerdtree'
+	Plug 'Xuyuanp/nerdtree-git-plugin'
 	Plug 'kyazdani42/nvim-web-devicons' " for file icons
 	Plug 'kyazdani42/nvim-tree.lua'
   Plug 'vim-airline/vim-airline'
@@ -159,347 +162,20 @@ set nocompatible
 
 "                                                                           }}}
 " # Plugin Configurations and Bindings                                      {{{
-
-	" ## Vim Leader Guide Configuration                                       {{{
-	nnoremap <silent> <leader> :<c-u>LeaderGuide '\'<CR>
-	vnoremap <silent> <leader> :<c-u>LeaderGuideVisual '\'<CR>
-	let g:lmap = {}
-	call leaderGuide#register_prefix_descriptions("\\", "g:lmap")
-
-	augroup AnishsVimLeader
-		autocmd!
-		autocmd FileType gitcommit noremap <buffer> <leader> <Plug>leaderguide-buffer
-		autocmd BufEnter __Tagbar__ noremap <buffer> <leader> <Plug>leaderguide-buffer
-		autocmd FileType NERDTreeType noremap <buffer> <leader> <Plug>leaderguide-buffer
-	augroup END
-
-
-	"                                                                         }}}
-  " ## Ultisnips Configuration  --Disabled in favor of COC                  {{{
-	"if has("win64") || has("win32")
-		"set rtp+=~/vimfiles
-		"let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
-	"else
-		"set rtp+=~/.vim
-		"let g:UltiSnipsSnippetsDir="~/.vim/UltiSnips"
-	"endif
-  "let g:UltiSnipsExpandTrigger="<c-space>"
-  "let g:UltiSnipsJumpForwardTrigger="<tab>"
-  "let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-  "let g:UltiSnipsListSnippets="<c-l>"
-
-  "let g:UltiSnipsSnippetsDirectoris=['UltiSnips']
-  "let g:UltiSnipsEditSplit="horizontal"
-
-	"                                                                         }}}
-	" ## YouCompleteMe Configuration  --Disabled in favor of COC              {{{
-	"set signcolumn=yes " signcolumn is turned on to avoid toggle
-  "if has("win64") || has("win32")
-    "let g:ycm_server_python_interpreter = 'python'
-  "else
-    "let g:ycm_server_python_interpreter = 'python3'
-  "endif
-
-	"let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-	"let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-	"let g:SuperTabDefaultCompletionType = '<C-n>'
-
-  "let g:ycm_global_extra_conf='~/.ycm_extra_conf.py'
-  "let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
-	"let g:ycm_confirm_extra_conf = 0
-
-  "let g:ycm_collect_identifiers_from_tag_files = 1
-  "let g:ycm_seed_identifier_with_syntax = 1
-	"let g:ycm_complete_in_comments = 1
-	"let g:ycm_cache_omnifunc = 1
-
-	"let g:ycm_show_diagnostic_ui = 0
-
-  "if !exists('g:ycm_sematics_triggers')
-    "let g:ycm_semantic_triggers = {}
-  "endif
-  "let g:ycm_semantic_triggers.cpp = ['re!(?=[a-zA-Z0-9_]{3})']
-  "let g:ycm_semantic_triggers.tex = g:vimtex#re#youcompleteme
-
-	"                                                                         }}}
-  " ## ALE Configuration  --Disabled in favor of COC                        {{{
-	"set signcolumn=yes " signcolumn is turned on to avoid toggle
-	"let g:ale_line_on_text_changed = 'never'
-	"let g:ale_on_enter = 1
-	"let g:ale_on_save = 1
-
-	"if !exists('g:ale_linters')
-		"let g:ale_linters = {}
-	"endif
-	"let g:ale_linters.haskell = ['ghc-mod', 'hlint']
-
-	""                                                                         }}}
-	" ## COC Configuration                                                    {{{
-	set signcolumn=yes " signcolumn is turned on to avoid toggle
-
-	" extensions
-	let g:coc_global_extensions = [
-		\'coc-emoji',
-		\'coc-dictionary',
-		\'coc-tag',
-		\'coc-snippets',
-		\'coc-json',
-		\'coc-html',
-		\'coc-css',
-		\'coc-python',
-		\'coc-vimtex',
-		\'coc-diagnostic'
-		\]
-
-	" snippet mappings
-	map <c-l> <c-o>:CocList snippets<CR>
-	vmap <c-j> <Plug>(coc-snippets-select)
-	let g:coc_snippet_next = '<tab>'
-	let g:coc_snippet_prev = '<s-tab>'
-	xmap <leader>ex <Plug>(coc-convert-snippet)
-	
-	" binding <tab> to select
-	" helper function to check if previous entry is a whitespace.
-	function! s:check_back_space() abort
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1] =~ '\s'
-	endfunction
-
-	" Use tab to navigate manu and snippets
-	imap <silent><expr> <tab>
-		\ coc#expandableOrJumpable() ? "\<c-r>=coc#_insert_key('request', 'snippets-expand-jump', 1)<cr>" :
-		\ pumvisible() ? "\<c-n>":
-		\ <SID>check_back_space() ? "\<tab>" :
-		\ coc#refresh()
-
-	inoremap <silent><expr> <s-tab> pumvisible() ? "\<c-p>" : "\<c-h>"
-	inoremap <silent><expr> <c-space> coc#refresh()
-	inoremap <expr> <cr> pumvisible() ? coc#_select_confirm() : "\<c-g>u\<cr>"
-	
-	nmap <silent> [g <Plug>(coc-diagnostic-prev)
-	nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-	" Use K to show documentation in preview window.
-	function! s:show_documentation()
-		if (index(['vim','help'], &filetype) >= 0)
-			execute 'h '.expand('<cword>')
-		else
-			call CocAction('doHover')
-		endif
-	endfunction
-
-	nnoremap <silent> K :call <SID>show_documentation()<cr>
-	nnoremap <Plug>(coc-show-documentation) :call <SID>show_documentation()<cr>
-	nmap <silent> <leader>dk <Plug>(coc-show-documentation)
-
-	" GoTo code navigation.
-	nmap <silent> <leader>dd <Plug>(coc-definition)
-	nmap <silent> <leader>dy <Plug>(coc-type-definition)
-	nmap <silent> <leader>di <Plug>(coc-implementation)
-	nmap <silent> <leader>dr <Plug>(coc-references)
-
-	let g:lmap.d = {'name': 'GoTo'}
-
-
-	"																																					}}}
-  " ## Vimtex configuration                                                 {{{
-  let g:vimtex_enabled = 1
-  let g:vimtex_view_automatic = 1
-	let g:vimtex_toc_enabled = 1
-	let g:vimtex_toc_depth = 1
-	let g:vimtex_toc_show_included_files = 1
-	let g:vimtex_toc_fold = 1
-
-	let g:vimtex_cache_root = '/tmp/vimtex'
-
-	" LeaderGuide
-	let g:lmap.l = {
-				\'name': 'Latex',
-				\}
-
-	" SumatraPDF config for windows
-	if has("win64") || has("win32")
-		let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
-		let g:vimtex_view_general_options
-					\ = ' -forward-search @tex @line @pdf'
-					\ . ' -inverse-search "gvim.exe --servername ' . v:servername
-					\ . ' --remote-send \"^<C-\^>^<C-n^>'
-					\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
-					\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
-					\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
-					\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""'
-  else
-		let g:vimtex_view_general_viewer = 'zathura'
-    let g:vimtex_view_method = 'zathura'
-  endif
-	
-	if has("nvim")
-		let g:vimtex_compiler_progname = 'nvr'
+	source ~/.vim/plugin_confs/vim_leader.vim
+	source ~/.vim/plugin_confs/coc.vim
+	source ~/.vim/plugin_confs/vimtex.vim
+	source ~/.vim/plugin_confs/gundo.vim
+	source ~/.vim/plugin_confs/fzf_ag.vim
+	source ~/.vim/plugin_confs/fugitive.vim"
+	if(exists('g:loaded_tree'))
+		source ~/.vim/plugin_confs/nvimtree.vim
+	else
+		source ~/.vim/plugin_confs/nerdtree.vim
 	endif
-
-	"                                                                         }}}
-  " ## Gundo Configuration                                                  {{{
-  let g:gundo_prefer_python3 = 1
-	let g:lmap.u = [ 'GundoToggle', "undo"	]
-
-	"                                                                         }}}
-  " ## FZF and Ag configuration                                             {{{
-  if executable('ag')
-	  set grepprg=ag\ --vimgrep
-	  let g:ackprg='ag --vimgrep'
-	  let g:ctrlp_user_command='ag --vimgrep -g'
-  endif
-  noremap <c-p> :FZF<CR>
-
-	"                                                                         }}}
-  " ## Fugitive + Github-Dashboard                                          {{{
-	let g:lmap.g = {
-				\'name': 'Git Menu',
-				\'s': ['Gstatus', 'Git Status'],
-				\'p': ['Gpull', 'Git Pull'],
-				\'u': ['Gpush', 'Git Push'],
-				\'c': ['Gcommit', 'Git Commit'],
-				\'w': ['Gwrite', 'Git Write'],
-				\'r': ['Gread', 'Git Read'],
-				\}
-
-	"                                                                         }}}
-  " ## NvimTree Configuration                                               {{{
-	let g:nvim_tree_side = 'right' "left by default
-	let g:nvim_tree_width = 40 "30 by default, can be width_in_columns or 'width_in_percent%'
-	let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ] "empty by default
-	let g:nvim_tree_gitignore = 1 "0 by default
-	let g:nvim_tree_auto_open = 1 "0 by default, opens the tree when typing `vim $DIR` or `vim`
-	let g:nvim_tree_auto_close = 1 "0 by default, closes the tree when it's the last window
-	let g:nvim_tree_auto_ignore_ft = [ 'startify', 'dashboard' ] "empty by default, don't auto open tree on specific filetypes.
-	let g:nvim_tree_quit_on_open = 1 "0 by default, closes the tree when you open a file
-	let g:nvim_tree_follow = 1 "0 by default, this option allows the cursor to be updated when entering a buffer
-	let g:nvim_tree_indent_markers = 1 "0 by default, this option shows indent markers when folders are open
-	let g:nvim_tree_hide_dotfiles = 1 "0 by default, this option hides files and folders starting with a dot `.`
-	let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
-	let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
-	let g:nvim_tree_root_folder_modifier = ':~' "This is the default. See :help filename-modifiers for more options
-	let g:nvim_tree_tab_open = 1 "0 by default, will open the tree when entering a new tab and the tree was previously open
-	let g:nvim_tree_auto_resize = 0 "1 by default, will resize the tree to its saved width when opening a file
-	let g:nvim_tree_disable_netrw = 0 "1 by default, disables netrw
-	let g:nvim_tree_hijack_netrw = 0 "1 by default, prevents netrw from automatically opening when opening directories (but lets you keep its other utilities)
-	let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
-	let g:nvim_tree_group_empty = 1 " 0 by default, compact folders that only contain a single folder into one node in the file tree
-	let g:nvim_tree_lsp_diagnostics = 1 "0 by default, will show lsp diagnostics in the signcolumn. See :help nvim_tree_lsp_diagnostics
-	let g:nvim_tree_disable_window_picker = 1 "0 by default, will disable the window picker.
-	let g:nvim_tree_hijack_cursor = 0 "1 by default, when moving cursor in the tree, will position the cursor at the start of the file on the current line
-	let g:nvim_tree_icon_padding = ' ' "one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
-	let g:nvim_tree_update_cwd = 1 "0 by default, will update the tree cwd when changing nvim's directory (DirChanged event). Behaves strangely with autochdir set.
-	let g:nvim_tree_window_picker_exclude = {
-				\   'filetype': [
-				\     'packer',
-				\     'qf'
-				\   ],
-				\   'buftype': [
-				\     'terminal'
-				\   ]
-				\ }
-	" Dictionary of buffer option names mapped to a list of option values that
-	" indicates to the window picker that the buffer's window should not be
-	" selectable.
-	let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } " List of filenames that gets highlighted with NvimTreeSpecialFile
-	let g:nvim_tree_show_icons = {
-				\ 'git': 1,
-				\ 'folders': 0,
-				\ 'files': 0,
-				\ 'folder_arrows': 0,
-				\ }
-	"If 0, do not show the icons for one of 'git' 'folder' and 'files'
-	"1 by default, notice that if 'files' is 1, it will only display
-	"if nvim-web-devicons is installed and on your runtimepath.
-	"if folder is 1, you can also tell folder_arrows 1 to show small arrows next to the folder icons.
-	"but this will not work when you set indent_markers (because of UI conflict)
-
-	" default will show icon by default if no icon is provided
-	" default shows no icon by default
-	let g:nvim_tree_icons = {
-				\ 'default': '',
-				\ 'symlink': '',
-				\ 'git': {
-				\   'unstaged': "✗",
-				\   'staged': "✓",
-				\   'unmerged': "",
-				\   'renamed': "➜",
-				\   'untracked': "★",
-				\   'deleted': "",
-				\   'ignored': "◌"
-				\   },
-				\ 'folder': {
-				\   'arrow_open': "",
-				\   'arrow_closed': "",
-				\   'default': "",
-				\   'open': "",
-				\   'empty': "",
-				\   'empty_open': "",
-				\   'symlink': "",
-				\   'symlink_open': "",
-				\   },
-				\   'lsp': {
-				\     'hint': "",
-				\     'info': "",
-				\     'warning': "",
-				\     'error': "",
-				\   }
-				\ }
-
-	nnoremap <C-n> :NvimTreeToggle<CR>
-	nnoremap <leader>r :NvimTreeRefresh<CR>
-	nnoremap <leader>n :NvimTreeFindFile<CR>
-	" NvimTreeOpen and NvimTreeClose are also available if you need them
-
-	"set termguicolors " this variable must be enabled for colors to be applied properly
-
-	" a list of groups can be found at `:help nvim_tree_highlight`
-	highlight NvimTreeFolderIcon guibg=blue
-
-	"                                                                         }}}
-  " ## NERDcommenter                                                        {{{
-	let g:lmap.c = {
-				\'name': 'Comments',
-				\}
-
-	"                                                                         }}}
-  " ## Airline Configuration                                                {{{
-  let g:airline_theme = 'solarized'
-  let g:airline_solarized_bg = 'dark'
-  let g:airline_powerline_fonts = 1
-  let g:airline_inactive_collapse = 1
-  let g:airline_skip_empty_sections = 1
-  let g:airline#extensions#whitespace#enabled = 1
-	let g:airline#extensions#tabline#enabled = 1
-
-  " Airline symbols
-  if !exists('g:airline_symbols')
-    let g:airline_symbols ={}
-  endif
-	let g:airline_symbols.space = "\u3000"
-  if has("win64") || has("win32")
-    let g:airline_powerline_fonts = 0
-    let g:airline_symbols.space = "\u0020"
-  endif
-
-	"                                                                         }}}
-  " ## Solarized Config for Terminal                                        {{{
-	let g:solarized_termtrans=1
-	let g:solarized_termcolors=16
-  let g:solarized_contrast="normal"
-	set background=dark
-	colorscheme solarized
-
-	" ## FZF and Ag configuration
-	if executable('ag')
-		set grepprg=ag\ --vimgrep
-		let g:ackprg='ag --vimgrep'
-		let g:ctrlp_user_command='ag --vimgrep -g'
-	endif
-	noremap <c-p> :FZF<CR>
-
-	"                                                                         }}}
+	source ~/.vim/plugin_confs/nerd_commenter.vim
+	source ~/.vim/plugin_confs/airline.vim
+	source ~/.vim/plugin_confs/solarized.vim
 
 "                                                                           }}}
 " # Generic Bindings and Shortcuts                                          {{{

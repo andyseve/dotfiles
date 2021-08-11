@@ -106,7 +106,7 @@
 		# CLI programs
 		ranger
 		weechat
-		vim neovim
+		neovim
 		w3m
 		youtube-dl
 		taskwarrior timewarrior

@@ -1,4 +1,4 @@
-## Last Modified: Fri 06 Aug 2021 12:31:21 PM EDT
+## Last Modified: Mon 09 Aug 2021 05:20:31 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -249,7 +249,7 @@ fi
 # xmonad
 if check xmonad; then
 	IF="$DOTFILES/xmonad"
-	OF="$HOME/.xmonad"
+	OF="$CONFIG/xmonad"
 	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs

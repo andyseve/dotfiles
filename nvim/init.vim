@@ -1,6 +1,6 @@
 " Neovim Config file
 " Author: Anish Sevekari
-" Last Modified: Sat 14 Mar 2020 04:38:49 PM EDT
+" Last Modified: Wed 11 Aug 2021 03:13:53 AM EDT
 
 " essentially adds vimrc here
 set rtp^=~/.vim rtp+=~/.vim/after
