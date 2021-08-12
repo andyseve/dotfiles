@@ -106,7 +106,7 @@
 		# CLI programs
 		ranger
 		weechat
-		neovim
+    unstable.neovim
 		w3m
 		youtube-dl
 		taskwarrior timewarrior
