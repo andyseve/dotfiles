@@ -2,10 +2,10 @@
 [main]
 
 # Where the pubs repository files (bibtex, metadata, notes) are located
-pubsdir = /home/stranger/.pubs
+pubsdir = ~/.local/share/pubs
 
 # Where the documents files are located (default: $(pubsdir)/doc/)
-docsdir = /home/stranger/.pubs/doc
+docsdir = ~/.local/share/pubs/doc
 
 # Specify if a document should be copied or moved in the docdir, or only
 # linked when adding a publication.

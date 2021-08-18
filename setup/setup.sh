@@ -1,4 +1,4 @@
-## Last Modified: Mon 09 Aug 2021 05:20:31 PM EDT
+## Last Modified: Wed 18 Aug 2021 02:57:59 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -387,6 +387,22 @@ if check networkmanager_dmenu; then
 	link $IF/config.ini $OF/config.ini
 else
 	nope networkmanager_dmenu
+fi
+
+# pubs
+if check pubs; then
+	link $DOTFILES/pubs/pubsrc $HOME/.pubsrc
+	pubs init
+	echo "Run \"git remote set-url origin\" in \"$HOME/.local/share/pubs\" to setup git"
+else
+	nope pubs
+fi
+
+# pass
+if check pass; then
+	echo "Run \"git remote set-url origin\" in \"$HOME/.password-store\" to setup git"
+else
+	nope pass
 fi
 
 ################################################################################

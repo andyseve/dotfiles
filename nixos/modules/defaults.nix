@@ -72,6 +72,7 @@
     # Drivers
     firmwareLinuxNonfree
 
+
 		# Version Control / Archive
 		git subversion
 		unzip zip unrar
@@ -106,14 +107,14 @@
 		# CLI programs
 		ranger
 		weechat
-    unstable.neovim
+    unstable.neovim # load latest neovim
 		w3m
 		youtube-dl
 		taskwarrior timewarrior
     khal khard # calendars and contacts
     vdirsyncer # vdirsyncer
     fswebcam 
-    neomutt
+    neomutt isync msmtp
     unstable.pubs # biblography manager
     (pass.withExtensions
       (exts: [
@@ -137,13 +138,11 @@
     )
     python3Packages.pip
     python3Packages.argcomplete
-    #pypi2nix
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.haskell-language-server
-    cabal2nix
 
 		jdk11 nodejs
 
@@ -153,8 +152,8 @@
 		# Man Pages
 		man man-pages
 
-    # Gurobi
-    gurobi
+    # dotfiles
+    anish-dotfiles
   ];
 
   # Enable CUPS to print documents.

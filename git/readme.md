@@ -6,6 +6,6 @@ The format usually is
 ```gitconfig
 [credential url]
 	username = user
-	helper = "!f() { test $1 = get && echo password=`/home/stranger/dotfiles/bin/getpass -p pass`;}; f"
+	helper = "!f() { test $1 = get && echo password=`getpass -p pass`;}; f"
 ```
 Here, pass is the name of the corresponding entry in the password store.

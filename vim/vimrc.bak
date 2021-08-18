@@ -1,0 +1,268 @@
+" Author: Anish Sevekari
+" Last Updated: Sun 15 Aug 2021 01:10:12 AM EDT
+
+set nocompatible
+
+" # vim-plug                                                                 {{{
+  " change installation paths based on os
+  if !exists("g:bundle_path")
+    if has("win64") || has("win32")
+      let g:bundle_path = '~/vimfiles/bundle'
+    else
+      let g:bundle_path = '~/.vim/bundle'
+    endif
+  endif
+
+  function! BuildYCM(info)
+    " Builds ycm only when forced, installed or updated
+    if a:info.status == 'installed' || a:info.force || a:info.status == 'updated'
+			if has("win64") || has("win32")
+				!python3 "%USERPROFILE%"\vimfiles\bundle\YouCompleteMe\install.py --clang-completer --js-completer
+			else
+				!python3 "$HOME/.vim/bundle/YouCompleteMe/install.py --clang-completer --js-completer"
+			endif
+    endif
+  endfunc
+
+  call plug#begin(bundle_path)
+  Plug 'hecal3/vim-leader-guide'
+	Plug 'neoclide/coc.nvim',								{ 'branch': 'release' }
+	Plug 'lervag/vimtex',                   { 'for': 'latex' }
+  Plug 'sjl/gundo.vim'
+  Plug 'mileszs/ack.vim'
+  Plug 'junegunn/fzf',                    { 'do':'./install --bin' }
+  Plug 'junegunn/fzf.vim'
+  Plug 'tpope/vim-fugitive'
+	Plug 'junegunn/vim-github-dashboard',   { 'on': ['GHDashboard', 'GHActivity'] }
+  Plug 'jiangmiao/auto-pairs'
+	Plug 'tpope/vim-surround'
+	Plug 'preservim/nerdtree'
+	Plug 'Xuyuanp/nerdtree-git-plugin'
+	Plug 'kyazdani42/nvim-web-devicons' " for file icons
+	Plug 'kyazdani42/nvim-tree.lua'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'godlygeek/tabular'
+  Plug 'tpope/vim-repeat'
+	Plug 'tpope/vim-dispatch'
+	Plug 'dan-t/vim-hsimport',              { 'for': 'haskell' }
+	Plug 'neovimhaskell/haskell-vim',       { 'for': 'haskell' }
+	Plug 'Konfekt/FastFold'
+	Plug 'LnL7/vim-nix',                    { 'for': 'nix' }
+
+	call plug#end()
+
+"                                                                           }}}
+" # Core Settings                                                           {{{
+  set background=dark
+	syntax enable
+  set synmaxcol=0
+  set encoding=utf-8
+  filetype plugin indent on
+	" Setting visualbell for windows
+	if has("win64") || has("win32")
+    set guifont=Fira_Code:h10:cANSI:qDRAFT
+		set renderoptions=type:directx
+		set visualbell
+	else
+		set guifont=Fira\ Code\ Regular\ 10
+	endif
+
+  set backspace=indent,eol,start
+  set ruler " Display cursor position
+
+  " Numbering Settings and functions
+  set number
+  " Toggle between relative and absolute numbers
+  function! RelativeNumber()
+	  set number
+	  set relativenumber
+  endfunc
+  function! AbsoluteNumber()
+	  set norelativenumber
+	  set number
+  endfunc
+  " Autocommands to toggle between relative and absolute numbering
+	augroup numbertoggle
+		autocmd!
+		autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu | set rnu   | endif
+		autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+	augroup END
+
+  set confirm              " Exit confirmation
+  set wildmenu
+  set wildmode=full
+  set lazyredraw           " Lazy redrawing of screen, force redraw using :redraw
+	set showcmd              " Show (partial) command in status line
+  set showmatch            " Highlight matching braces
+  set modeline             " Enables modlines (File specific vim settings)
+  set modelines=1          " Read only the last line for vim specific options
+  set autoread             " Read changes from outside automatically
+	set autowrite            " Automatically save before commands like :next and :make
+  set nomousehide          " To fix a bug that causes cursor to dissapear
+  set mouse=a              " Enable mouse
+  set textwidth=0          " Textwidth to infinite
+  set spelllang=en_us      " Set US English for spellchecking
+  set nospell
+  set viewoptions-=options " Excludes options (like working dir) from view
+  set updatetime=300
+	set hidden               " Hide buffers when they are abandoned
+	set cmdheight=2          " Setting command height 2 for more space
+	set shortmess+=c         " Messages should be short
+	set whichwrap+=<,>,h,l,[,] " Wraping around the lines
+
+  let mapleader = "\\"
+
+  " Gui Options
+  set guioptions-=L " Remove left scrollbar
+  set guioptions-=T " Remove Toolbar
+  set guioptions-=m " Remove Menubar
+
+
+  " Back up directories
+  if has("win64") || has("win32")
+		set undodir=~/vimfiles/.undo//
+		set backupdir=~/vimfiles/.backup//
+		set directory=~/vimfiles/.swp//
+		set viewdir=~/vimfiles/.view//
+  else
+		set undodir=~/.vim/.undo//
+		set backupdir=~/.vim/.backup//
+		set directory=~/.vim/.swp//
+		set viewdir=~/.vim/.view//
+  endif
+" # indent settings
+  set autoindent
+  set smartindent
+  set breakindent
+  set showbreak=↳\ 
+
+  set shiftwidth=2
+  set softtabstop=2
+  set tabstop=2
+  set noexpandtab
+
+"                                                                           }}}
+" # Search Settings                                                         {{{
+  set hlsearch " Highlight searches
+  set incsearch " Incremental search (As characters are entered)
+	set ignorecase " Do case insensitive matching
+	set smartcase " Do smart case matching
+
+"                                                                           }}}
+" # Fold Settings                                                           {{{
+  set foldenable
+	set foldlevel=0
+
+"                                                                           }}}
+" # Plugin Configurations and Bindings                                      {{{
+	source ~/.vim/plugin_confs/vim_leader.vim
+	source ~/.vim/plugin_confs/coc.vim
+	source ~/.vim/plugin_confs/vimtex.vim
+	source ~/.vim/plugin_confs/gundo.vim
+	source ~/.vim/plugin_confs/fzf_ag.vim
+	source ~/.vim/plugin_confs/fugitive.vim"
+	source ~/.vim/plugin_confs/nerdtree.vim
+	source ~/.vim/plugin_confs/nerd_commenter.vim
+	source ~/.vim/plugin_confs/airline.vim
+	source ~/.vim/plugin_confs/solarized.vim
+
+"                                                                           }}}
+" # Generic Bindings and Shortcuts                                          {{{
+  nnoremap :W :w
+  nnoremap :Q :q
+	nnoremap -d dd
+	nnoremap -c ddO
+
+	" Movements
+  nnoremap j gj
+  nnoremap k gk
+  vnoremap j gj
+  vnoremap k gk
+
+  " Hotkeys for saving in gvim
+  if(has("gui_running"))
+    nnoremap <c-s> :update<CR>
+    vnoremap <c-s> <c-c>:update<CR>
+    inoremap <c-s> <c-o>:update<CR>
+  endif
+
+  " Backspace to delete words
+  imap <c-backspace> <c-o>:normal dbx<CR>
+	nmap <c-backspace> dbx
+
+
+	" Global Copy and Paste
+	let g:lmap.p = [ 'call feedkeys("\"+gP")', 'Paste']
+	let g:lmap.y = [ 'call feedkeys("\"+y")', 'Copy' ]
+
+
+	" Quick Edits
+	let g:lmap.e = {
+				\'name': 'Quick Edit',
+				\'s':['CocCommand snippets.editSnippets', 'Snippets'],
+				\'v':['vsplit ~/.vimrc', 'Vimrc'],
+				\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
+				\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
+				\}
+
+	" Remove search highlight
+	nmap <leader>h :nohlsearch<CR>
+	let g:lmap.h = ['nohlsearch', 'Highlight']
+
+	" Quick Source
+	if(has("win64") || has("win32"))
+		nnoremap sv :source ~/_vimrc<CR>
+	else
+		nnoremap sv :source ~/.vimrc<CR>
+	endif
+
+	" Quick lists
+	let g:lmap.o = {
+				\'name': 'Lists'
+				\}
+	let g:lmap.o.k = ['copen', 'Quickfix']
+	let g:lmap.o.o = ['cwindow', 'Quickfix']
+	let g:lmap.o.l = ['lwindow', 'Locationlist']
+
+"                                                                           }}}
+" # Functions                                                               {{{
+  " Update last modified entries
+  function! UpdateLastModified()
+    " TODO: Delete the update search
+    let b:cur_window = winsaveview()
+    let b:last_line = line('$')
+    if(b:last_line > 20)
+      let b:last_line = 20
+    endif
+    let cmd = "0," . b:last_line . "s/Last \\(Modified\\|Edited\\|Changed\\|Updated\\): \\zs.*/\\=strftime(\"%c\")"
+    execute cmd
+    :nohlsearch
+    call winrestview(b:cur_window)
+  endfunc
+
+	" CP environment
+	function! AnishCode()
+		:cd ~/Code
+		:e main.cpp
+		:vs out
+		:split in
+		:vertical resize 40
+	endfunc
+
+"                                                                           }}}
+" # Autocommands                                                            {{{
+  augroup Anishs
+    autocmd!
+		autocmd BufWritePost,BufLeave,WinLeave ?* mkview
+		autocmd WinEnter ?* silent loadview
+    " Update last modified tags at start of the file
+    autocmd BufWritePre * silent! call UpdateLastModified() | redraw
+    autocmd BufEnter * :nohlsearch
+  augroup END
+
+"                                                                           }}}
+
+" vim:foldmethod=marker:syntax=vim

@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sun 13 Dec 2020 10:46:16 PM EST
+# Last Edited: Wed 18 Aug 2021 02:58:47 AM EDT
 # Lite zshrc with only essential plugins
 
 # Set zsh variables and source corresponding settings
@@ -10,7 +10,7 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
 # Zplugin ######################################################################
 ################################################################################
 
-source /home/stranger/.zplugin/bin/zplugin.zsh
+source $HOME/.zplugin/bin/zplugin.zsh
 autoload -Uz _zplugin
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
 

@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Tue 29 Jun 2021 02:40:19 PM EDT
+# Last Edited: Wed 18 Aug 2021 02:30:11 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -11,8 +11,8 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/ba
 
 source $HOME/.zinit/bin/zinit.zsh
 
-if [ -e /home/stranger/.nix-profile/etc/profile.d/nix.sh ]; then 
-	. /home/stranger/.nix-profile/etc/profile.d/nix.sh;
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then 
+	. ~/.nix-profile/etc/profile.d/nix.sh;
 fi
 
 autoload -Uz _zinit
