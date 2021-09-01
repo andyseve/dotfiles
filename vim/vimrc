@@ -1,10 +1,10 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Aug 2021 02:44:53 AM EDT
+" Last Updated: Tue 31 Aug 2021 06:25:17 PM EDT
 " 
 
 set nocompatible
 
-" # vim-plug                                                                 {{{
+" # vim-plug                                                                 
   " change installation paths based on os
   if !exists("g:bundle_path")
     if has("win64") || has("win32")
@@ -54,8 +54,6 @@ set nocompatible
 	Plug 'LnL7/vim-nix',                    { 'for': 'nix' }
 
 	call plug#end()
-
-"                                                                           }}}
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 

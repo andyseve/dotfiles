@@ -38,6 +38,7 @@
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
     haskellPackages.xmobar
+    stalonetray
 		rofi rofi-pass
 		picom                            # transparancy
 		dunst libnotify                  # notifications
@@ -56,6 +57,7 @@
 		vlc
 		zathura
 		libreoffice
+    thunderbird
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     steam
