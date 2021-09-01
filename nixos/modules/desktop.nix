@@ -17,7 +17,6 @@
 
     # Desktop
     desktopManager.xterm.enable = false;
-		displayManager.sddm.enable = true;
     displayManager.defaultSession = "none+xmonad";
     windowManager.xmonad = {
       enable = true;
@@ -84,5 +83,6 @@
       temperature.night = 3000;
     };
     geoclue2.enable = true;
+    autorandr.enable = true;
   };
 }

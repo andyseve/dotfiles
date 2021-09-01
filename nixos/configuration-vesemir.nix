@@ -66,6 +66,16 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
 
+  services.xserver.xrandrHeads = [ 
+    {
+      output = "eDP-1";
+      primary = true;
+    }
+    {
+      output = "DP-1";
+    }
+  ];
+
   # Power actions
   services.logind = {
     killUserProcesses = false;
