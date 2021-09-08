@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Aug 2021 02:15:47 AM EDT
+" Last Updated: Wed 08 Sep 2021 03:08:00 PM EDT
 
 " Auto Commands
 
@@ -44,8 +44,6 @@ endfunc
 
 augroup anish_sevekari
 	autocmd!
-	autocmd BufWritePost,BufLeave,WinLeave ?* mkview
-	autocmd WinEnter ?* silent loadview
 	" Update last modified tags at start of the file
 	autocmd BufWritePre * silent! call UpdateLastModified() | redraw
 	autocmd BufEnter * :nohlsearch

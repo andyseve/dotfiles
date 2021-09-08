@@ -1,6 +1,6 @@
 " Neovim Config file
 " Author: Anish Sevekari
-" Last Modified: Wed 01 Sep 2021 03:50:42 AM EDT
+" Last Modified: Wed 08 Sep 2021 05:36:24 PM EDT
 
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -18,17 +18,16 @@ for s:fname in g:config_file_list
 	execute printf('source %s/core/%s', g:config_root, s:fname)
 endfor
 
+lua require('plugins')
+
 
 let g:config_plugin_list = [
-			\'vim_leader.vim',
-			\'coc.vim',
 			\'vimtex.vim',
-			\'gundo.vim',
 			\'fzf_ag.vim',
 			\'fugitive.vim',
-			\'nerdtree.vim',
 			\'nerd_commenter.vim',
-			\'airline.vim'
+			\'airline.vim',
+			\'ultisnips.vim'
 			\]
 
 for s:fname in g:config_plugin_list
