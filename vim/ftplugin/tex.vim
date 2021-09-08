@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 08 Sep 2021 03:07:55 PM EDT
+" Last Updated: Wed 08 Sep 2021 05:48:21 PM EDT
 " tex specific vim settings
 
 " Core Settings {{{
@@ -40,7 +40,7 @@
 " autocommands {{{
 	augroup anish_sevekari_tex
 		autocmd!
-		autocmd BufWinLeave *.tex mkview
-		autocmd BufWinEnter *.tex silent loadview
+		autocmd BufWinLeave *.* mkview
+		autocmd BufWinEnter *.* silent loadview
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell
