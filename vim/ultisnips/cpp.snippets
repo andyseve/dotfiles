@@ -98,7 +98,7 @@ snippet miller_rabin "Miller Rabin Primality Test" b
 bool miller_rabin(${1:int} p) {
 	$1 s = 0; $1 r = p-1;
 	while(! (r % 2)) s++, r /= 2;
-	int l[9] = {2,3,5,7,11,13,17,19,23};
+	int l[9] = {2,3,5,7,11,13,17,19,23}; // add 29,31,37 for long long
 	for(int i = 0 ; i < 9; ++i) {
 		$1 a = l[i];
 		if(a == p) continue;

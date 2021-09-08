@@ -3,13 +3,13 @@
 while getopts ":u:p:g:l:h" opt; do
 	case ${opt} in
 		u )
-			echo $(pass $OPTARG | grep username | awk -F "username: " '{print $2}')
+			echo $(pass $OPTARG | grep user | awk -F "username: " '{print $2}')
 			;;
 		p )
 			echo $(pass $OPTARG | sed -n 1p)
 			;;
 		g )
-			user=$(pass $OPTARG | grep username | awk -F "username: " '{print $2}')
+			user=$(pass $OPTARG | grep user | awk -F "username: " '{print $2}')
 			pass=$(pass $OPTARG | sed -n 1p)
 			echo "username = ${user}"
 			echo "password = ${pass}"

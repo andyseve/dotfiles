@@ -114,7 +114,6 @@
     khal khard # calendars and contacts
     vdirsyncer # vdirsyncer
     fswebcam 
-    neomutt isync msmtp
     unstable.pubs # biblography manager
     (pass.withExtensions
       (exts: [
