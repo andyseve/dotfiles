@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Aug 2021 02:14:31 AM EDT
+" Last Updated: Thu 02 Sep 2021 03:44:07 AM EDT
 
 " Keybindings
 " Has vim-global leader settings: its better to bind keys outside the function
@@ -23,11 +23,7 @@ if(has("gui_running"))
 endif
 
 " Reload vimrc
-if g:is_win
-	nnoremap sv :source ~/_vimrc<CR>
-else
-	nnoremap sv :source ~/.vimrc<CR>
-endif
+nnoremap sv :source $MYVIMRC<CR>
 
 " Backspace to delete words
 imap <c-backspace> <c-o>:normal dbx<CR>

@@ -15,12 +15,12 @@ end
 vim.cmd [[packadd packer.nvim]]
 
 return require('packer').startup(function()
-	use { 'wbthomason/packer.nvim', opt = true }
+	use 'wbthomason/packer.nvim'
 
 	-- lsp and autocomplete
 	use { 'neovim/nvim-lspconfig', event = 'VimEnter', config = [[require('config.lsp')]] }
 	use { 'hrsh7th/nvim-compe', event = 'InsertEnter', config = [[require('config.compe')]] }
-	use 'SirVer/ultisnips'
+	use { 'SirVer/ultisnips' }
 
 	-- key guide
 	-- use hecal3/vim-leader-guide 
@@ -50,7 +50,7 @@ return require('packer').startup(function()
 	use { 'LnL7/vim-nix', ft = {'nix'} } -- nix
 	use 'itchyny/vim-highlighturl'
 
-	-- matching
+	-- matchinn
 	use 'jiangmiao/auto-pairs'
 	use 'tpope/vim-surround' 
 	use 'andymass/vim-matchup'
@@ -67,8 +67,11 @@ return require('packer').startup(function()
 	-- file explorer
 	-- use 'preservim/nerdtree'
 	-- use 'Xuyuanp/nerdtree-git-plugin'
-	use 'kyazdani42/nvim-web-devicons'
-	use 'kyazdani42/nvim-tree.lua'
+	use {
+		'kyazdani42/nvim-tree.lua',
+		requires = "kyazdani42/nvim-web-devicons",
+		config = [[require('config.nvim-tree')]]
+	}
 
 	-- zen mode
 	use { 'folke/zen-mode.nvim', event = 'VimEnter', config = [[require('config.zen-mode')]] }

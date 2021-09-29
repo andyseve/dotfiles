@@ -1,4 +1,4 @@
-# Ultisnips Configuration  --Disabled in favor of COC                  
+" # Ultisnips Configuration  --Disabled in favor of COC                  
 if has("win64") || has("win32")
 	set rtp+=~/vimfiles
 	let g:UltiSnipsSnippetsDir="~/vimfiles/UltiSnips"
