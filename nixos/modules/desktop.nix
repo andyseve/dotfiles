@@ -42,7 +42,7 @@
 		picom                            # transparancy
 		dunst libnotify                  # notifications
 		feh
-		xdotool xorg.xmodmap xorg.xrandr
+		xdotool xorg.xmodmap xorg.xrandr xorg.libXinerama
 		scrot                            # screenshots
     xclip
 

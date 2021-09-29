@@ -1,4 +1,4 @@
-## Last Modified: Wed 01 Sep 2021 03:38:42 AM EDT
+## Last Modified: Wed 08 Sep 2021 09:30:06 PM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -395,9 +395,11 @@ fi
 
 # pubs
 if check pubs; then
+	if [ ! -d "$HOME/.local/share/pubs" ]; then
+		pubs init -p $HOME/.local/share/pubs -d ~/.local/share/pubs/doc
+		echo "Run \"git remote set-url origin\" in \"$HOME/.local/share/pubs\" to setup git"
+	fi
 	link $DOTFILES/pubs/pubsrc $HOME/.pubsrc
-	pubs init
-	echo "Run \"git remote set-url origin\" in \"$HOME/.local/share/pubs\" to setup git"
 else
 	nope pubs
 fi

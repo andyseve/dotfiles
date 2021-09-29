@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 31 Mar 2021 12:55:56 PM EDT
+" Last Updated: Wed 08 Sep 2021 05:48:21 PM EDT
 " tex specific vim settings
 
 " Core Settings {{{
@@ -16,7 +16,7 @@
 " autocorrects {{{
 	ab inv ^{-1}
 " }}}
-" Ale config {{{
+" Ale config -- not used anymore {{{
 	let b:ale_max_signs = 20
 	let b:ale_open_list = 0
 " }}}
@@ -36,5 +36,11 @@
 			" autocmd to check for new commands in anishs.sty
 			" might be better to write a python function instead of one in vim.
 	endfunction
+" }}}
+" autocommands {{{
+	augroup anish_sevekari_tex
+		autocmd!
+		autocmd BufWinLeave *.* mkview
+		autocmd BufWinEnter *.* silent loadview
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell
