@@ -1,6 +1,6 @@
 " Neovim Config file
 " Author: Anish Sevekari
-" Last Modified: Tue 28 Sep 2021 11:15:01 PM EDT
+" Last Modified: Tue 28 Sep 2021 11:16:26 PM EDT
 
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -19,16 +19,6 @@ for s:fname in g:config_file_list
 	execute printf('source %s/core/%s', g:config_root, s:fname)
 endfor
 
-<<<<<<< HEAD
-lua require("plugins")
-
-let g:config_plugin_list = [
-			\'airline.vim',
-			\'fugitive.vim',
-			\'nerd_commenter.vim',
-			\'ultisnips.vim',
-			\'vimtex.vim',
-=======
 lua require('plugins')
 
 
