@@ -1,15 +1,15 @@
 # Need nvidia-offload for laptop cards
 # info: nixos.wiki/wiki/Nvidia
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   #services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
-  services.xserver.videoDrivers = [ "nouveau" "modesetting" ];
+  services.xserver.videoDrivers = lib.mkDefault [ "nouveau" "modesetting" ];
 
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
 
   hardware.nvidia.prime = {
-    sync.enable = true;
+    sync.enable = lib.mkDefault true;
     nvidiaBusId = "PCI:4:0:0";
     intelBusId  = "PCI:0:2:0";
   };
@@ -19,6 +19,14 @@
     driSupport32Bit = true;
     extraPackages = [ pkgs.vaapiIntel ];
   };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override {
+      enableHybridCodec = true;
+    };
+  };
+
+  boot.blacklistedKernelModules = lib.mkDefault [ "nouveau" ];
 
   #services.xserver.serverLayoutSection = ''
     #Identifier "Multihead"
@@ -36,9 +44,9 @@
   #'';
 
 
-  environment.systemPackages = with pkgs; [
-    cudatoolkit
-    python3Packages.tensorflow
-    python3Packages.pytorch
-  ];
+  #environment.systemPackages = with pkgs; [
+    #cudatoolkit
+    #python3Packages.tensorflow
+    #python3Packages.pytorch
+  #];
 }

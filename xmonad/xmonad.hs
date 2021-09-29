@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Sun 25 Apr 2021 06:05:59 PM EDT
+-- Last Modified: Thu 23 Sep 2021 03:53:15 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -856,7 +856,7 @@ myCustomShiftHook = composeOne . concat $
             myWebShifts = ["Firefox", "google-chrome"]
             myGameShifts = ["Steam"]
             myGameViews = ["dota2", "Civ6Sub", "Terraria.bin.x86_64"]
-            myComShifts = ["Slack", "discord", "weechat", "zoom"]
+            myComShifts = ["Slack", "discord", "weechat", "zoom", "Mail"]
             myMediaViews = []
             myMediaShifts = ["vlc"]
 
