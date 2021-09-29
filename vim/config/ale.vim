@@ -7,6 +7,7 @@ let g:ale_on_save = 1
 if !exists('g:ale_linters')
 	let g:ale_linters = {}
 endif
+
 let g:ale_linters.haskell = ['ghc-mod', 'hlint']
 
 

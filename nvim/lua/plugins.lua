@@ -18,9 +18,10 @@ return require('packer').startup(function()
 	use { 'wbthomason/packer.nvim' }
 
 	-- lsp and autocomplete
-	use { 'neovim/nvim-lspconfig', event = 'VimEnter', config = [[require('config.lsp')]] }
-	use { 'hrsh7th/nvim-compe', event = 'InsertEnter', config = [[require('config.compe')]] }
-	use { 'SirVer/ultisnips' }
+	--use { 'neovim/nvim-lspconfig', event = 'VimEnter', config = [[require('config.lsp')]] }
+	--use { 'hrsh7th/nvim-compe', event = 'InsertEnter', config = [[require('config.compe')]] }
+	--use 'SirVer/ultisnips'
+	use { 'neoclide/coc.nvim', branch = 'release' }
 
 	-- key guide
 	-- use hecal3/vim-leader-guide 
@@ -39,14 +40,7 @@ return require('packer').startup(function()
 	use { 'lervag/vimtex', ft = {'tex'} }
 
 	-- syntax highlight
-	use { 
-		'nvim-treesitter/nvim-treesitter', 
-		requires = {
-			'nvim-treesitter/nvim-treesitter-refactor',
-			'nvim-treesitter/nvim-treesitter-textobjects',
-		},
-		run = ':TSUpdate' 
-	} -- treesitter
+	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- treesitter
 	use { 'LnL7/vim-nix', ft = {'nix'} } -- nix
 	use 'itchyny/vim-highlighturl'
 

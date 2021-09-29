@@ -120,6 +120,7 @@
       exts.pass-otp 
       ])
     ) # password manager
+    mailutils
 
 		
 		# Dev Tools

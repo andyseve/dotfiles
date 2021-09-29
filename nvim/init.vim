@@ -1,10 +1,6 @@
 " Neovim Config file
 " Author: Anish Sevekari
-<<<<<<< HEAD
-" Last Modified: Thu 02 Sep 2021 04:57:21 PM EDT
-=======
-" Last Modified: Wed 08 Sep 2021 05:36:24 PM EDT
->>>>>>> 1e3ca44b09c2603c5b90df4112d1e71de36a6233
+" Last Modified: Tue 28 Sep 2021 11:15:01 PM EDT
 
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -42,8 +38,7 @@ let g:config_plugin_list = [
 			\'fugitive.vim',
 			\'nerd_commenter.vim',
 			\'airline.vim',
-			\'ultisnips.vim'
->>>>>>> 1e3ca44b09c2603c5b90df4112d1e71de36a6233
+			\'coc.vim',
 			\]
 
 for s:fname in g:config_plugin_list
