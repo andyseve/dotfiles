@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Thu 23 Sep 2021 03:53:15 PM EDT
+-- Last Modified: Wed 29 Sep 2021 05:51:52 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -757,14 +757,14 @@ myLogPP = myXmobarLogPP
 myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
 myXmobarLogPP = def
     { ppCurrent = xmobarColor blue "" . clickableWorkspaces
-    , ppTitle   = xmobarColor green "" . (xmobarFont 3) . shorten 45
+    , ppTitle   = xmobarColor green "" . xmobarFont 1 . shorten 45
     , ppVisible = xmobarColor blue "" . clickableWorkspaces
     , ppUrgent  = xmobarColor red "" . clickableWorkspaces
     , ppHidden  = xmobarColor white "" . clickableWorkspaces
     , ppHiddenNoWindows = xmobarColor base01 "" . clickableWorkspaces
-    , ppSep     = "<fn=3> </fn><fn=1>\xf101</fn><fn=3> </fn>" 
-    , ppWsSep   = "<fn=3> </fn>"
-    , ppLayout  = xmobarColor yellow "" . (xmobarFont 3) . shorten 5
+    , ppSep     = "<fn=1> </fn>\xf101<fn=1> </fn>" 
+    , ppWsSep   = " "
+    , ppLayout  = xmobarColor yellow "" . xmobarFont 1 . shorten 5
     , ppSort    = mkWsSort wsCompare
     }
         where
@@ -783,16 +783,16 @@ myXmobarLogPP = def
             wsCompare = return (compare `on` wsIndex)
 
             workspaceToIcons :: String -> String
-            workspaceToIcons "main"  = "<fn=1>\xf0f2</fn>" -- 
-            workspaceToIcons "latex" = "<fn=1>\xf70e</fn>" -- 
-            workspaceToIcons "code"  = "<fn=1>\xf121</fn>" -- 
-            workspaceToIcons "game"  = "<fn=2>\xf1b6</fn>" -- 
-            workspaceToIcons "www"   = "<fn=2>\xf269</fn>" -- 
-            workspaceToIcons "com"   = "<fn=1>\xf075</fn>" -- 
-            workspaceToIcons "media" = "<fn=2>\xf3b5</fn>" -- 
-            workspaceToIcons "sys"   = "<fn=1>\xf120</fn>" -- 
-            workspaceToIcons "NSP"   = "<fn=1>\xf328</fn>" -- 
-            workspaceToIcons _       = "<fn=1>\xf714</fn>" -- 
+            workspaceToIcons "main"  = "\xf724" -- 
+            workspaceToIcons "latex" = "\xf977" -- 亮
+            workspaceToIcons "code"  = "\xf673" -- 
+            workspaceToIcons "game"  = "\xf7b3" -- 
+            workspaceToIcons "www"   = "\xf738" -- 
+            workspaceToIcons "com"   = "\xf679" -- 
+            workspaceToIcons "media" = "\xfac2" -- 輸
+            workspaceToIcons "sys"   = "\xf120" -- 
+            workspaceToIcons "NSP"   = "\xfb12" -- ﬒
+            workspaceToIcons _       = "\xf6a1" -- 
 
             clickableWorkspaces :: String -> String
             clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
@@ -863,7 +863,7 @@ myCustomShiftHook = composeOne . concat $
             shiftView = liftM2 (.) W.greedyView W.shift 
 
 myCustomPlaceHook :: ManageHook
-myCustomPlaceHook = composeOne . concat $ 
+myCustomPlaceHook = (composeOne . concat)
         -- Handling specific conditions
     [ [ transience ]
     , [ isFullscreen       -?> doFullFloat   ]
@@ -873,6 +873,10 @@ myCustomPlaceHook = composeOne . concat $
     , [ className =? c <||> resource =? c -?> doCenterFloat                                  |  c <- myCFloats     ]
     , [ className =? c <||> resource =? c -?> doRRectFloat                                   |  c <- myRFloats     ]
     , [ className =? c <||> resource =? c -?> doFullFloat                                    |  c <- myFullFloats  ]
+    ]
+    <+> (composeOne . concat)
+    [ [ isDialog           -?> doF W.swapUp ]
+    , [ isRole =? "pop-up" -?> doF W.swapUp ]
     ]
         where
             isRole = stringProperty "WM_WINDOW_ROLE"
@@ -887,7 +891,7 @@ myCustomPlaceHook = composeOne . concat $
 myCustomStackHook :: ManageHook
 myCustomStackHook = composeOne . concat $
     [ [ className =? c     -?> tileBelowNoFocus                                              |  c <- myViewers     ]
-    , [ pure True          -?> tileBelow     ]
+    , [ pure True          -?> tileBelow                                                                           ]
     ]
         where
             tileBelowNoFocus = insertPosition Below Older

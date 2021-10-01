@@ -6,12 +6,11 @@ import System.Environment
 
 config :: Config
 config = defaultConfig { 
-				 font    = "xft:Fira Code:style=Bold:size=12:antialias=true"
+				 font    = "xft:FiraMono Nerd Font:style=Bold:size=12:antialias=true"
 			 , additionalFonts = [
-													"xft:FontAwesome5Free:style=Solid:size=12:antialias=true",
-													"xft:FontAwesome5Brands:style=Solid:size=12:antialias=true",
-													"xft:Fira Code:style=Bold:size=10:antialias=true;"
+													"xft:FiraMono Nerd Font:style=Bold:size=10:antialias=true"
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
+													-- use fc-list to find out correct font name
 												]
        , bgColor = "#000000"
        , fgColor = "#93a1a1"
@@ -26,18 +25,18 @@ config = defaultConfig {
        , commands = [  
                       Run $ Date "%a %d %b %H:%M" "date" 20
                     , Run $ Volume "default" "Master" [
-                                            "-t", "<status> <volume>%"
+                                            "-t", "<status> <fn=1><volume>%</fn>"
                                           , "--"
-                                          , "-o", "<fn=1>\xf6a9</fn>" --
+                                          , "-o", "\xfc5d" -- ﱝ
                                           , "-O", ""
-                                          , "-h", "<fn=1>\xf028</fn>" --
-                                          , "-m", "<fn=1>\xf027</fn>" --
-                                          , "-l", "<fn=1>\xf026</fn>" --
+                                          , "-h", "\xfa7d" -- 墳
+                                          , "-m", "\xfa7f" -- 奔
+                                          , "-l", "\xfa7e" -- 奄
                                           , "-c", "#dc322f"
                                           , "-C", "#93a1a1"
                                           ] 10
                     , Run $ Wireless "wlp4s0" [
-                                    "-t", "<fn=1>\xf1eb</fn> <quality>" --
+                                    "-t", "\xfaa8 <fn=1><quality></fn>" --直
                                   ] 10
                     , Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
                     , Run $ UnsafeStdinReader
