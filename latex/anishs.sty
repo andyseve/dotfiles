@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 15 Jul 2021 03:17:22 AM EDT
+% Last Modified: Thu 30 Sep 2021 05:07:24 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -325,7 +325,8 @@
 	% abs checks for a star or options and then calles the right version of PAIREDabs
 
 	% If this starts giving too much trouble then I will have to stick with the starred versions.
-
+	
+	\makeatletter
 	\def\DeclarePairedDelimiterStar#1#2#3{%
 		\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
 		\newcommand#1{%
@@ -337,7 +338,7 @@
 	}
 	\def\DeclarePairedDelimiterStarX#1[#2]#3#4#5{%
 		\expandafter\DeclarePairedDelimiterX\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}%
-		\newcommand#1[#2]{%
+		\newcommand#1{%
 			\@ifstar{\csname PAIREDX\string#1\endcsname}
 			{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
 				{\csname PAIREDX\string#1\endcsname*}%
@@ -345,14 +346,15 @@
 		}%
 	}
 	\def\DeclarePairedDelimiterStarXPP#1[#2]#3#4#5#6#7{%
-		\expandafter\DeclarePairedDelimiterXPP\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}{#6}{#7}%
-		\newcommand#1[#2]{%
-			\@ifstar{\csname PAIREDX\string#1\endcsname}
-			{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
-				{\csname PAIREDX\string#1\endcsname*}%
+		\expandafter\DeclarePairedDelimiterXPP\csname PAIREDXPP\string#1\endcsname[#2]{#3}{#4}{#5}{#6}{#7}%
+		\newcommand#1{%
+			\@ifstar{\csname PAIREDXPP\string#1\endcsname}
+			{\@ifnextchar[{\csname PAIREDXPP\string#1\endcsname}
+				{\csname PAIREDXPP\string#1\endcsname*}%
 			}%
 		}%
 	}
+	\makeatother
 
 	% Not really sure that the micro modification always works.
 	\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
@@ -370,10 +372,12 @@
 	\providecommand\st{}
 	\newcommand\stSymbol[1][]{\nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
 	% Sets
-	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1}
-	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \given #2}
+	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st\stSymbol[\delimsize]#1}
+	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \st #2}
 	% Probability 
-	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st\stSymbol#1}
+		%\renewcommand\st{\stSymbol[\delimsize]}
+	%#1}
 	\DeclarePairedDelimiterStarXPP\prob[2]{\underset{#1}{\mathbb{P}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
 	% Expectation
 	\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
