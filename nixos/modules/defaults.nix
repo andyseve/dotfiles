@@ -32,14 +32,13 @@
 
   fonts = {
     fonts = with pkgs; [
-      inconsolata
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
+      inconsolata
       fira-code
       fira-code-symbols
-      powerline-fonts
-      font-awesome-ttf
+      (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "Inconsolata" ]; })
       lohit-fonts.marathi
     ];
   };
