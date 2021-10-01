@@ -18,10 +18,27 @@ return require('packer').startup(function()
 	use { 'wbthomason/packer.nvim' }
 
 	-- lsp and autocomplete
-	--use { 'neovim/nvim-lspconfig', event = 'VimEnter', config = [[require('config.lsp')]] }
-	--use { 'hrsh7th/nvim-compe', event = 'InsertEnter', config = [[require('config.compe')]] }
-	--use 'SirVer/ultisnips'
-	use { 'neoclide/coc.nvim', branch = 'release' }
+	use {
+		'neovim/nvim-lspconfig', 
+		config = [[require('config.lsp')]],
+		requires = 'onsails/lspkind-nvim'
+	}
+	--use { 'hrsh7th/nvim-compe', config = [[require('config.compe')]] }
+	use {
+		'hrsh7th/nvim-cmp',
+		config = [[require('config.cmp')]],
+		requires = {
+			'hrsh7th/cmp-nvim-lsp',
+			'hrsh7th/cmp-path',
+			'hrsh7th/cmp-buffer',
+			'f3fora/cmp-spell',
+			'hrsh7th/cmp-emoji',
+			'hrsh7th/cmp-nvim-lua',
+			'quangnguyen30192/cmp-nvim-ultisnips'
+		}
+	}
+	use 'SirVer/ultisnips'
+	--use { 'neoclide/coc.nvim', branch = 'release' }
 
 	-- key guide
 	-- use hecal3/vim-leader-guide 
@@ -40,7 +57,7 @@ return require('packer').startup(function()
 	use { 'lervag/vimtex', ft = {'tex'} }
 
 	-- syntax highlight
-	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' } -- treesitter
+	use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', config = [[require('config.treesitter')]] } -- treesitter
 	use { 'LnL7/vim-nix', ft = {'nix'} } -- nix
 	use 'itchyny/vim-highlighturl'
 

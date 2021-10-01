@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Aug 2021 01:09:52 AM EDT
+" Last Updated: Fri 01 Oct 2021 01:08:43 AM EDT
 
 " Options
 
@@ -51,6 +51,7 @@ set cmdheight=2                " Setting command height 2 for more space
 set shortmess+=c               " Messages should be short
 set whichwrap+=<,>,h,l,[,]     " Wraping around the lines
 set splitbelow splitright      " Window split settings
+set completeopt=menu,menuone,noselect
 
 " Ignore certain files and folders when globing
 set wildignore+=*.o,*.obj,*.bin,*.dll,*.exe

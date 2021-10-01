@@ -1,7 +1,11 @@
+-- Author: Anish Sevekari
+-- Last Modified: Thu 30 Sep 2021 11:32:56 PM EDT
+-- # nvim-tree config
+
 vim.g.nvim_tree_ignore = { '.git', 'node_modules', 'dist' }
 vim.g.nvim_tree_auto_open = 1
-vim.g.nvim_tree_auto_close = 0
-vim.g.nvim_tree_disable_netrw = 0
+vim.g.nvim_tree_auto_close = 1
+vim.g.nvim_tree_disable_netrw = 1
 vim.g.nvim_tree_hijack_netrw = 1
 vim.g.nvim_tree_follow = 1
 vim.g.nvim_tree_tab_open = 1
@@ -22,11 +26,14 @@ vim.g.nvim_tree_window_picker_exclude = {
     "packer",
     "qf",
     "Trouble"
-  }
+  },
+	buftype = {
+		'terminal'
+	}
 }
 
 vim.g.nvim_tree_icons = {
-	default = '',
+	default = 'asd',
 	git= {
 		unstaged = "✗",
 		staged = "✓",
@@ -35,12 +42,12 @@ vim.g.nvim_tree_icons = {
 		untracked = "★"
 	},
 	folder = {
-		default = "",
-		open = ""
+		default = "",
+		open = "ﱮ"
 	}
 }
 
-vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', {
+vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeToggle<CR>', {
 	noremap = true,
 	silent = true
 })

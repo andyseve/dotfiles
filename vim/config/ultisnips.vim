@@ -1,13 +1,5 @@
 " # Ultisnips Configuration  --Disabled in favor of COC                  
 
-"if has("win64") || has("win32")
-	"set rtp+=~/vimfiles
-	"let g:UltiSnipsSnippetsDir="~/vimfiles/ultiSnips"
-"else
-	"set rtp+=~/.vim
-	"let g:UltiSnipsSnippetsDir="~/.vim/ultiSnips"
-"endif
-
 let g:UltiSnipsEnableSnipMate = 0
 
 let g:UltiSnipsExpandTrigger="<tab>"

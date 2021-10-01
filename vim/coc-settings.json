@@ -1,8 +1,11 @@
 {
-	"coc.preferences.highlightTimeout": 300,
-
 	"coc.source.vimtex.enable": true,
 	"coc.source.vimtex.priority": 99,
+
+	"coc.source.emoji.enable": true,
+	"coc.source.emoji.priority": 3,
+	"coc.source.emoji.triggerCharacters": [":"],
+
 
 	"snippets.priority": 100,
 	"snippets.snipmate.enable": false,

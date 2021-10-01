@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 08 Sep 2021 05:48:21 PM EDT
+" Last Updated: Fri 01 Oct 2021 01:54:59 AM EDT
 " tex specific vim settings
 
 " Core Settings {{{
@@ -15,10 +15,6 @@
 " }}}
 " autocorrects {{{
 	ab inv ^{-1}
-" }}}
-" Ale config -- not used anymore {{{
-	let b:ale_max_signs = 20
-	let b:ale_open_list = 0
 " }}}
 " functions {{{
 	function! ImprortPreemble()

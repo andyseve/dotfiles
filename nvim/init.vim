@@ -1,7 +1,6 @@
-" Neovim Config file
+" # Neovim Config file
 " Author: Anish Sevekari
-" Last Modified: Tue 28 Sep 2021 11:16:26 PM EDT
-
+" Last Modified: Fri 01 Oct 2021 12:18:17 AM EDT
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
@@ -13,7 +12,6 @@ let g:config_file_list = [
 			\'ui.vim',
 			\'keys.vim'
 			\]
-
 
 for s:fname in g:config_file_list
 	execute printf('source %s/core/%s', g:config_root, s:fname)
@@ -28,7 +26,7 @@ let g:config_plugin_list = [
 			\'fugitive.vim',
 			\'nerd_commenter.vim',
 			\'airline.vim',
-			\'coc.vim',
+			\'ultisnips.vim'
 			\]
 
 for s:fname in g:config_plugin_list
