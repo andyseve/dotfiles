@@ -67,7 +67,7 @@ return require('packer').startup(function()
 	use 'andymass/vim-matchup'
 
 	-- notification plugin
-  use 'rcarriga/nvim-notify'
+  use { 'rcarriga/nvim-notify', config = [[require('config.notify')]] }
 
 	-- colorful status line and theme
 	use 'vim-airline/vim-airline-themes'

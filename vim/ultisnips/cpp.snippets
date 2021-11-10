@@ -892,37 +892,47 @@ void ${5:add}(int i, $1 x) {
 	for(int j = i; j < N; j += j & -j) $2[j] += x;
 }
 endsnippet
-snippet fenwick "Fenwick Tree Class" b
-template <typename T>
-class ${1:fenwick} {
-	public:
-		vector<T> fenw;
-		int n;
-	
-		fenwick (int _n) : n(_n) {
-			fenw.resize(n);
-		}
-		
-		void add(int x, T v) {
-			while (x < n) {
-				fenw[x] += v;
-				x |= (x + 1);
-				
-			}
-		}
+snippet fenwick "Fenwick Tree Struct" b
+struct fenwick {
+	// index starts at 1
+	vector<${1:int}> fenw;
+	int n;
 
-		T get(int x) {
-			T v{};
-			while (x >= 0) {
-				v += fenw[x];
-				x = (x & (x+1)) - 1;
-			}
-			return v;
-		}
+	fenwick (int _n) : n(_n) {fenw.resize(n+1,${2:0});}
 
-		T get(int l, int r) {
-			return get(r) - get(l-1);
-		}		
+	void add(int x, $1 v){
+		// add v to fenw[x]
+		for(int i = x; i < n+1; i += i & -i) fenw[i] += v;
+	}
+
+	$1 get(int x){
+		// return fenw[1] + ... + fenw[x]
+		$1 ret = 0;
+		for(int j = x; j; j -= j & -j) ret += fenw[j];
+		return ret;
+	}
+
+	$1 get(int l, int r){
+		return get(r) - get(l-1);
+	}
+};
+endsnippet
+snippet dsu "Disjoint Set Union" b
+struct dsu {
+	vector<int> parent;
+	dsu(int m){
+		parent.resize(m);
+		for(int i = 0; i < m; ++i) parent[i] = i;
+	}
+
+	int find(int a){
+		if(a == parent[a]) return a;
+		return parent[a] = find(parent[a]);
+	}
+
+	void unite(int a, int b){
+		parent[find(a)] = find(b);
+	}
 };
 endsnippet
 # }}}

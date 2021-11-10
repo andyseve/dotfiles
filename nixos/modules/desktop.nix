@@ -55,13 +55,11 @@
 		firefox google-chrome 
 		vlc
 		zathura
-		libreoffice
     thunderbird
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     steam
     discord unstable.zoom-us slack
-		deluge
 		unstable.google-play-music-desktop-player
     unstable.dropbox
 

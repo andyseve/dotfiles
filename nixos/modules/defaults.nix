@@ -35,10 +35,8 @@
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
-      inconsolata
       fira-code
-      fira-code-symbols
-      (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "Inconsolata" ]; })
+      (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" ]; })
       lohit-fonts.marathi
     ];
   };
@@ -59,9 +57,7 @@
   };
 
 	# NixPkgs Configuration
-	nixpkgs.config = {
-		allowUnfree = true;
-	};
+	nixpkgs.config.allowUnfree = true;
 
 	nixpkgs.overlays = import ../overlays;
 
