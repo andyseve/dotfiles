@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 29 Sep 2021 05:51:52 PM EDT
+-- Last Modified: Fri 12 Nov 2021 12:16:25 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -810,7 +810,7 @@ xmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
 xmobarCreator (XMonad.S sid) = do
     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
     XMonad.trace (show t ++ ": XMonad xmobarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("~/.config/xmobar/xmobar -x " ++ show sid)
+    XMonad.Util.Run.spawnPipe ("~/.cabal/bin/xmobar -x " ++ show sid)
 
 xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
 xmobarDestroyer = do

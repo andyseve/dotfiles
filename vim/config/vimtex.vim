@@ -2,9 +2,7 @@
 let g:vimtex_enabled = 1
 let g:vimtex_view_automatic = 1
 let g:vimtex_toc_enabled = 1
-let g:vimtex_toc_depth = 1
 let g:vimtex_toc_show_included_files = 1
-let g:vimtex_toc_fold = 1
 
 let g:vimtex_cache_root = '/tmp/vimtex'
 
@@ -14,7 +12,7 @@ let g:lmap.l = {
 			\}
 
 " SumatraPDF config for windows
-if has("win64") || has("win32")
+if g:is_win
 	let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 	let g:vimtex_view_general_options
 				\ = ' -forward-search @tex @line @pdf'
@@ -29,6 +27,30 @@ else
 	let g:vimtex_view_method = 'zathura'
 endif
 
-if has("nvim")
-	let g:vimtex_compiler_progname = 'nvr'
-endif
+" Table of contents
+let g:vimtex_toc_config = {
+			\'name'           : 'LaTeX TOC',
+			\'mode'           : 2,
+			\'fold_enable'    : 1,
+			\'show_help'      : 0,
+			\'refresh_always' : 0
+			\}
+
+let g:vimtex_toc_config.layer_status = {
+			\'content' : '1',
+			\'label'   : '1',
+			\'todo'    : '0',
+			\'include' : '0'
+			\}
+
+let g:vimtex_toc_config.layer_keys = {
+			\'content' : 'C',
+			\'label'   : 'L',
+			\'todo'    : 'T',
+			\'include' : 'I'
+			\}
+
+augroup VimTex
+	autocmd!
+	autocmd BufWritePost *.tex call vimtex#toc#refresh()
+augroup END
