@@ -1,5 +1,5 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Wed 29 Sep 2021 05:05:33 PM EDT
+-- Last Modified: Fri 10 Dec 2021 06:58:03 AM EST
 -- Author: Anish Sevekari
 
 import Xmobar
@@ -7,7 +7,7 @@ import System.Environment
 
 config :: Config
 config = defaultConfig { 
-				 font    = "xft:Fira Code:style=Bold:size=12:antialias=true"
+				 font    = "xft:FiraMono Nerd Font:style=Bold:size=12:antialias=true"
 			 , additionalFonts = [
 													"xft:FiraMono Nerd Font:style=Bold:size=10:antialias=true"
 													-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
