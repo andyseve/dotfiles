@@ -94,6 +94,7 @@
 		neofetch
 		tree
 		tmux screen
+    pdftk
 
 		# Encryption
 		gnupg
