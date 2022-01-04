@@ -26,6 +26,7 @@
 	# Timezone settings
 	time.timeZone = "America/New_York";
 	time.hardwareClockInLocalTime = true;
+  services.localtime.enable = true;
 
   # Defining mount points
 	# Mounting Home
