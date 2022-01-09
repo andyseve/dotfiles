@@ -1,17 +1,9 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 30 Sep 2021 11:32:56 PM EDT
+-- Last Modified: Sat Jan  8 15:34:10 2022
 -- # nvim-tree config
 
-vim.g.nvim_tree_ignore = { '.git', 'node_modules', 'dist' }
-vim.g.nvim_tree_auto_open = 1
-vim.g.nvim_tree_auto_close = 1
-vim.g.nvim_tree_disable_netrw = 1
-vim.g.nvim_tree_hijack_netrw = 1
-vim.g.nvim_tree_follow = 1
-vim.g.nvim_tree_tab_open = 1
-vim.g.nvim_tree_lint_lsp = 1
-vim.g.nvim_tree_gitignore = 1
-vim.g.nvim_tree_update_cwd = 1
+local nvim_tree = require('nvim-tree') 
+
 vim.g.nvim_tree_show_icons = {
 	git = 1,
 	folders = 1,
@@ -19,8 +11,7 @@ vim.g.nvim_tree_show_icons = {
   folder_arrows = 1
 }
 vim.g.nvim_tree_group_empty = 1
-vim.g.nvim_tree_lsp_diagnostics = 1
-vim.g.nvim_tree_hijack_cursor = 1
+vim.g.nvim_tree_root_folder_modifier = table.concat { ":t:gs?$?/..", string.rep(" ", 1000), "?:gs?^??" }
 vim.g.nvim_tree_window_picker_exclude = {
   filetype = {
     "packer",
@@ -31,20 +22,26 @@ vim.g.nvim_tree_window_picker_exclude = {
 		'terminal'
 	}
 }
-
 vim.g.nvim_tree_icons = {
-	default = 'asd',
-	git= {
-		unstaged = "✗",
-		staged = "✓",
-		unmerged = "",
-		renamed = "➜",
-		untracked = "★"
-	},
-	folder = {
-		default = "",
-		open = "ﱮ"
-	}
+   default = "",
+   symlink = "",
+   git = {
+      deleted = "",
+      ignored = "◌",
+      renamed = "➜",
+      staged = "✓",
+      unmerged = "",
+      unstaged = "✗",
+      untracked = "★",
+   },
+   folder = {
+      default = "",
+      empty = "",
+      empty_open = "",
+      open = "",
+      symlink = "",
+      symlink_open = "",
+   },
 }
 
 vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeToggle<CR>', {
@@ -56,3 +53,63 @@ vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {
 	noremap = true,
 	silent = true
 })
+
+nvim_tree.setup {
+  disable_netrw       = true,
+  hijack_netrw        = true,
+  open_on_setup       = false,
+  ignore_ft_on_setup  = {},
+  auto_close          = false,
+  open_on_tab         = false,
+  hijack_cursor       = false,
+  update_cwd          = false,
+  update_to_buf_dir   = {
+    enable = true,
+    auto_open = true,
+  },
+  diagnostics = {
+    enable = false,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    }
+  },
+  update_focused_file = {
+    enable      = false,
+    update_cwd  = false,
+    ignore_list = {}
+  },
+  system_open = {
+    cmd  = nil,
+    args = {}
+  },
+  filters = {
+    dotfiles = true,
+    custom = {}
+  },
+  git = {
+    enable = true,
+    ignore = true,
+    timeout = 500,
+  },
+  view = {
+    width = 30,
+    height = 30,
+    hide_root_folder = false,
+    side = 'left',
+    auto_resize = false,
+    mappings = {
+      custom_only = false,
+      list = {}
+    },
+    number = false,
+    relativenumber = false,
+    signcolumn = "yes"
+  },
+  trash = {
+    cmd = "trash",
+    require_confirm = true
+  }
+}

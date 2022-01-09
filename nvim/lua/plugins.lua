@@ -17,13 +17,15 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
 	use { 'wbthomason/packer.nvim' }
 
+	use { 'kyazdani42/nvim-web-devicons' }
+
 	-- lsp and autocomplete
 	use {
 		'neovim/nvim-lspconfig', 
 		config = [[require('config.lsp')]],
 		requires = 'onsails/lspkind-nvim'
 	}
-	--use { 'hrsh7th/nvim-compe', config = [[require('config.compe')]] }
+
 	use {
 		'hrsh7th/nvim-cmp',
 		config = [[require('config.cmp')]],
@@ -38,7 +40,11 @@ return require('packer').startup(function()
 		}
 	}
 	use 'SirVer/ultisnips'
-	--use { 'neoclide/coc.nvim', branch = 'release' }
+
+	--use {
+		--'neoclide/coc.nvim',
+		--branch = 'release'
+	--}
 
 	-- key guide
 	-- use hecal3/vim-leader-guide 
@@ -70,17 +76,21 @@ return require('packer').startup(function()
   use { 'rcarriga/nvim-notify', config = [[require('config.notify')]] }
 
 	-- colorful status line and theme
-	use 'vim-airline/vim-airline-themes'
-	use 'vim-airline/vim-airline'
+	--use 'vim-airline/vim-airline-themes'
+	--use 'vim-airline/vim-airline'
 
-	use 'akinsho/nvim-bufferline.lua'
+	use {
+		'akinsho/nvim-bufferline.lua',
+		after = "nvim-web-devicons",
+		--config = [[require('config.bufferline')]]
+	}
 
 	-- file explorer
 	-- use 'preservim/nerdtree'
 	-- use 'Xuyuanp/nerdtree-git-plugin'
 	use {
 		'kyazdani42/nvim-tree.lua',
-		requires = "kyazdani42/nvim-web-devicons",
+		after = "nvim-web-devicons",
 		config = [[require('config.nvim-tree')]]
 	}
 
@@ -97,5 +107,22 @@ return require('packer').startup(function()
 	use 'scrooloose/nerdcommenter'
 	use 'godlygeek/tabular'
 	use 'junegunn/fzf.vim'
+
+	use {
+		'feline-nvim/feline.nvim',
+		after = "nvim-web-devicons",
+		config = [[require('config.feline')]]
+	}
+
+	use {
+		'akinsho/bufferline.nvim',
+		after = "nvim-web-devicons",
+		config = [[require('config.bufferline')]]
+	}
+	
+	use {
+      "ray-x/lsp_signature.nvim",
+      after = "nvim-lspconfig",
+   }
 
 end)

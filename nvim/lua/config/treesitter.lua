@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 01 Oct 2021 01:58:53 AM EDT
+-- Last Modified: Sat Jan  8 15:40:01 2022
 -- # treesitter settings
 
 require('nvim-treesitter.configs').setup({
