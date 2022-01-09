@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 18 Aug 2021 02:30:11 AM EDT
+# Last Edited: Sat Dec 11 12:02:44 2021
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -26,7 +26,7 @@ zinit light srijanshetty/zsh-pip-completion
 zinit ice atclone"./install.py"; zinit light wting/autojump
 zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure 
 zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
-zinit light zdharma/fast-syntax-highlighting
+zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
 zinit light spwhitt/nix-zsh-completions 
 zinit light chisui/zsh-nix-shell

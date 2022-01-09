@@ -1,3 +1,4 @@
+#!/bin/bash
 #!/run/current-system/sw/bin/bash
 
 while getopts ":u:p:g:l:h" opt; do

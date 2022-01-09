@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 30 Sep 2021 05:07:24 PM EDT
+% Last Modified: Thu Jan  6 08:09:36 2022
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 \usepackage[utf8]{inputenc}
@@ -72,8 +72,11 @@
 	% Configures others manually since those occurrences are rare.
 	% Might have to branch this in future
 
-	\pagestyle{fancy}{%
-		\fancyhead[L]{\thetitle}
+	\renewcommand{\sectionmark}[1]{\markboth{\thesection.\ #1}{}}
+
+	\fancypagestyle{fancy}{%
+		\fancyhf{}
+		\fancyhead[L]{\leftmark}
 		\fancyhead[C]{}
 		\ifanishsauthblk
 			\fancyhead[R]{}
@@ -84,10 +87,11 @@
 		\fancyfoot[C]{\thepage}
 	}
 	\fancypagestyle{plain}{%
-		\fancyhead{}
+		\fancyhf{}
 		\fancyfoot[C]{\thepage}
 		\renewcommand{\headrulewidth}{0pt}
 	}
+	\pagestyle{fancy}
 \fi
 
 % Better citations
@@ -370,14 +374,17 @@
 	% Copied from mathtools documentation
 	% We define another local function called given which places this symbol whenever needed.
 	\providecommand\st{}
-	\newcommand\stSymbol[1][]{\nonscript\:#1\vert\allowbreak\nonscript\:\mathopen{}}
+	\newcommand\stSymbol[1][]{%
+		\nonscript\:#1\vert
+		\allowbreak
+		\nonscript\:
+		\mathopen{}
+	}
 	% Sets
-	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st\stSymbol[\delimsize]#1}
+	\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1}
 	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \st #2}
 	% Probability 
-	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st\stSymbol#1}
-		%\renewcommand\st{\stSymbol[\delimsize]}
-	%#1}
+	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
 	\DeclarePairedDelimiterStarXPP\prob[2]{\underset{#1}{\mathbb{P}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
 	% Expectation
 	\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}

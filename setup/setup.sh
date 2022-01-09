@@ -1,4 +1,4 @@
-## Last Modified: Wed 08 Sep 2021 09:30:06 PM EDT
+## Last Modified: Sat Dec 11 12:00:18 2021
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -112,7 +112,7 @@ if check zsh; then
 		git pull origin master
 	else
 		cd "$ZINIT_HOME"
-		git clone https://github.com/zdharma/zinit.git bin
+		git clone https://github.com/zdharma-continuum/zinit.git bin
 	fi
 else
 	nope zsh
