@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan  8 15:34:10 2022
+-- Last Modified: Tue 11 Jan 2022 04:13:35 PM EST
 -- # nvim-tree config
 
 local nvim_tree = require('nvim-tree') 
@@ -44,7 +44,7 @@ vim.g.nvim_tree_icons = {
    },
 }
 
-vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeToggle<CR>', {
+vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeFocus<CR>', {
 	noremap = true,
 	silent = true
 })

@@ -1,6 +1,6 @@
-" # Neovim Config file
+" # Neovim Config Init file
 " Author: Anish Sevekari
-" Last Modified: Fri 01 Oct 2021 12:18:17 AM EDT
+" Last Updated: Mon 10 Jan 2022 06:04:32 AM EST
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 

@@ -1,11 +1,11 @@
-" # Ultisnips Configuration  --Disabled in favor of COC                  
-
+" # Ultisnips Configuration
 let g:UltiSnipsEnableSnipMate = 0
 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsListSnippets="<c-l>"
+let g:UltiSnipsExpandTrigger='<Plug>(ultisnips_expand)'
+let g:UltiSnipsJumpForwardTrigger='<Plug>(ultisnips_jump_forward)'
+let g:UltiSnipsJumpBackwardTrigger='<Plug>(ultisnips_jump_backward)'
+let g:UltiSnipsListSnippets='<c-x><c-s>'
+let g:UltiSnipsRemoveSelectModeMappings = 0
 
 let g:UltiSnipsSnippetDirectories=["ultisnips"]
 let g:UltiSnipsEditSplit="horizontal"

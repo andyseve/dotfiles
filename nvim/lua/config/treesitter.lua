@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan  8 15:40:01 2022
+-- Last Modified: Tue 11 Jan 2022 04:21:48 PM EST
 -- # treesitter settings
 
 require('nvim-treesitter.configs').setup({
@@ -8,5 +8,6 @@ require('nvim-treesitter.configs').setup({
 	highlight = {
 		enable = true,
 		disable = {},
+		use_languagetree = true
 	},
 })
