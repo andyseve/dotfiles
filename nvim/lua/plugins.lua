@@ -1,6 +1,6 @@
--- Plugin config file using packer
 -- Author: Anish Sevekari
--- Last Modified: Tue 11 Jan 2022 05:29:21 PM EST
+-- Last Modified: Wed 12 Jan 2022 08:48:47 AM EST
+-- Plugin config file using packer
 
 local utils = require("core.utils")
 local plugins = require("core.config").plugins
@@ -124,7 +124,7 @@ return require('packer').startup({
 
 		-- themes
 		use {
-			'altercation/vim-colors-solarized',
+			'ishan9299/nvim-solarized-lua',
 			disable = not plugins.solarized
 		}
 
@@ -160,7 +160,10 @@ return require('packer').startup({
 		use {
 			"nvim-telescope/telescope.nvim",
 			disable = not plugins.telescope,
-			cmd = "Telescope"
+			cmd = "Telescope",
+			requires = {
+				'nvim-lua/plenary.nvim'
+			}
 		}
 
 		use {
@@ -172,14 +175,24 @@ return require('packer').startup({
 		use {
 			"lewis6991/gitsigns.nvim",
 			disable = not plugins.gitsigns,
+			requires = {
+				'nvim-lua/plenary.nvim'
+			}
 		}
 
 		-- pairs
-		use 'jiangmiao/auto-pairs'
+		use {
+			'jiangmiao/auto-pairs'
+		}
 
 		use {
 			'andymass/vim-matchup',
 			disable = not plugins.vim_matchup
+		}
+
+		use {
+			'tpope/vim-surround',
+			disable = not plugins.vim_surround
 		}
 
 		-- latex
@@ -215,7 +228,7 @@ return require('packer').startup({
 	config = {
 		display = {
 			open_fn = function()
-				return require('packer.util').float({ border='single' })
+				return require('packer.util').float({ border='rounded' })
 			end
 		},
 		profile = {

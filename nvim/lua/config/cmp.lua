@@ -1,6 +1,6 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 11 Jan 2022 05:46:00 PM EST
--- # nvim-cmp settings
+-- Last Modified: Wed 12 Jan 2022 09:45:09 AM EST
+-- nvim-cmp settings
 
 local cmp = require('cmp')
 local lspkind = require('lspkind')
@@ -53,7 +53,9 @@ cmp.setup({
 				end
 			end,
 			i = function(fallback)
-				if cmp.visible() then
+				if vim.fn["UltiSnips#CanExpandSnippet"]() == 1 then
+					vim.api.nvim_feedkeys(t("<Plug>(ultisnips_expand)"), 'm', true)
+				elseif cmp.visible() then
 					cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
 				elseif vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
 					vim.api.nvim_feedkeys(t("<Plug>(ultisnips_jump_forward)"), 'm', true)
@@ -134,13 +136,6 @@ cmp.setup({
 		['<C-e>'] = cmp.mapping({ i = cmp.mapping.close(), c = cmp.mapping.close() }),
 		['<CR>'] = cmp.mapping({
 			i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-			c = function(fallback)
-				if cmp.visible() then
-					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-				else
-					fallback()
-				end
-			end
 		}),
 	}
 })
@@ -155,7 +150,6 @@ cmp.setup.cmdline('/', {
 
 -- Use cmdline & path source for ':'.
 cmp.setup.cmdline(':', {
-	completion = { autocomplete = false },
 	sources = {
 		{ name = 'path' },
 		{ name = 'cmdline' }

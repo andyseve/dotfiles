@@ -1,3 +1,5 @@
+-- Author: Anish Sevekari
+-- Last Modified: Wed 12 Jan 2022 08:49:19 AM EST
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -36,6 +38,7 @@ config.plugins = {
 	-- pairs
 	nvim_autopairs              = true,
 	vim_matchup                 = true,
+	vim_surround                = true,
 
 	-- filetype specifics
 	tex                         = true,

@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Tue 11 Jan 2022 02:25:49 PM EST
+" Last Updated: Wed 12 Jan 2022 08:28:05 AM EST
 
 " Options
 
@@ -53,6 +53,7 @@ set shortmess+=c               " Messages should be short
 set whichwrap+=<,>,h,l,[,]     " Wraping around the lines
 set splitbelow splitright      " Window split settings
 set completeopt=menu,menuone,noselect
+set termguicolors              " Terminal Color settings
 
 " Ignore certain files and folders when globing
 set wildignore+=*.o,*.obj,*.bin,*.dll,*.exe
@@ -86,6 +87,7 @@ set smartcase  " Do smart case matching
 " # Fold Settings                                                           {{{
 set foldenable
 set foldlevel=0
+set foldmethod=marker
 "                                                                           }}}
 
 " # Back up directories                                                     {{{

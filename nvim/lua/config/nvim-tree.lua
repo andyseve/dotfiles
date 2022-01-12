@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 11 Jan 2022 04:13:35 PM EST
+-- Last Modified: Wed 12 Jan 2022 08:40:50 AM EST
 -- # nvim-tree config
 
 local nvim_tree = require('nvim-tree') 
@@ -23,25 +23,25 @@ vim.g.nvim_tree_window_picker_exclude = {
 	}
 }
 vim.g.nvim_tree_icons = {
-   default = "",
-   symlink = "",
-   git = {
-      deleted = "",
-      ignored = "◌",
-      renamed = "➜",
-      staged = "✓",
-      unmerged = "",
-      unstaged = "✗",
-      untracked = "★",
-   },
-   folder = {
-      default = "",
-      empty = "",
-      empty_open = "",
-      open = "",
-      symlink = "",
-      symlink_open = "",
-   },
+	default = "",
+	symlink = "",
+	git = {
+		deleted   = "",
+		ignored   = "◌",
+		renamed   = "➜",
+		staged    = "✓",
+		unmerged  = "",
+		unstaged  = "✗",
+		untracked = "★",
+	},
+	folder = {
+		default      = "",
+		open         = "",
+		empty        = "",
+		empty_open   = "",
+		symlink      = "",
+		symlink_open = "",
+	},
 }
 
 vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeFocus<CR>', {
