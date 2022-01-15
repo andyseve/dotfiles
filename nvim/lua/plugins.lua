@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 08:48:47 AM EST
+-- Last Modified: Sat Jan 15 16:22:18 2022
 -- Plugin config file using packer
 
 local utils = require("core.utils")
@@ -220,6 +220,12 @@ return require('packer').startup({
 		use {
 			'godlygeek/tabular',
 			disable = not plugins.tabular
+		}
+
+		use {
+			'Pocco81/TrueZen.nvim',
+			disable = not plugins.true_zen,
+			config = [[require('config.true_zen')]]
 		}
 
 

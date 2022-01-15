@@ -1,7 +1,10 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 09:04:50 AM EST
+-- Last Modified: Sat Jan 15 16:51:57 2022
 -- Telescope Plugin Config
 
-local feline = require('feline')
+local present, feline = pcall(require,'feline')
 
+if not present then
+	return
+end
 

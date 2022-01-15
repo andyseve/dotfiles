@@ -1,8 +1,12 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 08:40:50 AM EST
+-- Last Modified: Sat Jan 15 16:47:24 2022
 -- # nvim-tree config
 
-local nvim_tree = require('nvim-tree') 
+local present, nvim_tree = pcall(require,'nvim-tree') 
+
+if not present then
+	return
+end
 
 vim.g.nvim_tree_show_icons = {
 	git = 1,

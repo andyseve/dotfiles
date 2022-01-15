@@ -1,8 +1,12 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 09:20:51 AM EST
+-- Last Modified: Sat Jan 15 16:53:31 2022
 -- Telescope Plugin Config
 
-local telescope = require('telescope')
+local present, telescope = pcall(require,'telescope')
+
+if not present then
+	return
+end
 
 telescope.setup {
 	defaults = {

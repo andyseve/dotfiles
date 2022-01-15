@@ -1,13 +1,27 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 11 Jan 2022 04:21:48 PM EST
+-- Last Modified: Sat Jan 15 16:34:53 2022
 -- # treesitter settings
 
-require('nvim-treesitter.configs').setup({
-	ensure_installed = { 'python', 'cpp', 'haskell', 'lua', 'vim' },
+local present, ts_configs = pcall(require, 'nvim-treesitter.configs')
+
+if not present then
+	return
+end
+
+ts_configs.setup({
+	ensure_installed = {
+		'python',
+		'cpp',
+		'haskell',
+		'lua',
+		'vim'
+	},
+
 	ignore_install = {},
 	highlight = {
 		enable = true,
 		disable = {},
 		use_languagetree = true
 	},
+
 })

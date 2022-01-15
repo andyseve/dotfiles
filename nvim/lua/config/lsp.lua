@@ -1,4 +1,12 @@
-local lsp = require('lspconfig')
+-- Author: Anish Sevekari
+-- Last Modified: Sat Jan 15 16:41:34 2022
+-- lsp config
+
+local present, lsp = pcall(require,'lspconfig')
+
+if not present then
+	return
+end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)

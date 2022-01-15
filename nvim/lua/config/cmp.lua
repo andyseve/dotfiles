@@ -1,9 +1,13 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 09:45:09 AM EST
+-- Last Modified: Sat Jan 15 16:38:33 2022
 -- nvim-cmp settings
 
-local cmp = require('cmp')
-local lspkind = require('lspkind')
+local cmp_present, cmp = pcall(require,'cmp')
+local lspkind_present, lspkind = pcall(require,'lspkind')
+
+if not cmp_present then
+	return
+end
 
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str,true,true,true)
@@ -18,7 +22,9 @@ cmp.setup({
 
 	formatting = {
 		format = function(entry, vim_item)
-			vim_item.kind = lspkind.presets.default[vim_item.kind] .. ' ' .. vim_item.kind
+			if lspkind_present then
+				vim_item.kind = lspkind.presets.default[vim_item.kind] .. ' ' .. vim_item.kind
+			end
 
 			vim_item.menu = ({
 				nvim_lsp = "[LSP]",

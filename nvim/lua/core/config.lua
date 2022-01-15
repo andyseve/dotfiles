@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 12 Jan 2022 08:49:19 AM EST
+-- Last Modified: Sat Jan 15 16:16:50 2022
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -25,7 +25,7 @@ config.plugins = {
 
 	-- themes
 	solarized                   = true,
-	onedark                     = true,
+	onedark                     = false,
 
 	-- search and files
 	telescope                   = true,

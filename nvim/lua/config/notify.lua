@@ -1,8 +1,12 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 07 Oct 2021 02:44:47 AM EDT
+-- Last Modified: Sat Jan 15 16:48:27 2022
 -- # nvim-notify settings
 
-local notify = require('notify')
+local present, notify = pcall(require,'notify')
+
+if not present then
+	return
+end
 
 notify.setup({
 	stages = "fade_in_slide_out",
