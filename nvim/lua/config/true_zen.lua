@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:45:58 2022
+-- Last Modified: Fri 21 Jan 2022 11:12:22 AM EST
 -- # zen-mode settings
 
 local present, true_zen = pcall(require, 'true-zen')
@@ -82,8 +82,8 @@ true_zen.setup({
 })
 
 vim.cmd([[
-	augroup auto_ze
-		autocmd
-		autocmd FileType Markdown ZenMod
-	augroup EN
+	augroup auto_zen
+		autocmd!
+		autocmd FileType Markdown TZAtaraxis
+	augroup END
 ]])
