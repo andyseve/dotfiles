@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 21 Jan 2022 12:14:34 PM EST
+-- Last Modified: Fri 21 Jan 2022 12:16:02 PM EST
 -- Plugin config file using packer
 
 local utils = require('core.utils')
