@@ -60,7 +60,7 @@
 		alacritty rxvt_unicode-with-plugins
     steam
     discord unstable.zoom-us slack
-		unstable.google-play-music-desktop-player
+		unstable.ytmdesktop
     unstable.dropbox
 
     # Helper CLI tools
