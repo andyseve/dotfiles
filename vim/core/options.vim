@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Wed 12 Jan 2022 08:28:05 AM EST
+" Last Updated: Tue 01 Feb 2022 07:41:57 PM EST
 
 " Options
 
@@ -9,8 +9,8 @@ set encoding=utf-8
 " # Symtax Settings                                                         {{{
 syntax enable
 set synmaxcol=0 " Maximum syntax coloring column
-"                                                                           }}}
 
+"                                                                           }}}
 " # Indent Settings                                                         {{{
 filetype plugin indent on
 set autoindent
@@ -22,10 +22,8 @@ set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 set noexpandtab
+
 "                                                                           }}}
-
-
-
 " # General Settings                                                        {{{
 set backspace=indent,eol,start " Backspace settings
 set ruler                      " Display cursor position
@@ -66,16 +64,16 @@ set wildignorecase  " ignore file and dir name cases in cmd-completion
 
 " Completion
 set complete+=kspell
-"                                                                           }}}
 
+"                                                                           }}}
 " # Gui Settings                                                            {{{
 if has('gui_running')
 	set guioptions-=L " Remove left scrollbar
 	set guioptions-=T " Remove Toolbar
 	set guioptions-=m " Remove Menubar
 endif
-"                                                                           }}}
 
+"                                                                           }}}
 " # Search Settings                                                         {{{
 set hlsearch   " Highlight searches
 set incsearch  " Incremental search (As characters are entered)
@@ -83,24 +81,29 @@ set ignorecase " Do case insensitive matching
 set smartcase  " Do smart case matching
 
 "                                                                           }}}
-
 " # Fold Settings                                                           {{{
 set foldenable
 set foldlevel=0
 set foldmethod=marker
-"                                                                           }}}
 
+"                                                                           }}}
 " # Back up directories                                                     {{{
-if g:is_win
-	set undodir=~/vimfiles/.undo//
-	set backupdir=~/vimfiles/.backup//
-	set directory=~/vimfiles/.swp//
-	set viewdir=~/vimfiles/.view//
+if g:is_nvim
+	set undodir=~/.local/share/nvim/undo
+	set backupdir=~/.local/share/nvim/backup
+	set directory=~/.local/share/nvim/swp
+	set viewdir=~/.local/share/nvim/view
+elseif g:is_win
+	set undodir=~/vimfiles/.undo
+	set backupdir=~/vimfiles/.backup
+	set directory=~/vimfiles/.swp
+	set viewdir=~/vimfiles/.view
 else
-	set undodir=~/.vim/.undo//,/tmp//
-	set backupdir=~/.vim/.backup//,/tmp//
-	set directory=~/.vim/.swp//,/tmp//
-	set viewdir=~/.vim/.view//,/tmp//
+	set undodir=~/.vim/.undo
+	set backupdir=~/.vim/.backup
+	set directory=~/.vim/.swp
+	set viewdir=~/.vim/.view
 endif
+
 "                                                                           }}}
 
