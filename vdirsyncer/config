@@ -29,13 +29,13 @@ fileext = ".ics"
 [storage google_calendar]
 type = "google_calendar"
 token_file = "~/.config/vdirsyncer/google_calendar"
-client_id.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_id", "api/google/andyseve"]
-client_secret.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_secret", "api/google/andyseve"]
+client_id.fetch = ["command", "getpass", "-l", "client_id", "api/google/andyseve"]
+client_secret.fetch = ["command", "getpass", "-l", "client_secret", "api/google/andyseve"]
 
 [storage google_contacts]
 type = "google_contacts"
 token_file = "~/.config/vdirsyncer/google_contacts"
-client_id.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_id", "api/google/andyseve"]
-client_secret.fetch = ["command", "~/dotfiles/bin/getpass", "-l", "client_secret", "api/google/andyseve"]
+client_id.fetch = ["command", "getpass", "-l", "client_id", "api/google/andyseve"]
+client_secret.fetch = ["command", "getpass", "-l", "client_secret", "api/google/andyseve"]
 
 # vim:ft=cfg

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 21 Jan 2022 11:07:00 AM EST
+-- Last Modified: Wed 26 Jan 2022 12:43:44 AM EST
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -8,7 +8,7 @@ config.plugins = {
 	bufferline                  = true,
 	feline                      = true,
 	notify                      = false,
-	blankline                    = true,
+	blankline                   = true,
 
 	-- autocomplete and linting
 	coc                         = false,
@@ -47,7 +47,6 @@ config.plugins = {
 	-- others
 	true_zen                    = true,
 	tabular                     = true,
-	indent_blankline            = true,
 	fast_fold                   = true
 }
 

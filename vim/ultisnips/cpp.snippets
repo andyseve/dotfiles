@@ -756,8 +756,77 @@ snippet segtree_struct "Segment tree stuct" b
  */
 
 struct segtree{
-	struct node{semi built seg tree}
-}
+	struct node{
+		int val = 0;
+
+		node() {};
+		void modify(int v){
+			val = v;
+		}
+		void unite(const node &a, const node &b) {
+			val = a.val + b.val;
+		}
+	};
+
+	node unite(const node &a, const node &b) const {
+		node ret;
+		ret.unite(a,b);
+		return ret;
+	}
+
+	int n;
+	vector<node> tree;
+
+	LCA(int n): n(n), tree(n << 2, node()) {}
+
+	inline void pull(int p) {
+		tree[p].unite(tree[p << 1], tree[(p << 1) + 1]);
+	}
+
+	void build(int p, int l, int r, const vector<int> &v) {
+		// build range l <= x <= r
+		if( l == r - 1 ) {
+			if(l < szof(v)) tree[p].modify(v[l]);
+			return;
+		}
+		int m = (l + r) >> 1;
+		build(p << 1, l, m, v);
+		build((p << 1) + 1, m, r, v);
+		pull(p);
+	}
+
+	//query and modify need to be top down to ensure updates go through.	
+
+	void modify(int p, int l, int r, int pos, int v) {
+		// modifies range l <= x < r
+		if(pos <= l && r <= pos + 1) {
+			tree[p].modify(v);
+			return;
+		}
+		int m = (l + r) >> 1;
+		if(pos < m) modify(p << 1, l, m, pos, v);
+		if(pos + 1 > m) modify((p << 1) + 1, m, r, pos, v);
+		pull(p);
+	}
+
+	node query(int p, int l, int r, int ll, int rr) {
+		// query range l <= x < r
+		if(ll <= l && r <= rr) return tree[p];
+		int m = (l + r) >> 1;
+		node ret;
+		if(ll < m && rr > m) ret = unite(query(p << 1, l, m, ll, rr), query((p << 1) + 1, m, r, ll, rr));
+		else if(ll < m) ret = query(p << 1, l, m, ll, rr);
+		else if(rr > m) ret = query((p << 1) + 1, m, r, ll, rr);
+		pull(p);
+		return ret;
+	}
+
+	inline void build(int p, int l, int r) {build(p,l,r, vector<int>());}
+	inline void build(int l, int r) {build(1,l,r);}
+	inline void modify(int pos, int v) {modify(1,0,n,pos,v);}
+	inline node query(int l, int r) {return query(1,0,n,l,r);}
+	inline node get(int i) {return query(i,i+1);}
+};
 endsnippet
 snippet segtree_struct_lazy "Lazy segment tree struct" b
 /* Segtree struct template + lazy variant
@@ -1125,6 +1194,16 @@ endsnippet
 # # Debug {{{
 snippet debug "basic debug" b
 cout << "debug-------------: " << $1 << endl;
+$0
+endsnippet
+snippet vector_output "vector output" b
+ostream& operator<<(ostream& os, const vector<${1:int}>& v) {
+	ostream& ret = os;
+	ret << "[ ";
+	for(auto it = v.begin(); it != v.end(); ) ret << *it << (++it == v.end() ? "" : ", ");
+	ret << " ]";
+	return ret;
+}
 $0
 endsnippet
 # }}}

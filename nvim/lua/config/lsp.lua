@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:41:34 2022
+-- Last Modified: Wed 26 Jan 2022 12:31:32 AM EST
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
@@ -7,6 +7,7 @@ local present, lsp = pcall(require,'lspconfig')
 if not present then
 	return
 end
+
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
@@ -17,7 +18,9 @@ local on_attach = function(client,bufnr)
 
 	buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 	local msg = string.format("Language server %s started!", client.name)
-	--vim.notify(msg, 'info', {title = 'LSP info'})
+
+	-- mappings
+	local opts = { noremap = true, silent = true }
 end
 
 lsp.ccls.setup {
@@ -41,4 +44,31 @@ local lspkind = require('lspkind')
 lspkind.init({
 	with_text = true,
 	preset = 'default',
+})
+
+-- set lsp symbols (from nvchad - https://github.com/NvChad/NvChad)
+local function lspSymbol(name, icon)
+	local hl = "DiagnosticSign" .. name
+	vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
+end
+
+lspSymbol("Error", "")
+lspSymbol("Info" , "")
+lspSymbol("Hint" , "")
+lspSymbol("Warn" , "")
+
+vim.diagnostic.config {
+	virtual_text = {
+		prefix = "",
+	},
+	signs = true,
+	underline = true,
+	update_in_insert = false,
+}
+
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	border = "single",
+})
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+	border = "single",
 })

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 21 Jan 2022 12:16:02 PM EST
+-- Last Modified: Wed 26 Jan 2022 12:43:58 AM EST
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -68,6 +68,7 @@ return require('packer').startup({
 			'ray-x/lsp_signature.nvim',
 			disable = not plugins.lsp_config,
 			after = 'nvim-lspconfig',
+			config = [[require('config.lsp_signature')]]
 		}
 
 		use {
@@ -146,7 +147,8 @@ return require('packer').startup({
 			disable = not plugins.nvim_tree,
 			after = 'nvim-web-devicons',
 			cmd = {'NvimTreeToggle', 'NvimTreeFocus'},
-			config = [[require('config.nvim-tree')]]
+			config = [[require('config.nvim-tree')]],
+			setup = [[require('setup.nvim-tree')]]
 		}
 
 		use {
@@ -168,6 +170,7 @@ return require('packer').startup({
 			'nvim-telescope/telescope.nvim',
 			disable = not plugins.telescope,
 			cmd = 'Telescope',
+			setup = [[require('setup.telescope')]],
 			requires = {
 				'nvim-lua/plenary.nvim'
 			}
