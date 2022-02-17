@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Tue 01 Feb 2022 07:43:57 PM EST
+" Last Updated: Mon 07 Feb 2022 04:34:10 AM EST
 
 " Options
 
@@ -99,17 +99,10 @@ elseif g:is_win
 	set directory=~/vimfiles/.swp
 	set viewdir=~/vimfiles/.view
 else
-<<<<<<< HEAD
 	set undodir=~/.vim/.undo
 	set backupdir=~/.vim/.backup
 	set directory=~/.vim/.swp
 	set viewdir=~/.vim/.view
-=======
-	set undodir=~/.vim/.undo/,/tmp//
-	set backupdir=~/.vim/.backup/,/tmp//
-	set directory=~/.vim/.swp/,/tmp//
-	set viewdir=~/.vim/.view/,/tmp//
->>>>>>> 08b0896ca1ae478717f46e8de8bf3bdc3a5d60c3
 endif
 
 "                                                                           }}}

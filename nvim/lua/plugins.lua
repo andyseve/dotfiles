@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 26 Jan 2022 12:43:58 AM EST
+-- Last Modified: Thu 17 Feb 2022 03:28:55 AM EST
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -122,7 +122,7 @@ return require('packer').startup({
 		use {
 			'numToStr/Comment.nvim',
 			disable = not plugins.comment,
-			module = 'Comment'
+			config = [[require('Comment').setup()]]
 		}
 
 		use {
