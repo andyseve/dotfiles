@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:47:24 2022
+-- Last Modified: Wed 26 Jan 2022 12:43:55 AM EST
 -- # nvim-tree config
 
 local present, nvim_tree = pcall(require,'nvim-tree') 
@@ -47,16 +47,6 @@ vim.g.nvim_tree_icons = {
 		symlink_open = "",
 	},
 }
-
-vim.api.nvim_set_keymap('n', '<M-\\>', ':NvimTreeFocus<CR>', {
-	noremap = true,
-	silent = true
-})
-
-vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {
-	noremap = true,
-	silent = true
-})
 
 nvim_tree.setup {
   disable_netrw       = true,

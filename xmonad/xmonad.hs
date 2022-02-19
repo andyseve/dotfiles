@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 12 Nov 2021 12:16:25 PM EST
+-- Last Modified: Fri 21 Jan 2022 05:57:40 PM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -154,7 +154,7 @@ myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
-myMusic       = "google-play-music-desktop-player"
+myMusic       = "ytmdesktop"
 
 ----------------------------------------------------------------------------}}}
 -- Scratchpads                                                              {{{
@@ -192,7 +192,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         manageKhal = rightFloating
 
         spawnMusic = myMusic
-        findMusic = className =? "Google Play Music Desktop Player"
+        findMusic = className =? "youtube-music-desktop-app"
         manageMusic = centerFloating
 
 ----------------------------------------------------------------------------}}}

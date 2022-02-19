@@ -1,9 +1,9 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:22:18 2022
+-- Last Modified: Thu 17 Feb 2022 03:28:55 AM EST
 -- Plugin config file using packer
 
-local utils = require("core.utils")
-local plugins = require("core.config").plugins
+local utils = require('core.utils')
+local plugins = require('core.config').plugins
 local fn = vim.fn
 
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
@@ -28,20 +28,21 @@ return require('packer').startup({
 
 		use {
 			'akinsho/nvim-bufferline.lua',
-			after = "nvim-web-devicons",
+			after = 'nvim-web-devicons',
 			config = [[require('config.bufferline')]]
 		}
 
 		use {
 			'feline-nvim/feline.nvim',
-			after = "nvim-web-devicons",
+			after = 'nvim-web-devicons',
 			config = [[require('config.feline')]]
 		}
 
 		use {
-			"lukas-reineke/indent-blankline.nvim",
+			'lukas-reineke/indent-blankline.nvim',
 			disable = not plugins.blankline,
-			event = "BufRead",
+			config = [[require('config.blankline')]],
+			event = 'BufRead'
 		}
 
 		--use 'vim-airline/vim-airline-themes'
@@ -64,9 +65,10 @@ return require('packer').startup({
 		}
 
 		use {
-			"ray-x/lsp_signature.nvim",
+			'ray-x/lsp_signature.nvim',
 			disable = not plugins.lsp_config,
-			after = "nvim-lspconfig",
+			after = 'nvim-lspconfig',
+			config = [[require('config.lsp_signature')]]
 		}
 
 		use {
@@ -80,9 +82,15 @@ return require('packer').startup({
 				'hrsh7th/cmp-buffer',
 				'f3fora/cmp-spell',
 				'hrsh7th/cmp-emoji',
-				'hrsh7th/cmp-nvim-lua',
 				'hrsh7th/cmp-cmdline',
 			}
+		}
+
+		use {
+			'hrsh7th/cmp-nvim-lua',
+			disable = not plugins.nvim_cmp,
+			after = 'nvim-cmp',
+			ft = {'lua'}
 		}
 
 		use {
@@ -95,9 +103,9 @@ return require('packer').startup({
 
 		-- syntax highlight
 		use {
-			"norcalli/nvim-colorizer.lua",
+			'norcalli/nvim-colorizer.lua',
 			disable = not plugins.colorizer,
-			event = "BufRead",
+			event = 'BufRead',
 		}
 
 		use {
@@ -112,9 +120,9 @@ return require('packer').startup({
 		}
 
 		use {
-			"numToStr/Comment.nvim",
+			'numToStr/Comment.nvim',
 			disable = not plugins.comment,
-			module = "Comment"
+			config = [[require('Comment').setup()]]
 		}
 
 		use {
@@ -137,9 +145,10 @@ return require('packer').startup({
 		use {
 			'kyazdani42/nvim-tree.lua',
 			disable = not plugins.nvim_tree,
-			after = "nvim-web-devicons",
-			cmd = {"NvimTreeToggle", "NvimTreeFocus"},
-			config = [[require('config.nvim-tree')]]
+			after = 'nvim-web-devicons',
+			cmd = {'NvimTreeToggle', 'NvimTreeFocus'},
+			config = [[require('config.nvim-tree')]],
+			setup = [[require('setup.nvim-tree')]]
 		}
 
 		use {
@@ -158,9 +167,10 @@ return require('packer').startup({
 		}
 
 		use {
-			"nvim-telescope/telescope.nvim",
+			'nvim-telescope/telescope.nvim',
 			disable = not plugins.telescope,
-			cmd = "Telescope",
+			cmd = 'Telescope',
+			setup = [[require('setup.telescope')]],
 			requires = {
 				'nvim-lua/plenary.nvim'
 			}
@@ -173,11 +183,12 @@ return require('packer').startup({
 		}
 
 		use {
-			"lewis6991/gitsigns.nvim",
+			'lewis6991/gitsigns.nvim',
 			disable = not plugins.gitsigns,
 			requires = {
 				'nvim-lua/plenary.nvim'
-			}
+			},
+			config = [[require('config.gitsigns')]]
 		}
 
 		-- pairs

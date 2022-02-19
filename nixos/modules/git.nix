@@ -9,6 +9,7 @@
     extraGroups = [ "git" ];
     createHome = true;  
 		shell = "${pkgs.git}/bin/git-shell";	
+    group = "git";
   };
 	users.groups.git.members = [ "git" "stranger" ];
 }

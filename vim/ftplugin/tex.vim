@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Fri 01 Oct 2021 01:54:59 AM EDT
+" Last Updated: Mon 07 Feb 2022 04:18:17 AM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -7,6 +7,8 @@
 	set nospell
 	set textwidth=0
 	set colorcolumn=100
+	setlocal dictionary+=~/.config/nvim/spell/math.add
+	setlocal spellfile+=~/.config/nvim/spell/math.add
 " }}}
 " Key bindings and leader guide settings{{{
 	" This is where the fun starts.
