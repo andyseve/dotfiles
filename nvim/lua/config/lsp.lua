@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 26 Jan 2022 12:31:32 AM EST
+-- Last Modified: Wed 23 Feb 2022 03:12:10 PM EST
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
@@ -42,7 +42,7 @@ lsp.ccls.setup {
 local lspkind = require('lspkind')
 
 lspkind.init({
-	with_text = true,
+	mode = 'symbol_text',
 	preset = 'default',
 })
 
