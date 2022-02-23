@@ -1,5 +1,5 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Fri 10 Dec 2021 06:58:03 AM EST
+-- Last Modified: Wed 23 Feb 2022 03:07:23 PM EST
 -- Author: Anish Sevekari
 
 import Xmobar
@@ -41,7 +41,7 @@ config = defaultConfig {
                                   ] 10
 										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
 										,	Run $ Battery [
-											   "--template" , "<acstatus> (<timeleft>)"
+											   "--template" , "<acstatus>"
 											 , "--Low"      , "25"
 											 , "--High"     , "50"
 											 , "--low"      , "#dc322f"
