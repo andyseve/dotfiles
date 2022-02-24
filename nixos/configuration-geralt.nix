@@ -18,6 +18,7 @@
 	# Timezone settings
 	time.timeZone = "America/New_York";
 	time.hardwareClockInLocalTime = true;
+  services.localtime.enable = true;
 
   # Defining mount points
 	# Mounting Storage
@@ -50,6 +51,7 @@
 
   # SSHD
   # Add /etc/nixos/ssh.nix to imports
+  # Note that ssh works without services.openssh.enable
 
   # Firewall.
   networking.firewall.enable = true;

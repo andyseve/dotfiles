@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Mon 07 Feb 2022 04:34:10 AM EST
+" Last Updated: Thu 17 Feb 2022 04:52:39 PM EST
 
 " Options
 

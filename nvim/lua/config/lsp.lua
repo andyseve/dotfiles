@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 18 Feb 2022 05:21:17 PM EST
+-- Last Modified: Thu 24 Feb 2022 09:21:27 AM EST
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
