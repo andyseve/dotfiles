@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 17 Feb 2022 03:27:07 AM EST
+-- Last Modified: Thu 17 Feb 2022 03:42:46 AM EST
 -- # comment settings
 
 local present, comment = pcall(require, 'Comment')
@@ -28,18 +28,18 @@ comment.setup({
 	---@type table
 	toggler = {
 		---Line-comment toggle keymap
-		line = '<leader>cc',
+		line = "<leader>cc",
 		---Block-comment toggle keymap
-		block = '<leader>bc',
+		block = "<leader>bc",
 	},
 
-	---LHS of operator-pending mappings in NORMAL + VISUAL mode
-	---@type table
-	opleader = {
-		---Line-comment keymap
-		line = '<leader>c',
-		---Block-comment keymap
-		block = '<leader>b',
+---LHS of operator-pending mappings in NORMAL + VISUAL mode
+---@type table
+opleader = {
+	---Line-comment keymap
+	line = "<leader>c",
+	---Block-comment keymap
+	block = "<leader>b",
 	},
 
 	---LHS of extra mappings
