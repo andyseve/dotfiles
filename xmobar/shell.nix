@@ -13,6 +13,7 @@ let
   nixPackages = [
     ghc
   ];
+
 in 
   pkgs.mkShell {
     name = "xmobar";
