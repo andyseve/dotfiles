@@ -6,12 +6,16 @@ let g:vimtex_toc_show_included_files = 1
 
 let g:vimtex_cache_root = '/tmp/vimtex'
 
-" LeaderGuide
+let g:tex_flavor = "latex"
+
+
+" LeaderGuide {{{
 let g:lmap.l = {
 			\'name': 'Latex',
 			\}
 
-" SumatraPDF config for windows
+" }}}
+" SumatraPDF config for windows {{{
 if g:is_win
 	let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
 	let g:vimtex_view_general_options
@@ -27,7 +31,8 @@ else
 	let g:vimtex_view_method = 'zathura'
 endif
 
-" Table of contents
+" }}}
+" Table of contents {{{
 let g:vimtex_toc_config = {
 			\'name'           : 'LaTeX TOC',
 			\'mode'           : 2,
@@ -49,6 +54,31 @@ let g:vimtex_toc_config.layer_keys = {
 			\'todo'    : 'T',
 			\'include' : 'I'
 			\}
+
+" }}}
+" Conceal {{{
+let g:vimtex_syntax_conceal = {
+			\ 'accents': 1,
+			\ 'cites': 1,
+			\ 'fancy': 1,
+			\ 'greek': 1,
+			\ 'math_bounds': 1,
+			\ 'math_delimiters': 1,
+			\ 'math_fracs': 0,
+			\ 'math_super_sub': 0,
+			\ 'math_symbols': 0,
+			\ 'sections': 0,
+			\ 'styles': 1,
+			\}
+
+let g:vimtex_syntax_conceal_cites = {
+          \ 'type': 'brackets',
+          \ 'icon': '📖',
+          \ 'verbose': v:true,
+          \}
+
+" }}}
+
 
 augroup VimTex
 	autocmd!

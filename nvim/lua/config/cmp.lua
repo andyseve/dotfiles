@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:38:33 2022
+-- Last Modified: Wed 02 Mar 2022 06:29:47 PM EST
 -- nvim-cmp settings
 
 local cmp_present, cmp = pcall(require,'cmp')
@@ -30,7 +30,8 @@ cmp.setup({
 				nvim_lsp = "[LSP]",
 				nvim_lua = "[Lua]",
 				buffer = "[BUF]",
-				omni = "[omni]"
+				omni = (vim.inspect(vim_item.menu):gsub('%"', "")),
+				ultisnips = "[UltiSnip]"
 			})[entry.source.name]
 
 			return vim_item

@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 07 Feb 2022 04:18:17 AM EST
+" Last Updated: Wed 02 Mar 2022 06:56:54 PM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -7,6 +7,9 @@
 	set nospell
 	set textwidth=0
 	set colorcolumn=100
+
+	setlocal conceallevel=2
+
 	setlocal dictionary+=~/.config/nvim/spell/math.add
 	setlocal spellfile+=~/.config/nvim/spell/math.add
 " }}}
@@ -40,5 +43,6 @@
 		autocmd!
 		autocmd BufWinLeave *.* mkview
 		autocmd BufWinEnter *.* silent loadview
+	augroup END
 " }}}
 " vim:foldmethod=marker:foldlevel=0:nospell
