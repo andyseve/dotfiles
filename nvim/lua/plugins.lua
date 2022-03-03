@@ -1,10 +1,11 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 17 Feb 2022 03:42:50 AM EST
+-- Last Modified: Wed 02 Mar 2022 06:48:06 PM EST
 -- Plugin config file using packer
 
 local utils = require('core.utils')
 local plugins = require('core.config').plugins
 local fn = vim.fn
+local nvim_config = "~/.config/nvim/"
 
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 
@@ -211,7 +212,8 @@ return require('packer').startup({
 		use {
 			'lervag/vimtex',
 			disable = not plugins.tex,
-			ft = {'tex'}
+			config = [[vim.cmd('source ~/.config/nvim/config/vimtex.vim')]],
+			ft = {'tex'},
 		}
 
 		-- nix
