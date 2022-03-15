@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Jan 15 16:34:53 2022
+-- Last Modified: Tue 15 Mar 2022 02:50:52 AM EDT
 -- # treesitter settings
 
 local present, ts_configs = pcall(require, 'nvim-treesitter.configs')
@@ -20,7 +20,7 @@ ts_configs.setup({
 	ignore_install = {},
 	highlight = {
 		enable = true,
-		disable = {},
+		disable = { 'latex' },
 		use_languagetree = true
 	},
 
