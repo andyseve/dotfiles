@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 02 Mar 2022 06:48:06 PM EST
+-- Last Modified: Mon 14 Mar 2022 04:46:25 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -97,6 +97,7 @@ return require('packer').startup({
 		use {
 			'SirVer/ultisnips',
 			disable = not plugins.ultisnips,
+			config = [[vim.cmd('source ~/.config/nvim/config/ultisnips.vim')]],
 			requires = {
 				'quangnguyen30192/cmp-nvim-ultisnips'
 			}

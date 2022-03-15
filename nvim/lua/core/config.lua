@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Feb 19 12:37:07 2022
+-- Last Modified: Tue 15 Mar 2022 03:04:50 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -19,7 +19,7 @@ config.plugins = {
 
 	-- syntax
 	colorizer                   = false,
-	treesitter                  = false,
+	treesitter                  = true,
 	comment                     = true,
 	nerdcommenter               = false,
 
