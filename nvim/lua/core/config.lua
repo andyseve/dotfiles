@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 15 Mar 2022 03:04:50 AM EDT
+-- Last Modified: Tue 15 Mar 2022 03:21:05 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -26,6 +26,7 @@ config.plugins = {
 	-- themes
 	solarized                   = true,
 	onedark                     = true,
+	nvim_base16                 = true,
 
 	-- search and files
 	telescope                   = true,

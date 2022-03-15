@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Mon 14 Mar 2022 04:46:25 AM EDT
+-- Last Modified: Tue 15 Mar 2022 03:15:49 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -142,6 +142,11 @@ return require('packer').startup({
 		use {
 			'navarasu/onedark.nvim',
 			disable = not plugins.onedark
+		}
+
+		use {
+			'RRethy/nvim-base16',
+			disable = not plugins.nvim_base16
 		}
 
 		-- search and files
