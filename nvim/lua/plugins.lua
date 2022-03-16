@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 15 Mar 2022 03:15:49 AM EDT
+-- Last Modified: Wed 16 Mar 2022 12:55:33 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -109,6 +109,7 @@ return require('packer').startup({
 			'norcalli/nvim-colorizer.lua',
 			disable = not plugins.colorizer,
 			event = 'BufRead',
+			config = [[require('colorizer').setup()]]
 		}
 
 		use {
