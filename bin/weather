@@ -1,18 +1,29 @@
 #!/bin/sh
 
-report="$HOME/.local/share/weather_report"
-report_trunc="$HOME/.local/share/weather_report_trunc"
+weather_dir="$HOME/.local/share/weather"
+if [ ! -d $weather_dir ]; then
+	mkdir -p $weather_dir
+fi
+
+report="$weather_dir/full"
+report_trunc="$weather_dir/trunc"
 
 
 getforecast() {
 	ping -q -c 1 1.1.1.1 >/dev/null || exit 1
-	curl -s "wttr.in/$1" > "$report" || exit 1
-	sed -i '$d' "$report"
-	curl -s "wttr.in/$1?format=%t" > "$report_trunc" || exit 1
-	curl -s "wttr.in/$1?format=%C" | tr '[:upper:]' '[:lower:]' >> "$report_trunc" || exit 1
+	curl -s "wttr.in/$1" > "$report" || exit 0
+	curl -s "wttr.in/$1?format=%t" > "$report_trunc" || exit 0
+	curl -s "wttr.in/$1?format=%C" | tr '[:upper:]' '[:lower:]' >> "$report_trunc" || exit 0
 }
 
 showforecast() {
+	case $1 in
+		full )
+			less -R "$report"
+			return
+			;;
+		trunc )
+
 	less -R "$report"
 }
 
@@ -36,28 +47,28 @@ while getopts "hfl:-:" opt; do
 			exit 0
 			;;
 		f )
-			 force="true"
-			 ;;
-		 l )
-			 location="$OPTARG"
-			 rm -f "$report"
-			 rm -f "$report_trunc"
-			 ;;
-		 - )
-			 case $OPTARG in
-				 noshow )
-					 noshow="true"
-					 ;;
-				 help )
-					 help_message
-					 exit 0
-					 ;;
-				 * )
-					 help_message
-					 exit 1
-					 ;;
-			 esac
-			 ;;
+			force="true"
+			;;
+		l )
+			location="$OPTARG"
+			rm -f "$report"
+			rm -f "$report_trunc"
+			;;
+		- )
+			case $OPTARG in
+				noshow )
+					noshow="true"
+					;;
+				help )
+					help_message
+					exit 0
+					;;
+				* )
+					help_message
+					exit 1
+					;;
+			esac
+			;;
 		\? )
 			help_message
 			exit 1
