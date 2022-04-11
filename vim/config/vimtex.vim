@@ -5,8 +5,20 @@ let g:vimtex_toc_enabled = 1
 let g:vimtex_toc_show_included_files = 1
 
 let g:vimtex_cache_root = '/tmp/vimtex'
-
 let g:tex_flavor = "latex"
+let g:vimtex_compiler_latexmk = {
+			\ 'build_dir' : '.vimtex',
+			\ 'callback' : 1,
+			\ 'continuous' : 1,
+			\ 'executable' : 'latexmk',
+			\ 'hooks' : [],
+			\ 'options' : [
+				\   '-verbose',
+				\   '-file-line-error',
+				\   '-synctex=1',
+				\   '-interaction=nonstopmode',
+				\ ],
+				\}
 
 
 " LeaderGuide {{{
