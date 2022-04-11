@@ -1,13 +1,7 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 03 Feb 2022 03:23:45 PM EST
+% Last Modified: Wed 30 Mar 2022 02:31:49 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-\usepackage{nameref}
-\usepackage[backref=page]{hyperref}
-\usepackage{cleveref} % for better referencing systems
-
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
 
 %arguments
@@ -54,6 +48,22 @@
 
 \DeclareOption{authblk}{\anishsauthblktrue}
 \DeclareOption{nonatbib}{\anishsnatbibfalse}
+
+\DeclareOption{onlymicro}{
+	\anishsmicrotrue
+
+	\anishspkgfalse
+	\anishsalgfalse
+	\anishsfancyfalse
+	\anishsthmfalse
+	\anishspagefalse
+	\anishstodofalse
+	\anishsauthblkfalse
+	\anishsnatbibfalse
+	\anishstikzfalse
+	\anishsnicelinksfalse
+	\anishsasyfalse
+}
 
 \ProcessOptions\relax
 
@@ -230,6 +240,12 @@
 
 % Setting up commonly used packages
 \ifanishspkg%
+	\usepackage[utf8]{inputenc}
+	\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
+	\usepackage{nameref}
+	\usepackage[backref=page]{hyperref}
+	\usepackage{cleveref} % for better referencing systems
+
 	\usepackage{listings} % listings allows to convert source codes into latex
 	% TODO Listings support
 	\lstset{basicstyle=\footnotesize\ttfamily,

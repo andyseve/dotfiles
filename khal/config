@@ -17,7 +17,9 @@ show_all_days = true
 timedelta = 2d
 
 [view]
-agenda_event_format = {calendar-color}{cancelled}{start-end-time-style} {title}{description-separator}{description}{repeat-symbol}{reset}
+agenda_event_format = {calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{alarm-symbol}{reset}
+event_format = {calendar-color}{cancelled}{start-end-time-style} {title}{repeat-symbol}{alarm-symbol}{description-separator}{description}{reset}
+blank_line_before_day = true
 
 [locale]
 timeformat = %H:%M
