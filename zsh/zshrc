@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sat Dec 11 12:02:44 2021
+# Last Edited: Thu Apr 14 17:34:07 2022
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -119,7 +119,7 @@ fi
 
 # use colored versions of commands by default
 if check dircolors; then
-	if test -r ~/.zsh/dircolors; then
+	if test -r $ZSH_HOME/dircolors; then
 		eval "$(dircolors -b ~/.zsh/dircolors)"
 	else
 		eval "$(dircolors -b)"
@@ -219,5 +219,10 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# Add local dirs to path -- required for convinience
+path+=($HOME/bin)
+path+=($HOME/.local/bin)
+export PATH
 
 # vim:ft=zsh
