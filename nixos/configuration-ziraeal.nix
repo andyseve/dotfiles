@@ -2,26 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       /etc/nixos/hardware-configuration.nix
-			/etc/nixos/modules/users.nix
-      /etc/nixos/modules/defaults.nix
-      /etc/nixos/modules/desktop.nix
+      ./modules/defaults.nix
+      ./modules/desktop.nix
+      ./modules/users.nix
     ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi = {
-    canTouchEfiVariables = true;
-  };
-
-  boot.plymouth.enable = true;
 
 	# Timezone settings
 	time.timeZone = "America/New_York";
@@ -39,7 +29,7 @@
   fileSystems."/media/storage" =
   { device = "/dev/disk/by-label/storage";
     fsType = "ntfs";
-    options = [ "auto" "rw" "exec" "nosuid" "nofail" "user" "uid=1000" "gid=100" ];
+    options = [ "auto" "rw" "nosuid" "nofail" "user" "uid=1000" "gid=100" "exec" "umask=022"];
   };
 
   networking.hostName = "ziraeal"; # Define your hostname.
@@ -63,8 +53,9 @@
 
   # List services that you want to enable:
 
-  # OpenSSH daemon.
-  # services.openssh.enable = true;
+  # SSHD
+  # Add /etc/nixos/ssh.nix to imports
+  # Note that ssh works without services.openssh.enable
 
   # Firewall.
   networking.firewall.enable = true;
@@ -88,6 +79,6 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.05"; # Did you read the comment?
+  system.stateVersion = "21.11"; # Did you read the comment?
 }
 

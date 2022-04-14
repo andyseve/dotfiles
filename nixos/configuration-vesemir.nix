@@ -15,7 +15,6 @@
       /etc/nixos/modules/ssh.nix
       /etc/nixos/modules/git.nix
       /etc/nixos/modules/taskserver.nix
-      /etc/nixos/modules/factorio-server.nix
     ];
 
   # Use the systemd-boot EFI boot loader.

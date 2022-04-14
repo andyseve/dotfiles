@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat Feb 19 12:37:07 2022
+-- Last Modified: Wed 16 Mar 2022 12:52:19 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -18,14 +18,15 @@ config.plugins = {
 	luasnip                     = false,
 
 	-- syntax
-	colorizer                   = false,
-	treesitter                  = false,
+	colorizer                   = true,
+	treesitter                  = true,
 	comment                     = true,
 	nerdcommenter               = false,
 
 	-- themes
 	solarized                   = true,
 	onedark                     = true,
+	nvim_base16                 = true,
 
 	-- search and files
 	telescope                   = true,

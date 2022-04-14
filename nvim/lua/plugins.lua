@@ -1,10 +1,11 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 17 Feb 2022 03:28:55 AM EST
+-- Last Modified: Wed 16 Mar 2022 12:55:33 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
 local plugins = require('core.config').plugins
 local fn = vim.fn
+local nvim_config = "~/.config/nvim/"
 
 local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 
@@ -96,16 +97,19 @@ return require('packer').startup({
 		use {
 			'SirVer/ultisnips',
 			disable = not plugins.ultisnips,
+			config = [[vim.cmd('source ~/.config/nvim/config/ultisnips.vim')]],
 			requires = {
 				'quangnguyen30192/cmp-nvim-ultisnips'
 			}
 		}
+
 
 		-- syntax highlight
 		use {
 			'norcalli/nvim-colorizer.lua',
 			disable = not plugins.colorizer,
 			event = 'BufRead',
+			config = [[require('colorizer').setup()]]
 		}
 
 		use {
@@ -122,7 +126,7 @@ return require('packer').startup({
 		use {
 			'numToStr/Comment.nvim',
 			disable = not plugins.comment,
-			config = [[require('Comment').setup()]]
+			config = [[require('config.comment')]]
 		}
 
 		use {
@@ -139,6 +143,11 @@ return require('packer').startup({
 		use {
 			'navarasu/onedark.nvim',
 			disable = not plugins.onedark
+		}
+
+		use {
+			'RRethy/nvim-base16',
+			disable = not plugins.nvim_base16
 		}
 
 		-- search and files
@@ -210,7 +219,8 @@ return require('packer').startup({
 		use {
 			'lervag/vimtex',
 			disable = not plugins.tex,
-			ft = {'tex'}
+			config = [[vim.cmd('source ~/.config/nvim/config/vimtex.vim')]],
+			ft = {'tex'},
 		}
 
 		-- nix

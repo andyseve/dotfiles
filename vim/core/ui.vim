@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 15 Aug 2021 01:51:03 AM EDT
+" Last Updated: Wed 16 Mar 2022 02:22:47 AM EDT
 
 " UI and related settings
 
@@ -17,7 +17,7 @@ endif
 " Based on https://github.com/jdhao/nvim-config/blob/nvim-lsp/core/ui.vim 
 let s:anish_theme_dict = {}
 
-function! s:anish_theme_dict.solarized() dict abort
+function! s:anish_theme_dict.solarized_dark() dict abort
 	let g:solarized_termtrans=1
 	let g:solarized_termcolors=16
 	let g:solarized_contrast="normal"
@@ -25,18 +25,20 @@ function! s:anish_theme_dict.solarized() dict abort
 	colorscheme solarized
 endfunction
 
+function! s:anish_theme_dict.base16_solarized_dark() dict abort
+	colorscheme base16-solarized-dark
+endfunction
+
+function! s:anish_theme_dict.base16_solarized_light() dict abort
+	colorscheme base16-solarized-light
+endfunction
+
 function! s:anish_theme_dict.onedark() dict abort
 	colorscheme onedark
 endfunction
 
-function! s:anish_theme_dict.sonokai() dict abort
-	let g:sonokai_enable_italics=1
-	let g:sonokai_better_performance=1
-	colorscheme sonokai
-endfunction
-
-let s:anish_candidate_theme = ['solarized', 'onedark', 'sonokai']
-let s:anish_theme = 'solarized'
+let s:anish_candidate_theme = ['solarized_dark', 'base16_solarized_dark', 'onedark']
+let s:anish_theme = 'base16_solarized_dark'
 
 let s:anish_colorscheme_func = printf('s:anish_theme_dict.%s()', s:anish_theme)
 if has_key(s:anish_theme_dict, s:anish_theme)

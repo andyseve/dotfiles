@@ -1,13 +1,7 @@
 \ProvidesPackage{anishs}
-% Last Modified: Thu 03 Feb 2022 03:23:45 PM EST
+% Last Modified: Tue 12 Apr 2022 02:29:14 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-\usepackage{nameref}
-\usepackage[backref=page]{hyperref}
-\usepackage{cleveref} % for better referencing systems
-
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
 
 %arguments
@@ -55,7 +49,65 @@
 \DeclareOption{authblk}{\anishsauthblktrue}
 \DeclareOption{nonatbib}{\anishsnatbibfalse}
 
+\DeclareOption{onlymicro}{
+	\anishsmicrotrue
+
+	\anishspkgfalse
+	\anishsalgfalse
+	\anishsfancyfalse
+	\anishsthmfalse
+	\anishspagefalse
+	\anishstodofalse
+	\anishsauthblkfalse
+	\anishsnatbibfalse
+	\anishstikzfalse
+	\anishsnicelinksfalse
+	\anishsasyfalse
+}
+
 \ProcessOptions\relax
+
+% Setting up commonly used packages
+\ifanishspkg%
+	\usepackage[utf8]{inputenc}
+	\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
+	\usepackage{nameref}
+	\usepackage[backref=page]{hyperref}
+	\usepackage{cleveref} % for better referencing systems
+
+	\usepackage{listings} % listings allows to convert source codes into latex
+	% TODO Listings support
+	\lstset{basicstyle=\footnotesize\ttfamily,
+		numbers=left,
+		numbersep=5pt,
+		numberstyle=\tiny,
+		keywordstyle=\bfseries,
+		% title=\lstname,
+		showstringspaces=false,
+		tabsize=4,
+		frame=single,
+		keywordstyle=\bfseries\color{blue},
+		commentstyle=\color{green!70!black},
+		identifierstyle=\color{green!20!black},
+		stringstyle=\color{orange},
+		breaklines=true,
+		breakatwhitespace=true,
+		frame=none
+	}
+	\usepackage{mathrsfs}
+	\usepackage{textcomp}
+	\usepackage[shortlabels]{enumitem} % for better lists
+	\usepackage{mathtools}
+	\usepackage{microtype}
+	\usepackage{upgreek}
+	\usepackage{import}
+	\usepackage{graphicx} % for small tweaks
+	\usepackage{bbm} % Adding support for \mathbbm{1}
+
+	% Better Tables
+	\usepackage{tabularx, booktabs}
+
+\fi
 
 % Page Setup
 \ifanishspage
@@ -125,7 +177,7 @@
 	\usetikzlibrary{cd}
 	% fun stuff
 	\newcommand{\shrug}[1][]{%
-		\begin{tikzpicture}[baseline,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
+		\begin{tikzpicture}[baselineyou can abbreviate your name when citing yourself,x=0.8\ht\strutbox,y=0.8\ht\strutbox,line width=0.125ex,#1]
 			\def\arm{(-2.5,0.95) to (-2,0.95) (-1.9,1) to (-1.5,0) (-1.35,0) to (-0.8,0)};
 			\draw \arm;
 			\draw[xscale=-1] \arm;
@@ -226,42 +278,6 @@
 		\begin{proof}[Solution] }%
 		{\end{proof}} %Solutions
 	\fi
-\fi
-
-% Setting up commonly used packages
-\ifanishspkg%
-	\usepackage{listings} % listings allows to convert source codes into latex
-	% TODO Listings support
-	\lstset{basicstyle=\footnotesize\ttfamily,
-		numbers=left,
-		numbersep=5pt,
-		numberstyle=\tiny,
-		keywordstyle=\bfseries,
-		% title=\lstname,
-		showstringspaces=false,
-		tabsize=4,
-		frame=single,
-		keywordstyle=\bfseries\color{blue},
-		commentstyle=\color{green!70!black},
-		identifierstyle=\color{green!20!black},
-		stringstyle=\color{orange},
-		breaklines=true,
-		breakatwhitespace=true,
-		frame=none
-	}
-	\usepackage{mathrsfs}
-	\usepackage{textcomp}
-	\usepackage[shortlabels]{enumitem} % for better lists
-	\usepackage{mathtools}
-	\usepackage{microtype}
-	\usepackage{upgreek}
-	\usepackage{import}
-	\usepackage{graphicx} % for small tweaks
-	\usepackage{bbm} % Adding support for \mathbbm{1}
-
-	% Better Tables
-	\usepackage{tabularx, booktabs}
-
 \fi
 
 % Notes

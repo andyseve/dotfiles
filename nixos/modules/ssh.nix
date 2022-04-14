@@ -28,6 +28,7 @@
 	};
 
   # ssh agent
+  # comment if using gpg-agent
   #programs.ssh = {
     #startAgent = true;
     #agentTimeout = "30m";
