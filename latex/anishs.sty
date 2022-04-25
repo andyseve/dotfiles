@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 12 Apr 2022 02:29:14 AM EDT
+% Last Modified: Mon 25 Apr 2022 02:24:04 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
@@ -195,8 +195,9 @@
 
 % Theorems and Environments
 \ifanishsthm
+	% TODO: Complete fancy theorem settings
+	% TODO: Fix subproblem environment
 	\ifanishsfancythm%
-		% TODO: Complete fancy theorem settings
 		\usepackage{thmtools}
 		\usepackage[framemethod=TikZ]{mdframed}
 	\else
@@ -252,6 +253,8 @@
 		\newtheorem{exercise}[theorem]{Exercise}
 		\newtheorem{problem}[theorem]{Problem}
 		\newtheorem{subproblem}{Part}[problem]
+		\newtheorem{example}[theorem]{Example}
+		\newtheorem{assumption}[theorem]{Assumption}
 		\newtheorem*{answer*}{Answer}
 		\newtheorem*{case*}{Case}
 		\newtheorem*{claim*}{Claim}
@@ -263,8 +266,8 @@
 		\newtheorem*{exercise*}{Exercise}
 		\newtheorem*{problem*}{Problem}
 		\newtheorem*{subproblem*}{Part}
-		\newtheorem{example}[theorem]{Example}
 		\newtheorem*{example*}{Example}
+		\newtheorem*{assumption*}{Assumption}
 		% Remark-style theorems
 		\theoremstyle{remark}
 		\newtheorem{note}[theorem]{Note}
