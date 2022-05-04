@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Mon 25 Apr 2022 02:24:04 AM EDT
+% Last Modified: Tue 03 May 2022 09:57:12 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
@@ -242,32 +242,32 @@
 		\newtheorem*{corollary*}{Corollary}
 		%Def-style theorems
 		\theoremstyle{definition}
+		\newtheorem{answer}[theorem]{Answer}
+		\newtheorem{assumption}[theorem]{Assumption}
+		\newtheorem{case}[theorem]{Case}
 		\newtheorem{claim}[theorem]{Claim}
 		\newtheorem{conjecture}[theorem]{Conjecture}
 		\newtheorem{definition}[theorem]{Definition}
-		\newtheorem{fact}[theorem]{Fact}
-		\newtheorem{obs}[theorem]{Observation}
-		\newtheorem{answer}[theorem]{Answer}
-		\newtheorem{case}[theorem]{Case}
-		\newtheorem{ques}[theorem]{Question}
-		\newtheorem{exercise}[theorem]{Exercise}
-		\newtheorem{problem}[theorem]{Problem}
-		\newtheorem{subproblem}{Part}[problem]
 		\newtheorem{example}[theorem]{Example}
-		\newtheorem{assumption}[theorem]{Assumption}
+		\newtheorem{exercise}[theorem]{Exercise}
+		\newtheorem{fact}[theorem]{Fact}
+		\newtheorem{observation}[theorem]{Observation}
+		\newtheorem{problem}[theorem]{Problem}
+		\newtheorem{question}[theorem]{Question}
+		\newtheorem{subproblem}{Part}[problem]
 		\newtheorem*{answer*}{Answer}
+		\newtheorem*{assumption*}{Assumption}
 		\newtheorem*{case*}{Case}
 		\newtheorem*{claim*}{Claim}
 		\newtheorem*{conjecture*}{Conjecture}
 		\newtheorem*{definition*}{Definition}
-		\newtheorem*{fact*}{Fact}
-		\newtheorem*{joke*}{Joke}
-		\newtheorem*{ques*}{Question}
-		\newtheorem*{exercise*}{Exercise}
-		\newtheorem*{problem*}{Problem}
-		\newtheorem*{subproblem*}{Part}
 		\newtheorem*{example*}{Example}
-		\newtheorem*{assumption*}{Assumption}
+		\newtheorem*{exercise*}{Exercise}
+		\newtheorem*{fact*}{Fact}
+		\newtheorem*{observation*}{Observation}
+		\newtheorem*{problem*}{Problem}
+		\newtheorem*{question*}{Question}
+		\newtheorem*{subproblem*}{Part}
 		% Remark-style theorems
 		\theoremstyle{remark}
 		\newtheorem{note}[theorem]{Note}
@@ -308,7 +308,7 @@
 	\newcommand\ubar[1]{\text{\underbar{$#1$}}}
 	\newcommand\nref[1]{\ref{#1}~\nameref{#1}}
 	\newcommand\rem{\textbf{\underline{Remark}}}
-	\newcommand\question{\textbf{\underline{Question}}}
+	\newcommand\ques{\textbf{\underline{Question}}}
 	\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
 	\newcommand\tageqn{\addtocounter{equation}{1}\tag{\theequation}} % Equation numbering
 	\newcommand\labeleqn[1]{\addtocounter{equation}{1}\tag{\theequation}\label{#1}}
@@ -430,7 +430,7 @@
 	\DeclareMathOperator{\Tr}{Tr} % Trace
 	\DeclareMathOperator{\pred}{pred} % Predecessor
 	\DeclareMathOperator{\dom}{dom} % domain
-	\DeclareMathOperator{\ran}{ran} % range
+	\DeclareMathOperator{\range}{range} % range
 	\DeclareMathOperator{\Aut}{Aut} % automophisms
 	\DeclareMathOperator{\Hom}{Hom} % homomorphism
 	\DeclareMathOperator{\End}{End} % endomorphism
@@ -445,7 +445,6 @@
 	\DeclareMathOperator{\polylog}{polylog}
 	\DeclareMathOperator{\conv}{Conv} % Convex Hulls
 	\DeclareMathOperator{\proj}{proj} % Projections
-	\DeclareMathOperator{\dist}{dist} % Distance
 	\DeclareMathOperator{\diam}{diam} % Diameter
 	\DeclareMathOperator{\supp}{Supp} % Support
 	\DeclareMathOperator{\spn}{span} % Span
@@ -455,6 +454,10 @@
 	\DeclareMathOperator{\spdopt}{SDPOpt}
 
 	\DeclareMathOperator{\ber}{Ber}
+
+	\DeclareMathOperator{\dist}{dist} % Distance
+	\DeclareMathOperator{\KL}{KL}
+	\DeclareMathOperator{\TV}{TV}
 
 	\DeclareMathOperator{\sininv}{\sin^{-1}} % Better Trig Inverses
 	\DeclareMathOperator{\cosinv}{\cos^{-1}}
@@ -467,6 +470,9 @@
 	\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 	\newcommand{\F}{\ensuremath{\mathbb{F}}}
 	\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+
+	% Matrices
+	\newcommand{\id}{\mathrm{I}}
 \fi
 
 
