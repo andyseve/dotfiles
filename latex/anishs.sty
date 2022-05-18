@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 03 May 2022 09:57:12 PM EDT
+% Last Modified: Wed 18 May 2022 02:48:09 AM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
@@ -320,7 +320,7 @@
 	\newcommand\OhStar{\ensuremath{\Oh^{\star}}}
 	\newcommand\xor{\oplus}
 	\newcommand\tensor{\otimes} % I don't like to remember things.
-	\newcommand\transpose{\intercal} % Much better
+	\newcommand\transpose{\top} % Much better
 	\newcommand\directsum{\oplus}
 	\newcommand\iso{\cong}
 	\newcommand\del{\partial}
@@ -411,10 +411,11 @@
 	\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \st #2}
 	% Probability 
 	\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
-	\DeclarePairedDelimiterStarXPP\prob[2]{\underset{#1}{\mathbb{P}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	\DeclarePairedDelimiterStarXPP\prob[2]{\mathbb{P}_{#1}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
 	% Expectation
 	\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
-	\DeclarePairedDelimiterStarXPP\expect[2]{\underset{#1}{\mathbb{E}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	%\DeclarePairedDelimiterStarXPP\expect[2]{\underset{#1}{\mathbb{E}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+	\DeclarePairedDelimiterStarXPP\expect[2]{\mathbb{E}_{#1}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
 	% Variance
 	\DeclarePairedDelimiterStarXPP\var[1]{\textbf{Var}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
 
@@ -470,6 +471,9 @@
 	\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 	\newcommand{\F}{\ensuremath{\mathbb{F}}}
 	\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+
+	% mathbb shortcuts
+	\newcommand{\E}{\ensuremath{\mathbb{E}}}
 
 	% Matrices
 	\newcommand{\id}{\mathrm{I}}
