@@ -1,5 +1,5 @@
 -- http://projects.haskell.org/xmobar/
--- Last Modified: Wed 23 Feb 2022 03:07:23 PM EST
+-- Last Modified: Thu 24 Feb 2022 11:40:39 AM EST
 -- Author: Anish Sevekari
 
 import Xmobar
@@ -36,7 +36,7 @@ config = defaultConfig {
                                           , "-c", "#dc322f"
                                           , "-C", "#93a1a1"
                                           ] 10
-                    , Run $ Wireless "wlp4s0" [
+                    , Run $ Wireless "wlp1s0" [
                                     "-t", "\xfaa8 <fn=1><quality></fn>" --直
                                   ] 10
 										, Run $ Com ".xmonad/scripts/xmobar/weather.sh" [] "weather" 1000
