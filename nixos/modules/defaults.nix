@@ -86,7 +86,7 @@
     iputils
 		nmap wireshark
 		tor openvpn
-		wget curl rsync unison
+		wget curl rsync
     networkmanager networkmanager-openvpn
 
 		# Linux shell utils

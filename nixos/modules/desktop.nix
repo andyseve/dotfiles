@@ -55,7 +55,6 @@
 		firefox google-chrome 
 		vlc
 		zathura
-    thunderbird
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     steam
