@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 16 Mar 2022 12:52:19 AM EDT
+-- Last Modified: Fri 27 May 2022 06:16:01 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -9,6 +9,7 @@ config.plugins = {
 	feline                      = true,
 	notify                      = false,
 	blankline                   = true,
+	which_key                   = false,
 
 	-- autocomplete and linting
 	coc                         = false,
@@ -21,7 +22,6 @@ config.plugins = {
 	colorizer                   = true,
 	treesitter                  = true,
 	comment                     = true,
-	nerdcommenter               = false,
 
 	-- themes
 	solarized                   = true,
@@ -30,9 +30,7 @@ config.plugins = {
 
 	-- search and files
 	telescope                   = true,
-	fzf                         = false,
 	nvim_tree                   = true,
-	nerdtree                    = false,
 	mundo                       = true,
 	gitsigns                    = true,
 

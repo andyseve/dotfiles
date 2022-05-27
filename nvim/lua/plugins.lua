@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 16 Mar 2022 12:55:33 AM EDT
+-- Last Modified: Fri 27 May 2022 06:53:09 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -19,57 +19,59 @@ vim.cmd 'packadd packer.nvim'
 return require('packer').startup({
 	function()
 		use {
-			'wbthomason/packer.nvim'
+			'wbthomason/packer.nvim',
 		}
 
 		-- ui
 		use {
-			'kyazdani42/nvim-web-devicons'
+			'kyazdani42/nvim-web-devicons',
 		}
 
 		use {
 			'akinsho/nvim-bufferline.lua',
 			after = 'nvim-web-devicons',
-			config = [[require('config.bufferline')]]
+			config = [[require('config.bufferline')]],
 		}
 
 		use {
 			'feline-nvim/feline.nvim',
 			after = 'nvim-web-devicons',
-			config = [[require('config.feline')]]
+			config = [[require('config.feline')]],
 		}
 
 		use {
 			'lukas-reineke/indent-blankline.nvim',
 			disable = not plugins.blankline,
 			config = [[require('config.blankline')]],
-			event = 'BufRead'
+			event = 'BufRead',
 		}
 
-		--use 'vim-airline/vim-airline-themes'
-		--use 'vim-airline/vim-airline'
-		-- use hecal3/vim-leader-guide 
-		-- use 'spinks/vim-leader-guide'
+		use {
+			'folke/which-key.nvim',
+			disable = not plugins.which_key,
+			opt = true,
+			config = [[require('config.which_key')]],
+		}
 
 		-- lsp and autocomplete
 		use {
 			'neoclide/coc.nvim',
 			disable = not plugins.coc,
-			branch = 'release'
+			branch = 'release',
 		}
 
 		use {
 			'neovim/nvim-lspconfig', 
 			disable = not plugins.lsp_config,
 			config = [[require('config.lsp')]],
-			requires = 'onsails/lspkind-nvim'
+			requires = 'onsails/lspkind-nvim',
 		}
 
 		use {
 			'ray-x/lsp_signature.nvim',
 			disable = not plugins.lsp_config,
 			after = 'nvim-lspconfig',
-			config = [[require('config.lsp_signature')]]
+			config = [[require('config.lsp_signature')]],
 		}
 
 		use {
@@ -84,14 +86,14 @@ return require('packer').startup({
 				'f3fora/cmp-spell',
 				'hrsh7th/cmp-emoji',
 				'hrsh7th/cmp-cmdline',
-			}
+			},
 		}
 
 		use {
 			'hrsh7th/cmp-nvim-lua',
 			disable = not plugins.nvim_cmp,
 			after = 'nvim-cmp',
-			ft = {'lua'}
+			ft = {'lua'},
 		}
 
 		use {
@@ -100,7 +102,7 @@ return require('packer').startup({
 			config = [[vim.cmd('source ~/.config/nvim/config/ultisnips.vim')]],
 			requires = {
 				'quangnguyen30192/cmp-nvim-ultisnips'
-			}
+			},
 		}
 
 
@@ -108,46 +110,41 @@ return require('packer').startup({
 		use {
 			'norcalli/nvim-colorizer.lua',
 			disable = not plugins.colorizer,
+			config = [[require('colorizer').setup()]],
 			event = 'BufRead',
-			config = [[require('colorizer').setup()]]
 		}
 
 		use {
 			'nvim-treesitter/nvim-treesitter',
 			disable = not plugins.treesitter,
 			run = ':TSUpdate',
-			config = [[require('config.treesitter')]]
+			config = [[require('config.treesitter')]],
 		}
 
 		use {
-			'itchyny/vim-highlighturl'
+			'itchyny/vim-highlighturl',
 		}
 
 		use {
 			'numToStr/Comment.nvim',
 			disable = not plugins.comment,
-			config = [[require('config.comment')]]
-		}
-
-		use {
-			'scrooloose/nerdcommenter',
-			disable = not plugins.nerdcommenter
+			config = [[require('config.comment')]],
 		}
 
 		-- themes
 		use {
 			'ishan9299/nvim-solarized-lua',
-			disable = not plugins.solarized
+			disable = not plugins.solarized,
 		}
 
 		use {
 			'navarasu/onedark.nvim',
-			disable = not plugins.onedark
+			disable = not plugins.onedark,
 		}
 
 		use {
 			'RRethy/nvim-base16',
-			disable = not plugins.nvim_base16
+			disable = not plugins.nvim_base16,
 		}
 
 		-- search and files
@@ -155,40 +152,34 @@ return require('packer').startup({
 			'kyazdani42/nvim-tree.lua',
 			disable = not plugins.nvim_tree,
 			after = 'nvim-web-devicons',
-			cmd = {'NvimTreeToggle', 'NvimTreeFocus'},
 			config = [[require('config.nvim-tree')]],
-			setup = [[require('setup.nvim-tree')]]
-		}
-
-		use {
-			'preservim/nerdtree',
-			disable = not plugins.nerdtree
-		}
-
-		use {
-			'Xuyuanp/nerdtree-git-plugin',
-			disable = not plugins.nerdtree
-		}
-
-		use {
-			'junegunn/fzf.vim',
-			disable = not plugins.fzf
+			setup = [[require('setup.nvim-tree')]],
+			cmd = {'NvimTreeToggle', 'NvimTreeFocus'},
 		}
 
 		use {
 			'nvim-telescope/telescope.nvim',
 			disable = not plugins.telescope,
-			cmd = 'Telescope',
+			config = [[require('config.telescope')]],
 			setup = [[require('setup.telescope')]],
 			requires = {
-				'nvim-lua/plenary.nvim'
-			}
+				'nvim-lua/plenary.nvim',
+				'nvim-telescope/telescope-fzf-native.nvim',
+			},
+			cmd = 'Telescope',
+		}
+
+		use {
+			'nvim-telescope/telescope-fzf-native.nvim',
+			disable = not plugins.telescope,
+			after = 'telescope.nvim',
+			run = 'make',
 		}
 
 		use {
 			'simnalamburt/vim-mundo',
 			disable = not plugins.mundo,
-			cmd = {'MundoShow', 'MundoToggle'}
+			cmd = {'MundoShow', 'MundoToggle'},
 		}
 
 		use {
@@ -197,22 +188,23 @@ return require('packer').startup({
 			requires = {
 				'nvim-lua/plenary.nvim'
 			},
-			config = [[require('config.gitsigns')]]
+			config = [[require('config.gitsigns')]],
 		}
 
 		-- pairs
 		use {
-			'jiangmiao/auto-pairs'
+			'jiangmiao/auto-pairs',
+			disable = not plugins.nvim_autopairs,
 		}
 
 		use {
 			'andymass/vim-matchup',
-			disable = not plugins.vim_matchup
+			disable = not plugins.vim_matchup,
 		}
 
 		use {
 			'tpope/vim-surround',
-			disable = not plugins.vim_surround
+			disable = not plugins.vim_surround,
 		}
 
 		-- latex
@@ -227,26 +219,26 @@ return require('packer').startup({
 		use {
 			'LnL7/vim-nix',
 			disable = not plugins.nix,
-			ft = {'nix'}
+			ft = {'nix'},
 		}
 
 
 		-- others
 		use {
 			'Konfekt/FastFold',
-			disable = not plugins.fast_fold
+			disable = not plugins.fast_fold,
 		}
 
 
 		use {
 			'godlygeek/tabular',
-			disable = not plugins.tabular
+			disable = not plugins.tabular,
 		}
 
 		use {
 			'Pocco81/TrueZen.nvim',
 			disable = not plugins.true_zen,
-			config = [[require('config.true_zen')]]
+			config = [[require('config.true_zen')]],
 		}
 
 
