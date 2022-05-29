@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 27 May 2022 06:53:09 AM EDT
+-- Last Modified: Fri 27 May 2022 07:17:03 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -164,16 +164,13 @@ return require('packer').startup({
 			setup = [[require('setup.telescope')]],
 			requires = {
 				'nvim-lua/plenary.nvim',
-				'nvim-telescope/telescope-fzf-native.nvim',
+				{ 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+				'nvim-telescope/telescope-file-browser.nvim',
+				'nvim-telescope/telescope-packer.nvim',
+				'fhill2/telescope-ultisnips.nvim',
+				'kelly-lin/telescope-ag',
 			},
 			cmd = 'Telescope',
-		}
-
-		use {
-			'nvim-telescope/telescope-fzf-native.nvim',
-			disable = not plugins.telescope,
-			after = 'telescope.nvim',
-			run = 'make',
 		}
 
 		use {
