@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Thu 02 Sep 2021 03:44:07 AM EDT
+" Last Updated: Fri 27 May 2022 07:24:51 AM EDT
 
 " Keybindings
 " Has vim-global leader settings: its better to bind keys outside the function
@@ -66,4 +66,13 @@ let g:lmap.e = {
 			\'l':['vsplit ~/dotfiles/latex/anishs.sty', 'Latex'],
 			\'z':['vsplit ~/dotfiles/zsh/zshrc', 'Zsh'],
 			\}
+
+" Move keymaps from this file into setup files
+" This allows functions to be loaded, so that keymaps work before functions
+" have been loaded
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
