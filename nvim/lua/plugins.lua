@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 27 May 2022 07:17:03 AM EDT
+-- Last Modified: Thu 02 Jun 2022 05:17:31 PM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -28,15 +28,17 @@ return require('packer').startup({
 		}
 
 		use {
-			'akinsho/nvim-bufferline.lua',
-			after = 'nvim-web-devicons',
+			'akinsho/bufferline.nvim',
+			disable = not plugins.bufferline,
 			config = [[require('config.bufferline')]],
+			requires = 'nvim-web-devicons',
 		}
 
 		use {
 			'feline-nvim/feline.nvim',
-			after = 'nvim-web-devicons',
+			disable = not plugins.feline,
 			config = [[require('config.feline')]],
+			requires = 'nvim-web-devicons',
 		}
 
 		use {
