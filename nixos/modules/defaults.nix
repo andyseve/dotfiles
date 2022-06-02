@@ -46,7 +46,23 @@
 
   # Nix configuration
   nix = {
-    autoOptimiseStore = true;
+    # build related settings
+    settings = {
+      auto-optimise-store = true;
+      require-sigs = true;
+      substituters = [
+        "https://cache.nixos.org"
+        "https://hydra.nixos.org"
+      ];
+      trusted-substituters = [
+        "https://nix-community.cachix.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "hydra.nixos.org-1:CNHJZBh9K4tP3EKF6FkkgeVYsS3ohTl+oS0Qa8bezVs="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
 
     # Garbage Collector
     gc = {
@@ -164,16 +180,14 @@
   sound.enable = true;
   hardware.pulseaudio = {
     enable = true;
-	  # PulseAudio Full - bluetooth headsets support
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
     package = pkgs.pulseaudioFull;
   };
-	hardware.bluetooth.enable = true;
 
-	# 32 bit support, required for steam
+  # hardware support
+	hardware.bluetooth.enable = true;
+	# 32 bit support, required for steam -- check this
 	hardware.opengl.driSupport32Bit = true;
 	hardware.pulseaudio.support32Bit = true;
-	hardware.steam-hardware.enable = true;
 
   programs = {
     # zsh

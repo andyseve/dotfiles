@@ -42,7 +42,8 @@
 		picom                            # transparancy
 		dunst libnotify                  # notifications
 		feh
-		xdotool xorg.xmodmap xorg.xrandr xorg.libXinerama
+    xdotool
+    xorg.xmodmap xorg.xrandr xorg.libXinerama
 		scrot                            # screenshots
     xclip
 
@@ -57,7 +58,6 @@
 		zathura
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
-    steam
     discord unstable.zoom-us slack
 		unstable.ytmdesktop
     unstable.dropbox
@@ -84,4 +84,5 @@
     geoclue2.enable = true;
     autorandr.enable = true;
   };
+
 }
