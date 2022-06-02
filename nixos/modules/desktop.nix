@@ -57,7 +57,6 @@
 		zathura
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
-    steam
     discord unstable.zoom-us slack
 		unstable.ytmdesktop
     unstable.dropbox
@@ -84,4 +83,5 @@
     geoclue2.enable = true;
     autorandr.enable = true;
   };
+
 }
