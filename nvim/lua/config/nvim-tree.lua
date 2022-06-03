@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 02 Jun 2022 06:18:23 PM EDT
+-- Last Modified: Fri 03 Jun 2022 10:40:55 AM EDT
 -- # nvim-tree config
 
 local present, nvim_tree = pcall(require,'nvim-tree') 
@@ -47,7 +47,7 @@ nvim_tree.setup {
 		highlight_opened_files = "none",
 		root_folder_modifier = table.concat { ":t:gs?$?/..", string.rep(" ", 1000), "?:gs?^??" },
 		indent_markers = {
-			enable = false,
+			enable = true,
 			icons = {
 				corner = "└ ",
 				edge = "│ ",

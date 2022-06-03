@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 02 Jun 2022 06:20:09 PM EDT
+-- Last Modified: Fri 03 Jun 2022 10:43:31 AM EDT
 -- bufferline settings
 
 local present, bufferline = pcall(require, 'bufferline')
@@ -8,13 +8,22 @@ if not present then
 	return
 end
 
+local present_bufdelete, bufdelete = pcall(require, 'bufdelete')
+local function bufdelete_helper(bufnum)
+	if present_bufdelete then
+		bufdelete.bufdelete(bufnum, true)
+	else
+		vim.cmd('bdelete!', bufnum)
+	end
+end
+
 bufferline.setup {
   options = {
 		numbers = "none", --numbers = "none" | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
-    close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
-    right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
+    close_command = bufdelete_helper,       -- can be a string | function, see "Mouse actions"
+    right_mouse_command = "vertical sbuffer %d", -- can be a string | function, see "Mouse actions"
     left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
-    middle_mouse_command = nil,          -- can be a string | function, see "Mouse actions"
+    middle_mouse_command = bufdelete_helper,          -- can be a string | function, see "Mouse actions"
 
     -- NOTE: this plugin is designed with this icon in mind,
     -- and so changing this is NOT recommended, this is intended

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 21 Jan 2022 12:04:34 PM EST
+-- Last Modified: Fri 03 Jun 2022 10:40:14 AM EDT
 -- # indent-blankline settings
 
 local present, blankline = pcall(require, 'indent_blankline')
@@ -24,7 +24,7 @@ blankline.setup {
 		"lspinfo",
 		"TelescopePrompt",
 		"TelescopeResults",
-		"nvchad_cheatsheet",
+		"NvimTree",
 		"",
 	},
 

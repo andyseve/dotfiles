@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 02 Jun 2022 05:17:31 PM EDT
+-- Last Modified: Fri 03 Jun 2022 10:37:06 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -53,6 +53,11 @@ return require('packer').startup({
 			disable = not plugins.which_key,
 			opt = true,
 			config = [[require('config.which_key')]],
+		}
+
+		use {
+			'famiu/bufdelete.nvim',
+			disable = not plugins.bufdelete,
 		}
 
 		-- lsp and autocomplete
