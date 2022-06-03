@@ -1,6 +1,5 @@
 configuration {
 	font: "fira code 12";
-	theme: "purple";
 	show-icons: true;
 	icon-theme: "Papirus-Dark";
 	matching: "fuzzy";
@@ -11,3 +10,4 @@ configuration {
 	sort: true;
 	terminal: "alacritty";
 }
+@theme "purple"
