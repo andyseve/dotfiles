@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Jun 2022 10:33:46 AM EDT
+-- Last Modified: Sat 04 Jun 2022 03:05:37 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
@@ -9,7 +9,7 @@ config.plugins = {
 	feline                      = true,
 	notify                      = false,
 	blankline                   = true,
-	which_key                   = false,
+	which_key                   = true,
 	bufdelete                   = true,
 
 	-- autocomplete and linting
