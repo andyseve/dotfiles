@@ -1,6 +1,6 @@
 " # Neovim Config Init file
 " Author: Anish Sevekari
-" Last Updated: Thu 03 Mar 2022 01:53:22 PM EST
+" Last Updated: Sat 04 Jun 2022 02:59:00 AM EDT
 
 let g:config_root = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
@@ -18,6 +18,7 @@ for s:fname in g:config_file_list
 endfor
 
 lua require('plugins')
+lua require('core.mappings')
 
 " vim:foldmethod=marker:syntax=vim
 

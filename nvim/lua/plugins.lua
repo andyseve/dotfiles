@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Jun 2022 10:37:06 AM EDT
+-- Last Modified: Sat 04 Jun 2022 03:06:46 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -51,7 +51,6 @@ return require('packer').startup({
 		use {
 			'folke/which-key.nvim',
 			disable = not plugins.which_key,
-			opt = true,
 			config = [[require('config.which_key')]],
 		}
 

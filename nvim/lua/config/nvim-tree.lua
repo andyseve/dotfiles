@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 03 Jun 2022 10:40:55 AM EDT
+-- Last Modified: Sat 04 Jun 2022 08:03:08 PM EDT
 -- # nvim-tree config
 
 local present, nvim_tree = pcall(require,'nvim-tree') 
@@ -13,7 +13,7 @@ nvim_tree.setup {
 	create_in_closed_folder = false,
 	disable_netrw = false,
 	hijack_cursor = true,
-	hijack_netrw = true,
+	hijack_netrw = false,
 	hijack_unnamed_buffer_when_opening = false,
 	ignore_buffer_on_setup = false,
 	open_on_setup = false,

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 27 May 2022 07:58:08 AM EDT
+-- Last Modified: Sat 04 Jun 2022 08:25:19 PM EDT
 -- Telescope Plugin Config
 
 local present, telescope = pcall(require,'telescope')
@@ -32,6 +32,9 @@ telescope.setup {
 				flip_lines = 20,
 			},
 		},
+		winblend = 10,
+		border = true,
+    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 		initial_mode = "insert",
 		selection_strategy = "reset",
 		sorting_strategy = "ascending",
@@ -41,6 +44,7 @@ telescope.setup {
 		path_display = { "truncate" },
 		color_devicons = true,
 		use_less = true,
+		set_env = { ["COLORTERM"] = "truecolor" },
 		file_previewer = require('telescope.previewers').vim_buffer_cat.new,
 		grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
 		qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
@@ -54,9 +58,18 @@ telescope.setup {
 				["<c-h>"] = "which_key",
 			},
 		},
+		vimgrep_arguments = {
+			"rg",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case",
+		},
 	},
 	pickers = {
-
+		
 	},
 	extensions = {
 		fzf = {
