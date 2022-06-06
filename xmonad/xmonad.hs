@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 06 Jun 2022 05:23:15 AM EDT
+-- Last Modified: Mon 06 Jun 2022 03:33:34 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -105,7 +105,7 @@ main = do
          . ewmhFullscreen
          . ewmh
          . docks
-         . withSB mySB
+         . dynamicSBs myBarSpawner
          $ myConfig
 
 
@@ -774,7 +774,7 @@ myXmobarPP = def
 
             wsIndex :: WorkspaceId -> Int
             wsIndex "min" = 10
-            wsIndex a = fixIndex $ flip elemIndex wsOrder a
+            wsIndex a = fixIndex $ elemIndex a wsOrder
 
             wsCompare :: X WorkspaceCompare
             wsCompare = return (compare `on` wsIndex)
@@ -792,42 +792,24 @@ myXmobarPP = def
             workspaceToIcons _       = "\xf6a1" -- 
 
             clickableWorkspaces :: String -> String
-            clickableWorkspaces ws = "<action=xdotool key Super+" ++ show ((wsIndex ws) + 1) ++">" ++ workspaceToIcons ws ++ "</action>"
+            clickableWorkspaces ws = xmobarAction ("xdotool set_desktop " ++ show (fixIndex $ elemIndex ws myWorkspaces)) "1" (workspaceToIcons ws)
+            -- clickableWorkspaces ws = "<action=xdotool set_desktop " ++ show ((wsIndex ws) + 1) ++">" ++ ws ++ "</action>"
 
             xmobarFont :: Int -> String -> String
             xmobarFont i ws = "<fn=" ++ show(i) ++ ">" ++ ws ++ "</fn>"
             -- Looks too complicated to use xmobar action here
 
-myXmobar0 = statusBarPropTo "_XMONAD_LOG" "~/.cabal/bin/xmobar -x 0" (pure myXmobarPP)
-myXmobar1 = statusBarPropTo "_XMONAD_LOG" "~/.cabal/bin/xmobar -x 1" (pure myXmobarPP)
+myXmobar0 = statusBarPropTo "_XMONAD_LOG" "xmobar -x 0" (pure myXmobarPP)
+myXmobar1 = statusBarPropTo "_XMONAD_LOG" "xmobar -x 1" (pure myXmobarPP)
 
 myXmobar :: ScreenId -> XMonad.Hooks.StatusBar.StatusBarConfig
-myXmobar sid = do 
-    let cmd = "~/.cabal/bin/xmobar -x " ++ show sid ++ " ~/.cabal/bin/xmobar"
-    statusBarPropTo "_XMONAD_LOG" cmd (pure myXmobarPP)
-
-mySB = statusBarProp "~/.cabal/bin/xmobar" (pure xmobarPP)
+myXmobar sid = statusBarPropTo "_XMONAD_LOG" ("xmobar -x " ++ show sid) (pure myXmobarPP)
 
 myBarSpawner :: ScreenId -> IO XMonad.Hooks.StatusBar.StatusBarConfig
-myBarSpawner 0 = pure $ myXmobar0
-myBarSpawner 1 = pure $ myXmobar1
+-- myBarSpawner sid = pure $ statusBarPropTo "_XMONAD_LOG" ("xmobar -x " ++ show sid) (pure myXmobarPP)
+myBarSpawner 0 = pure  myXmobar0
+myBarSpawner 1 = pure  myXmobar1
 myBarSpawner _ = mempty
--- myBarSpawner t = pure $ myXmobar t
--- -- Defining barcreator and destroyer
--- myBarCreator   = xmobarCreator
--- myBarDestroyer = xmobarDestroyer
---
--- -- Xmobar Creator and Destroyer using dynamic bars
--- xmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
--- xmobarCreator (XMonad.S sid) = do
---     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
---     XMonad.trace (show t ++ ": XMonad xmobarCreator " ++ show sid) --logging
---     XMonad.Util.Run.spawnPipe ("~/.cabal/bin/xmobar -x " ++ show sid)
---
--- xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
--- xmobarDestroyer = do
---     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
---     XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
 
 -- FadeHook
 myFadeHook = composeAll $ 
