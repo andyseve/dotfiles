@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Fri 21 Jan 2022 05:57:40 PM EST
+-- Last Modified: Mon 06 Jun 2022 05:23:15 AM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -62,7 +62,6 @@ import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
 -- Hooks
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.DynamicBars
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.InsertPosition
@@ -70,6 +69,8 @@ import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.PositionStoreHooks
 import XMonad.Hooks.RefocusLast
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.UrgencyHook
 -- Actions
 import XMonad.Actions.Commands
@@ -98,11 +99,15 @@ import XMonad.Util.WorkspaceCompare
 
 main = do
     xmonad
-         $ withNavigation2DConfig myNav2DConf
-         $ withUrgencyHook LibNotifyUrgencyHook 
-         $ addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
-         $ ewmh
+         . withNavigation2DConfig myNav2DConf
+         . withUrgencyHook LibNotifyUrgencyHook
+         . addDescrKeys' ((myModMask, xK_F1), showKeybindings) myKeys
+         . ewmhFullscreen
+         . ewmh
+         . docks
+         . withSB mySB
          $ myConfig
+
 
 
 myConfig = def
@@ -490,23 +495,20 @@ myNav2DConf = def
 
 -- workspace navigation functions -- https://github.com/altercation
 -- any workspace but scratchpad
-notSP = (return $ ("NSP" /=) . W.tag) :: X (WindowSpace -> Bool)
-shiftAndView dir = findWorkspace getSortByIndex dir (WSIs notSP) 1
+shiftAndView dir = findWorkspace getSortByIndex dir (ignoringWSs ["NSP"]) 1
         >>= \t -> (windows . W.shift $ t) >> (windows . W.greedyView $ t)
 
 -- hidden, non-empty workspaces less scratchpad
-shiftAndView' dir = findWorkspace getSortByIndexNoSP dir HiddenNonEmptyWS 1
+shiftAndView' dir = findWorkspace getSortByIndex dir (hiddenWS :&: Not emptyWS :&: ignoringWSs ["NSP"]) 1
         >>= \t -> (windows . W.shift $ t) >> (windows . W.greedyView $ t)
-nextHidWS = findWorkspace getSortByIndexNoSP Next HiddenWS 1
+nextHidWS = findWorkspace getSortByIndex Next (hiddenWS :&: ignoringWSs ["NSP"]) 1
         >>= \t ->  windows . W.view $ t
-prevHidWS = findWorkspace getSortByIndexNoSP Prev HiddenWS 1
+prevHidWS = findWorkspace getSortByIndex Prev (hiddenWS :&: ignoringWSs ["NSP"]) 1
         >>= \t ->  windows . W.view $ t
-nextNonEmptyWS = findWorkspace getSortByIndexNoSP Next HiddenNonEmptyWS 1
+nextNonEmptyWS = findWorkspace getSortByIndex Next (hiddenWS :&: Not emptyWS :&: ignoringWSs ["NSP"]) 1
         >>= \t ->  windows . W.view $ t
-prevNonEmptyWS = findWorkspace getSortByIndexNoSP Prev HiddenNonEmptyWS 1
+prevNonEmptyWS = findWorkspace getSortByIndex Prev (hiddenWS :&: Not emptyWS :&: ignoringWSs ["NSP"]) 1
         >>= \t ->  windows . W.view $ t
-getSortByIndexNoSP =
-       fmap (.namedScratchpadFilterOutWorkspace) getSortByIndex
 
 -- toggle any workspace but scratchpad
 myToggle = windows $ W.view =<< W.tag . head . filter 
@@ -529,8 +531,8 @@ showKeybindings x = addName "show keybindings" $ io $ do
 data XCond = WS | LD
 
 chooseAction :: XCond -> (String -> X()) -> X()
-chooseAction WS f = withWindowSet (f . W.currentTag)
-chooseAction LD f = withWindowSet (f . description . W.layout . W.workspace . W.current)
+chooseAction Main.WS f = withWindowSet (f . W.currentTag)
+chooseAction Main.LD f = withWindowSet (f . description . W.layout . W.workspace . W.current)
 
 bindOn :: XCond -> [(String, X())] -> X()
 bindOn xc bindings = chooseAction xc $ chooser
@@ -727,7 +729,7 @@ myStartupHook = do
     spawnOnce "picom"
     spawnOnce "dunst"
     spawnOnce "slack"
-    XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
+    -- XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -746,16 +748,11 @@ restartXmonad =
 myLogHook = do
     -- LogHook for multiple screens
     -- https://github.com/jonascj/.xmonad/blob/master/xmonad.hs 
-    multiPP myLogPP myLogPP
-    ewmhDesktopsLogHook
     historyHook
     fadeWindowsLogHook myFadeHook
 
-myLogPP :: XMonad.Hooks.DynamicLog.PP
-myLogPP = myXmobarLogPP
-
-myXmobarLogPP :: XMonad.Hooks.DynamicLog.PP
-myXmobarLogPP = def
+myXmobarPP :: XMonad.Hooks.StatusBar.PP.PP
+myXmobarPP = def
     { ppCurrent = xmobarColor blue "" . clickableWorkspaces
     , ppTitle   = xmobarColor green "" . xmobarFont 1 . shorten 45
     , ppVisible = xmobarColor blue "" . clickableWorkspaces
@@ -801,21 +798,36 @@ myXmobarLogPP = def
             xmobarFont i ws = "<fn=" ++ show(i) ++ ">" ++ ws ++ "</fn>"
             -- Looks too complicated to use xmobar action here
 
--- Defining barcreator and destroyer
-myBarCreator   = xmobarCreator
-myBarDestroyer = xmobarDestroyer
+myXmobar0 = statusBarPropTo "_XMONAD_LOG" "~/.cabal/bin/xmobar -x 0" (pure myXmobarPP)
+myXmobar1 = statusBarPropTo "_XMONAD_LOG" "~/.cabal/bin/xmobar -x 1" (pure myXmobarPP)
 
--- Xmobar Creator and Destroyer using dynamic bars
-xmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
-xmobarCreator (XMonad.S sid) = do
-    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad xmobarCreator " ++ show sid) --logging
-    XMonad.Util.Run.spawnPipe ("~/.cabal/bin/xmobar -x " ++ show sid)
+myXmobar :: ScreenId -> XMonad.Hooks.StatusBar.StatusBarConfig
+myXmobar sid = do 
+    let cmd = "~/.cabal/bin/xmobar -x " ++ show sid ++ " ~/.cabal/bin/xmobar"
+    statusBarPropTo "_XMONAD_LOG" cmd (pure myXmobarPP)
 
-xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
-xmobarDestroyer = do
-    t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
-    XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
+mySB = statusBarProp "~/.cabal/bin/xmobar" (pure xmobarPP)
+
+myBarSpawner :: ScreenId -> IO XMonad.Hooks.StatusBar.StatusBarConfig
+myBarSpawner 0 = pure $ myXmobar0
+myBarSpawner 1 = pure $ myXmobar1
+myBarSpawner _ = mempty
+-- myBarSpawner t = pure $ myXmobar t
+-- -- Defining barcreator and destroyer
+-- myBarCreator   = xmobarCreator
+-- myBarDestroyer = xmobarDestroyer
+--
+-- -- Xmobar Creator and Destroyer using dynamic bars
+-- xmobarCreator :: XMonad.Hooks.DynamicBars.DynamicStatusBar
+-- xmobarCreator (XMonad.S sid) = do
+--     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
+--     XMonad.trace (show t ++ ": XMonad xmobarCreator " ++ show sid) --logging
+--     XMonad.Util.Run.spawnPipe ("~/.cabal/bin/xmobar -x " ++ show sid)
+--
+-- xmobarDestroyer :: XMonad.Hooks.DynamicBars.DynamicStatusBarCleanup
+-- xmobarDestroyer = do
+--     t <- XMonad.liftIO Data.Time.LocalTime.getZonedTime
+--     XMonad.trace (show t ++ ": XMonad xmobarDestroyer") -- logging
 
 -- FadeHook
 myFadeHook = composeAll $ 
@@ -839,7 +851,6 @@ myManageHook :: ManageHook
 myManageHook = myCustomPlaceHook <+> myCustomShiftHook <+> myCustomStackHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
     <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
-    <+> XMonad.Hooks.ManageDocks.manageDocks -- Docks ManageHook
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook
     <+> manageHook def
 
@@ -905,10 +916,7 @@ myCustomStackHook = composeOne . concat $
 
 myHandleEventHook = myCustomEventHook
     <+> refocusLastWhen myRefocusPred
-    <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
-    <+> XMonad.Hooks.ManageDocks.docksEventHook -- Handle dock events
-    <+> XMonad.Hooks.EwmhDesktops.ewmhDesktopsEventHook
-    <+> XMonad.Hooks.EwmhDesktops.fullscreenEventHook
+    -- <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
     <+> positionStoreEventHook
     <+> handleEventHook def
