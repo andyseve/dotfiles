@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 08 Jun 2022 04:49:28 AM EDT
+-- Last Modified: Wed 08 Jun 2022 03:14:41 PM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -160,7 +160,7 @@ myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
 myMusic       = "ytmdesktop --no-sandbox | awk -F \"Listen: \" '{print \"<fc=#268bd2>ﱘ <fn=1>\"$2\"</fn></fc>\"; fflush();}' | tee /tmp/music_pipe"
-myTrayPrimary = "trayer --edge top --align right --widthtype request --SetDockType true --transparent true --alpha 150 --heighttype pixel --height 30 --tint 0x00000000 --iconspacing 5 --monitor 0"
+myTrayPrimary = "sh ~/.xmonad/scripts/start_trayer.sh"
 
 ----------------------------------------------------------------------------}}}
 -- Scratchpads                                                              {{{
@@ -731,9 +731,9 @@ myStartupHook = do
     spawnOnce "~/.config/fehbg" -- feh + xrandr script
     spawnOnce "picom"
     spawnOnce "dunst"
-    spawnOnce myTrayPrimary
+    spawn     myTrayPrimary
     spawnOnce "slack"
-    spawnOnce "~/.xmonad/scripts/create_pipes.sh" -- this command needs to run at last
+    spawn     "~/.xmonad/scripts/create_pipes.sh" -- this command needs to run at last
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)

@@ -121,7 +121,6 @@
 		weechat
     unstable.neovim # load latest neovim
 		w3m
-		youtube-dl
 		taskwarrior timewarrior
     khal khard # calendars and contacts
     vdirsyncer # vdirsyncer
@@ -154,6 +153,7 @@
     python3Packages.pandas
     python3Packages.jupyter
     python3Packages.notebook
+    python3Packages.youtube-dl
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle
