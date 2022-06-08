@@ -1,6 +1,6 @@
 {-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
 -- Author: Anish Sevekari
--- Last Modified: Mon 06 Jun 2022 03:33:34 PM EDT
+-- Last Modified: Wed 08 Jun 2022 04:49:28 AM EDT
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -46,17 +46,18 @@ import XMonad.Layout.LayoutBuilder
 import XMonad.Layout.LayoutCombinators
 import XMonad.Layout.PerScreen -- Screen Functionalities
 import XMonad.Layout.PerWorkspace -- Workspace specific layouts
-import XMonad.Layout.PositionStoreFloat -- Position remebering floats
 import XMonad.Layout.Renamed -- for modifying layout names
 import XMonad.Layout.ResizableTile -- Resizable Horizontal Border
 import XMonad.Layout.ShowWName
 import XMonad.Layout.SimpleDecoration
+import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing -- Smart space around windows
 import XMonad.Layout.SubLayouts -- Layouts inside windows
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.TrackFloating
 import XMonad.Layout.WindowNavigation
 import XMonad.Prompt
 import XMonad.Prompt.ConfirmPrompt
@@ -67,7 +68,6 @@ import XMonad.Hooks.FadeWindows
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks -- Managing docks
 import XMonad.Hooks.ManageHelpers
-import XMonad.Hooks.PositionStoreHooks
 import XMonad.Hooks.RefocusLast
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
@@ -159,7 +159,8 @@ myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -show window -modi window,windowcd"
 myFiles       = "alacritty -e ranger"
 myEditor      = "gvim"
-myMusic       = "ytmdesktop"
+myMusic       = "ytmdesktop --no-sandbox | awk -F \"Listen: \" '{print \"<fc=#268bd2>ﱘ <fn=1>\"$2\"</fn></fc>\"; fflush();}' | tee /tmp/music_pipe"
+myTrayPrimary = "trayer --edge top --align right --widthtype request --SetDockType true --transparent true --alpha 150 --heighttype pixel --height 30 --tint 0x00000000 --iconspacing 5 --monitor 0"
 
 ----------------------------------------------------------------------------}}}
 -- Scratchpads                                                              {{{
@@ -414,6 +415,7 @@ myLayoutHook = showWorkspaceName
         -----------------------------------------------------------------------
         tabs = named "tabs"
             $ avoidStruts
+            $ trackFloating
             $ addTopBar
             $ addTabs shrinkText myTabTheme
             $ Simplest
@@ -422,6 +424,7 @@ myLayoutHook = showWorkspaceName
             -- Not going to have functions to move around: one tab is the main one
         tabs_tall = named "tabs"
             $ avoidStruts
+            $ trackFloating
             $ windowNavigation
             $ addTabs shrinkText myTabTheme
             $ subLayout [] (mySpacing $ ResizableTall 1 (1/20) (2/3) [])
@@ -473,7 +476,7 @@ myLayoutHook = showWorkspaceName
             $ avoidStruts
             $ imageButtonDeco shrinkText myButtonTheme 
             $ borderResize
-            $ positionStoreFloat
+            $ simpleFloat
 
 ----------------------------------------------------------------------------}}}
 -- Bindings                                                                 {{{
@@ -517,7 +520,7 @@ myToggle = windows $ W.view =<< W.tag . head . filter
 -- toggling between floating and non-floating
 toggleFloat w = windows (\s -> if M.member w (W.floating s)
                 then W.sink w s
-                else (W.float w (W.RationalRect (1/3) (1/4) (1/2) (2/3)) s))
+                else (W.float w (W.RationalRect (1/4) (1/4) (1/2) (1/2)) s))
 
 -- from https://github.com/thomasf/dotfiles-thomasf-xmonad/blob/master/.xmonad/lib/XMonad/Config/A00001.hs
 showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
@@ -601,12 +604,12 @@ myKeys conf = let
     subKeys "actions"
     [
     -- sound
-      ("M-<Page_Up>"             , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute" )
-    , ("M-<Page_Down>"           , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute" )
-    , ("M-<End>"                 , addName "mute/unmute"                 $ spawn "amixer -q set Master toggle"  )
-    , ("<XF86AudioRaiseVolume>"  , addName "volume +5%"                  $ spawn "amixer set Master 5%+ unmute" )
-    , ("<XF86AudioLowerVolume>"  , addName "volume -5%"                  $ spawn "amixer set Master 5%- unmute" )
-    , ("<XF86AudioMute>"         , addName "mute/unmute"                 $ spawn "amixer set Master toggle"     )
+      ("M-<Page_Up>"             , addName "volume +5%"                  $ spawn "~/.xmonad/scripts/volume_pipe.sh up"     )
+    , ("M-<Page_Down>"           , addName "volume -5%"                  $ spawn "~/.xmonad/scripts/volume_pipe.sh down"   )
+    , ("M-<End>"                 , addName "mute/unmute"                 $ spawn "~/.xmonad/scripts/volume_pipe.sh toggle" )
+    , ("<XF86AudioRaiseVolume>"  , addName "volume +5%"                  $ spawn "~/.xmonad/scripts/volume_pipe.sh up"     )
+    , ("<XF86AudioLowerVolume>"  , addName "volume -5%"                  $ spawn "~/.xmonad/scripts/volume_pipe.sh down"   )
+    , ("<XF86AudioMute>"         , addName "mute/unmute"                 $ spawn "~/.xmonad/scripts/volume_pipe.sh toggle" )
     -- brightness
     , ("<XF86MonBrightnessDown>"   , addName "brightness -5"  $ spawn "light -U 5"    )
     , ("<XF86MonBrightnessUp>"     , addName "brightness +5"  $ spawn "light -A 5"    )
@@ -728,8 +731,9 @@ myStartupHook = do
     spawnOnce "~/.config/fehbg" -- feh + xrandr script
     spawnOnce "picom"
     spawnOnce "dunst"
+    spawnOnce myTrayPrimary
     spawnOnce "slack"
-    -- XMonad.Hooks.DynamicBars.dynStatusBarStartup myBarCreator myBarDestroyer
+    spawnOnce "~/.xmonad/scripts/create_pipes.sh" -- this command needs to run at last
 
 quitXmonad :: X ()
 quitXmonad = io (exitWith ExitSuccess)
@@ -751,6 +755,25 @@ myLogHook = do
     historyHook
     fadeWindowsLogHook myFadeHook
 
+
+-- FadeHook
+myFadeHook = composeAll $ 
+    [ opaque
+    , isUnfocused          --> opacity 0.95
+    , isFloating           --> opacity 0.95
+    , isDialog             --> opaque
+    , isFullscreen         --> opaque
+    , isRole =? "browser"  --> opaque -- Makes browser oqaque, important for videos
+    ]
+    ++
+    [ className =? c --> opaque | c <- myOpaques ]
+        where
+            isRole = stringProperty "WM_WINDOW_ROLE"
+            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub", "Terraria.bin.x86_64"]
+
+----------------------------------------------------------------------------}}}
+-- Xmobar                                                                   {{{
+-------------------------------------------------------------------------------
 myXmobarPP :: XMonad.Hooks.StatusBar.PP.PP
 myXmobarPP = def
     { ppCurrent = xmobarColor blue "" . clickableWorkspaces
@@ -796,35 +819,26 @@ myXmobarPP = def
             -- clickableWorkspaces ws = "<action=xdotool set_desktop " ++ show ((wsIndex ws) + 1) ++">" ++ ws ++ "</action>"
 
             xmobarFont :: Int -> String -> String
-            xmobarFont i ws = "<fn=" ++ show(i) ++ ">" ++ ws ++ "</fn>"
+            xmobarFont i ws = "<fn=" ++ show i ++ ">" ++ ws ++ "</fn>"
             -- Looks too complicated to use xmobar action here
 
-myXmobar0 = statusBarPropTo "_XMONAD_LOG" "xmobar -x 0" (pure myXmobarPP)
-myXmobar1 = statusBarPropTo "_XMONAD_LOG" "xmobar -x 1" (pure myXmobarPP)
+-- This is dumb, but literally anything else does not work.
+myXmobar0Cmd = "xmobar -x 0 /home/stranger/.config/xmobar/xmobar.hs"
+myXmobar1Cmd = "xmobar -x 1 /home/stranger/.config/xmobar/xmobar-secondary.hs"
+myXmobar2Cmd = "xmobar -x 2 /home/stranger/.config/xmobar/xmobar-secondary.hs"
+myXmobar0 = statusBarProp myXmobar0Cmd (pure myXmobarPP)
+myXmobar1 = statusBarProp myXmobar1Cmd (pure myXmobarPP)
+myXmobar2 = statusBarProp myXmobar2Cmd (pure myXmobarPP)
 
-myXmobar :: ScreenId -> XMonad.Hooks.StatusBar.StatusBarConfig
-myXmobar sid = statusBarPropTo "_XMONAD_LOG" ("xmobar -x " ++ show sid) (pure myXmobarPP)
+-- myXmobar :: ScreenId -> XMonad.Hooks.StatusBar.StatusBarConfig
+-- myXmobar 0   = statusBarPropTo "_XMONAD_LOG" ("xmobar -x 0 /home/stanger/.config/xmobar/xmobar.hs") (pure myXmobarPP)
+-- myXmobar sid = statusBarPropTo "_XMONAD_LOG" ("xmobar -x " ++ show sid ++ "/home/stranger/.config/xmobar/xmobar_secondary.hs") (pure myXmobarPP)
 
 myBarSpawner :: ScreenId -> IO XMonad.Hooks.StatusBar.StatusBarConfig
--- myBarSpawner sid = pure $ statusBarPropTo "_XMONAD_LOG" ("xmobar -x " ++ show sid) (pure myXmobarPP)
-myBarSpawner 0 = pure  myXmobar0
-myBarSpawner 1 = pure  myXmobar1
+myBarSpawner 0 = pure myXmobar0
+myBarSpawner 1 = pure myXmobar1
+myBarSpawner 2 = pure myXmobar2
 myBarSpawner _ = mempty
-
--- FadeHook
-myFadeHook = composeAll $ 
-    [ opaque
-    , isUnfocused          --> opacity 0.95
-    , isFloating           --> opacity 0.95
-    , isDialog             --> opaque
-    , isFullscreen         --> opaque
-    , isRole =? "browser"  --> opaque -- Makes browser oqaque, important for videos
-    ]
-    ++
-    [ className =? c --> opaque | c <- myOpaques ]
-        where
-            isRole = stringProperty "WM_WINDOW_ROLE"
-            myOpaques = ["vlc", "feh", "dota2", "Civ6Sub", "Terraria.bin.x86_64"]
 
 ----------------------------------------------------------------------------}}}
 -- Manage Hook                                                              {{{
@@ -832,7 +846,6 @@ myFadeHook = composeAll $
 myManageHook :: ManageHook
 myManageHook = myCustomPlaceHook <+> myCustomShiftHook <+> myCustomStackHook
     <+> namedScratchpadManageHook myScratchpads -- Spawning and managing scratchpads
-    <+> positionStoreManageHook (Just defaultThemeWithImageButtons)
     <+> XMonad.Layout.Fullscreen.fullscreenManageHook
     <+> manageHook def
 
@@ -900,7 +913,6 @@ myHandleEventHook = myCustomEventHook
     <+> refocusLastWhen myRefocusPred
     -- <+> XMonad.Hooks.DynamicBars.dynStatusBarEventHook myBarCreator myBarDestroyer -- Create dynamic status bars
     <+> XMonad.Layout.Fullscreen.fullscreenEventHook
-    <+> positionStoreEventHook
     <+> handleEventHook def
 
 myCustomEventHook = mempty

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Thu 24 Feb 2022 09:21:27 AM EST
+-- Last Modified: Tue 07 Jun 2022 10:29:36 PM EDT
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
@@ -23,9 +23,13 @@ local on_attach = function(client,bufnr)
 	local opts = { noremap = true, silent = true }
 end
 
+
+-- language server settings
+
 lsp.ccls.setup {
 	on_attach = on_attach;
 	capabilities = capabilities;
+	single_file_support = true;
 	init_options = {
 		compilationDatabaseDirectory = "build";
 		index = {
@@ -36,6 +40,20 @@ lsp.ccls.setup {
 		};
 	}
 }
+
+lsp.hls.setup {
+	on_attach = on_attach;
+	capabilities = capabilities;
+	single_file_support = true;
+}
+
+lsp.pyright.setup {
+	on_attach = on_attach;
+	capabilities = capabilities;
+	single_file_support = true;
+}
+
+
 
 -- lspkind settings for better symbols
 

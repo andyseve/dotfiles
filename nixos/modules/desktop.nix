@@ -37,7 +37,7 @@
 	environment.systemPackages = with pkgs; [	
 		# WindowManager Core
     haskellPackages.xmobar
-    stalonetray
+    trayer
 		rofi rofi-pass
 		picom                            # transparancy
 		dunst libnotify                  # notifications

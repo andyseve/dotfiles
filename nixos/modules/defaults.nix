@@ -141,22 +141,27 @@
 
     (python3.withPackages # installing python3 with packages
       (ps: with ps; [
-        pylint jedi
         numpy scipy matplotlib
-        scikitlearn
-        pandas
         jupyter notebook
       ])
     )
     python3Packages.pip
     python3Packages.argcomplete
+    python3Packages.numpy
+    python3Packages.scipy
+    python3Packages.matplotlib
+    python3Packages.scikitlearn
+    python3Packages.pandas
+    python3Packages.jupyter
+    python3Packages.notebook
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.haskell-language-server
 
-		jdk11 nodejs
+    jdk11 nodejs
+    nodePackages.pyright
 
 		# Latex
 		texlive.combined.scheme-full

@@ -1,4 +1,4 @@
-## Last Modified: Sat Dec 11 12:00:18 2021
+## Last Modified: Wed 08 Jun 2022 02:04:29 AM EDT
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -257,6 +257,7 @@ if check xmonad; then
 	cdir $OF
 
 	link $IF/xmonad.hs $OF/xmonad.hs
+	link $IF/scripts $OF/scripts
 else
 	nope xmonad
 fi
@@ -268,16 +269,18 @@ if check xmobar; then
 	cdir $OF
 	
 	if [ ! -L $OF/xmobar.hs ]; then
-		echo "Choose the xmobar file to link"
+		echo "Choose the primary xmobar file to link"
 		select opt in $IF/*.hs
 		do
 			link $opt $OF/xmobar.hs
 			break
 		done
 	fi
-	link $IF/my-xmobar.cabal $OF/my-xmobar.cabal
-	link $IF/shell.nix $OF/shell.nix
-	link $IF/hie.yaml $OF/hie.yaml
+	# link $IF/my-xmobar.cabal $OF/my-xmobar.cabal
+	# link $IF/shell.nix $OF/shell.nix
+	# link $IF/hie.yaml $OF/hie.yaml
+	link $IF/xmobar-secondary.hs $OF/xmobar-secondary.hs
+	link $IF/scripts $OF/scripts
 else
 	nope xmobar
 fi
