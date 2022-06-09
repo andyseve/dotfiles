@@ -1,5 +1,11 @@
 #!/run/current-system/sw/bin/sh
 
+_infodir=$(mktemp -dt "info.XXXXXXXX" --tmpdir=/run/user/$(id -u))
+
+_volume=$(mktemp -t "volume.XXXXXXXX" --tmpdir=$_infodir)
+_music=$(mktemp -t "music.XXXXXXXX" --tmpdir=$_infodir)
+_internet=$(mktemp -t "internet.XXXXXXXX" --tmpdir=$_infodir)
+
 _volume_pipe=/tmp/volume_pipe
 rm $_volume_pipe; mkfifo $_volume_pipe
 
