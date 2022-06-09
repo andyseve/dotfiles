@@ -132,6 +132,8 @@
       ])
     ) # password manager
     mailutils
+    yt-dlp #youtube-dl
+    ncmpcpp
 
 		
 		# Dev Tools
@@ -153,7 +155,6 @@
     python3Packages.pandas
     python3Packages.jupyter
     python3Packages.notebook
-    python3Packages.youtube-dl
 
     unstable.haskellPackages.ghc
     unstable.haskellPackages.hoogle
