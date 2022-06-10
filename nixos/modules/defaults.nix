@@ -96,7 +96,7 @@
     dmidecode
 
     # Volume
-    pavucontrol
+    alsa-utils
 
 		# Networking
     iputils

@@ -59,6 +59,7 @@
 		gimp inkscape
 		alacritty rxvt_unicode-with-plugins
     discord unstable.zoom-us slack
+    pavucontrol
 		unstable.ytmdesktop
     unstable.dropbox
 

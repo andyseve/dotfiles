@@ -11,11 +11,11 @@
       /etc/nixos/modules/defaults.nix
       /etc/nixos/modules/desktop.nix
       /etc/nixos/modules/nvidia-legacy.nix
-      /etc/nixos/modules/users.nix
+      /etc/nixos/modules/sound.nix
+      /etc/nixos/modules/security.nix
       /etc/nixos/modules/ssh.nix
       /etc/nixos/modules/git.nix
       /etc/nixos/modules/taskserver.nix
-      /etc/nixos/modules/mopidy.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
