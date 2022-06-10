@@ -1,7 +1,11 @@
 { config, lib, pkgs, ... }:
 
 {
+  security.apparmor.enable = true;
+  security.rtkit.enable = true;
+  security.polkit.enable = true;
 	security.sudo.enable = true;
+
   users.users.stranger = {
     isNormalUser = true;
 		home = "/home/stranger";
@@ -10,5 +14,6 @@
 		createHome = true;
 		shell = "${pkgs.zsh}/bin/zsh";
   };
+
 	users.users.root.shell = "${pkgs.zsh}/bin/zsh";
 }

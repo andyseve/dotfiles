@@ -140,12 +140,7 @@
 		gnumake
 		gcc ccls
 
-    (python3.withPackages # installing python3 with packages
-      (ps: with ps; [
-        numpy scipy matplotlib
-        jupyter notebook
-      ])
-    )
+    python3
     python3Packages.pip
     python3Packages.argcomplete
     python3Packages.numpy
@@ -182,18 +177,10 @@
     hplipWithPlugin
   ];
 
-  # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull;
-  };
-
   # hardware support
 	hardware.bluetooth.enable = true;
 	# 32 bit support, required for steam -- check this
 	hardware.opengl.driSupport32Bit = true;
-	hardware.pulseaudio.support32Bit = true;
 
   programs = {
     # zsh

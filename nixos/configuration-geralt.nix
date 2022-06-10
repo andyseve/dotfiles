@@ -10,9 +10,10 @@
       /etc/nixos/hardware-configuration.nix
       ./modules/defaults.nix
       ./modules/desktop.nix
+      ./modules/sound.nix
       ./modules/nvidia.nix
+      ./modules/security.nix
       ./modules/ssh.nix
-      ./modules/users.nix
     ];
 
 	# Timezone settings
