@@ -42,7 +42,7 @@
   networking.useDHCP = false;
   networking.interfaces.wlp1s0.useDHCP = true;
 
-  # Network Proxy
+  # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 	
@@ -54,17 +54,14 @@
 
   # List services that you want to enable:
 
-  # SSHD
-  # Add /etc/nixos/ssh.nix to imports
-  # Note that ssh works without services.openssh.enable
+  # Enable the OpenSSH daemon.
+  # Import /etc/nixos/ssh.nix
 
-  # Firewall.
+  # Open ports in the firewall.
   networking.firewall.enable = true;
 	networking.firewall.allowPing = false;
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
-	#
-  # Define a user account. Don't forget to set a password with ‘passwd’.
 
 	# power actions
 	services.logind = {
@@ -80,6 +77,6 @@
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "21.11"; # Did you read the comment?
+  system.stateVersion = "22.05"; # Did you read the comment?
 }
 
