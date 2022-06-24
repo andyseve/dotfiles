@@ -7,6 +7,7 @@
     listenHost = "::";
     listenPort = 53589;
     ipLog = true;
+    openFirewall = true;
 
     organisations.asevekar.users = [ "Anish Sevekari" ];
 	};
