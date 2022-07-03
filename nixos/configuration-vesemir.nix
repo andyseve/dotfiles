@@ -42,7 +42,6 @@
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
   networking.interfaces.enp2s0f1.useDHCP = true;
   networking.interfaces.wlp3s0f0.useDHCP = true;
 
@@ -50,12 +49,6 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
-
-  # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
   # Import /etc/nixos/ssh.nix
@@ -66,6 +59,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
 
+  # Default monitor configuration
   services.xserver.xrandrHeads = [ 
     {
       output = "eDP-1";
