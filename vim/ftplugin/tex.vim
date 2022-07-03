@@ -1,12 +1,11 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 16 Mar 2022 02:21:26 AM EDT
+" Last Updated: Sun 03 Jul 2022 06:20:55 AM EDT
 " tex specific vim settings
 
 " Core Settings {{{
 set spelllang=en_us
 set nospell
 set textwidth=0
-set colorcolumn=100
 
 setlocal conceallevel=2
 
