@@ -1,6 +1,6 @@
-fixing nice failed on windows:
+# Fixing nice failed on windows:
 	add unsetopt BG_NICE /usr/etc/zshenv
 
-Fixing zplug unknown error:
+# Fixing zplug unknown error:
 	install gawk
 	https://github.com/zplug/zplug/issues/359
