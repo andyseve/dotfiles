@@ -7,14 +7,14 @@ a = "google_calendar"
 b = "calendar_local"
 collections = [["default", "andyseve3.1415@gmail.com", "personal"], ["codechef", "codechef.com_3ilksfmv45aqr3at9ckm95td5g@group.calendar.google.com", "codechef"], ["topcoder", "appirio.com_bhga3musitat85mhdrng9035jg@group.calendar.google.com", "topcoder"], ["codeforces", "k23j233gtcvau7a8ulk2p360m4@group.calendar.google.com", "codeforces"], ["cmu_tcs", "a1hmhmo8houlor4or7344gk59g@group.calendar.google.com", "cmu_cs"], ["cmu_math", "962vi4oj630as7cl1oalq0pc6vlgr94u@import.calendar.google.com", "cmu_math"]]
 metadata = ["color", "displayname"]
-conflict_resolution = ["command", "vimdiff"]
+conflict_resolution = ["command", "nvim", "-d"]
 
 [pair contacts]
 a = "google_contacts"
 b = "contacts_local"
 metadata = ["displayname"]
 collections = [["default", "default", "personal"]]
-conflict_resolution = ["command", "vimdiff"]
+conflict_resolution = ["command", "nvim", "-d"]
 
 [storage contacts_local]
 type = "filesystem"
