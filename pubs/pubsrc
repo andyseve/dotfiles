@@ -82,6 +82,7 @@ active = alias, git
 # new subcommands can be defined, e.g.:
 print = open --with lp
 zathura = open --with zathura
+firefox = open --with firefox
 
 # shell commands can also be defined, by prefixing them with a bang `!`, e.g:
 # count = !pubs list -k | wc -l
