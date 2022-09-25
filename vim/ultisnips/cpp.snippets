@@ -203,6 +203,18 @@ ${1:long long} gcd($1 a, $1 b) {
 }
 $0
 endsnippet
+snippet euclid "Extended Euclid's Algorithm" b
+${1:long long} euclid($1 a, $1 b, $1 &x, $1 &y){
+	if(b == 0){
+		x = 1, y = 0;
+		return a;
+	}
+	$1 d = euclid(b, a % b, y, x);
+	y -= x * (a / b);
+	return d;
+}
+$0
+endsnippet
 snippet frac "Fraction Functions" b
 inline pair<${1:int},$1> sum(pair<$1,$1> a, pair<$1,$1>b) {
 	return make_pair(
@@ -225,7 +237,48 @@ inline pair<$1,$1> sub(pair<$1,$1> a, pair<$1, $1>b) {
 endsnippet
 # }}}
 # # Graphs {{{
+# matchings
+snippet kuhn "Kuhn's algorithm" b
+// Returns lexicographically smallest matching in L
+// Runtime O(l*E)
+// Tested : https://codeforces.com/contest/1728/problem/F
+struct kuhn {
+	int l,r;
+	vector<vector<int>> edges;
+	vector<int> matching;
+	vector<bool> used;
+
+	kuhn() {};
+	kuhn(int l, int r): l(l), r(r) {
+		edges.resize(l);
+		used.resize(l,false);
+		matching.resize(r,-1);
+	}
+
+	bool try_kuhn(int v){
+		if(used[v]) return false;
+		used[v] = true;
+		for(int u : edges[v])
+			if(matching[u] == -1 || try_kuhn(matching[u])){
+				matching[u] = v;
+				return true;
+			}
+		return false;
+	}
+
+	void find_matching(){
+		used.assign(l,false);
+		for(int i = 0; i < l; i++){
+			if(try_kuhn(i)){
+				used.assign(l,false);
+			}
+		}
+	}
+};
+endsnippet
+# flows
 snippet dinic "Dinics algorithm" b
+// Untested
 template<typename T>
 struct dinic {
 	struct edge {
@@ -306,9 +359,9 @@ struct dinic {
 	}
 };
 endsnippet
-snippet push_relable "Push relable" b
+snippet push_relabel "Push relabel" b
 template<typename T>
-struct push_relable {
+struct push_relabel {
 	const T inf = numeric_limits<T>::max();
 	struct edge {
 		int u, rev;
@@ -324,8 +377,8 @@ struct push_relable {
 	vector<vector<edge>> g;
 	vector<vector<int>> B;
 
-	push_relable() {};
-	push_relable(int n): n(n) {
+	push_relabel() {};
+	push_relabel(int n): n(n) {
 		count.resize(2 * n + 1,0);
 		dist.resize(n,0);
 		active.resize(n,0);
@@ -356,7 +409,7 @@ struct push_relable {
 		}
 	}
 
-	void relable(int v) {
+	void relabel(int v) {
 		count[dist[v]]--; dist[v] = 2 * n;
 		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
 		count[dist[v]]++;
@@ -369,7 +422,7 @@ struct push_relable {
 			else break;
 		}
 		if(excess[v] > 0) {
-			relable(v);
+			relabel(v);
 		}
 	}
 
@@ -390,9 +443,9 @@ struct push_relable {
 
 };
 endsnippet
-snippet push_relable_gap "Push relable algorithm - gap heuristic" b
+snippet push_relabel_gap "Push relabel algorithm - gap heuristic" b
 template<typename T>
-struct push_relable {
+struct push_relabel {
 	const T inf = numeric_limits<T>::max();
 	struct edge {
 		int u, rev;
@@ -408,8 +461,8 @@ struct push_relable {
 	vector<vector<edge>> g;
 	vector<vector<int>> B;
 
-	push_relable() {};
-	push_relable(int n): n(n) {
+	push_relabel() {};
+	push_relabel(int n): n(n) {
 		count.resize(n+1,0);
 		dist.resize(n,0);
 		active.resize(n,0);
@@ -450,7 +503,7 @@ struct push_relable {
 		}
 	}
 
-	void relable(int v) {
+	void relabel(int v) {
 		count[dist[v]]--; dist[v] = 2 * n;
 		for(edge& e : g[v]) if(e.cap > e.flow) dist[v] = min(dist[v], dist[e.u] + 1);
 		count[dist[v]]++;
@@ -464,7 +517,7 @@ struct push_relable {
 		}
 		if(excess[v] > 0) {
 			if(count[dist[v]] == 1) gap(dist[v]);
-			else relable(v);
+			else relabel(v);
 		}
 	}
 
