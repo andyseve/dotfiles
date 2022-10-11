@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 27 Sep 2022 07:34:48 AM EDT
+% Last Modified: Tue 27 Sep 2022 06:18:48 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
@@ -71,7 +71,6 @@
 \ifanishspkg%
 	\usepackage[utf8]{inputenc}
 	\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-	\usepackage{nameref}
 	\usepackage[backref=page]{hyperref}
 	\usepackage{cleveref} % for better referencing systems
 
@@ -297,7 +296,7 @@
 		colorlinks   = true, %Colours links instead of ugly boxes
 		urlcolor     = blue, %Colour for external hyperlinks
 		linkcolor    = blue, %Colour of internal links
-		citecolor    = blue,  %Colour of citations
+		citecolor    = blue, %Colour of citations
 	}
 \fi
 
