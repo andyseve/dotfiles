@@ -1,14 +1,11 @@
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.mkShell {
-  name = "jupyter";
+  name = "python";
 
   buildInputs = [
     pkgs.python3
     pkgs.python3Packages.pip
-
-    pkgs.python3Packages.jupyter
-    pkgs.python3Packages.notebook
 
     pkgs.python3Packages.numpy
     pkgs.python3Packages.scipy
