@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 25 Jan 2022 05:22:19 PM EST
+-- Last Modified: Thu 27 Oct 2022 02:25:23 AM EDT
 -- lsp signature config
 
 local present, lsp_signature = pcall(require,'lsp_signature')
@@ -11,9 +11,10 @@ end
 lsp_signature.setup({
 	bind = true,
 	doc_lines = 10,
-
+	
+	-- Floating window offsets
 	floating_window_off_x = 1,
-	floating_window_off_y = 1,
+	floating_window_off_y = 0,
 
 	hint_enable = true,
 	hint_prefix = "🐼 ",  -- Panda for parameter
