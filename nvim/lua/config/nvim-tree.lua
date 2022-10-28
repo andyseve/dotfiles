@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat 04 Jun 2022 08:03:08 PM EDT
+-- Last Modified: Fri 28 Oct 2022 05:27:37 AM EDT
 -- # nvim-tree config
 
 local present, nvim_tree = pcall(require,'nvim-tree') 
@@ -26,7 +26,6 @@ nvim_tree.setup {
 	view = {
 		adaptive_size = false,
 		width = 30,
-		height = 30,
 		hide_root_folder = false,
 		side = "left",
 		preserve_window_proportions = false,
@@ -37,6 +36,18 @@ nvim_tree.setup {
 			custom_only = false,
 			list = {
 				-- user mappings go here
+			},
+		},
+		float = {
+			enable = false,
+			quit_on_focus_loss = true,
+			open_win_config = {
+				relative = "editor",
+				border = "rounded",
+				width = 30,
+				height = 30,
+				row = 1,
+				col = 1,
 			},
 		},
 	},

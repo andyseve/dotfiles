@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Mon 19 Sep 2022 09:19:10 PM EDT
+-- Last Modified: Fri 28 Oct 2022 05:01:36 AM EDT
 -- Plugin config file using packer
 
 local utils = require('core.utils')
@@ -139,7 +139,7 @@ return require('packer').startup({
 
 		-- themes
 		use {
-			'ishan9299/nvim-solarized-lua',
+			'Tsuzat/NeoSolarized.nvim',
 			disable = not plugins.solarized,
 		}
 

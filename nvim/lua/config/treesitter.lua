@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 15 Mar 2022 02:50:52 AM EDT
+-- Last Modified: Fri 28 Oct 2022 06:04:46 AM EDT
 -- # treesitter settings
 
 local present, ts_configs = pcall(require, 'nvim-treesitter.configs')
@@ -16,12 +16,35 @@ ts_configs.setup({
 		'lua',
 		'vim'
 	},
+	-- ignore_install = {}, -- this is only applicable if ensure_installed = all
 
-	ignore_install = {},
+	sync_install = false,
+	auto_install = false,
+
 	highlight = {
 		enable = true,
 		disable = { 'latex' },
-		use_languagetree = true
+		additional_vim_regex_highlighting = false,
 	},
+
+	indent = {
+		-- Experimental
+		-- Enables indent = symbol based on treesitter
+		enable = true,
+	},
+
+	matchup = {
+		enable = true;
+	},
+
+	incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
 
 })

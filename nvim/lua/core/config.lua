@@ -1,13 +1,13 @@
 -- Author: Anish Sevekari
--- Last Modified: Sat 04 Jun 2022 03:05:37 AM EDT
+-- Last Modified: Fri 28 Oct 2022 05:55:43 AM EDT
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
 config.plugins = {
 	-- ui
-	bufferline                  = true,
+	bufferline                  = false,
 	feline                      = true,
-	notify                      = false,
+	notify                      = true,
 	blankline                   = true,
 	which_key                   = true,
 	bufdelete                   = true,
@@ -47,7 +47,7 @@ config.plugins = {
 	-- others
 	true_zen                    = true,
 	tabular                     = true,
-	fast_fold                   = true
+	fast_fold                   = true,
 }
 
 return config
