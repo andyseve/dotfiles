@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 28 Oct 2022 05:53:49 AM EDT
+-- Last Modified: Fri Oct 28 13:19:08 2022
 -- bufferline settings
 
 local present, bufferline = pcall(require, 'bufferline')
@@ -57,7 +57,7 @@ bufferline.setup {
     end,
     max_name_length = 18,
     max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
-    truncate_names = true -- whether or not tab names should be truncated
+    truncate_names = true, -- whether or not tab names should be truncated
     tab_size = 18,
     diagnostics = "nvim_lsp",	--diagnostics = false | "nvim_lsp" | "coc",
     diagnostics_update_in_insert = false,
@@ -76,9 +76,9 @@ bufferline.setup {
 		offsets = {
 			{
 				filetype = "NvimTree",
-				text = "File Explorer" -- text = "File Explorer" | function ,
-				text_align = "left" -- text_align = "left" | "center" | "right"
-				separator = true
+				text = "File Explorer", -- text = "File Explorer" | function ,
+				text_align = "left", -- text_align = "left" | "center" | "right"
+				separator = true,
 			}
 		},
 		color_icons = true,

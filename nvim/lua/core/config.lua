@@ -1,11 +1,11 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 28 Oct 2022 05:55:43 AM EDT
+-- Last Modified: Fri Oct 28 13:20:52 2022
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 
 config.plugins = {
 	-- ui
-	bufferline                  = false,
+	bufferline                  = true,
 	feline                      = true,
 	notify                      = true,
 	blankline                   = true,

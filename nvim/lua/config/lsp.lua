@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 28 Oct 2022 06:45:05 AM EDT
+-- Last Modified: Fri Oct 28 13:22:28 2022
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
@@ -13,9 +13,9 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 -- include capabilities probided by nvim_cmp
-local present, lsp = pcall(require, 'cmp_nvim_lsp')
+local present, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
 if present then
-	capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+	capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
 end
 
 
@@ -103,7 +103,7 @@ local lsp_flags = {
 
 -- language server settings
 
-lsp['ccls'].setup {
+lsp.ccls.setup {
 	on_attach = on_attach,
 	capabilities = capabilities,
 	flags = lsp_flags,
