@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Wed 26 Oct 2022 10:35:59 PM EDT
+-- Last Modified: Fri 28 Oct 2022 04:22:09 AM EDT
 -- lsp signature config
 
 local present, lsp_signature = pcall(require,'lsp_signature')
@@ -11,7 +11,8 @@ end
 lsp_signature.setup({
 	bind = true,
 	doc_lines = 10,
-
+	
+	-- Floating window offsets
 	floating_window_off_x = 1,
 	floating_window_off_y = 0,
 
