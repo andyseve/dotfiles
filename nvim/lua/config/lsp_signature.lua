@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Tue 25 Jan 2022 05:22:19 PM EST
+-- Last Modified: Wed 26 Oct 2022 10:35:59 PM EDT
 -- lsp signature config
 
 local present, lsp_signature = pcall(require,'lsp_signature')
@@ -13,7 +13,7 @@ lsp_signature.setup({
 	doc_lines = 10,
 
 	floating_window_off_x = 1,
-	floating_window_off_y = 1,
+	floating_window_off_y = 0,
 
 	hint_enable = true,
 	hint_prefix = "🐼 ",  -- Panda for parameter

@@ -93,19 +93,6 @@ firefox = doc open --with firefox
 [[[count]]]
 command = !pubs list -k | wc -l
 description = lists number of pubs in repo
-# new subcommands can be defined, e.g.:
-# print = open --with lp
-# evince = open --with evince
-
-# shell commands can also be defined, by prefixing them with a bang `!`, e.g:
-# count = !pubs list -k | wc -l
-
-# aliases can also be defined with descriptions using the following configobj
-# subsectioning.  NOTE: any aliases defined this way should come after all other
-# aliases, otherwise simple aliases will be ignored.
-# [[[count]]]
-# command = !pubs list -k | wc -l
-# description = lists number of pubs in repo
 
 [[git]]
 # The git plugin will commit changes to the repository in a git repository
