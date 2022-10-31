@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Wed 16 Mar 2022 02:22:47 AM EDT
+" Last Updated: Mon 31 Oct 2022 12:30:06 PM EDT
 
 " UI and related settings
 
@@ -18,11 +18,7 @@ endif
 let s:anish_theme_dict = {}
 
 function! s:anish_theme_dict.solarized_dark() dict abort
-	let g:solarized_termtrans=1
-	let g:solarized_termcolors=16
-	let g:solarized_contrast="normal"
-	set background=dark
-	colorscheme solarized
+	colorscheme NeoSolarized
 endfunction
 
 function! s:anish_theme_dict.base16_solarized_dark() dict abort
@@ -38,7 +34,7 @@ function! s:anish_theme_dict.onedark() dict abort
 endfunction
 
 let s:anish_candidate_theme = ['solarized_dark', 'base16_solarized_dark', 'onedark']
-let s:anish_theme = 'base16_solarized_dark'
+let s:anish_theme = 'solarized_dark'
 
 let s:anish_colorscheme_func = printf('s:anish_theme_dict.%s()', s:anish_theme)
 if has_key(s:anish_theme_dict, s:anish_theme)
