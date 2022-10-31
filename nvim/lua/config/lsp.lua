@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri Oct 28 13:22:28 2022
+-- Last Modified: Fri Oct 28 13:28:37 2022
 -- lsp config
 
 local present, lsp = pcall(require,'lspconfig')
@@ -92,7 +92,7 @@ end
 
 local on_attach = function(client,bufnr)
 	lsp_keymaps(bufnr)
-	buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 	local msg = string.format("Language server %s started!", client.name)
 end
 
