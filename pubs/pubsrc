@@ -20,7 +20,7 @@ open_cmd = xdg-open
 # "kate --block"
 # If set to an empty string (default) pubs uses the value of the environment
 # variable $EDITOR.
-edit_cmd = nvim
+edit_cmd = "nvim --server /tmp/pubs_nvim_socket --remote-silent"
 
 # Which default extension to use when creating a note file.
 note_extension = txt

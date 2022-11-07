@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Sun 03 Jul 2022 06:20:55 AM EDT
+" Last Updated: Mon 07 Nov 2022 03:11:49 PM EST
 " tex specific vim settings
 
 " Core Settings {{{
@@ -24,7 +24,7 @@ ab inv ^{-1}
 " }}}
 " syntax tweaks {{{
 "hi! link texMathEnvArgName texEnvArgName
-
+highlight! link Conceal SpecialChar
 " }}}
 " functions {{{
 function! ImprortPreemble()

@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Modified: Wed 17 Aug 2022 12:50:58 PM EDT
+# Last Modified: Mon 07 Nov 2022 11:53:53 AM EST
 # Function that syncs latex style file with the version in the git repository to update and keep changes
 # Function calls diff with the main latex file
 latexsync() {
