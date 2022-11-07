@@ -1,5 +1,5 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 31 Oct 2022 12:30:06 PM EDT
+" Last Updated: Mon 31 Oct 2022 09:47:54 PM EDT
 
 " UI and related settings
 
@@ -34,7 +34,7 @@ function! s:anish_theme_dict.onedark() dict abort
 endfunction
 
 let s:anish_candidate_theme = ['solarized_dark', 'base16_solarized_dark', 'onedark']
-let s:anish_theme = 'solarized_dark'
+let s:anish_theme = 'base16_solarized_dark'
 
 let s:anish_colorscheme_func = printf('s:anish_theme_dict.%s()', s:anish_theme)
 if has_key(s:anish_theme_dict, s:anish_theme)
