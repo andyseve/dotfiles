@@ -1,7 +1,7 @@
 Config {
-		font    = "xft:FiraMono Nerd Font:style=Bold:size=12:antialias=true"
+		font    = "xft:FiraCode Nerd Font Mono:style=Bold:size=12:antialias=true"
 	, additionalFonts = [
-		"xft:FiraMono Nerd Font:style=Bold:size=10:antialias=true"
+		"xft:FiraCode Nerd Font Mono:style=Bold:size=10:antialias=true"
 			-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
 			-- use fc-list to find out correct font name
 		]
