@@ -1,9 +1,12 @@
 " Author: Anish Sevekari
-" Last Modified: Wed 08 Sep 2021 03:01:29 PM EDT
+" Last Modified: Thu 27 Oct 2022 03:05:25 AM EDT
 " Cpp specific vim settings
 
 " # Core Settings
-	setlocal foldmethod=manual
+	setlocal foldmethod=expr
+	setlocal foldexpr=nvim_treesitter#foldexpr()
+	setlocal foldminlines=5
+	setlocal foldlevelstart=99
 
 " # Tabstops
 	setlocal tabstop=4
@@ -22,9 +25,9 @@
 	nnoremap <F8> :Make debug<CR>
 
 " # ALE Settings
-	let b:ale_linters = ['gcc', 'clang']
-	let b:ale_fixers = ['clang-format', 'uncrustify']
-	let b:ale_cpp_gcc_options = '-std=c++17 -Wall -Wno-unused-result -O3 -pthread -lm'
+	" let b:ale_linters = ['gcc', 'clang']
+	" let b:ale_fixers = ['clang-format', 'uncrustify']
+	" let b:ale_cpp_gcc_options = '-std=c++20 -Wall -Wno-unused-result -O3 -pthread -lm'
 
 " # Abbreviations
 	ab vi vector<int>

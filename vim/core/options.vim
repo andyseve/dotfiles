@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Thu 17 Feb 2022 04:52:39 PM EST
+" Last Updated: Thu 27 Oct 2022 02:59:18 AM EDT
 
 " Options
 
@@ -84,7 +84,6 @@ set smartcase  " Do smart case matching
 " # Fold Settings                                                           {{{
 set foldenable
 set foldlevel=0
-set foldmethod=marker
 
 "                                                                           }}}
 " # Back up directories                                                     {{{

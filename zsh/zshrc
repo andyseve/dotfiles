@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu Apr 14 17:34:07 2022
+# Last Edited: Sat 15 Oct 2022 10:03:23 AM EDT
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -46,7 +46,7 @@ setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
 COMPLETION_WAITING_DOTS="true"
-bindkey -v # Use vim keybindings
+# bindkey -v # Use vim keybindings
 
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
