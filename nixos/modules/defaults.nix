@@ -52,7 +52,6 @@
       require-sigs = true;
       substituters = [
         "https://cache.nixos.org"
-        "https://hydra.nixos.org"
       ];
       trusted-substituters = [
         "https://nix-community.cachix.org"
