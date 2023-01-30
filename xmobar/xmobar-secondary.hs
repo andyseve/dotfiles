@@ -1,23 +1,21 @@
 Config {
-		font    = "xft:FiraMono Nerd Font:style=Bold:size=12:antialias=true"
+	font = "xft:Fira Code Nerd Font Mono Bold 12"
 	, additionalFonts = [
-		"xft:FiraMono Nerd Font:style=Bold:size=10:antialias=true"
-			-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
-			-- use fc-list to find out correct font name
-		]
+		"xft:Fira Code Nerd Font Mono Bold 10"
+	]
+	-- https://www.reddit.com/r/archlinux/comments/7n3uxw/font_awesome/ 
+	-- use fc-list to find out correct font name
+	, border = NoBorder
+	, borderWidth = 0
 	, bgColor = "#000000"
 	, fgColor = "#93a1a1"
 	, alpha = 150
-	, position = Top
+	, position = TopSize C 100 40
+	, allDesktops = True
+	, persistent = False
 	, lowerOnStart = True
 	, hideOnStart = False
-	, allDesktops = True
-	, persistent = True
-	, border = NoBorder
-	, borderWidth = 0
 	, sepChar = "%"
-	, alignSep = "}{"
-	, template = " %UnsafeXMonadLog%} <action=xdotool key Super+c>%date%</action> {%music% %volume% "
 	, commands = [  
 			Run Date "%a %d %b %H:%M" "date" 20
 		, Run PipeReader "/tmp/volume_pipe" "volume"
@@ -25,6 +23,16 @@ Config {
 		, Run PipeReader "/tmp/music_pipe" "music"
 		, Run UnsafeXMonadLog
 	]
+	, alignSep = "}{"
+	, template = "\
+	\  \
+	\%UnsafeXMonadLog%\
+	\}\
+	\<action=xdotool key Super+c>%date%</action>\
+	\{\
+	\%music% \
+	\%volume% \
+	\"
 }
 
 -- vim:ft=haskell
