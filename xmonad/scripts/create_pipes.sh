@@ -1,6 +1,6 @@
 #!/run/current-system/sw/bin/sh
 
-_infodir=$(mktemp -dt "info.XXXXXXXX" --tmpdir=/run/user/$(id -u))
+_infodir=$(mktemp -dt "session_info.XXXXXXXX" --tmpdir=/run/user/$(id -u))
 
 _volume=$(mktemp -t "volume.XXXXXXXX" --tmpdir=$_infodir)
 _music=$(mktemp -t "music.XXXXXXXX" --tmpdir=$_infodir)

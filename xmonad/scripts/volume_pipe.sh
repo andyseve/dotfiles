@@ -1,5 +1,9 @@
 #!/run/current-system/sw/bin/sh
 
+# TODO: split into two scipts.
+# One for xmobar : update xmobar every few second -- this can read from a tmpfs instead of querying
+# Might be worth creaing set of functions that create a string of actions and colors for xmobar
+# Second for xmonad : to control changing updates
 
 status="$(amixer sget Master | grep -o -m 1 "\[[a-z]*\]" | tr -d '%[]')"
 vol="$(amixer sget Master | grep -o -m 1 "[[:digit:]]*%" | tr -d '%')"
@@ -20,18 +24,18 @@ pipe_volume() {
 		icon="ﱝ "
 		color=$color_red
 	elif [ "$vol" -lt "20" ]; then
-		icon="奄"
+		icon=""
 		color=$color_green
 	elif [ "$vol" -lt "50" ]; then
-		icon="奔"
+		icon=""
 		color=$color_normal
 	else
-		icon="墳"
+		icon=""
 		color=$color_orange
 	fi
-	echo "<fc=$color><fn=1>$vol</fn>$icon</fc>" | tee /tmp/volume_pipe
-	echo "<fc=$color><fn=1>$vol</fn>$icon</fc>" | tee /tmp/volume_pipe
-	echo "<fc=$color><fn=1>$vol</fn>$icon</fc>" | tee /tmp/volume_pipe
+	echo "<fc=$color><fn=1>$vol</fn><fn=2>$icon</fn></fc>" | tee /tmp/volume_pipe
+	echo "<fc=$color><fn=1>$vol</fn><fn=2>$icon</fn></fc>" | tee /tmp/volume_pipe
+	echo "<fc=$color><fn=1>$vol</fn><fn=2>$icon</fn></fc>" | tee /tmp/volume_pipe
 }
 
 send_notification() {

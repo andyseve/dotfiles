@@ -1,6 +1,7 @@
-{-# LANGUAGE AllowAmbiguousTypes, DeriveDataTypeable, TypeSynonymInstances, MultiParamTypeClasses #-}
+{-# OPTIONS_GHC -Wno-name-shadowing #-}
+{-# OPTIONS_GHC -Wno-missing-signatures #-}
 -- Author: Anish Sevekari
--- Last Modified: Wed 08 Jun 2022 03:14:41 PM EDT
+-- Last Modified: Tue 31 Jan 2023 02:16:48 AM EST
 -- Based on : https://github.com/altercation
   
 -- TODO                                                                     {{{
@@ -166,7 +167,7 @@ myTrayPrimary = "sh ~/.xmonad/scripts/start_trayer.sh"
 -- Scratchpads                                                              {{{
 -------------------------------------------------------------------------------
 
-myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
+myScratchpads = [ NS "top"  spawnTop findTop manageTop
                 , NS "terminal"  spawnTerminal findTerminal manageTerminal
                 , NS "ranger" spawnRanger findRanger manageRanger
                 , NS "khal" spawnKhal findKhal manageKhal
@@ -177,9 +178,9 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         centerFloating = customFloating $ W.RationalRect 0.25 0.25 0.5 0.5
         rightFloating = customFloating $ W.RationalRect 0.73 0.02 0.25 0.50
 
-        spawnHtop  = myTerminal ++ " --class=htop -e htop"
-        findHtop   = resource =? "htop"
-        manageHtop = centerFloating
+        spawnTop  = myTerminal ++ " --class=top -e btop"
+        findTop   = resource =? "top"
+        manageTop = centerFloating
 
         spawnWeather  = myTerminal ++ "--class=weather -e weather"
         findWeather   = resource =? "weather"
@@ -189,7 +190,7 @@ myScratchpads = [ NS "htop"  spawnHtop findHtop manageHtop
         findTerminal = resource =? "term"
         manageTerminal = centerFloating
 
-        spawnRanger = myTerminal ++ " --class=ranger  -e ranger"
+        spawnRanger = myTerminal ++ " --class=ranger -e ranger"
         findRanger = resource =? "ranger"
         manageRanger = centerFloating
 
@@ -714,7 +715,7 @@ myKeys conf = let
     -- Scratchpads                                                          {{{
     ---------------------------------------------------------------------------
     subKeys "scratchpads"
-    [ ("M-r", addName "htop"     $ namedScratchpadAction myScratchpads "htop"     )
+    [ ("M-r", addName "top"      $ namedScratchpadAction myScratchpads "top"      )
     , ("M-t", addName "terminal" $ namedScratchpadAction myScratchpads "terminal" )
     , ("M-v", addName "mixer"    $ namedScratchpadAction myScratchpads "mixer"    )
     , ("M-e", addName "ranger"   $ namedScratchpadAction myScratchpads "ranger"   )

@@ -109,6 +109,7 @@
 		tree
 		tmux screen
     pdftk
+    btop
 
 		# Encryption
 		gnupg

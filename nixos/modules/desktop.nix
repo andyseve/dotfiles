@@ -46,6 +46,7 @@
     xorg.xmodmap xorg.xrandr xorg.libXinerama
 		scrot                            # screenshots
     xclip
+    volumeicon                       # volume for trayer
 
     networkmanager_dmenu
 

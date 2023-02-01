@@ -1,10 +1,10 @@
 " Author: Anish Sevekari
-" Last Updated: Mon 07 Nov 2022 03:11:49 PM EST
+" Last Updated: Wed 16 Nov 2022 05:02:11 AM EST
 " tex specific vim settings
 
 " Core Settings {{{
 set spelllang=en_us
-set nospell
+set spell
 set textwidth=0
 
 setlocal conceallevel=2
@@ -18,15 +18,16 @@ setlocal spellfile+=~/.config/nvim/spell/math.add
 " Make a spell check keybinding, to be ran at last
 
 " }}}
-" autocorrects {{{
+" Autocorrects {{{
 ab inv ^{-1}
+ab teh the
 
 " }}}
-" syntax tweaks {{{
+" Syntax Tweaks {{{
 "hi! link texMathEnvArgName texEnvArgName
 highlight! link Conceal SpecialChar
 " }}}
-" functions {{{
+" Functions {{{
 function! ImprortPreemble()
 	" Preemble function.
 	" Includes appropriate lines from anishs.sty into the latex file
@@ -44,7 +45,7 @@ function! ImprortPreemble()
 endfunction
 
 " }}}
-" autocommands {{{
+" Autocommands {{{
 augroup anish_sevekari_tex
 	autocmd!
 	autocmd BufWinLeave *.* mkview
