@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 18 Aug 2021 02:58:28 AM EDT
+# Last Edited: Wed 01 Feb 2023 03:27:19 PM EST
 # Zshrc with only color and completiong settings
 
 # Set zsh variables and source corresponding settings
@@ -28,7 +28,7 @@ unsetopt beep # removes beeps in windows
 
 setopt histreduceblanks # remove blanks
 setopt histignorealldups # ignore repeats in history
-setopt sharehistory # share history between terminals
+# setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
 COMPLETION_WAITING_DOTS="true"
