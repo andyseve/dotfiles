@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 01 Feb 2023 03:17:45 PM EST
+# Last Edited: Thu 02 Feb 2023 11:32:50 AM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -8,8 +8,10 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/ba
 ################################################################################
 # zinit ######################################################################
 ################################################################################
-
-source $HOME/.zinit/bin/zinit.zsh
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+mkdir -p "$(dirname $ZINIT_HOME)"
+git clone https://github.com/zdharma-continuum/zinit.git
+source ${ZINIT_HOME}/zinit.zsh
 
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then 
 	. ~/.nix-profile/etc/profile.d/nix.sh;
