@@ -104,7 +104,7 @@
     networkmanager networkmanager-openvpn
 
 		# Linux shell utils
-		fzf silver-searcher
+		fzf silver-searcher autojump
 		neofetch
 		tree
 		tmux screen

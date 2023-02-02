@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 01 Feb 2023 03:17:45 PM EST
+# Last Edited: Thu 02 Feb 2023 03:18:45 PM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -9,27 +9,74 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/ba
 # zinit ######################################################################
 ################################################################################
 
-source $HOME/.zinit/bin/zinit.zsh
-
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then 
-	. ~/.nix-profile/etc/profile.d/nix.sh;
+# Auto installing zinit
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d $(dirname $ZINIT_HOME) ]; then
+	mkdir -p "$(dirname $ZINIT_HOME)"
+	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
+source "${ZINIT_HOME}/zinit.zsh"
 
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+# helper functions
+function __bind_history_keys(){
+	bindkey "$terminfo[kcuu1]" history-substring-search-up
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+	bindkey -M vicmd 'k' history-substring-search-up
+	bindkey -M vicmd 'j' history-substring-search-down
+}
 
-zinit light hlissner/zsh-autopair
-zinit light jeffwalter/zsh-plugin-cd-ssh
-zinit light arzzen/calc.plugin.zsh
-zinit light zsh-users/zsh-autosuggestions
-zinit light srijanshetty/zsh-pip-completion
-zinit ice atclone"./install.py"; zinit light wting/autojump
-zinit ice pick"async.zsh" src"pure.zsh"; zinit light sindresorhus/pure 
-zinit ice from"gh-r" as"command"; zinit load junegunn/fzf-bin
-zinit light zdharma-continuum/fast-syntax-highlighting
-zinit light zsh-users/zsh-history-substring-search
-zinit light spwhitt/nix-zsh-completions 
-zinit light chisui/zsh-nix-shell
+zinit wait lucid light-mode for \
+	hlissner/zsh-autopair \
+	jeffwalter/zsh-plugin-cd-ssh \
+	arzzen/calc.plugin.zsh \
+	chisui/zsh-nix-shell \
+	laggardkernel/zsh-thefuck \
+	MichaelAquilina/zsh-auto-notify
+
+# completions and autosuggestions
+zinit wait lucid light-mode for \
+		atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
+		atload"_zsh_autosuggest_start" \
+	zsh-users/zsh-autosuggestions \
+		atpull'zinit creinstall -q .' \
+		blockf \
+	zsh-users/zsh-completions \
+  srijanshetty/zsh-pip-completion \
+  spwhitt/nix-zsh-completions 
+
+
+# history searching
+zinit wait lucid light-mode for \
+		atinit"
+			zstyle :history-search-multi-word page-size 10
+			zstyle :history-search-multi-word highlight-color fg=red,bold
+			zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+		" \
+	zdharma-continuum/history-search-multi-word \
+		atload'__bind_history_keys' \
+	zsh-users/zsh-history-substring-search
+
+# syntax highlighting
+zinit wait lucid light-mode for \
+		atinit"
+			typeset -gA FAST_HIGHLIGHT; FAST_HIGHLIGHT[git-cmsg-len]=100;
+			ZINIT[COMPINIT_OPTS]=-C;
+			zicompinit;
+			zicdreplay;
+		" \
+	zdharma-continuum/fast-syntax-highlighting \
+	zlsun/solarized-man \
+
+# Prompt theme
+zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
+zinit light sindresorhus/pure 
+
+# Navigation
+zinit wait lucid light-mode for \
+		atclone"./install.py" \
+	wting/autojump \
+	changyuheng/zsh-interactive-cd
+
 
 ################################################################################
 # Settings #####################################################################
@@ -52,7 +99,7 @@ COMPLETION_WAITING_DOTS="true"
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
 SAVEHIST=1000
-HISTFILE=~/.zsh_history
+HISTFILE=~/.zsh/zsh_history
 
 
 # zsh/autosuggestions color change
@@ -67,11 +114,13 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 # Search
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
-# history search keybindings
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
+
+# history search keybindings -- reset keys at start of the shell
+# history search keys would be bound when plugin loads
+bindkey -r "$terminfo[kcuu1]"
+bindkey -r "$terminfo[kcud1]"
+bindkey -r -M vicmd 'k'
+bindkey -r -M vicmd 'j'
 
 ################################################################################
 # Functions and Commands #######################################################
@@ -97,7 +146,12 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # loading autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+if _has autojump; then
+	AUTOJUMP_BIN=$(readlink $(which autojump))
+	AUTOJUMP_DIR=$(dirname $(dirname $AUTOJUMP_BIN))
+	AUTOJUMP_SH=$AUTOJUMP_DIR/etc/profile.d/autojump.sh
+	[[ -s $AUTOJUMP_SH ]] && source $AUTOJUMP_SH
+fi
 
 
 
