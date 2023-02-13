@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 02 Feb 2023 04:14:45 PM EST
+# Last Edited: Thu 02 Feb 2023 04:20:04 PM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -72,9 +72,8 @@ zinit light sindresorhus/pure
 
 # Navigation
 zinit wait lucid light-mode for \
-		atclone"./install.py" \
-	wting/autojump \
-	changyuheng/zsh-interactive-cd
+	changyuheng/zsh-interactive-cd \
+	# wting/autojump
 
 
 ################################################################################
