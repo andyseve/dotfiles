@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Sun 13 Dec 2020 10:47:17 PM EST
+# Last Edited: Wed 15 Feb 2023 02:36:05 AM EST
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
@@ -147,7 +147,7 @@ done
 export PAGER='less'
 if _has nvim; then
 	export EDITOR='nvim'
-else
+elif _has vim; then
 	export EDITOR='vim'
 fi
 

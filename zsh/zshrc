@@ -1,13 +1,21 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 02 Feb 2023 04:20:04 PM EST
+# Last Edited: Wed 15 Feb 2023 03:10:51 AM EST
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=$HOME/.zsh
 fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
-# zinit ######################################################################
+# zinit ########################################################################
 ################################################################################
+
 # Auto installing zinit
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [ ! -d $(dirname $ZINIT_HOME) ]; then
@@ -17,13 +25,14 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # helper functions
-function __bind_history_keys(){
+local function __bind_history_keys(){
 	bindkey "$terminfo[kcuu1]" history-substring-search-up
 	bindkey "$terminfo[kcud1]" history-substring-search-down
 	bindkey -M vicmd 'k' history-substring-search-up
 	bindkey -M vicmd 'j' history-substring-search-down
 }
 
+# plugins
 zinit wait lucid light-mode for \
 	hlissner/zsh-autopair \
 	jeffwalter/zsh-plugin-cd-ssh \
@@ -32,7 +41,7 @@ zinit wait lucid light-mode for \
 	laggardkernel/zsh-thefuck \
 	MichaelAquilina/zsh-auto-notify
 
-# completions and autosuggestions
+## completions and autosuggestions
 zinit wait lucid light-mode for \
 		atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
 		atload"_zsh_autosuggest_start" \
@@ -44,7 +53,7 @@ zinit wait lucid light-mode for \
   spwhitt/nix-zsh-completions 
 
 
-# history searching
+## history searching
 zinit wait lucid light-mode for \
 		atinit"
 			zstyle :history-search-multi-word page-size 10
@@ -55,7 +64,7 @@ zinit wait lucid light-mode for \
 		atload'__bind_history_keys' \
 	zsh-users/zsh-history-substring-search
 
-# syntax highlighting
+## syntax highlighting
 zinit wait lucid light-mode for \
 		atinit"
 			typeset -gA FAST_HIGHLIGHT; FAST_HIGHLIGHT[git-cmsg-len]=100;
@@ -66,11 +75,13 @@ zinit wait lucid light-mode for \
 	zdharma-continuum/fast-syntax-highlighting \
 	zlsun/solarized-man \
 
-# Prompt theme
-zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
-zinit light sindresorhus/pure 
+## Prompt theme
+# zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
+# zinit light sindresorhus/pure 
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 
-# Navigation
+## Navigation
 zinit wait lucid light-mode for \
 	changyuheng/zsh-interactive-cd \
 	# wting/autojump
@@ -144,6 +155,7 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # loading autojump
+# autojump is installed using nixos, and it needs to be imported from nix-store.
 if _has autojump; then
 	AUTOJUMP_BIN=$(readlink $(which autojump))
 	AUTOJUMP_DIR=$(dirname $(dirname $AUTOJUMP_BIN))
@@ -207,7 +219,7 @@ done
 export PAGER='less'
 if _has nvim; then
 	export EDITOR='nvim'
-else
+elif _has vim; then
 	export EDITOR='vim'
 fi
 
@@ -217,31 +229,34 @@ fi
 ################################################################################
 autoload -U promptinit && promptinit
 
-PURE_PROMPT_SYMBOL='❯'
-PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
-PROMPT='%F{white}%* '$PROMPT
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}%f"
-       if [[ ${(j.|.)pipestatus} = 0 ]]; then
-              RPROMPT=""
-       fi
-}
-
-precmd_nix_shell() {
-	if [[ -n "$IN_NIX_SHELL" ]]; then
-		if [[ -n $name ]]; then
-			RPROMPT=$RPROMPT' %F{red}[${name}]%f'
-		else
-			RPROMPT=$RPROMPT' %F{red}[nix-shell]%f'
-		fi
-	fi
-}
-
-add-zsh-hook precmd precmd_pipestatus
-add-zsh-hook precmd precmd_nix_shell
-
-zstyle :prompt:pure:git:stash show yes
+# PURE_PROMPT_SYMBOL='❯'
+# PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
+# PROMPT='%F{white}%* '$PROMPT
+#
+# precmd_pipestatus() {
+# 	RPROMPT="%F{red}${(j.|.)pipestatus}%f"
+#        if [[ ${(j.|.)pipestatus} = 0 ]]; then
+#               RPROMPT=""
+#        fi
+# }
+#
+# precmd_nix_shell() {
+# 	if [[ -n "$IN_NIX_SHELL" ]]; then
+# 		if [[ -n $name ]]; then
+# 			RPROMPT=$RPROMPT' %F{red}[${name}]%f'
+# 		else
+# 			RPROMPT=$RPROMPT' %F{red}[nix-shell]%f'
+# 		fi
+# 	fi
+# }
+#
+# add-zsh-hook precmd precmd_pipestatus
+# add-zsh-hook precmd precmd_nix_shell
+#
+# zstyle :prompt:pure:git:stash show yes
 
 
 ################################################################################

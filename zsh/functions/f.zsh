@@ -1,9 +1,10 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 31 Oct 2019 01:44:46 AM EDT
+# Last Edited: Wed 15 Feb 2023 03:44:59 AM EST
 # Better fzf function
 # Pipes through the command given as first arguement if it exists, and it not to be passed to fzf
 # We prefer setting height to 40% for better readability
 
+# f <program> <search_string>
 function f(){
 	file=""
 	if [[ -z "$1" ]]; then
