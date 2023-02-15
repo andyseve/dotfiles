@@ -1,14 +1,15 @@
 #!/run/current-system/sw/bin/bash
 # Author: Anish Sevekari
-# Last Modified: Tue 31 Jan 2023 11:02:14 PM EST
+# Last Modified: Wed 15 Feb 2023 01:48:57 PM EST
 # Helper functions for xmobar
 
+# xmobar <color> <string>
 xmobar_color(){
-	# $1 color
-	# $2 string
 	color=$1
 	text=$2
 	return "<fc=$1>$2</fc>"
 }
+
+# xmobar <string> <actions> <buttons>
 
 
