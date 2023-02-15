@@ -1,8 +1,4 @@
 # useful shortcuts
-alias cclip='xclip -selection clipboard'
-function cpaste(){xclip -o > "$1"}
-
-
 alias showuser='cut -d: -f1 /etc/passwd'
 alias my-ip="curl http://ipecho.net/plain; echo"
 alias fetch="neofetch"

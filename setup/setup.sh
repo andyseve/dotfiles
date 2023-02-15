@@ -1,4 +1,4 @@
-## Last Modified: Wed 08 Jun 2022 02:04:29 AM EDT
+## Last Modified: Wed 15 Feb 2023 04:05:15 AM EST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
@@ -86,6 +86,7 @@ if check zsh; then
 	link $IF/zshrc.lite $OF/zshrc.lite
 	link $IF/zshrc.noplugin $OF/zshrc.noplugin
 	link $IF/zshrc.testing $OF/zshrc.testing
+	link $IF/p10k.zsh $OF/p10k.zsh
 
 	link $IF/dircolors $OF/dircolors
 

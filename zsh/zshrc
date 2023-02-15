@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 15 Feb 2023 03:10:51 AM EST
+# Last Edited: Wed 15 Feb 2023 04:13:08 AM EST
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -102,7 +102,8 @@ setopt histignorealldups # ignore repeats in history
 
 setopt correct # spelling correction
 COMPLETION_WAITING_DOTS="true"
-# bindkey -v # Use vim keybindings
+bindkey -v # Use vim keybindings
+# vim keybindings are a problem if you are already in nvim
 
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
@@ -230,7 +231,7 @@ fi
 autoload -U promptinit && promptinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f "$ZSH_HOME/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
 
 # PURE_PROMPT_SYMBOL='❯'
 # PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
