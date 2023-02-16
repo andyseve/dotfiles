@@ -1,12 +1,12 @@
-## Last Modified: Wed 15 Feb 2023 04:05:15 AM EST
+## Last Modified: Wed 15 Feb 2023 10:16:36 PM EST
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
 ################################################################################
 # Global Variables #############################################################
 ################################################################################
-CONFIG="$HOME/.config"
-LOCAL="$HOME/.local/share"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+LOCAL="${XDG_DATA_HOME:-$HOME/.local/share}"
 DOTFILES="$HOME/dotfiles"
 OVERWRITE="$HOME/.overwrites"
 DID_OVERWRITE=false
@@ -76,45 +76,22 @@ fi
 
 # zsh
 if check zsh; then
+
 	IF=$DOTFILES/zsh
-	OF=$HOME/.zsh
+	OF=${ZDOTDIR:-$HOME/.zsh}
 	FOLDERS=(aliases functions)
+	FILES=(.zshenv .zshrc p10k.zsh dircolors)
 
 	cdir $OF
 
-	link $IF/zshrc $OF/zshrc
-	link $IF/zshrc.lite $OF/zshrc.lite
-	link $IF/zshrc.noplugin $OF/zshrc.noplugin
-	link $IF/zshrc.testing $OF/zshrc.testing
-	link $IF/p10k.zsh $OF/p10k.zsh
-
-	link $IF/dircolors $OF/dircolors
+	for file in ${FILES[@]}; do
+		link "$IF/$file" "$OF/$file"
+	done
 
 	for dir in ${FOLDERS[@]}; do
 		link "$IF/$dir" "$OF/$dir"
 	done
 
-	if $LITE; then
-		link $OF/zshrc.lite $HOME/.zshrc
-	elif $NOPLUGIN; then
-		link $OF/zshrc.noplugin $HOME/.zshrc
-	else
-		link $OF/zshrc $HOME/.zshrc
-	fi
-
-	# zinit setup
-	if [ -z "$ZINIT_HOME" ]; then
-		ZINIT_HOME="${ZDOTDIR:-$HOME}/.zinit"
-	fi
-	cdir $ZINIT_HOME
-	chmod g-rwX $ZINIT_HOME
-	if test -d "$ZINIT_HOME/bin/.git"; then
-		cd "$ZINIT_HOME/bin"
-		git pull origin master
-	else
-		cd "$ZINIT_HOME"
-		git clone https://github.com/zdharma-continuum/zinit.git bin
-	fi
 else
 	nope zsh
 fi

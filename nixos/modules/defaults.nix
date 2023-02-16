@@ -75,6 +75,22 @@
 
 	nixpkgs.overlays = import ../overlays;
 
+  # environment variables
+  environment.sessionVariables = rec {
+    XDG_CACHE_HOME  = "\${HOME}/.cache";
+    XDG_CONFIG_HOME = "\${HOME}/.config";
+    XDG_BIN_HOME    = "\${HOME}/.local/bin";
+    XDG_DATA_HOME   = "\${HOME}/.local/share";
+
+    # ZDOTDIR
+    ZDOTDIR         = "\${XDG_CONFIG_HOME}/zsh";
+
+    # PATH
+    PATH = [
+      "\${XDG_BIN_HOME}"
+    ];
+  };
+
   environment.enableDebugInfo = true;
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [

@@ -1,28 +1,91 @@
 # Author: Anish Sevekari
-# Last Edited: Wed 15 Feb 2023 02:36:05 AM EST
+# Last Edited: Thu 16 Feb 2023 02:36:49 AM EST
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # Set zsh variables and source corresponding settings
-ZSH_HOME=$HOME/.zsh
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions $fpath)
+ZSH_HOME=${ZDOTDIR:-$HOME/.zsh}
+fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
-# Zplugin ######################################################################
+# zinit ########################################################################
 ################################################################################
 
-source $HOME/.zplugin/bin/zplugin.zsh
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
+# Auto installing zinit
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d $(dirname $ZINIT_HOME) ]; then
+	mkdir -p "$(dirname $ZINIT_HOME)"
+	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
 
-zplugin light hlissner/zsh-autopair
-zplugin light jeffwalter/zsh-plugin-cd-ssh
-zplugin light arzzen/calc.plugin.zsh
-zplugin light zsh-users/zsh-autosuggestions
-zplugin light srijanshetty/zsh-pip-completion
-zplugin ice atclone"./install.py"; zplugin light wting/autojump
-zplugin ice pick"async.zsh" src"pure.zsh"; zplugin light sindresorhus/pure 
-zplugin ice from"gh-r" as"command"; zplugin load junegunn/fzf-bin
-zplugin light zdharma/fast-syntax-highlighting
-zplugin light zsh-users/zsh-history-substring-search
+# helper functions
+local function __bind_history_keys(){
+	bindkey "$terminfo[kcuu1]" history-substring-search-up
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+	bindkey -M vicmd 'k' history-substring-search-up
+	bindkey -M vicmd 'j' history-substring-search-down
+}
+
+# plugins
+zinit wait lucid light-mode for \
+	hlissner/zsh-autopair \
+	jeffwalter/zsh-plugin-cd-ssh \
+	arzzen/calc.plugin.zsh \
+	chisui/zsh-nix-shell \
+	laggardkernel/zsh-thefuck \
+	MichaelAquilina/zsh-auto-notify
+
+## completions and autosuggestions
+zinit wait lucid light-mode for \
+		atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
+		atload"_zsh_autosuggest_start" \
+	zsh-users/zsh-autosuggestions \
+		atpull'zinit creinstall -q .' \
+		blockf \
+	zsh-users/zsh-completions \
+  srijanshetty/zsh-pip-completion \
+  spwhitt/nix-zsh-completions 
+
+
+## history searching
+zinit wait lucid light-mode for \
+		atinit"
+			zstyle :history-search-multi-word page-size 10
+			zstyle :history-search-multi-word highlight-color fg=red,bold
+			zstyle :plugin:history-search-multi-word reset-prompt-protect 1
+		" \
+	zdharma-continuum/history-search-multi-word \
+		atload'__bind_history_keys' \
+	zsh-users/zsh-history-substring-search
+
+## syntax highlighting
+zinit wait lucid light-mode for \
+		atinit"
+			typeset -gA FAST_HIGHLIGHT; FAST_HIGHLIGHT[git-cmsg-len]=100;
+			ZINIT[COMPINIT_OPTS]=-C;
+			zicompinit;
+			zicdreplay;
+		" \
+	zdharma-continuum/fast-syntax-highlighting \
+	zlsun/solarized-man \
+
+## Prompt theme
+# zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
+# zinit light sindresorhus/pure 
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+## Navigation
+zinit wait lucid light-mode for \
+	changyuheng/zsh-interactive-cd \
+	# wting/autojump
+
 
 ################################################################################
 # Settings #####################################################################
@@ -35,17 +98,18 @@ unsetopt beep # removes beeps in windows
 
 setopt histreduceblanks # remove blanks
 setopt histignorealldups # ignore repeats in history
-setopt sharehistory # share history between terminals
+# setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
 COMPLETION_WAITING_DOTS="true"
 bindkey -v # Use vim keybindings
+# vim keybindings are a problem if you are already in nvim
 
 
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
 SAVEHIST=1000
-HISTFILE=~/.zsh_history
+HISTFILE=~/.zsh/zsh_history
 
 
 # zsh/autosuggestions color change
@@ -60,11 +124,13 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=10'
 # Search
 bindkey -M vicmd '?' history-incremental-search-backward
 bindkey -M vicmd '/' history-incremental-search-forward
-# history search keybindings
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
+
+# history search keybindings -- reset keys at start of the shell
+# history search keys would be bound when plugin loads
+bindkey -r "$terminfo[kcuu1]"
+bindkey -r "$terminfo[kcud1]"
+bindkey -r -M vicmd 'k'
+bindkey -r -M vicmd 'j'
 
 ################################################################################
 # Functions and Commands #######################################################
@@ -90,7 +156,13 @@ if [[ -n $SSH_CONNECTION ]]; then
 fi
 
 # loading autojump
-[[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+# autojump is installed using nixos, and it needs to be imported from nix-store.
+if _has autojump; then
+	AUTOJUMP_BIN=$(readlink $(which autojump))
+	AUTOJUMP_DIR=$(dirname $(dirname $AUTOJUMP_BIN))
+	AUTOJUMP_SH=$AUTOJUMP_DIR/etc/profile.d/autojump.sh
+	[[ -s $AUTOJUMP_SH ]] && source $AUTOJUMP_SH
+fi
 
 
 
@@ -111,9 +183,9 @@ fi
 ################################################################################
 
 # use colored versions of commands by default
-if [ -x /usr/bin/dircolors ]; then
-	if test -r ~/.zsh/dircolors; then
-		eval "$(dircolors -b ~/.zsh/dircolors)"
+if check dircolors; then
+	if test -r $ZSH_HOME/dircolors; then
+		eval "$(dircolors -b $ZSH_HOME/dircolors)"
 	else
 		eval "$(dircolors -b)"
 	fi
@@ -133,6 +205,7 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
+#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias alert='tput bel'
 
 # Importing Aliases
@@ -151,36 +224,25 @@ elif _has vim; then
 	export EDITOR='vim'
 fi
 
-PATH="$PATH:$HOME/bin" # add my scripts to bin
-PATH="$PATH:$HOME/.local/bin" # numpy scripts
-if [ -e "$HOME/bin/miniconda3/bin" ]; then
-	PATH="$PATH:$HOME/bin/miniconda3/bin" # add anaconda to path
-fi
-
 
 ################################################################################
 # Prompt #######################################################################
 ################################################################################
 autoload -U promptinit && promptinit
 
-PURE_PROMPT_SYMBOL='❯'
-PROMPT='%(?.%F{green}.%F{red})${PURE_PROMPT_SYMBOL}%f '
-PROMPT='%F{white}%* '$PROMPT
-
-precmd_pipestatus() {
-	RPROMPT="%F{red}${(j.|.)pipestatus}"
-       if [[ ${(j.|.)pipestatus} = 0 ]]; then
-              RPROMPT=""
-       fi
-}
-add-zsh-hook precmd precmd_pipestatus
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f "$ZDOTDIR/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
 
 ################################################################################
 # Completions ##################################################################
 ################################################################################
 
 # Use modern completion system
-autoload -Uz compinit && compinit -u
+autoload -Uz compinit bashcompinit
+compinit -u
+bashcompinit -u
+
+eval "$(register-python-argcomplete pubs)"
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -198,5 +260,10 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+# Add local dirs to path -- required for convinience
+path+=($HOME/bin)
+path+=($HOME/.local/bin)
+export PATH
 
 # vim:ft=zsh
