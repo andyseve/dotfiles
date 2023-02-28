@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri Oct 28 13:20:52 2022
+-- Last Modified: Thu 23 Feb 2023 01:17:37 PM EST
 -- Contains plugin config - Makes it more readable than changing packer file.
 local config= {}
 

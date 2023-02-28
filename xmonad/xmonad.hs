@@ -1,15 +1,12 @@
-{-# OPTIONS_GHC -Wno-name-shadowing #-}
-{-# OPTIONS_GHC -Wno-missing-signatures #-}
 -- Author: Anish Sevekari
--- Last Modified: Tue 31 Jan 2023 02:16:48 AM EST
+-- Last Modified: Tue 28 Feb 2023 08:23:23 AM EST
 -- Based on : https://github.com/altercation
+-- Based on : https://github.com/NeshHari
   
 -- TODO                                                                     {{{
 -------------------------------------------------------------------------------
     {-
-    * restructure xmobar
-    * xmobar music
-    * xmobar weather
+    * change config to use polybar
     * vlc moving with mouse between screens.
     * steam messages window popping up when opening steam.
     -}
@@ -26,6 +23,7 @@ import Data.List
 import Data.Time.LocalTime
 import System.Exit
 import System.IO
+
 -- Base
 -- ||| will be imported through X.L.LayoutCombinators
 import XMonad hiding ( (|||) )
@@ -804,11 +802,11 @@ myXmobarPP = def
             wsCompare = return (compare `on` wsIndex)
 
             workspaceToIcons :: String -> String
-            workspaceToIcons "main"  = "\xf724" -- 
+            workspaceToIcons "main"  = "\xf015" -- 
             workspaceToIcons "latex" = "\xf977" -- 亮
             workspaceToIcons "code"  = "\xf673" -- 
-            workspaceToIcons "game"  = "\xf7b3" -- 
-            workspaceToIcons "www"   = "\xf738" -- 
+            workspaceToIcons "game"  = "\xf7b3" -- 󰊴\udb80\udeb4
+            workspaceToIcons "www"   = "\xf269" -- 
             workspaceToIcons "com"   = "\xf679" -- 
             workspaceToIcons "media" = "\xfac2" -- 輸
             workspaceToIcons "sys"   = "\xf120" -- 

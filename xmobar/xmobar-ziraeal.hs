@@ -9,7 +9,7 @@ Config {
 	, bgColor = "#000000"
 	, fgColor = "#93a1a1"
 	, alpha = 150
-	, position = TopSize C 100 40
+	, position = TopH 40
 	, lowerOnStart = True
 	, hideOnStart = False
 	, allDesktops = True
@@ -40,7 +40,7 @@ Config {
 	]
 	, sepChar = "%"
 	, alignSep = "}{"
-	, template = " %UnsafeXMonadLog%} <action=xdotool key Super+c>%date%</action> {%volume% %internet% %batt0% %trayer% "
+	, template = " %UnsafeXMonadLog%}<action=xdotool key Super+c>%date%</action>{%volume% %internet% %batt0% %trayer% "
 }
 
 -- vim:ft=haskell

@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Thu 16 Feb 2023 02:36:49 AM EST
+# Last Edited: Fri 24 Feb 2023 03:51:23 PM EST
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -98,7 +98,7 @@ unsetopt beep # removes beeps in windows
 
 setopt histreduceblanks # remove blanks
 setopt histignorealldups # ignore repeats in history
-# setopt sharehistory # share history between terminals
+setopt sharehistory # share history between terminals
 
 setopt correct # spelling correction
 COMPLETION_WAITING_DOTS="true"
@@ -106,10 +106,15 @@ bindkey -v # Use vim keybindings
 # vim keybindings are a problem if you are already in nvim
 
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
+# History
+# Keep 1000000 lines of history within the shell and save it to ~/.zsh_history:
+HISTFILE=$ZSH_HOME/zsh_history
+HISTSIZE=1000000
+HISTFILESIZE=1000000
 SAVEHIST=1000
-HISTFILE=~/.zsh/zsh_history
+
+setopt incappendhistory
+
 
 
 # zsh/autosuggestions color change
@@ -231,7 +236,7 @@ fi
 autoload -U promptinit && promptinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f "$ZDOTDIR/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
+[[ ! -f "$ZSH_HOME/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
 
 ################################################################################
 # Completions ##################################################################
@@ -239,8 +244,8 @@ autoload -U promptinit && promptinit
 
 # Use modern completion system
 autoload -Uz compinit bashcompinit
-compinit -u
-bashcompinit -u
+compinit 
+bashcompinit
 
 eval "$(register-python-argcomplete pubs)"
 

@@ -1,5 +1,5 @@
 -- Author: Anish Sevekari
--- Last Modified: Fri 28 Oct 2022 06:04:46 AM EDT
+-- Last Modified: Thu 23 Feb 2023 11:19:04 PM EST
 -- # treesitter settings
 
 local present, ts_configs = pcall(require, 'nvim-treesitter.configs')
@@ -10,20 +10,25 @@ end
 
 ts_configs.setup({
 	ensure_installed = {
-		'python',
+		'c',
 		'cpp',
+		'python',
 		'haskell',
 		'lua',
-		'vim'
+		'vim',
+		'nix',
+		'bash',
+		'bibtex',
+		'make'
 	},
 	-- ignore_install = {}, -- this is only applicable if ensure_installed = all
 
-	sync_install = false,
+	sync_install = true,
 	auto_install = false,
 
 	highlight = {
 		enable = true,
-		disable = { 'latex' },
+		disable = { 'latex' }, -- treesitter conflicts vimtex
 		additional_vim_regex_highlighting = false,
 	},
 

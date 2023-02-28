@@ -34,39 +34,36 @@
 
   hardware.opengl.extraPackages = with pkgs; [ libva ];
 
-	environment.systemPackages = with pkgs; [	
-		# WindowManager Core
-    haskellPackages.xmobar
-    trayer
-		rofi rofi-pass
-		picom                            # transparancy
-		dunst libnotify                  # notifications
-		feh
+  environment.systemPackages = with pkgs; [	
+    # WindowManager Core
+    polybar
+    rofi rofi-pass
+    picom                            # transparancy
+    dunst libnotify                  # notifications
+    feh
     xdotool
     xorg.xmodmap xorg.xrandr xorg.libXinerama
-		scrot                            # screenshots
+    scrot                            # screenshots
     xclip
-    volumeicon                       # volume for trayer
 
     networkmanager_dmenu
 
     papirus-icon-theme               # Papirus-icons
-    numix-solarized-gtk-theme        # Numix theme
 
-		# Desktop Programs
-		firefox google-chrome 
-		vlc
-		zathura
-		gimp inkscape
-		alacritty rxvt_unicode-with-plugins
+    # Desktop Programs
+    firefox google-chrome 
+    vlc
+    zathura
+    gimp inkscape
+    alacritty rxvt_unicode-with-plugins
     discord unstable.zoom-us slack
     pavucontrol
-		unstable.ytmdesktop
+    unstable.ytmdesktop
     unstable.dropbox
 
     # Helper CLI tools
     streamlink
-	];
+  ];
 
   environment.variables = {
     GTK_THEME = "NumixSolarizedDarkBlue";
