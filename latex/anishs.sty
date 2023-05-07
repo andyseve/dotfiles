@@ -1,5 +1,5 @@
 \ProvidesPackage{anishs}
-% Last Modified: Tue 27 Sep 2022 06:18:48 PM EDT
+% Last Modified: Thu 27 Apr 2023 04:55:49 PM EDT
 % Author: Anish Sevekari
 % This is based on Even Chen's even.sty
 %TODO: add commutative diagram support. (Tikz or equivalent.) Added Tikz, might need to simplify and build some commands.
@@ -13,7 +13,8 @@
 \newif\ifanishspage\anishspagefalse%Margins
 \newif\ifanishstodo\anishstodofalse%Todonotes
 \newif\ifanishsauthblk\anishsauthblkfalse%Authblk
-\newif\ifanishsnatbib\anishsnatbibtrue%natbib
+\newif\ifanishsbibtex\anishsbibtextrue%bibtex
+\newif\ifanishsnatbib\anishsnatbibfalse%natbib
 
 \newif\ifanishssecthm\anishssecthmfalse%theorems numbered inside sections
 \newif\ifanishssubsecthm\anishssubsecthmfalse%theorems numbered inside subsections
@@ -47,6 +48,9 @@
 \DeclareOption{asy}{\anishsasytrue}
 
 \DeclareOption{authblk}{\anishsauthblktrue}
+\DeclareOption{bibtex}{\anishsbibtextrue}
+\DeclareOption{nobibtex}{\anishsbibtexfalse}
+\DeclareOption{natbib}{\anishsnatbibtrue}
 \DeclareOption{nonatbib}{\anishsnatbibfalse}
 
 \DeclareOption{onlymicro}{
@@ -71,7 +75,12 @@
 \ifanishspkg%
 	\usepackage[utf8]{inputenc}
 	\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
-	\usepackage[backref=page]{hyperref}
+	\usepackage{nameref}
+    \ifanishsbibtex
+        \usepackage{hyperref}
+    \else
+	      \usepackage[backref=page]{hyperref}
+    \fi
 	\usepackage{cleveref} % for better referencing systems
 
 	\usepackage{listings} % listings allows to convert source codes into latex
@@ -102,6 +111,9 @@
 	\usepackage{import}
 	\usepackage{graphicx} % for small tweaks
 	\usepackage{bbm} % Adding support for \mathbbm{1}
+	\usepackage{thmtools,thm-restate}
+	\usepackage{subcaption}
+    \usepackage{caption}
 
 	% Better Tables
 	\usepackage{tabularx, booktabs}
@@ -146,8 +158,14 @@
 \fi
 
 % Better citations
-\ifanishsnatbib
-	\usepackage[round]{natbib}
+\ifanishsbibtex
+    % bibtex is newer and being developed
+    \usepackage[backend=biber,style=alphabetic,natbib=true,hyperref=auto]{biblatex}
+\else
+    \ifanishsnatbib
+        % natbib is no longer developed
+	   \usepackage[round]{natbib}
+    \fi
 \fi
 
 % Multiple Author support
@@ -330,10 +348,44 @@
 	\renewcommand\emptyset{\varnothing} % Slightly better symbol
 	\renewcommand\iff{\ensuremath{\Leftrightarrow}}
 
+	\newcommand{\pl}[0]{\partial}
+	\newcommand{\dd}[2]{\frac{d #1}{d #2}}
+	\newcommand{\ddd}[1]{\frac{d}{d #1}}
+	\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+	\newcommand{\pdd}[1]{\frac{\partial}{\partial #1}}
+
 	% Common Math Constructs
 	\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
 
 	% Common symbols
+
+    % Mathcal
+	\newcommand{\calA}{\mathcal{A}}
+	\newcommand{\calB}{\mathcal{B}}
+	\newcommand{\calC}{\mathcal{C}}
+	\newcommand{\calD}{\mathcal{D}}
+	\newcommand{\calE}{\mathcal{E}}
+	\newcommand{\calF}{\mathcal{F}}
+	\newcommand{\calG}{\mathcal{G}}
+	\newcommand{\calH}{\mathcal{H}}
+	\newcommand{\calI}{\mathcal{I}}
+	\newcommand{\calJ}{\mathcal{J}}
+	\newcommand{\calK}{\mathcal{K}}
+	\newcommand{\calL}{\mathcal{L}}
+	\newcommand{\calM}{\mathcal{M}}
+	\newcommand{\calN}{\mathcal{N}}
+	\newcommand{\calO}{\mathcal{O}}
+	\newcommand{\calP}{\mathcal{P}}
+	\newcommand{\calQ}{\mathcal{Q}}
+	\newcommand{\calR}{\mathcal{R}}
+	\newcommand{\calS}{\mathcal{S}}
+	\newcommand{\calT}{\mathcal{T}}
+	\newcommand{\calU}{\mathcal{U}}
+	\newcommand{\calV}{\mathcal{V}}
+	\newcommand{\calW}{\mathcal{W}}
+	\newcommand{\calX}{\mathcal{X}}
+	\newcommand{\calY}{\mathcal{Y}}
+	\newcommand{\calZ}{\mathcal{Z}}
 
 
 	% Delimiters: Based on mathtools

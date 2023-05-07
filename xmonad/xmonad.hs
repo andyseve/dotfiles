@@ -148,15 +148,14 @@ myWorkspaces = [ wsmain, wswww, wstex, wscode, wsgame, wscom, wsmedia, wssys, ws
 -- Applications                                                             {{{
 -------------------------------------------------------------------------------
 
-myTerminal    = "alacritty"
-myAltTerminal = "rxvt_unicode"
+myTerminal    = "kitty"
 myBrowser     = "firefox"
 myAltBrowser  = "google-chrome-stable"
 myLauncher    = "rofi -show run -modi drun,run"
 myAltLauncher = "rofi -show drun -modi drun,run"
 myKeyViewer   = "rofi -i -dmenu -p 'Xmonad keys'"
 myWinSearch   = "rofi -show window -modi window,windowcd"
-myFiles       = "alacritty -e ranger"
+myFiles       = "kitty -e ranger"
 myEditor      = "gvim"
 myMusic       = "ytmdesktop --no-sandbox | awk -F \"Listen: \" '{print \"<fc=#268bd2>ﱘ <fn=1>\"$2\"</fn></fc>\"; fflush();}' | tee /tmp/music_pipe"
 myTrayPrimary = "sh ~/.xmonad/scripts/start_trayer.sh"
@@ -627,7 +626,7 @@ myKeys conf = let
     [ ("M-p"          , addName "launcher"      $ spawn myLauncher                                                      )
     , ("M-S-p"        , addName "launcher"      $ spawn myAltLauncher                                                   )
     , ("M-/"          , addName "window search" $ spawn myWinSearch                                                     )
-    , ("M-S-<Return>" , addName "terminal"      $ nextMatchOrDo History (className =? "Alacritty") (spawn myTerminal)   )
+    , ("M-S-<Return>" , addName "terminal"      $ nextMatchOrDo History (className =? "kitty") (spawn myTerminal)   )
     , ("M-<Return>"   , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M1-C-t"       , addName "terminal"      $ spawn myTerminal                                                      )
     , ("M-\\"         , addName "browser"       $ nextMatchOrDo Forward (className =? "Firefox") (spawn myBrowser)      )
@@ -639,7 +638,6 @@ myKeys conf = let
     , ("M-o M-S-b"    , addName "alt-browser"   $ spawn myAltBrowser                                                    )
     , ("M-o M-f"      , addName "files"         $ spawn myFiles                                                         )
     , ("M-o M-t"      , addName "terminal"      $ spawn myTerminal                                                      )
-    , ("M-o M-S-t"    , addName "alt-terminal"  $ spawn myAltTerminal                                                   )
     , ("M-o M-p"      , addName "passwords"     $ spawn "rofi-pass"                                                     )
     ] ^++^
     ------------------------------------------------------------------------}}}

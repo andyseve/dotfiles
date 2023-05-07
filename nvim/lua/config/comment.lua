@@ -33,13 +33,13 @@ comment.setup({
 		block = "<leader>bc",
 	},
 
----LHS of operator-pending mappings in NORMAL + VISUAL mode
----@type table
-opleader = {
-	---Line-comment keymap
-	line = "<leader>c",
-	---Block-comment keymap
-	block = "<leader>b",
+	---LHS of operator-pending mappings in NORMAL + VISUAL mode
+	---@type table
+	opleader = {
+		---Line-comment keymap
+		line = "<leader>c",
+		---Block-comment keymap
+		block = "<leader>v",
 	},
 
 	---LHS of extra mappings

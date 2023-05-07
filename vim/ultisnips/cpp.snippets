@@ -538,6 +538,14 @@ struct push_relabel {
 
 };
 endsnippet
+snippet floyd-warshall "All pairs shortest paths" b
+// setup initial values to be edge weights.
+for(int k = 0; k < n; ++k) {
+	for(int i = 0; i < n; ++i) for(int j = 0; j < n; ++j) {
+		${1:sp}[i][j] = min($1[i][j], $1[i][k] + $1[k][j]);
+	}
+}
+endsnippet
 # }}}
 # # Combinatorics {{{
 snippet binom "fast binom" b
@@ -1217,14 +1225,6 @@ struct query{
 		else return a.r < b.r;
 	}
 };
-endsnippet
-snippet floyd-warshall "All pairs shortest paths" b
-// setup initial values to be edge weights.
-for(int k = 0; k < n; ++k) {
-	for(int i = 0; i < n; ++i) for(int j = 0; j < n; ++j) {
-		${1:sp}[i][j] = min($1[i][j], $1[i][k] + $1[k][j]);
-	}
-}
 endsnippet
 snippet mo_loop "Mo's algo - loop" b
 for(query ${1:a} : ${2:q}) {

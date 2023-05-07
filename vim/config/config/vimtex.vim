@@ -23,27 +23,9 @@ let g:vimtex_compiler_latexmk = {
 				\}
 
 " }}}
-" LeaderGuide {{{
-let g:lmap.l = {
-			\'name': 'Latex',
-			\}
-
-" }}}
-" SumatraPDF config for windows {{{
-if g:is_win
-	let g:vimtex_view_general_viewer = 'SumatraPDF.exe'
-	let g:vimtex_view_general_options
-				\ = ' -forward-search @tex @line @pdf'
-				\ . ' -inverse-search "gvim.exe --servername ' . v:servername
-				\ . ' --remote-send \"^<C-\^>^<C-n^>'
-				\ . ':drop \%f^<CR^>:\%l^<CR^>:normal\! zzzv^<CR^>'
-				\ . ':execute ''drop '' . fnameescape(''\%f'')^<CR^>'
-				\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
-				\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""'
-else
-	let g:vimtex_view_method = 'zathura'
-	let g:vimtex_view_general_viewer = 'zathura'
-endif
+" Zathura config {{{
+let g:vimtex_view_method = 'zathura'
+let g:vimtex_view_general_viewer = 'zathura'
 
 " }}}
 " Table of contents {{{

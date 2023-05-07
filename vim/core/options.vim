@@ -1,6 +1,6 @@
 " Vim Core Options
 " Author: Anish Sevekari
-" Last Updated: Thu 27 Oct 2022 02:59:18 AM EDT
+" Last Updated: Thu 02 Mar 2023 06:14:20 PM EST
 
 " Options
 
@@ -46,7 +46,7 @@ set nospell
 set viewoptions-=options       " Excludes options (like working dir) from view
 set updatetime=300
 set hidden                     " Hide buffers when they are abandoned
-set cmdheight=2                " Setting command height 2 for more space
+set cmdheight=1                " Setting command height 2 for more space
 set shortmess+=c               " Messages should be short
 set whichwrap+=<,>,h,l,[,]     " Wraping around the lines
 set splitbelow splitright      " Window split settings

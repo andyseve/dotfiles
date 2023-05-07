@@ -44,19 +44,18 @@
     xdotool
     xorg.xmodmap xorg.xrandr xorg.libXinerama
     scrot                            # screenshots
-    xclip
-
+    xclip 
     networkmanager_dmenu
 
+    # Themes etc
     papirus-icon-theme               # Papirus-icons
 
     # Desktop Programs
     firefox google-chrome 
     vlc
     zathura
-    gimp inkscape
-    alacritty rxvt_unicode-with-plugins
-    discord unstable.zoom-us slack
+    kitty
+    unstable.zoom-us slack discord
     pavucontrol
     unstable.ytmdesktop
     unstable.dropbox

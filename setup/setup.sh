@@ -2,79 +2,72 @@
 ## This script creates all the symlinks from correct folders
 ## Based on similar script by Chris Cox
 
-################################################################################
-# Global Variables #############################################################
-################################################################################
+# Globals
 CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 LOCAL="${XDG_DATA_HOME:-$HOME/.local/share}"
 DOTFILES="$HOME/dotfiles"
 OVERWRITE="$HOME/.overwrites"
+
 DID_OVERWRITE=false
 EXISTS_OVERWRITE=false
-LITE=false
-NOPLUGIN=false
-
-while test $# != 0
-do
-	case "$1" in
-		-l | --lite)
-			LITE=true
-			;;
-		-n | --noplugin)
-			NOPLUGIN=true
-			;;
-		*)
-			echo "flags are --lite,--noplugin"
-			exit 0
-			;;
-	esac
-	shift
-done
-
-# handling overwrites
-if [ -e "$OVERWRITE" ]; then
-	while true; do
-		read -p "Overwrite file already exists. Are you sure you want to run setup again?[y|n]" cont
-		printf "\n"
-		case $cont in
-			[Yy]*)
-				echo "$(date)" >> $OVERWRITE
-				echo "--------------------------------------------------------------------------------" >> $OVERWRITE
-				EXISTS_OVERWRITE=true
-				break;;
-			[Nn]*)
-				echo "Exiting."
-				exit 0
-				;;
-			*)
-				echo "Please enter a valid selection"
-				;;
-		esac
-	done
-else
-	touch $OVERWRITE
-fi
-
+APPNAME=ALL
+COLORSCHEME=
+FORCE=false
 
 # import helper functions
-. $DOTFILES/zsh/functions/helper.zsh
+source $DOTFILES/zsh/functions/helper.zsh
+
+# help function
+help_function (){
+	printf "This is help.\n"
+}
+
+# Overwrites
+# FORCE variable checks if overwrites are to be forced or not. 
+check_force() {
+	if $FORCE; then 
+		while true; do
+			read -p "Running setup with --force. This will overwrite everything. Are you sure?" cont 
+			printf "\n"
+			case $cont in 
+				[Yy]* ) break;;
+				[Nn]* ) exit 0;;
+				* ) printf "Invalid selection.\n";;
+			esac
+		done
+	fi
+}
+
+show_overwrites() {
+	if [ -e "$OVERWRITE" ]; then
+		printf "Overwrite file already exists, with following contents:\n"
+		if check bat; then bat $OVERWRITE; else cat $OVERWRITE; fi
+		read -p "Continue?" cont
+		while true; do
+			case $cont in 
+				[Yy]* ) break;;
+				[Nn]* ) exit 0;;
+				* ) printf "Invalid selection.\n";;
+			esac
+		done
+		rm "$OVERWRITE"
+	fi
+	touch "$OVERWRITE"
+}
 
 
-
-################################################################################
-# Configs ######################################################################
-################################################################################
-
-echo -e "\nlinking configs..."
-
+# Application setups
 # bash
+bash_setup(){
 if check bash; then
 	link $DOTFILES/bash/bashrc $HOME/.bashrc
 else
 	nope bash
 fi
+}
 
 # zsh
+zsh_setup(){
 if check zsh; then
 
 	IF=$DOTFILES/zsh
@@ -95,332 +88,348 @@ if check zsh; then
 else
 	nope zsh
 fi
-
-# bin
-
-while true; do
-	read -p "Do you want to install scripts in bin[y|n]" install_bin
-	printf "\n"
-	case $install_bin in
-		[Yy]*)
-			IF=$DOTFILES/bin
-			OF=$HOME/bin
-
-			cdir $OF
-
-			for file in "$IF"/*; do
-				link $file $OF/${file##*/}
-			done
-			break;;
-		[Nn]*)
-			break;;
-		*)
-			echo "Please enter a valid selection"
-			;;
-	esac
-done
+}
 
 # git
-if check git; then
-	link $DOTFILES/git/gitconfig $HOME/.gitconfig
-fi
+git_setup() {
+	if check git; then
+		link $DOTFILES/git/gitconfig $HOME/.gitconfig
+	fi
+}
 
 # alacritty
-if check alacritty; then
-	IF=$DOTFILES/alacritty
-	OF=$HOME/.config/alacritty
-
-	link $IF/alacritty.yml $OF/alacritty.yml
-else
-	nope alacritty
-fi
+alacritty_setup() {
+	if check alacritty; then
+		IF=$DOTFILES/alacritty
+		OF=$HOME/.config/alacritty
+		link $IF/alacritty.yml $OF/alacritty.yml
+	else
+		nope alacritty
+	fi
+}
 
 # vim
-if check vim; then
-	IF=$DOTFILES/vim
-	OF=$HOME/.vim
-	FOLDERS=(ftdetect ftplugin spell syntax config core ultisnips)
+vim_setup() {
+	if check vim; then
+		IF=$DOTFILES/vim
+		OF=$HOME/.vim
+		FOLDERS=(ftdetect ftplugin spell syntax config core ultisnips)
 
-	cdir $OF
-	cdir $OF/.swp
-	cdir $OF/.backup
-	cdir $OF/.undo
-	cdir $OF/view
-	cdir $CONFIG/coc/ultisnips
+		cdir $OF
+		cdir $OF/.swp
+		cdir $OF/.backup
+		cdir $OF/.undo
+		cdir $OF/view
+		cdir $CONFIG/coc/ultisnips
 
-	link $IF/vimrc $OF/vimrc
-	link $IF/vimrc.noplugin $OF/vimrc.noplugin
-	link $IF/vimrc.lite $OF/vimrc.lite
-	link $IF/vimrc.testing $OF/vimrc.testing
-	link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
-	link $IF/coc-settings.json $OF/coc-settings.json
-	link $IF/ultisnips $CONFIG/coc/ultisnips
-	for dir in ${FOLDERS[@]}; do
-		link "$IF/$dir" "$OF/$dir"
-	done
+		link $IF/vimrc $OF/vimrc
+		link $IF/vimrc.noplugin $OF/vimrc.noplugin
+		link $IF/vimrc.lite $OF/vimrc.lite
+		link $IF/vimrc.testing $OF/vimrc.testing
+		link $IF/ycm_extra_conf.py $HOME/.ycm_extra_conf.py
+		link $IF/coc-settings.json $OF/coc-settings.json
+		link $IF/ultisnips $CONFIG/coc/ultisnips
+		for dir in ${FOLDERS[@]}; do
+			link "$IF/$dir" "$OF/$dir"
+		done
 
-	if $LITE; then
-		link $OF/vimrc.lite $HOME/.vimrc
-	elif $NOPLUGIN; then
-		link $OF/vimrc.noplugin $HOME/.vimrc
+		if $LITE; then
+			link $OF/vimrc.lite $HOME/.vimrc
+		elif $NOPLUGIN; then
+			link $OF/vimrc.noplugin $HOME/.vimrc
+		else
+			link $OF/vimrc $HOME/.vimrc
+		fi
+
+		cdir $OF/autoload
+		download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
 	else
-		link $OF/vimrc $HOME/.vimrc
+		nope vim
 	fi
-
-	cdir $OF/autoload
-	download "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim" "$OF/autoload/plug.vim"
-else
-	nope vim
-fi
+}
 
 # nvim
-if check nvim; then
-	IF=$DOTFILES/nvim
-	OF=$HOME/.config/nvim
-	FOLDERS=(ftdetect ftplugin spell syntax config core ultisnips lua)
-	
-	cdir $OF
-	link $IF/init.vim $OF/init.vim
-	link $DOTFILES/vim/coc-settings.json $OF/coc-settings.json
-	for dir in ${FOLDERS[@]}; do
-		link "$IF/$dir" "$OF/$dir"
-	done
-else
-	nope neovim
-fi
+nvim_setup() {
+	if check nvim; then
+		IF=$DOTFILES/nvim
+		OF=$HOME/.config/nvim
+		FOLDERS=(ftdetect ftplugin spell syntax config core ultisnips lua)
+		
+		cdir $OF
+		link $IF/init.vim $OF/init.vim
+		link $DOTFILES/vim/coc-settings.json $OF/coc-settings.json
+		for dir in ${FOLDERS[@]}; do
+			link "$IF/$dir" "$OF/$dir"
+		done
+	else
+		nope neovim
+	fi
+}
 
 # neofetch
-if check neofetch; then
-	cdir $CONFIG/neofetch
-	link $DOTFILES/neofetch/config.conf $CONFIG/neofetch/config.conf
-else
-	nope neofetch
-fi
+neofetch_setup() {
+	if check neofetch; then
+		cdir $CONFIG/neofetch
+		link $DOTFILES/neofetch/config.conf $CONFIG/neofetch/config.conf
+	else
+		nope neofetch
+	fi
+}
 
 #latex
-if check pdflatex; then
-	cdir $HOME/texmf/tex/latex/local
-	link $DOTFILES/latex/anishs.sty $HOME/texmf/tex/latex/local/anishs.sty
-fi
+latex_setup() {
+	if check latex; then
+		cdir $HOME/texmf/tex/latex/local
+		link $DOTFILES/latex/anishs.sty $HOME/texmf/tex/latex/local/anishs.sty
+	fi
+}
 
 # rtorrent
-if check rtorrent; then
-	IF="$DOTFILES/rtorrent"
-	OF="$HOME/torrents"
+rtorrent_setup() {
+	if check rtorrent; then
+		IF="$DOTFILES/rtorrent"
+		OF="$HOME/torrents"
 
-	link $IF/rtorrent.rc $HOME/.rtorrent.rc
+		link $IF/rtorrent.rc $HOME/.rtorrent.rc
 
-	FOLDERS=(.session log incomplete)
-	STORAGE=(downloads watch)
-	SUBDIRS=(games iso movies music series)
+		FOLDERS=(.session log incomplete)
+		STORAGE=(downloads watch)
+		SUBDIRS=(games iso movies music series)
 
-	for fol in ${FOLDERS[@]}; do
-		cdir "$OF/$fol"
-	done
-	for fol in ${STORAGE[@]}; do
-		for subdir in ${SUBDIRS[@]}; do
-			cdir "$OF/$fol/$subdir"
+		for fol in ${FOLDERS[@]}; do
+			cdir "$OF/$fol"
 		done
-	done
+		for fol in ${STORAGE[@]}; do
+			for subdir in ${SUBDIRS[@]}; do
+				cdir "$OF/$fol/$subdir"
+			done
+		done
 
-	link $IF/rtorrent.service $CONFIG/systemd/user/rtorrent.service
-else
-	nope rtorrent
-fi
+		link $IF/rtorrent.service $CONFIG/systemd/user/rtorrent.service
+	else
+		nope rtorrent
+	fi
+}
 
 # xmonad
-if check xmonad; then
-	IF="$DOTFILES/xmonad"
-	OF="$CONFIG/xmonad"
-	cdir $OF
+xmonad_setup() {
+	if check xmonad; then
+		IF="$DOTFILES/xmonad"
+		OF="$CONFIG/xmonad"
+		cdir $OF
 
-	link $IF/xmonad.hs $OF/xmonad.hs
-	link $IF/scripts $OF/scripts
-else
-	nope xmonad
-fi
+		link $IF/xmonad.hs $OF/xmonad.hs
+		link $IF/scripts $OF/scripts
+	else
+		nope xmonad
+	fi
+}
 
 # xmobar
-if check xmobar; then
-	IF="$DOTFILES/xmobar"
-	OF="$CONFIG/xmobar"
-	cdir $OF
-	
-	if [ ! -L $OF/xmobar.hs ]; then
-		echo "Choose the primary xmobar file to link"
-		select opt in $IF/*.hs
-		do
-			link $opt $OF/xmobar.hs
-			break
-		done
+xmobar_setup() {
+	if check xmobar; then
+		IF="$DOTFILES/xmobar"
+		OF="$CONFIG/xmobar"
+		cdir $OF
+		
+		if [ ! -L $OF/xmobar.hs ]; then
+			echo "Choose the primary xmobar file to link"
+			select opt in $IF/*.hs
+			do
+				link $opt $OF/xmobar.hs
+				break
+			done
+		fi
+		# link $IF/my-xmobar.cabal $OF/my-xmobar.cabal
+		# link $IF/shell.nix $OF/shell.nix
+		# link $IF/hie.yaml $OF/hie.yaml
+		link $IF/xmobar-secondary.hs $OF/xmobar-secondary.hs
+		link $IF/scripts $OF/scripts
+	else
+		nope xmobar
 	fi
-	# link $IF/my-xmobar.cabal $OF/my-xmobar.cabal
-	# link $IF/shell.nix $OF/shell.nix
-	# link $IF/hie.yaml $OF/hie.yaml
-	link $IF/xmobar-secondary.hs $OF/xmobar-secondary.hs
-	link $IF/scripts $OF/scripts
-else
-	nope xmobar
-fi
+}
 
-# xfce
-if check xfce4-terminal; then
-	cdir $HOME/.config/xfce4/terminal
-	link $DOTFILES/xfce4/terminal/terminalrc $HOME/.config/xfce4/terminal/terminalrc
-else
-	nope xfce4-terminal
-fi
+# xfce_terminal
+xfce_terminal_setup() {
+	if check xfce4-terminal; then
+		cdir $HOME/.config/xfce4/terminal
+		link $DOTFILES/xfce4/terminal/terminalrc $HOME/.config/xfce4/terminal/terminalrc
+	else
+		nope xfce4-terminal
+	fi
+}
 
 # ranger
-if check ranger; then
-	IF="$DOTFILES/ranger"
-	OF="$HOME/.config/ranger"
-	cdir $OF
-	
-	link $IF/rc.conf $OF/rc.conf
-	link $IF/commands.py $OF/commands.py
-else
-	nope ranger
-fi
+ranger_setup() {
+	if check ranger; then
+		IF="$DOTFILES/ranger"
+		OF="$HOME/.config/ranger"
+		cdir $OF
+		
+		link $IF/rc.conf $OF/rc.conf
+		link $IF/commands.py $OF/commands.py
+	else
+		nope ranger
+	fi
+}
 
 # rofi
-if check rofi; then
-	IF="$DOTFILES/rofi"
-	OF="$HOME/.config/rofi"
-	cdir $OF
+rofi_setup() {
+	if check rofi; then
+		IF="$DOTFILES/rofi"
+		OF="$HOME/.config/rofi"
+		cdir $OF
 
-	link $IF/config.rasi $OF/config.rasi
-else
-	nope rofi
-fi
+		link $IF/config.rasi $OF/config.rasi
+	else
+		nope rofi
+	fi
+}
 
 # zathura
-if check zathura; then
-	IF="$DOTFILES/zathura"
-	OF="$HOME/.config/zathura"
-	cdir $OF
+zathura_setup() {
+	if check zathura; then
+		IF="$DOTFILES/zathura"
+		OF="$HOME/.config/zathura"
+		cdir $OF
 
-	link $IF/zathurarc $OF/zathurarc
-else
-	nope zathura
-fi
+		link $IF/zathurarc $OF/zathurarc
+	else
+		nope zathura
+	fi
+}
 
 # dunst
-if check dunst; then
-	IF="$DOTFILES/dunst"
-	OF="$HOME/.config/dunst"
-	cdir $OF
+dunst_setup() {
+	if check dunst; then
+		IF="$DOTFILES/dunst"
+		OF="$HOME/.config/dunst"
+		cdir $OF
 
-	link $IF/dunstrc $OF/dunstrc
-else
-	nope dunst
-fi
+		link $IF/dunstrc $OF/dunstrc
+	else
+		nope dunst
+	fi
+}
 
 # picom
-if check picom; then
-	IF="$DOTFILES/picom"
-	OF="$HOME/.config/picom"
-	cdir $OF
+picom_setup() {
+	if check picom; then
+		IF="$DOTFILES/picom"
+		OF="$HOME/.config/picom"
+		cdir $OF
 
-	link $IF/picom.conf $OF/picom.conf
-else
-	nope picom
-fi
+		link $IF/picom.conf $OF/picom.conf
+	else
+		nope picom
+	fi
+}
 
 # vdirsyncer
-if check vdirsyncer; then
-	IF="$DOTFILES/vdirsyncer"
-	OF="$HOME/.config/vdirsyncer"
-	cdir $OF
-	
-	link $IF/config $OF/config
-	vdirsyncer discover
-	vdirsyncer sync
-	vdirsyncer metasync
-else
-	nope vdirsyncer
-fi
+vdirsyncer_setup() {
+	if check vdirsyncer; then
+		IF="$DOTFILES/vdirsyncer"
+		OF="$HOME/.config/vdirsyncer"
+		cdir $OF
+		
+		link $IF/config $OF/config
+		vdirsyncer discover
+		vdirsyncer sync
+		vdirsyncer metasync
+	else
+		nope vdirsyncer
+	fi
+}
 
 # khal
-if check khal; then
-	IF="$DOTFILES/khal"
-	OF="$HOME/.config/khal"
-	cdir $OF
-	
-	link $IF/config $OF/config
-else
-	nope khal
-fi
+khal_setup() {
+	if check khal; then
+		IF="$DOTFILES/khal"
+		OF="$HOME/.config/khal"
+		cdir $OF
+		
+		link $IF/config $OF/config
+	else
+		nope khal
+	fi
+}
 
 # khard
-if check khard; then
-	IF="$DOTFILES/khard"
-	OF="$HOME/.config/khard"
-	cdir $OF
+khard_setup() {
+	if check khard; then
+		IF="$DOTFILES/khard"
+		OF="$HOME/.config/khard"
+		cdir $OF
 
-	link $IF/khard.conf $OF/khard.conf
-else
-	nope khard
-fi
+		link $IF/khard.conf $OF/khard.conf
+	else
+		nope khard
+	fi
+}
 
 # networkmanager
-if check networkmanager_dmenu; then
-	IF="$DOTFILES/networkmanager"
-	OF="$HOME/.config/networkmanager-dmenu"
-	cdir $OF
+networkmanager_setup() {
+	if check networkmanager_dmenu; then
+		IF="$DOTFILES/networkmanager"
+		OF="$HOME/.config/networkmanager-dmenu"
+		cdir $OF
 
-	link $IF/config.ini $OF/config.ini
-else
-	nope networkmanager_dmenu
-fi
+		link $IF/config.ini $OF/config.ini
+	else
+		nope networkmanager_dmenu
+	fi
+}
 
 # pubs
-if check pubs; then
-	if [ ! -d "$HOME/.local/share/pubs" ]; then
-		pubs init -p $HOME/.local/share/pubs -d ~/.local/share/pubs/doc
-		echo "Run \"git remote set-url origin\" in \"$HOME/.local/share/pubs\" to setup git"
+pubs_setup() {
+	if check pubs; then
+		if [ ! -d "$HOME/.local/share/pubs" ]; then
+			pubs init -p $HOME/.local/share/pubs -d ~/.local/share/pubs/doc
+			echo "Run \"git remote set-url origin\" in \"$HOME/.local/share/pubs\" to setup git"
+		fi
+		link $DOTFILES/pubs/pubsrc $HOME/.pubsrc
+	else
+		nope pubs
 	fi
-	link $DOTFILES/pubs/pubsrc $HOME/.pubsrc
-else
-	nope pubs
-fi
+}
 
 # pass
-if check pass; then
-	echo "Run \"git remote set-url origin\" in \"$HOME/.password-store\" to setup git"
-else
-	nope pass
-fi
-
-################################################################################
-# Themes #######################################################################
-################################################################################
-while true; do
-	read -p "Do you want to install ALL themes[y|n]" install_themes
-	printf "\n"
-	case $install_themes in
-		[Yy]*)
-			echo "Installing themes..."
-			$HOME/dotfiles/setup/themes.sh
-			break;;
-		[Nn]*)
-			echo "You can install themes later from $HOME/dotfiles/themes.sh"
-			echo "Or install themes separately in $HOME/dotfiles/themes"
-			break;;
-		*)
-			echo "Please enter a valid selection"
-			;;
-	esac
-done
-
-
-# cleaning up
-if ! $DID_OVERWRITE; then
-	echo "no overwrites! yaaay"
-	if ! $EXISTS_OVERWRITE;then
-		rm $OVERWRITE
+pass_setup() {
+	if check pass; then
+		echo "Run \"git remote set-url origin\" in \"$HOME/.password-store\" to setup git"
+	else
+		nope pass
 	fi
-else
-	echo "Overwritten files:"
-	cat $OVERWRITE
+}
+
+
+# Checking if script is sources or executed
+IS_SOURCED=true
+if [[ -n $ZSH_VERSION && $ZSH_EVAL_CONTEXT =~ :file$ ]] ; then IS_SOURCED=true;
+# elif [[ -n $BASH_VERSION && (return 0 2>/dev/null) ]]; then IS_SOURCED=false;
+else IS_SOURCED=false;
 fi
+
+if ! $IS_SOURCED; then
+	# Argument processing
+	OPTS=$(getopt -o hfa:c: --long help_function,force,appname:,color: -n 'setup' -- "$1")
+	if [ $? != 0 ] ; then printf "Incorrect arguments...\n"; help_function ; exit 1; fi
+
+	eval set -- "$OPTS"
+
+	while true; do
+		case "$1" in 
+			-h | --help ) help_function; exit 0;;
+			-f | --force ) FORCE=true; shift;;
+			-a | --appname ) APPNAME=$2; shift 2;;
+			-c | --color ) COLORSCHEME=$2; shift 2;;
+			-- ) shift; break;;
+			* ) help_function; exit 1;;
+		esac
+	done
+
+	check_force
+	show_overwrites
+fi
+
