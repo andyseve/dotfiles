@@ -137,7 +137,7 @@
         bat #better cat
         taskwarrior timewarrior
         khal khard # calendars and contacts
-        vdirsyncer # vdirsyncer
+        unstable.vdirsyncer # vdirsyncer
         fswebcam 
         unstable.pubs # biblography manager
         (pass.withExtensions
