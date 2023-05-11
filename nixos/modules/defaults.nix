@@ -7,8 +7,8 @@
   # iwlwifi settings
   # needed to stop multiple physical restarts.
   boot.extraModprobeConfig = ''
-    options iwlwifi 11n_disable=8
-    '';
+  options iwlwifi 11n_disable=8
+  '';
   # logitech
   hardware.logitech.wireless.enable=true;
 
@@ -70,10 +70,10 @@
     };
   };
 
-	# NixPkgs Configuration
-	nixpkgs.config.allowUnfree = true;
+    # NixPkgs Configuration
+    nixpkgs.config.allowUnfree = true;
 
-	nixpkgs.overlays = import ../overlays;
+    nixpkgs.overlays = import ../overlays;
 
   # environment variables
   environment.sessionVariables = rec {
@@ -98,87 +98,87 @@
     firmwareLinuxNonfree
 
 
-		# Version Control / Archive
-		git subversion
-		unzip zip unrar
+        # Version Control / Archive
+        git subversion
+        unzip zip unrar
 
-		# Debug / Monitor / Analysis
-		htop iotop powertop iftop
-		ltrace strace
-		pciutils usbutils lshw
-		smartmontools lm_sensors
-    dmidecode
+        # Debug / Monitor / Analysis
+        htop iotop powertop iftop
+        ltrace strace
+        pciutils usbutils lshw
+        smartmontools lm_sensors
+        dmidecode
 
     # Volume
     alsa-utils
 
-		# Networking
-    iputils
-		nmap wireshark
-		tor openvpn
-		wget curl rsync
-    networkmanager networkmanager-openvpn
+        # Networking
+        iputils
+        tor openvpn
+        wget curl rsync
+        networkmanager networkmanager-openvpn
 
-		# Linux shell utils
-		fzf silver-searcher autojump
-		neofetch
-		tree
-		tmux screen
-    pdftk
-    btop
+        # Linux shell utils
+        fzf silver-searcher autojump ripgrep
+        neofetch
+        tree
+        tmux screen
+        pdftk
+        btop
 
-		# Encryption
-		gnupg
-    pinentry-gtk2
-		
-		# CLI programs
-		ranger
-		weechat
-    unstable.neovim # load latest neovim
-		w3m
-		taskwarrior timewarrior
-    khal khard # calendars and contacts
-    vdirsyncer # vdirsyncer
-    fswebcam 
-    unstable.pubs # biblography manager
-    (pass.withExtensions
-      (exts: [
-      exts.pass-otp 
-      ])
-    ) # password manager
-    mailutils
-    yt-dlp #youtube-dl
-    ncmpcpp
+        # Encryption
+        gnupg
+        pinentry-gtk2
 
-		
-		# Dev Tools
-		gnumake
-		gcc ccls
+        # CLI programs
+        ranger
+        weechat
+        unstable.neovim # load latest neovim
+        bat #better cat
+        taskwarrior timewarrior
+        khal khard # calendars and contacts
+        unstable.vdirsyncer # vdirsyncer
+        fswebcam 
+        unstable.pubs # biblography manager
+        (pass.withExtensions
+        (exts: [
+          exts.pass-otp 
+        ])
+        ) # password manager
+        yt-dlp #youtube-dl
+        imagemagick
 
-    python3
-    python3Packages.pip
-    python3Packages.argcomplete
-    python3Packages.numpy
-    python3Packages.scipy
-    python3Packages.matplotlib
-    python3Packages.scikitlearn
-    python3Packages.pandas
-    python3Packages.jupyter
-    python3Packages.notebook
 
-    unstable.haskellPackages.ghc
-    unstable.haskellPackages.hoogle
-    unstable.haskellPackages.cabal-install
-    unstable.haskellPackages.haskell-language-server
+        # Dev Tools
+        gnumake
+        gcc ccls
 
-    jdk11 nodejs
-    nodePackages.pyright
+        python3
+        python3Packages.pip
+        python3Packages.argcomplete
+        python3Packages.numpy
+        python3Packages.scipy
+        python3Packages.matplotlib
+        python3Packages.scikitlearn
+        python3Packages.pandas
+        python3Packages.jupyter
+        python3Packages.notebook
 
-		# Latex
-		texlive.combined.scheme-full
+        unstable.haskellPackages.ghc
+        unstable.haskellPackages.hoogle
+        unstable.haskellPackages.cabal-install
+        unstable.haskellPackages.haskell-language-server
 
-		# Man Pages
-		man man-pages
+        jdk11 nodejs
+
+        nodePackages.pyright
+        sumneko-lua-language-server
+
+        # Latex
+        texlive.combined.scheme-full
+
+        # Man Pages
+        man man-pages
 
     # dotfiles
     anish-dotfiles
@@ -193,11 +193,11 @@
   ];
 
   # hardware support
-	hardware.bluetooth.enable = true;
-	# 32 bit support, required for steam -- check this
-	hardware.opengl.driSupport32Bit = true;
+  hardware.bluetooth.enable = true;
+    # 32 bit support, required for steam -- check this
+    hardware.opengl.driSupport32Bit = true;
 
-  programs = {
+    programs = {
     # zsh
     zsh = {
       enable = true;

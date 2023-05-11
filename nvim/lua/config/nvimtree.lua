@@ -2,13 +2,13 @@
 -- Last Modified: Fri 28 Oct 2022 05:27:37 AM EDT
 -- # nvim-tree config
 
-local present, nvim_tree = pcall(require,'nvim-tree') 
+local present, nvimtree = pcall(require,'nvim-tree') 
 
 if not present then
 	return
 end
 
-nvim_tree.setup {
+nvimtree.setup {
 	auto_reload_on_write = true,
 	create_in_closed_folder = false,
 	disable_netrw = false,
@@ -19,7 +19,7 @@ nvim_tree.setup {
 	open_on_setup = false,
 	open_on_setup_file = false,
 	open_on_tab = false,
-	sort_by = "name",
+	sort_by = "case_sensitive",
 	update_cwd = false,
 	reload_on_bufenter = false,
 	respect_buf_cwd = false,
@@ -151,13 +151,14 @@ nvim_tree.setup {
 			resize_window = true,
 			window_picker = {
 				enable = true,
-				chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+				chars = "1234567890", -- characters used to pick window
 				exclude = {
 					filetype = {
 						"notify",
 						"packer",
 						"qf",
 						"diff",
+						"telescope",
 					},
 					buftype = {
 						"nofile",

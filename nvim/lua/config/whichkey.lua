@@ -2,13 +2,16 @@
 -- Last Modified: Sat 04 Jun 2022 07:02:54 PM EDT
 -- which-key configuration
 
-local present, which_key = pcall(require,'which-key')
+vim.o.timeout = true
+vim.o.timeoutlen = 300
+
+local present, which_key = pcall(require, 'which-key')
 
 if not present then
 	return
 end
 
-which_key.setup {
+local config = {
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
 		registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
@@ -30,9 +33,7 @@ which_key.setup {
 	},
 	-- add operators that will trigger motion and text object completion
 	-- to enable all native operators, set the preset / operators plugin above
-	operators = {
-
-	},
+	operators = { ["<leader>c"] = "Comments", ["<leader>v"] = "Comments" },
 	key_labels = {
 		-- override the label used to display some keys. It doesn't effect WK in any other way.
 		-- For example:
@@ -63,8 +64,9 @@ which_key.setup {
 		align = "left", -- align columns left, center or right
 	},
 	ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
 	show_help = true, -- show help message on the command line when the popup is visible
+	show_keys = true, -- show the currently pressed key and its label as a message in the command line
 	triggers = "auto", -- automatically setup triggers
 	-- triggers = {"<leader>"} -- or specify a list manually
 	triggers_blacklist = {
@@ -74,4 +76,12 @@ which_key.setup {
 		i = { "j", "k" },
 		v = { "j", "k" },
 	},
+	-- disable the WhichKey popup for certain buf types and file types.
+	-- Disabled by deafult for Telescope
+	disable = {
+		buftypes = {},
+		filetypes = { "TelescopePrompt" },
+	},
 }
+
+which_key.setup(config)

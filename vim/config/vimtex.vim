@@ -41,8 +41,8 @@ if g:is_win
 				\ . ':\%l^<CR^>:normal\! zzzv^<CR^>'
 				\ . ':call remote_foreground('''.v:servername.''')^<CR^>^<CR^>\""'
 else
-	let g:vimtex_view_general_viewer = 'zathura'
 	let g:vimtex_view_method = 'zathura'
+	let g:vimtex_view_general_viewer = 'zathura'
 endif
 
 " }}}

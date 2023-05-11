@@ -1,100 +1,103 @@
+-- Mapping for nvim
 -- Author: Anish Sevekari
--- Last Modified: Sat 04 Jun 2022 08:25:19 PM EDT
--- Telescope Plugin Config
+-- Last Modified: Mon 06 Mar 2023 11:09:57 PM EST
 
-local present, telescope = pcall(require,'telescope')
-
+local plugins = require("core.user").plugins
+local utils = require("core.utils")
+local present, telescope = pcall(require, "telescope")
 if not present then
 	return
 end
 
-telescope.setup {
+local builtin = require("telescope.builtin")
+
+local telescope_ag = require("telescope-ag")
+telescope_ag.setup()
+
+
+local config = {
 	defaults = {
-		layout_strategy = "flex",
-		layout_config = {
-			horizontal = {
-				width = 0.8,
-				height = 0.9,
-				mirror = false,
-				preview_cutoff = 80,
-				preview_width = 0.6,
-			},
-			vertical = {
-				width = 0.5,
-				height = 0.9,
-				prompt_position = "top",
-				mirror = false,
-				preview_cutoff = 20,
-				preview_height = 0.5,
-			},
-			flex = {
-				flip_columns = 200,
-				flip_lines = 20,
-			},
-		},
-		winblend = 10,
-		border = true,
-    borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
-		initial_mode = "insert",
-		selection_strategy = "reset",
-		sorting_strategy = "ascending",
-		file_sorter = require('telescope.sorters').get_fuzzy_file,
-		file_ignore_patterns = { "node_modules" },
-		generic_sorter = require('telescope.sorters').get_generic_fuzzy_sorter,
-		path_display = { "truncate" },
-		color_devicons = true,
-		use_less = true,
-		set_env = { ["COLORTERM"] = "truecolor" },
-		file_previewer = require('telescope.previewers').vim_buffer_cat.new,
-		grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
-		qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
-		mappings = {
-			n = {
-				["q"] = require('telescope.actions').close,
-				["h"] = "which_key",
-			},
-			i = {
-				["<c-q>"] = require('telescope.actions').close,
-				["<c-h>"] = "which_key",
-			},
-		},
-		vimgrep_arguments = {
-			"rg",
-			"--color=never",
-			"--no-heading",
-			"--with-filename",
-			"--line-number",
-			"--column",
-			"--smart-case",
-		},
-	},
-	pickers = {
-		
+		previewer = true,
 	},
 	extensions = {
 		fzf = {
-			fuzzy = true,                   -- false will only do exact matching
-			override_generic_sorter = true, -- override the generic sorter
-			override_file_sorter = true,    -- override the file sorter
+			fuzzy = true,
+			override_generic_sorter = true,
+			override_file_sorter = true,
 			case_mode = "smart_case",
 		},
-		ag = {},
 		file_browser = {
-			theme = "ivy",
-			hijack_netrw = true, -- disables netrw and use telescope-file-browser in its place
-		},
-		ultisnips = {},
-		packer = {
-			theme = "ivy",
-			layout_config = {
-				height = 0.5,
+			-- disables netrw and use telescope-file-browser in its place
+			hijack_netrw = true,
+			mappings = {
+				["i"] = {
+					-- your custom insert mode mappings
+				},
+				["n"] = {
+					-- your custom normal mode mappings
+				},
 			},
+		},
+		undo = {
+			use_delta = true,
+			use_custom_command = nil, -- setting this implies `use_delta = false`. Accepted format is: { "bash", "-c", "echo '$DIFF' | delta" }
+			side_by_side = false,
+			diff_context_lines = vim.o.scrolloff,
+			entry_format = "state #$ID, $STAT, $TIME",
+			mappings = {
+				i = {
+					-- IMPORTANT: Note that telescope-undo must be available when telescope is configured if
+					-- you want to replicate these defaults and use the following actions. This means
+					-- installing as a dependency of telescope in it's `requirements` and loading this
+					-- extension from there instead of having the separate plugin definition as outlined
+					-- above.
+					["<cr>"] = require("telescope-undo.actions").yank_additions,
+					["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+					["<C-cr>"] = require("telescope-undo.actions").restore,
+				},
+				n = {
+					["y"] = require("telescope-undo.actions").yank_additions,
+					["Y"] = require("telescope-undo.actions").yank_deletions,
+					["u"] = require("telescope-undo.actions").restore,
+				},
+			},
+		},
+		lazy = {
+			-- Optional theme (the extension doesn't set a default theme)
+			theme = "ivy",
+			-- Whether or not to show the icon in the first column
+			show_icon = true,
+			-- Mappings for the actions
+			mappings = {
+				open_in_browser = "<C-o>",
+				open_in_file_browser = "<M-b>",
+				open_in_find_files = "<C-f>",
+				open_in_live_grep = "<C-g>",
+				open_plugins_picker = "<C-b>", -- Works only after having called first another action
+				open_lazy_root_find_files = "<C-r>f",
+				open_lazy_root_live_grep = "<C-r>g",
+			},
+			-- Other telescope configuration options
+		},
+		glyph = {
+			action = function(glyph)
+				-- Get row and column cursor,
+				-- use unpack because it's a tuple.
+				local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+				vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { glyph.value })
+			end
 		},
 	},
 }
 
-pcall(telescope.load_extension, 'fzf-native')
-pcall(telescope.load_extension, 'ultisnips')
-pcall(telescope.load_extension, 'file_browser')
-pcall(telescope.load_extension, 'packer')
-pcall(telescope.load_extension, 'ag')
+telescope.setup(config)
+telescope.load_extension("mappings")
+telescope.load_extension("file_browser")
+telescope.load_extension("fzf")
+telescope.load_extension("lazy")
+telescope.load_extension("glyph") -- I need this for modding my vim
+if plugins.notify then telescope.load_extension("notify") end
+if utils.is_exe("ag") then telescope.load_extension("ag") end
+if not plugins.undotree then telescope.load_extension("undo") end
+if plugins.ultisnips then telescope.load_extension("ultisnips") end
+if plugins.luasnip then telescope.load_extension("luasnip") end

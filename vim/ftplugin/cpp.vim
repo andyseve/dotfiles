@@ -24,11 +24,6 @@
 	nnoremap <F7> :Make run<CR>
 	nnoremap <F8> :Make debug<CR>
 
-" # ALE Settings
-	" let b:ale_linters = ['gcc', 'clang']
-	" let b:ale_fixers = ['clang-format', 'uncrustify']
-	" let b:ale_cpp_gcc_options = '-std=c++20 -Wall -Wno-unused-result -O3 -pthread -lm'
-
 " # Abbreviations
 	ab vi vector<int>
 	ab vvi vector<vector<int>>
@@ -45,7 +40,6 @@
 	ab mp make_pair(
 	ab cendl cout << endl
 	ab newline cout << "\n"
-	ab *=2 <<= 1
 
 " # Autocommands
 

@@ -26,6 +26,7 @@ ab teh the
 " Syntax Tweaks {{{
 "hi! link texMathEnvArgName texEnvArgName
 highlight! link Conceal SpecialChar
+highlight! link texCmdPackage Include
 " }}}
 " Functions {{{
 function! ImprortPreemble()
