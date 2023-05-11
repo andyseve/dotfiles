@@ -57,13 +57,13 @@ const long long ${1:inf} = 1ll << 62;
 endsnippet
 snippet testcases "Testcases" b
 int T; cin >> T;
-for(int tt = 0; tt < T; ++tt) {
+for(int tt = 0; tt < T; ++tt){
 	$0
 }
 endsnippet
 snippet google "Google output" b
 int T; cin >> T;
-for(int tt = 0; tt < T; ++tt) {
+for(int tt = 0; tt < T; ++tt){
 	$0
 	cout << "Case #" << tt + 1 << ": " << $1 << endl;
 }
@@ -88,9 +88,12 @@ endsnippet
 snippet trans "Transversal"
 for(${1:auto} ${2:a} : ${3:set})
 endsnippet
+snippet fore "Transversal"
+for(${1:auto} ${2:a} : ${3:set})
+endsnippet
 snippet imax "Inplace max" b
-inline void imax(${1:int} &a, $1 b) {a = max(a,b);}
-inline void imin($1 &a, $1 b) {a = min(a,b);}
+template<class T> bool chmax(T &a, const T &b) { if (a < b) { a = b; return true; } return false; }
+template<class T> bool chmin(T &a, const T &b) { if (a > b) { a = b; return true; } return false; }
 endsnippet
 # }}}
 # # Number Theory {{{
