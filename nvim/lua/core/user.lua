@@ -69,7 +69,7 @@ if user.plugins.undotree == nil then
 	user.plugins.undotree = not user.plugins.telescope
 end
 
-user.theme = "solarized"
+user.theme = "catppuccin"
 user.use_catppuccin = true
 
 return user

@@ -6,7 +6,7 @@
 local utils = require("core.utils")
 local plugins = require("core.user").plugins
 local cmp_present, cmp = pcall(require, 'cmp')
-local lspking_present, lspkind = pcall(require, 'lspkind')
+local lspkind_present, lspkind = pcall(require, 'lspkind')
 
 if not cmp_present then
 	return
@@ -180,6 +180,7 @@ cmp.setup({
 	formatting = {
 		format = lspkind.cmp_format({
 			mode = "symbol",
+			preset = "codicons",
 			maxwidth = 50,
 			ellipsis_char = "...",
 		}),

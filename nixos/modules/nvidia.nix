@@ -2,15 +2,15 @@
 
 {
   services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport32Bit = true;
+  # hardware.opengl.enable = true;
+  # hardware.opengl.driSupport32Bit = true;
 
   nixpkgs.config.allowUnfree = true;
-	nixpkgs.config.cudaSupport = true;
+  nixpkgs.config.cudaSupport = true;
 
   environment.systemPackages = with pkgs; [
-    cudatoolkit
+    # cudatoolkit
     #python3Packages.tensorflow
-    python3Packages.pytorch
+    # python3Packages.pytorch
   ];
 }
