@@ -145,7 +145,7 @@
           exts.pass-otp 
         ])
         ) # password manager
-        yt-dlp #youtube-dl
+        yt-dlp ytmdl #youtube-dl
         imagemagick
 
 

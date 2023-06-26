@@ -2,7 +2,7 @@
 -- Last Modified: Fri 28 Oct 2022 05:27:37 AM EDT
 -- # nvim-tree config
 
-local present, nvimtree = pcall(require,'nvim-tree') 
+local present, nvimtree = pcall(require, 'nvim-tree')
 
 if not present then
 	return
@@ -13,12 +13,8 @@ nvimtree.setup {
 	create_in_closed_folder = false,
 	disable_netrw = false,
 	hijack_cursor = true,
-	hijack_netrw = false,
+	hijack_netrw = true,
 	hijack_unnamed_buffer_when_opening = false,
-	ignore_buffer_on_setup = false,
-	open_on_setup = false,
-	open_on_setup_file = false,
-	open_on_tab = false,
 	sort_by = "case_sensitive",
 	update_cwd = false,
 	reload_on_bufenter = false,
@@ -68,6 +64,7 @@ nvimtree.setup {
 		icons = {
 			webdev_colors = true,
 			git_placement = "before",
+			modified_placement = "before",
 			padding = " ",
 			symlink_arrow = " ➛ ",
 			show = {
@@ -75,6 +72,7 @@ nvimtree.setup {
 				folder = true,
 				folder_arrow = true,
 				git = true,
+				modified = true,
 			},
 			glyphs = {
 				default = "",
@@ -101,6 +99,7 @@ nvimtree.setup {
 			},
 		},
 		special_files = { "Cargo.toml", "Makefile", "README.md", "readme.md" },
+		symlink_destination = false,
 	},
 	hijack_directories = {
 		enable = true,
@@ -111,14 +110,19 @@ nvimtree.setup {
 		update_cwd = false,
 		ignore_list = {},
 	},
-	ignore_ft_on_setup = {},
 	system_open = {
 		cmd = "",
 		args = {},
 	},
 	diagnostics = {
-		enable = false,
+		enable = true,
 		show_on_dirs = true,
+		show_on_open_dirs = true,
+		debounce_delay = 50,
+		severity = {
+			min = vim.diagnostic.severity.HINT,
+			max = vim.diagnostic.severity.ERROR,
+		},
 		icons = {
 			hint = "",
 			info = "",
@@ -128,13 +132,28 @@ nvimtree.setup {
 	},
 	filters = {
 		dotfiles = true,
+		git_clean = false,
+		no_buffer = false,
 		custom = {},
 		exclude = {},
+	},
+	filesystem_watchers = {
+		enable = true,
+		debounce_delay = 50,
+		ignore_dirs = {},
 	},
 	git = {
 		enable = true,
 		ignore = true,
+		show_on_dirs = true,
+		show_on_open_dirs = true,
+		disable_for_dirs = {},
 		timeout = 400,
+	},
+	modified = {
+		enable = false,
+		show_on_dirs = true,
+		show_on_open_dirs = true,
 	},
 	actions = {
 		use_system_clipboard = true,
@@ -180,6 +199,15 @@ nvimtree.setup {
 		prefix = "[FILTER]: ",
 		always_show_folders = true,
 	},
+	notify = {
+		threshold = vim.log.levels.INFO,
+	},
+	ui = {
+		confirm = {
+			remove = true,
+			trash = true,
+		},
+	},
 	log = {
 		enable = false,
 		truncate = false,
@@ -193,4 +221,3 @@ nvimtree.setup {
 		},
 	},
 }
-

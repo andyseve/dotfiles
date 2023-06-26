@@ -24,7 +24,6 @@ ts_configs.setup({
 		'make',
 		'markdown',
 		'markdown_inline',
-		'help',
 		'regex',
 	},
 	-- ignore_install = {}, -- this is only applicable if ensure_installed = all
