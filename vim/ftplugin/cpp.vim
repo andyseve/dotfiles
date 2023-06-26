@@ -3,7 +3,7 @@
 " Cpp specific vim settings
 
 " # Core Settings
-	setlocal foldmethod=expr
+	setlocal foldmethod=manual
 	setlocal foldexpr=nvim_treesitter#foldexpr()
 	setlocal foldminlines=5
 	setlocal foldlevelstart=99

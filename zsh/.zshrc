@@ -1,5 +1,5 @@
 # Author: Anish Sevekari
-# Last Edited: Fri 24 Feb 2023 03:51:23 PM EST
+# Last Edited: Fri 31 Mar 2023 06:58:33 PM EDT
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -246,9 +246,6 @@ autoload -U promptinit && promptinit
 autoload -Uz compinit bashcompinit
 compinit 
 bashcompinit
-
-eval "$(register-python-argcomplete pubs)"
-
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -270,5 +267,9 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 path+=($HOME/bin)
 path+=($HOME/.local/bin)
 export PATH
+
+# Python argcomplete
+eval "$(register-python-argcomplete pubs)"
+
 
 # vim:ft=zsh
