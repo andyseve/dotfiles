@@ -204,6 +204,7 @@ Spec = {
 			"f3fora/cmp-spell",
 			"hrsh7th/cmp-emoji",
 			"hrsh7th/cmp-cmdline",
+			"petertriho/cmp-git",
 			{ "hrsh7th/cmp-nvim-lsp", enabled = plugins.lsp, },
 			{ "onsails/lspkind-nvim", enabled = plugins.lsp, },
 			{ "quangnguyen30192/cmp-nvim-ultisnips", enabled = plugins.ultisnips, },

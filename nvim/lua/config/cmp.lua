@@ -2,7 +2,6 @@
 -- Last Modified: Tue 07 Mar 2023 04:07:30 AM EST
 -- nvim-cmp settings
 
-
 local utils = require("core.utils")
 local plugins = require("core.user").plugins
 local cmp_present, cmp = pcall(require, 'cmp')
@@ -19,6 +18,7 @@ local sources = function()
 	if plugins.luasnip then table.insert(ret, { name = "luasnip" }) end
 	-- table.insert(ret, { name = "omni" })
 	table.insert(ret, { name = "buffer" })
+	table.insert(ret, { name = "path" })
 	return ret
 end
 
@@ -36,7 +36,6 @@ local cmp_next = function(fallback)
 		fallback()
 	end
 end
-
 local cmp_prev = function(fallback)
 	if cmp.visible() then
 		cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
@@ -44,7 +43,6 @@ local cmp_prev = function(fallback)
 		fallback()
 	end
 end
-
 local cmp_confirm = function(fallback)
 	if cmp.visible() and cmp.get_active_entry() then
 		cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
@@ -64,7 +62,6 @@ local snippet_next_insert = function(fallback)
 		else
 			fallback()
 		end
-		return
 	end
 	cmp_next(fallback)
 end
@@ -75,7 +72,6 @@ local snippet_next_select = function(fallback)
 		else
 			fallback()
 		end
-		return
 	end
 	cmp_next(fallback)
 end
@@ -88,7 +84,6 @@ local snippet_prev_insert = function(fallback)
 		else
 			fallback()
 		end
-		return
 	end
 	cmp_prev(fallback)
 end
@@ -191,6 +186,17 @@ cmp.setup({
 		native_menu = false,
 		ghost_text = true,
 	},
+})
+
+-- Filetype specific sources
+cmp.setup.filetype('gitcommit', {
+	sources = cmp.config.sources({
+		{ name = 'git' },
+		{ name = 'buffer' },
+	})
+})
+cmp.setup.filetype('tex', {
+	sources = cmp.config.sources(table.insert(sources(), { name = 'omni' }))
 })
 
 -- Use buffer source for `/`, '?'
