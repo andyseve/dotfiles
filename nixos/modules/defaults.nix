@@ -36,7 +36,8 @@
       noto-fonts-cjk
       noto-fonts-emoji
       fira-code
-      (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" ]; })
+      cascadia-code
+      (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "CascadiaCode" ]; })
       lohit-fonts.marathi
     ];
   };
@@ -146,7 +147,7 @@
         ])
         ) # password manager
         yt-dlp ytmdl #youtube-dl
-        imagemagick
+        imagemagick inkscape
 
 
         # Dev Tools

@@ -14,19 +14,19 @@ let g:vimtex_compiler_latexmk = {
 			\ 'executable' : 'latexmk',
 			\ 'hooks' : [],
 			\ 'options' : [
-				\   '-shell-escape',
-				\   '-verbose',
-				\   '-file-line-error',
-				\   '-synctex=1',
-				\   '-interaction=nonstopmode',
-				\ ],
-				\}
+			\   '-shell-escape',
+			\   '-verbose',
+			\   '-file-line-error',
+			\   '-synctex=1',
+			\   '-interaction=nonstopmode',
+			\ ],
+			\}
 
 " }}}
 " LeaderGuide {{{
-let g:lmap.l = {
-			\'name': 'Latex',
-			\}
+" let g:lmap.l = {
+" 			\'name': 'Latex',
+" 			\}
 
 " }}}
 " SumatraPDF config for windows {{{
@@ -86,10 +86,10 @@ let g:vimtex_syntax_conceal = {
 			\}
 
 let g:vimtex_syntax_conceal_cites = {
-          \ 'type': 'brackets',
-          \ 'icon': '📖',
-          \ 'verbose': v:true,
-          \}
+			\ 'type': 'brackets',
+			\ 'icon': '📖',
+			\ 'verbose': v:true,
+			\}
 
 " }}}
 

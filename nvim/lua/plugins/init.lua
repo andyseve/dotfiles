@@ -260,6 +260,7 @@ Spec = {
 		lazy = true,
 		ft = { "tex" },
 		config = function()
+			vim.cmd("source ~/.config/nvim/core/globals.vim")
 			vim.cmd("source ~/.config/nvim/config/vimtex.vim")
 		end,
 	},
