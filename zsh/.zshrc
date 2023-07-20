@@ -10,7 +10,8 @@ fi
 
 # Set zsh variables and source corresponding settings
 ZSH_HOME=${ZDOTDIR:-$HOME/.zsh}
-fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
+fpath=($ZSH_HOME/functions $fpath)
+# fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/bash-completion/completions $fpath)
 
 ################################################################################
 # zinit ########################################################################
@@ -19,8 +20,8 @@ fpath=($ZSH_HOME/functions $ZSH_HOME/completions /run/current-system/sw/share/ba
 # Auto installing zinit
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [ ! -d $(dirname $ZINIT_HOME) ]; then
-	mkdir -p "$(dirname $ZINIT_HOME)"
-	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+	command mkdir -p "$(dirname $ZINIT_HOME)"
+	command git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
@@ -32,7 +33,23 @@ local function __bind_history_keys(){
 	bindkey -M vicmd 'j' history-substring-search-down
 }
 
+local function __bind_autosuggesnt_keys(){
+	bindkey -v "^ " autosuggest-accept
+}
+
+local function __eval_argcomplete(){
+	# Add a list of all argcomplete functions
+	eval "$(register-python-argcomplete pubs)"
+}
+
 # plugins
+## Prompt theme
+# zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
+# zinit light sindresorhus/pure 
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
+## utils
 zinit wait lucid light-mode for \
 	hlissner/zsh-autopair \
 	jeffwalter/zsh-plugin-cd-ssh \
@@ -45,12 +62,12 @@ zinit wait lucid light-mode for \
 zinit wait lucid light-mode for \
 		atinit"ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
 		atload"_zsh_autosuggest_start" \
+		atload'__bind_autosuggesnt_keys' \
 	zsh-users/zsh-autosuggestions \
 		atpull'zinit creinstall -q .' \
-		blockf \
 	zsh-users/zsh-completions \
-  srijanshetty/zsh-pip-completion \
-  spwhitt/nix-zsh-completions 
+	srijanshetty/zsh-pip-completion \
+	spwhitt/nix-zsh-completions 
 
 
 ## history searching
@@ -64,27 +81,25 @@ zinit wait lucid light-mode for \
 		atload'__bind_history_keys' \
 	zsh-users/zsh-history-substring-search
 
-## syntax highlighting
-zinit wait lucid light-mode for \
-		atinit"
-			typeset -gA FAST_HIGHLIGHT; FAST_HIGHLIGHT[git-cmsg-len]=100;
-			ZINIT[COMPINIT_OPTS]=-C;
-			zicompinit;
-			zicdreplay;
-		" \
-	zdharma-continuum/fast-syntax-highlighting \
-	zlsun/solarized-man \
-
-## Prompt theme
-# zinit ice compile'(pure|async).zsh' pick"async.zsh" src"pure.zsh"
-# zinit light sindresorhus/pure 
-zinit ice depth=1
-zinit light romkatv/powerlevel10k
-
 ## Navigation
 zinit wait lucid light-mode for \
 	changyuheng/zsh-interactive-cd \
 	# wting/autojump
+
+## Completion related things
+
+## syntax highlighting
+# syntax highlighting should be called last
+zinit wait lucid light-mode for \
+	zlsun/solarized-man \
+		atload'
+			ZINIT[COMPINIT_OPTS]=-C;
+			zicompinit;
+			zicdreplay;
+			__eval_argcomplete;
+			typeset -gA FAST_HIGHLIGHT; FAST_HIGHLIGHT[git-cmsg-len]=100;
+		' \
+	zdharma-continuum/fast-syntax-highlighting \
 
 
 ################################################################################
@@ -231,21 +246,10 @@ fi
 
 
 ################################################################################
-# Prompt #######################################################################
-################################################################################
-autoload -U promptinit && promptinit
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f "$ZSH_HOME/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
-
-################################################################################
 # Completions ##################################################################
 ################################################################################
 
 # Use modern completion system
-autoload -Uz compinit bashcompinit
-compinit 
-bashcompinit
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -263,13 +267,19 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+################################################################################
+# Prompt #######################################################################
+################################################################################
+autoload -U promptinit && promptinit
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f "$ZSH_HOME/p10k.zsh" ]] || source "$ZSH_HOME/p10k.zsh"
+
+
 # Add local dirs to path -- required for convinience
 path+=($HOME/bin)
 path+=($HOME/.local/bin)
 export PATH
-
-# Python argcomplete
-eval "$(register-python-argcomplete pubs)"
 
 
 # vim:ft=zsh

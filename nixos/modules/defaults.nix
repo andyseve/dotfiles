@@ -156,7 +156,7 @@
 
         python3
         python3Packages.pip
-        python3Packages.argcomplete
+        unstable.python3Packages.argcomplete
         python3Packages.numpy
         python3Packages.scipy
         python3Packages.matplotlib

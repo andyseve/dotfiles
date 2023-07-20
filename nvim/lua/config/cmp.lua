@@ -11,14 +11,16 @@ if not cmp_present then
 	return
 end
 
-local sources = function()
+local sources = function(omni)
 	local ret = {}
 	if plugins.lsp then table.insert(ret, { name = "nvim_lsp" }) end
 	if plugins.ultisnips then table.insert(ret, { name = "ultisnips" }) end
 	if plugins.luasnip then table.insert(ret, { name = "luasnip" }) end
-	-- table.insert(ret, { name = "omni" })
-	table.insert(ret, { name = "buffer" })
 	table.insert(ret, { name = "path" })
+	if omni then
+		table.insert(ret, { name = "omni" })
+	end
+	table.insert(ret, { name = "buffer" })
 	return ret
 end
 
@@ -38,7 +40,7 @@ local cmp_next = function(fallback)
 end
 local cmp_prev = function(fallback)
 	if cmp.visible() then
-		cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+		cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
 	else
 		fallback()
 	end
@@ -51,8 +53,16 @@ local cmp_confirm = function(fallback)
 	end
 end
 
-local snippet_next_insert = function(fallback)
-	if plugins.ultisnips then
+-- snippet dependent features
+-- utils.cmp provides keybind functions depending on snippet engine of choice.
+-- If the snippet engine is changed, then we need to reselect the appropriate functions.
+-- Note that tab bindings insert the completion by default, on the other hand, other keybinds only select the appropriate choice without inserting it.
+-- The idea is to use tabs for uninturpted typing only, and in all other cases, it is advised to use other keybinds to select, rather than schrolling to the correction option.
+-- Fuzzyfind helps with this, since completing the required word should automatically bring up the preffered choice to the top.
+
+local snippet_next_insert
+if plugins.ultisnips then
+	snippet_next_insert = function(fallback)
 		if vim.fn["UltiSnips#CanExpandSnippet"]() == 1 then
 			vim.fn["UltiSnips#ExpandSnippet"]()
 		elseif vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
@@ -63,20 +73,30 @@ local snippet_next_insert = function(fallback)
 			fallback()
 		end
 	end
-	cmp_next(fallback)
+else
+	snippet_next_insert = cmp_next
 end
-local snippet_next_select = function(fallback)
-	if plugins.ultisnips then
-		if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
-			vim.api.nvim_feedkeys(utils.termcodes("<ESC>:call UltiSnips#JumpForwards()<CR>"), 'm', true)
-		else
-			fallback()
+
+
+local snippet_next_select
+if plugins.ultisnips then
+	snippet_next_select = function(fallback)
+		if plugins.ultisnips then
+			if vim.fn["UltiSnips#CanJumpForwards"]() == 1 then
+				vim.api.nvim_feedkeys(utils.termcodes("<ESC>:call UltiSnips#JumpForwards()<CR>"), 'm', true)
+			else
+				fallback()
+			end
+			return
 		end
 	end
-	cmp_next(fallback)
+else
+	snippet_next_select = cmp_next
 end
-local snippet_prev_insert = function(fallback)
-	if plugins.ultisnips then
+
+local snippet_prev_insert
+if plugins.ultisnips then
+	snippet_prev_insert = function(fallback)
 		if vim.fn["UltiSnips#CanJumpBackwards"]() == 1 then
 			vim.fn["UltiSnips#JumpBackwards"]()
 		elseif cmp.visible() then
@@ -85,18 +105,21 @@ local snippet_prev_insert = function(fallback)
 			fallback()
 		end
 	end
-	cmp_prev(fallback)
+else
+	snippet_next_insert = cmp_next
 end
-local snippet_prev_select = function(fallback)
-	if plugins.ultisnips then
+
+local snippet_prev_select
+if plugins.ultisnips then
+	snippet_prev_select = function(fallback)
 		if vim.fn["UltiSnips#CanJumpBackwards"]() == 1 then
 			vim.api.nvim_feedkeys(utils.termcodes("<ESC>:call UltiSnips#JumpBackwards<CR>"), 'm', true)
 		else
 			fallback()
 		end
-		return
 	end
-	cmp_prev(fallback)
+else
+	snippet_prev_select = cmp_prev
 end
 
 cmp.setup({
@@ -181,7 +204,7 @@ cmp.setup({
 		}),
 	},
 	-- list of sources to add to lsp
-	sources = cmp.config.sources(sources()),
+	sources = cmp.config.sources(sources(false)),
 	experimental = {
 		native_menu = false,
 		ghost_text = true,
@@ -196,7 +219,11 @@ cmp.setup.filetype('gitcommit', {
 	})
 })
 cmp.setup.filetype('tex', {
-	sources = cmp.config.sources(table.insert(sources(), { name = 'omni' }))
+	completion = {
+		keyword_length = 1,
+		completeopt = "menu, noselect",
+	},
+	sources = cmp.config.sources(sources(true))
 })
 
 -- Use buffer source for `/`, '?'

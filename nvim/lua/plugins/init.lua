@@ -257,8 +257,9 @@ Spec = {
 	{
 		"lervag/vimtex",
 		enabled = plugins.tex,
-		lazy = true,
-		ft = { "tex" },
+		lazy = false,
+		-- lazy = true,
+		-- ft = { "tex" },
 		config = function()
 			vim.cmd("source ~/.config/nvim/core/globals.vim")
 			vim.cmd("source ~/.config/nvim/config/vimtex.vim")
