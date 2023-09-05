@@ -99,87 +99,88 @@
     firmwareLinuxNonfree
 
 
-        # Version Control / Archive
-        git subversion
-        unzip zip unrar
+    # Version Control / Archive
+    git subversion
+    unzip zip unrar
 
-        # Debug / Monitor / Analysis
-        htop iotop powertop iftop
-        ltrace strace
-        pciutils usbutils lshw
-        smartmontools lm_sensors
-        dmidecode
+    # Debug / Monitor / Analysis
+    htop iotop powertop iftop
+    ltrace strace
+    pciutils usbutils lshw
+    smartmontools lm_sensors
+    dmidecode
 
     # Volume
     alsa-utils
 
-        # Networking
-        iputils
-        tor openvpn
-        wget curl rsync
-        networkmanager networkmanager-openvpn
+    # Networking
+    iputils
+    tor openvpn
+    wget curl rsync
+    networkmanager networkmanager-openvpn
 
-        # Linux shell utils
-        fzf silver-searcher autojump ripgrep
-        neofetch
-        tree
-        tmux screen
-        pdftk
-        btop
+    # Linux shell utils
+    fzf silver-searcher autojump ripgrep
+    neofetch
+    tree
+    tmux screen
+    pdftk
+    btop
 
-        # Encryption
-        gnupg
-        pinentry-gtk2
+    # Encryption
+    gnupg
+    pinentry-gtk2
 
-        # CLI programs
-        ranger
-        weechat
-        unstable.neovim # load latest neovim
-        bat #better cat
-        taskwarrior timewarrior
-        khal khard # calendars and contacts
-        unstable.vdirsyncer # vdirsyncer
-        fswebcam 
-        unstable.pubs # biblography manager
-        (pass.withExtensions
-        (exts: [
-          exts.pass-otp 
-        ])
-        ) # password manager
-        yt-dlp ytmdl #youtube-dl
-        imagemagick inkscape
+    # CLI programs
+    ranger
+    weechat
+    unstable.neovim # load latest neovim
+    bat #better cat
+    taskwarrior timewarrior
+    khal khard # calendars and contacts
+    unstable.vdirsyncer # vdirsyncer
+    fswebcam 
+    unstable.pubs # biblography manager
+    (pass.withExtensions
+      (exts: [
+        exts.pass-otp 
+      ])
+    ) # password manager
+    unstable.yt-dlp unstable.ytmdl #youtube-dl
+    mediainfo
+    imagemagick inkscape
 
 
-        # Dev Tools
-        gnumake
-        gcc ccls
+    # Dev Tools
+    gnumake
+    gcc ccls
 
-        python3
-        python3Packages.pip
-        unstable.python3Packages.argcomplete
-        python3Packages.numpy
-        python3Packages.scipy
-        python3Packages.matplotlib
-        python3Packages.scikitlearn
-        python3Packages.pandas
-        python3Packages.jupyter
-        python3Packages.notebook
+    python3
+    python3Packages.pip
+    unstable.python3Packages.argcomplete
+    python3Packages.numpy
+    python3Packages.scipy
+    python3Packages.matplotlib
+    python3Packages.scikitlearn
+    python3Packages.pandas
+    python3Packages.jupyter
+    python3Packages.notebook
 
-        unstable.haskellPackages.ghc
-        unstable.haskellPackages.hoogle
-        unstable.haskellPackages.cabal-install
-        unstable.haskellPackages.haskell-language-server
+    unstable.haskellPackages.ghc
+    unstable.haskellPackages.hoogle
+    unstable.haskellPackages.cabal-install
+    unstable.haskellPackages.haskell-language-server
 
-        jdk11 nodejs
+    jdk11 nodejs
 
-        nodePackages.pyright
-        sumneko-lua-language-server
+    nodePackages.pyright
+    sumneko-lua-language-server
 
-        # Latex
-        texlive.combined.scheme-full
+    # Latex
+    texlive.combined.scheme-full
 
-        # Man Pages
-        man man-pages
+    # Man Pages
+    man man-pages
 
     # dotfiles
     anish-dotfiles
