@@ -10,7 +10,7 @@ type = birthdays
 color = dark red
 
 [default]
-default_calendar = "andyseve3.1415@gmail.com"
+default_calendar = "personal"
 highlight_event_days = true
 print_new = event
 show_all_days = true
