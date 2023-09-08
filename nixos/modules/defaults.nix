@@ -177,6 +177,7 @@
 
         # Latex
         texlive.combined.scheme-full
+        unstable.ps2eps
 
         # Man Pages
         man man-pages
