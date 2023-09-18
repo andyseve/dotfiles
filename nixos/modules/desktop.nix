@@ -37,7 +37,10 @@
   environment.systemPackages = with pkgs; [	
     # WindowManager Core
     polybar
+    taffybar
+    xmobar
     rofi rofi-pass
+    eww
     picom                            # transparancy
     dunst libnotify                  # notifications
     feh

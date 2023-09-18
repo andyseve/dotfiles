@@ -13,6 +13,7 @@
 \* Polybar has better action control than xmobar -- not really.
 \* Taffybar supports better things, but significantly harder and annoying to use with nixos
 \* Bite the bullet and start using Taffybar.
+\* Taffybar is also significantly larger
 \* Taffybar also allows inbuilt eww widgets.
 \* vlc moving with mouse between screens.
 \* steam messages window popping up when opening steam.

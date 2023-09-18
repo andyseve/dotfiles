@@ -11,6 +11,8 @@
     package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
     prime = {
       sync.enable = lib.mkDefault true;
+      offload.enable = lib.mkDefault 990 true;
+      # Hardware should specify bus id for nvidia and intel
       nvidiaBusId = "PCI:4:0:0";
       intelBusId  = "PCI:0:2:0";
     };
