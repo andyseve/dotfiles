@@ -65,6 +65,7 @@
 
     # Helper CLI tools
     streamlink
+    playerctl
   ];
 
   environment.variables = {

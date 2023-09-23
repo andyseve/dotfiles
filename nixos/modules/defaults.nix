@@ -154,6 +154,7 @@
     # Dev Tools
     gnumake
     gcc ccls
+    rustc
 
     python3
     python3Packages.pip
@@ -175,6 +176,8 @@
 
     nodePackages.pyright
     sumneko-lua-language-server
+    rust-analyzer
+
 
     # Latex
     texlive.combined.scheme-full

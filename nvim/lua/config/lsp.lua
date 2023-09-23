@@ -138,3 +138,9 @@ lsp.lua_ls.setup {
 		},
 	},
 }
+
+lsp.rust_analyzer.setup {
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = lsp_flags,
+}
