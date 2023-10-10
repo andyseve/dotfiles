@@ -19,7 +19,7 @@ fpath=($ZSH_HOME/functions $fpath)
 
 # Auto installing zinit
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [ ! -d $(dirname $ZINIT_HOME) ]; then
+if [[ ! -d $(dirname $ZINIT_HOME) ]]; then
 	command mkdir -p "$(dirname $ZINIT_HOME)"
 	command git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
@@ -38,6 +38,9 @@ local function __bind_autosuggesnt_keys(){
 }
 
 local function __eval_argcomplete(){
+	autoload bashcompinit
+	bashcompinit
+	source /etc/bash_completion.d/python-argcomplete.sh
 	# Add a list of all argcomplete functions
 	eval "$(register-python-argcomplete pubs)"
 }
@@ -86,10 +89,9 @@ zinit wait lucid light-mode for \
 	changyuheng/zsh-interactive-cd \
 	# wting/autojump
 
-## Completion related things
-
 ## syntax highlighting
 # syntax highlighting should be called last
+# completions after syntax is loaded
 zinit wait lucid light-mode for \
 	zlsun/solarized-man \
 		atload'
@@ -198,6 +200,9 @@ if _has fzf; then
   '
 fi
 
+# Python argcomplete
+_has register-python-argcomplete || _has register-python-argcomplete3 && alias register-python-argcomplete=register-python-argcomplete3
+
 ################################################################################
 # Aliases ######################################################################
 ################################################################################
@@ -281,5 +286,28 @@ path+=($HOME/bin)
 path+=($HOME/.local/bin)
 export PATH
 
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+
+if [[ -x "$HOME/.local/miniforge3/bin/clear" ]]; then
+	mv "$HOME/.local/miniforge3/bin/clear" "$HOME/.local/miniforge3/bin/clear_conda"
+fi
+__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed -E 's/\\([a-z]+)/\1/g')"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
+	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
+	if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
+		. "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
+	else
+		export PATH="$HOME/.local/miniforge3/bin:$PATH"
+	fi
+fi
+unset __conda_setup
+
+if [ -f "$HOME/.local/miniforge3/etc/profile.d/mamba.sh" ]; then
+    . "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
+fi
 
 # vim:ft=zsh
