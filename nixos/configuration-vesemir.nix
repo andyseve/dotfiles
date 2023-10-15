@@ -64,10 +64,9 @@
     {
       output = "HDMI-1-1";
       primary = true;
-    },
+    }
     {
       output = "eDP-1-1";
-      off = true;
     }
   ];
 
@@ -79,6 +78,11 @@
     lidSwitchDocked = "ignore";
   };
 
+  # Nvidia Prime Settings
+  hardware.nvidia.prime = {
+      nvidiaBusId = "PCI:4:0:0";
+      intelBusId  = "PCI:0:2:0";
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
