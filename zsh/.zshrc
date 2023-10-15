@@ -179,6 +179,7 @@ local _color() {
 # run neofetch at start of ssh session
 if [[ -n $SSH_CONNECTION ]]; then
 	if _has neofetch; then
+		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 		neofetch
 	fi
 fi
