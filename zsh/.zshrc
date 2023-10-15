@@ -19,7 +19,7 @@ fpath=($ZSH_HOME/functions $fpath)
 
 # Auto installing zinit
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-if [[ ! -d $(dirname $ZINIT_HOME) ]]; then
+if [ ! -d $(dirname $ZINIT_HOME) ]; then
 	command mkdir -p "$(dirname $ZINIT_HOME)"
 	command git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
@@ -37,11 +37,17 @@ local function __bind_autosuggesnt_keys(){
 	bindkey -v "^ " autosuggest-accept
 }
 
-local function __eval_argcomplete(){
+local function __load_bash_completion(){
 	autoload bashcompinit
 	bashcompinit
-	source /etc/bash_completion.d/python-argcomplete.sh
-	# Add a list of all argcomplete functions
+	if [ -d /etc/bash_completion.d ]; then
+		source /etc/bash_completion.d/python-argcomplete.sh
+	fi
+}
+
+local function __eval_argcomplete(){
+	# only need bashcompinit if using bash completions
+	# __load_bash_completion
 	eval "$(register-python-argcomplete pubs)"
 }
 
@@ -163,10 +169,10 @@ for file in $ZSH_HOME/functions/*.zsh; do
 	source $file
 done
 
-_has() {
+local _has() {
   return $( whence $1 >/dev/null )
 }
-_color() {
+local _color() {
   return $( [ -z "$INSIDE_EMACS" ] )
 }
 
@@ -189,6 +195,9 @@ fi
 
 
 # FZF config
+if [ $(command -v fzf>/dev/null) ]; then
+	echo "this works"
+fi
 if _has fzf; then
 	if _has ag; then
 		export FZF_DEFAULT_COMMAND='ag -g ""' # Use Ag if it exists
@@ -201,7 +210,7 @@ if _has fzf; then
 fi
 
 # Python argcomplete
-_has register-python-argcomplete || _has register-python-argcomplete3 && alias register-python-argcomplete=register-python-argcomplete3
+(_has register-python-argcomplete || _has register-python-argcomplete3) && (alias register-python-argcomplete=register-python-argcomplete3)
 
 ################################################################################
 # Aliases ######################################################################
@@ -310,4 +319,5 @@ if [ -f "$HOME/.local/miniforge3/etc/profile.d/mamba.sh" ]; then
     . "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
 fi
 
+# >>> conda initialize >>>
 # vim:ft=zsh

@@ -140,7 +140,7 @@
     khal khard # calendars and contacts
     unstable.vdirsyncer # vdirsyncer
     fswebcam 
-    unstable.pubs # biblography manager
+    pubs # biblography manager
     (pass.withExtensions
       (exts: [
         exts.pass-otp 
