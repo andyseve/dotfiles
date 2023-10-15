@@ -78,12 +78,6 @@
     lidSwitchDocked = "ignore";
   };
 
-  # Nvidia Prime Settings
-  hardware.nvidia.prime = {
-      nvidiaBusId = "PCI:4:0:0";
-      intelBusId  = "PCI:0:2:0";
-  };
-
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
