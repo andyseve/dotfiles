@@ -5,11 +5,11 @@
   services.openssh = {
     enable = true;
     allowSFTP = true;
-    settings.forwardX11 = true;
-    settings.logLevel = "VERBOSE";
+    settings.X11Forwarding = true;
+    settings.LogLevel = "VERBOSE";
     ports = [ 22 ];
-    settings.permitRootLogin = "no";
-    settings.passwordAuthentication = false;
+    settings.PermitRootLogin = "no";
+    settings.PasswordAuthentication = false;
 
     extraConfig = ''
       # Authentication
