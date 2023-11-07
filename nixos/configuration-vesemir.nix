@@ -7,15 +7,15 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-      /etc/nixos/modules/defaults.nix
-      /etc/nixos/modules/desktop.nix
-      /etc/nixos/modules/nvidia-legacy.nix
-      /etc/nixos/modules/sound.nix
-      /etc/nixos/modules/security.nix
-      /etc/nixos/modules/ssh.nix
-      /etc/nixos/modules/git.nix
-      /etc/nixos/modules/taskserver.nix
+      ./hardware-configuration.nix
+      ./modules/defaults.nix
+      ./modules/desktop.nix
+      ./modules/nvidia-legacy.nix
+      ./modules/sound.nix
+      ./modules/security.nix
+      ./modules/ssh.nix
+      ./modules/git.nix
+      ./modules/taskserver.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -62,11 +62,11 @@
   # Default monitor configuration
   services.xserver.xrandrHeads = [ 
     {
-      output = "eDP-1";
+      output = "HDMI-1-1";
       primary = true;
     }
     {
-      output = "DP-1";
+      output = "eDP-1-1";
     }
   ];
 
@@ -78,11 +78,16 @@
     lidSwitchDocked = "ignore";
   };
 
+  # Nvidia Prime Settings
+  hardware.nvidia.prime = {
+      nvidiaBusId = "PCI:4:0:0";
+      intelBusId  = "PCI:0:2:0";
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  system.stateVersion = "22.11"; # Did you read the comment?
+  system.stateVersion = "23.05"; # Did you read the comment?
 }
 

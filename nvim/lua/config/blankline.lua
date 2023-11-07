@@ -3,34 +3,51 @@
 -- # indent-blankline settings
 
 local ts = require("core.user").plugins.treesitter
-local present, blankline = pcall(require, 'indent_blankline')
+local present, blankline = pcall(require, 'ibl')
 
 if not present then
 	return
 end
 
-blankline.setup {
-	char = "",
-	space_char_blankline = " ",
-	show_current_context = true,
-	show_current_context_start = true,
-	show_trailing_blankline_indent = false,
-	show_first_indent_level = false,
-	use_treesitter = ts,
-	use_treesitter_scope = ts,
-
-	filetype_exclude = {
-		"help",
-		"terminal",
-		"dashboard",
-		"packer",
-		"lspinfo",
-		"TelescopePrompt",
-		"TelescopeResults",
-		"NvimTree",
-		"alpha",
-		"",
+local config  = {
+	enabled = true,
+	debounce = 50,
+	indent = {
+		char = "",
+		highlight = "IblIndent",
+		smart_indent_cap = true,
+		priority = 1,
 	},
-
-	buftype_exclude = { "terminal" },
+	whitespace = {
+		highlight = "IblIndent",
+		remove_blankline_trail = true,
+	},
+	scope = {
+		enabled = true,
+		char = "┊",
+		show_start = true,
+		show_end = false,
+		injected_languages = true,
+		highlight = "IblScope",
+		priority = 50,
+	},
+	exclude = {
+		filetypes = {
+			"help",
+			"terminal",
+			"dashboard",
+			"packer",
+			"lspinfo",
+			"TelescopePrompt",
+			"TelescopeResults",
+			"NvimTree",
+			"alpha",
+			"",
+		},
+		buftypes = {
+			"terminal",
+		},
+	},
 }
+
+blankline.setup(config)

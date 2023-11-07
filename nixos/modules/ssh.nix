@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs ? import <nixos>,
+  ...
+}:
 
 {
   # OpenSSH daemon.
@@ -28,7 +33,7 @@
     };
 
   # ssh agent
-  # comment if using gpg-agent
+  # comment out to use gpg agent
   #programs.ssh = {
     #startAgent = true;
     #agentTimeout = "30m";
