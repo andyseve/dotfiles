@@ -36,8 +36,6 @@
 
   environment.systemPackages = with pkgs; [	
     # WindowManager Core
-    polybar
-    taffybar
     xmobar
     rofi rofi-pass
     eww
@@ -54,13 +52,12 @@
     papirus-icon-theme               # Papirus-icons
 
     # Desktop Programs
-    firefox google-chrome 
+    firefox
     vlc
     zathura
     kitty
     unstable.zoom-us slack discord
     pavucontrol
-    unstable.ytmdesktop
     unstable.dropbox
 
     # Helper CLI tools
@@ -69,7 +66,7 @@
   ];
 
   environment.variables = {
-    GTK_THEME = "NumixSolarizedDarkBlue";
+    # GTK_THEME = "NumixSolarizedDarkBlue";
     GTK_ICON_THEME = "Papirus-Dark";
   };
 

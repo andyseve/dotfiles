@@ -51,10 +51,9 @@
     settings = {
       auto-optimise-store = true;
       require-sigs = true;
+      experimental-features = ["nix-command" "flakes"];
       substituters = [
         "https://cache.nixos.org"
-      ];
-      trusted-substituters = [
         "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
@@ -100,7 +99,7 @@
 
 
     # Version Control / Archive
-    git subversion
+    git 
     unzip zip unrar
 
     # Debug / Monitor / Analysis
@@ -120,7 +119,7 @@
     networkmanager networkmanager-openvpn
 
     # Linux shell utils
-    fzf silver-searcher autojump ripgrep
+    fzf silver-searcher autojump ripgrep # for grep and search
     neofetch
     tree
     tmux screen
@@ -146,9 +145,10 @@
         exts.pass-otp 
       ])
     ) # password manager
-    unstable.yt-dlp unstable.ytmdl #youtube-dl
-    mediainfo
-    imagemagick inkscape
+    unstable.yt-dlp # youtube downloader
+    unstable.ytmdl # youtube music downloader and info
+    imagemagick
+    inkscape
 
 
     # Dev Tools
