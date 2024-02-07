@@ -6,30 +6,30 @@ local plugins = require("core.user").plugins
 
 local mappings = {}
 mappings.files = {
-	name = " files",
+	name = " Files",
 	prefix = "<leader>f",
 	n = {
 		["f"] = { "<cmd> Telescope find_files <CR>", " Find files" },
 		["r"] = { "<cmd> Telescope oldfiles <CR>", " Recent files" },
-		["g"] = { "<cmd> Telescope live_grep <CR>", " Grep files" },
+		["g"] = { "<cmd> Telescope live_grep <CR>", "Grep files" },
 		["b"] = { "<cmd> Telescope buffers <CR>", "﬘ Find buffers" },
 		["h"] = { "<cmd> Telescope help_tags <CR>", " Help tags" },
 	},
 }
 mappings.lists = {
-	name = " lists",
+	name = " Lists",
 	prefix = "<leader>o",
 	n = {
 		["q"] = { "<cmd> Telescope quickfix <CR>", " Quickfix" },
-		["w"] = { "<cmd> Telescope loclist <CR>", " Locations" },
-		["g"] = { "<cmd> Telescope glyph <CR>", " Glyph" }
+		["w"] = { "<cmd> Telescope loclist <CR>", " Loclist" },
+		["g"] = { "<cmd> Telescope glyph <CR>", " Glyph" }
 	}
 }
 if plugins.ultisnip then
 	mappings.lists.n["s"] = { "<cmd> Telescope ultisnips theme=ivy <CR>", "Snippets" }
 end
 mappings.diagnostics = {
-	name = " diagnostics",
+	name = " Diagnostics",
 	prefix = "<leader>d",
 	n = {
 		["i"] = { "<cmd> Telescope diagnostics <CR>", " Diagnostics" },
@@ -40,7 +40,7 @@ if plugins.noice then
 	mappings.diagnostics.n["n"] = { "<cmd> Noice telescope <CR>", " Messages" }
 end
 mappings.edit = {
-	name = " edit",
+	name = " Edit",
 	prefix = "<leader>e",
 	n = {
 		["e"] = { "<cmd> Telescope find_files dir=~/dotfiles <CR>", "ﱐ Find files" },

@@ -252,6 +252,7 @@
     package.json
     stack.yaml
 	shell.nix
+	default.nix
 	flake.lock
   )
   typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchor_files})"
@@ -1584,10 +1585,10 @@
 
   # Custom transient prompt
   p10k-on-post-prompt() {
-	p10k display '1'=hide '2/right/time'=show '2/right/status'=show '2/right/command_execution_time'=show '2/right/public_ip'=hide '2/right_frame'=hide
+	p10k display '1'=hide '2/right/time'=show '2/right/public_ip'=hide '2/right_frame'=hide
   }
   p10k-on-pre-prompt()  {
-	p10k display '1'=show '2/right/time'=hide '2/right/status'=hide '2/right/command_execution_time'=hide '2/right/public_ip'=show '2/right_frame'=show
+	p10k display '1'=show '2/right/time'=hide '2/right/public_ip'=show '2/right_frame'=show
   }
 
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
@@ -1595,6 +1596,8 @@
   # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS. It displays an icon and orange text greeting the user.
   #
   # Type `p10k help segment` for documentation and a more sophisticated example.
+  function prompt_example() {
+  }
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
   # is to generate the prompt segment for display in instant prompt. See
