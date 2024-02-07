@@ -10,7 +10,7 @@
   services.openssh = {
     enable = true;
     allowSFTP = true;
-    settings.X11Forwarding = true;
+    settings.X11Forwarding = false;
     settings.LogLevel = "VERBOSE";
     ports = [ 22 ];
     settings.PermitRootLogin = "no";
