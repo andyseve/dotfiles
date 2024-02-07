@@ -69,7 +69,7 @@ mappings.general = {
 }
 
 mappings.edit = {
-	name = " edit",
+	name = " Edit",
 	prefix = "<leader>e",
 	n = {
 		["v"] = { "<cmd> vsplit $MYVIMRC <CR>", " nvim" },
@@ -87,7 +87,7 @@ mappings.source = {
 
 
 mappings.lists = {
-	name = " lists",
+	name = " Lists",
 	prefix = "<leader>o",
 	n = {
 		["o"] = { "<cmd> cclose <CR>", " Quickfix" },
@@ -102,7 +102,7 @@ if not plugins.telescope then
 end
 
 mappings.windows = {
-	name = " windows",
+	name = " Windows",
 	prefix = "<leader>w",
 	n = {
 		["t"] = { "<cmd> bnext <CR>", " Buffer" },
@@ -114,7 +114,7 @@ mappings.windows = {
 }
 
 mappings.buffers = {
-	name = "﬘ buffers",
+	name = " Buffers",
 	prefix = "<leader>b",
 	n = {
 		["n"] = { "<cmd> bnext <CR>", " Buffer" },

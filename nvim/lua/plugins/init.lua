@@ -63,6 +63,8 @@ Spec = {
 		enabled = plugins.trouble,
 		lazy = true,
 		dependencies = "nvim-tree/nvim-web-devicons",
+		cmd = "TroubleToggle",
+		init = function() require("setup.trouble") end,
 		config = function() require("config.trouble") end,
 	},
 	{
@@ -107,10 +109,10 @@ Spec = {
 			"tsakirist/telescope-lazy.nvim",
 			"ghassan0/telescope-glyph.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-			{ "kelly-lin/telescope-ag", enabled = utils.is_exe("ag") },
-			{ "debugloop/telescope-undo.nvim", enabled = not plugins.undotree },
-			{ "fhill2/telescope-ultisnips.nvim", enabled = plugins.ultisnips, },
-			{ "benfowler/telescope-luasnip.nvim", enabled = plugins.luasnip, },
+			{ "kelly-lin/telescope-ag",                   enabled = utils.is_exe("ag") },
+			{ "debugloop/telescope-undo.nvim",            enabled = not plugins.undotree },
+			{ "fhill2/telescope-ultisnips.nvim",          enabled = plugins.ultisnips, },
+			{ "benfowler/telescope-luasnip.nvim",         enabled = plugins.luasnip, },
 		},
 		cmd = 'Telescope',
 		init = function() require("setup.telescope") end,
@@ -205,10 +207,10 @@ Spec = {
 			"hrsh7th/cmp-emoji",
 			"hrsh7th/cmp-cmdline",
 			"petertriho/cmp-git",
-			{ "hrsh7th/cmp-nvim-lsp", enabled = plugins.lsp, },
-			{ "onsails/lspkind-nvim", enabled = plugins.lsp, },
+			{ "hrsh7th/cmp-nvim-lsp",                enabled = plugins.lsp, },
+			{ "onsails/lspkind-nvim",                enabled = plugins.lsp, },
 			{ "quangnguyen30192/cmp-nvim-ultisnips", enabled = plugins.ultisnips, },
-			{ "saadparwaiz1/cmp_luasnip", enabled = plugins.luasnip, },
+			{ "saadparwaiz1/cmp_luasnip",            enabled = plugins.luasnip, },
 		},
 		event = { 'InsertEnter', 'CmdlineEnter' },
 		config = function() require("config.cmp") end,
@@ -220,7 +222,14 @@ Spec = {
 		dependencies = {
 			"onsails/lspkind-nvim",
 			{ "glepnir/lspsaga.nvim", enabled = plugins.lspsaga, config = function() require("config.lspsaga") end, },
-			{ "ray-x/lsp_signature.nvim", enabled = plugins.lspsignature, config = function() require("config.lspsignature") end, },
+			{
+				"ray-x/lsp_signature.nvim",
+				enabled = plugins.lspsignature,
+				config = function()
+					require(
+						"config.lspsignature")
+				end,
+			},
 		},
 		config = function() require("config.lsp") end,
 	},
@@ -230,7 +239,7 @@ Spec = {
 		lazy = true,
 		dependencies = {
 			{ "quangnguyen30192/cmp-nvim-ultisnips", enabled = plugins.cmp, },
-			{ "fhill2/telescope-ultisnips.nvim", enabled = plugins.telescope, },
+			{ "fhill2/telescope-ultisnips.nvim",     enabled = plugins.telescope, },
 		},
 		event = 'InsertEnter',
 		config = function() vim.cmd('source ~/.config/nvim/config/ultisnips.vim') end,
@@ -242,7 +251,7 @@ Spec = {
 		"L3MON4D3/LuaSnip",
 		enabled = plugins.luasnip,
 		dependencies = {
-			{ "saadparwaiz1/cmp_luasnip", enabled = plugins.cmp, },
+			{ "saadparwaiz1/cmp_luasnip",         enabled = plugins.cmp, },
 			{ "benfowler/telescope-luasnip.nvim", enabled = plugins.telescope, },
 		},
 		event = 'InsertEnter',
