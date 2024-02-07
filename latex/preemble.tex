@@ -1,0 +1,81 @@
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm,amsfonts} %ams rocks
+\usepackage{nameref}
+\usepackage{hyperref}
+\usepackage{cleveref} % for better referencing systems
+\hypersetup{%
+	colorlinks   = true, %Colours links instead of ugly boxes
+	urlcolor     = blue, %Colour for external hyperlinks
+	linkcolor    = blue, %Colour of internal links
+	citecolor    = blue, %Colour of citations
+}
+
+\usepackage[margin=2cm,includehead,includefoot]{geometry} % Page setup
+\usepackage[backend=biber,style=alphabetic,natbib=true,hyperref=auto]{biblatex} % references
+\usepackage{algorithmicx,algorithm,algpseudocode,caption} % for typesetting algorithms
+
+% Environments
+\usepackage{thmtools}
+\newtheorem{theorem}{Theorem}
+\theoremstyle{plain}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem*{corollary*}{Corollary}
+
+%Def-style theorems
+\theoremstyle{definition}
+\newtheorem{answer}[theorem]{Answer}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{subproblem}{Part}[problem]
+\newtheorem*{answer*}{Answer}
+\newtheorem*{assumption*}{Assumption}
+\newtheorem*{case*}{Case}
+\newtheorem*{claim*}{Claim}
+\newtheorem*{conjecture*}{Conjecture}
+\newtheorem*{definition*}{Definition}
+\newtheorem*{example*}{Example}
+\newtheorem*{exercise*}{Exercise}
+\newtheorem*{fact*}{Fact}
+\newtheorem*{notation*}{Notation}
+\newtheorem*{observation*}{Observation}
+\newtheorem*{problem*}{Problem}
+\newtheorem*{question*}{Question}
+\newtheorem*{subproblem*}{Part}
+
+% Remark-style theorems
+\theoremstyle{remark}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem*{note*}{Note}
+\newtheorem*{remark*}{Remark}
+
+\newenvironment{subproof}[1][Proof]{%
+\begin{proof}[#1] \renewcommand{\qedsymbol}{$\blacksquare$}}%
+{\end{proof}} %From Math 55 and Math 145 at Harvard; SubProofs
+
+\newenvironment{solution}[1][Proof]{%
+\begin{proof}[Solution] }%
+{\end{proof}} %Solutions
+
+% Notes
+\newif\ifshowtodo\showtodotrue
+\ifshowtodo
+	\newcommand{\authnote}[3]{{\color{#2}$\ll$\textsf{\footnotesize #1: #3}$\gg$}}
+\else
+	\newcommand{\authnote}[3]{}
+\fi
+% vim:foldmethod=marker

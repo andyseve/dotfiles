@@ -1,0 +1,215 @@
+% Common Micros
+\newcommand\ts{\textstyle}
+\newcommand\ds{\displaystyle} 
+\newcommand\dsum{\displaystyle\sum}
+\newcommand\ubar[1]{\text{\underbar{$#1$}}}
+\newcommand\nref[1]{\ref{#1}~\nameref{#1}}
+\newcommand\rem{\textbf{\underline{Remark}}}
+\newcommand\ques{\textbf{\underline{Question}}}
+\newcommand\textbu[1]{\text{\textbf{\underline{#1}}}} % Combines bold and underline
+\newcommand\tageqn{\addtocounter{equation}{1}\tag{\theequation}} % Equation numbering
+\newcommand\labeleqn[1]{\addtocounter{equation}{1}\tag{\theequation}\label{#1}}
+\newcommand\numbereqn{\addtocounter{equation}{1}\tag{\theequation}}
+
+% Better symbols and renamings
+\newcommand\Oh{\ensuremath{\mathcal{O}}}
+\newcommand\oh{\scalebox{0.7}{$\mathcal{O}$}}
+\newcommand\OhStar{\ensuremath{\Oh^{\star}}}
+\newcommand\xor{\oplus}
+\newcommand\tensor{\otimes} % I don't like to remember things.
+\newcommand\transpose{\top} % Much better
+\newcommand\directsum{\oplus}
+\newcommand\iso{\cong}
+\newcommand\del{\partial}
+\newcommand\grad{\nabla}
+\newcommand\conj[1]{\overline{#1}}
+\newcommand\one{\mathbbm{1}}
+\renewcommand\emptyset{\varnothing} % Slightly better symbol
+\renewcommand\iff{\ensuremath{\Leftrightarrow}}
+
+\newcommand{\pl}[0]{\partial}
+\newcommand{\dd}[2]{\frac{d #1}{d #2}}
+\newcommand{\ddd}[1]{\frac{d}{d #1}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdd}[1]{\frac{\partial}{\partial #1}}
+
+% Common Math Constructs
+\newcommand\quotient[2]{\raise1ex\hbox{\ensuremath{#1}}\Big/\lower1ex\hbox{\ensuremath{#2}}} % Quotient of spaces
+
+% Common symbols
+
+% Mathcal
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+
+% Delimiters: Based on mathtools
+
+% Declaring paired delimiters like this provides better spacing.
+% Normal versions are normal sized delimiters, starred versions are sized delimiters
+\usepackage{mathtools}
+\usepackage{etoolbox}
+
+% Toggling stared function mapping: https://tex.stackexchange.com/questions/278382/cause-declarepaireddelimiter-to-switch-starred-and-nonstarred-versions 
+% Tells DeclarePairedDelimiter to create functions that are automatically sized.
+% Starred version is not automatically sized. Both version allow an overriding input.
+% Auto sizing:  \abs{x}
+% Override:     \abs[\big]{x}
+% Not sized:    \abs*{x}
+% Override:     \abs*[\big]{x}
+%
+% Defines two commands, for example: PAIREDabs, abs
+% abs checks for a star or options and then calles the right version of PAIREDabs
+
+% If this starts giving too much trouble then I will have to stick with the starred versions.
+
+\makeatletter
+\def\DeclarePairedDelimiterStar#1#2#3{%
+	\expandafter\DeclarePairedDelimiter\csname PAIRED\string#1\endcsname{#2}{#3}%
+	\newcommand#1{%
+		\@ifstar{\csname PAIRED\string#1\endcsname}
+		{\@ifnextchar[{\csname PAIRED\string#1\endcsname}
+			{\csname PAIRED\string#1\endcsname*}%
+		}%
+	}%
+}
+\def\DeclarePairedDelimiterStarX#1[#2]#3#4#5{%
+	\expandafter\DeclarePairedDelimiterX\csname PAIREDX\string#1\endcsname[#2]{#3}{#4}{#5}%
+	\newcommand#1{%
+		\@ifstar{\csname PAIREDX\string#1\endcsname}
+		{\@ifnextchar[{\csname PAIREDX\string#1\endcsname}
+			{\csname PAIREDX\string#1\endcsname*}%
+		}%
+	}%
+}
+\def\DeclarePairedDelimiterStarXPP#1[#2]#3#4#5#6#7{%
+	\expandafter\DeclarePairedDelimiterXPP\csname PAIREDXPP\string#1\endcsname[#2]{#3}{#4}{#5}{#6}{#7}%
+	\newcommand#1{%
+		\@ifstar{\csname PAIREDXPP\string#1\endcsname}
+		{\@ifnextchar[{\csname PAIREDXPP\string#1\endcsname}
+			{\csname PAIREDXPP\string#1\endcsname*}%
+		}%
+	}%
+}
+\makeatother
+
+% Not really sure that the micro modification always works.
+\DeclarePairedDelimiterStar\brac{(}{)} % Resizable paranthesis
+\DeclarePairedDelimiterStar\sbrac{[}{]} % Square brackets
+\DeclarePairedDelimiterStar\ceil{\lceil}{\rceil} % Ceiling function
+\DeclarePairedDelimiterStar\floor{\lfloor}{\rfloor} % Floor function
+\DeclarePairedDelimiterStar\gen{\langle}{\rangle} % Generators
+\DeclarePairedDelimiterStar\abs{\lvert}{\rvert} % Absoulte Value
+\DeclarePairedDelimiterStar\eval{.}{\rvert} % Integrals
+\DeclarePairedDelimiterStarX\norm[1]{\lVert}{\rVert}{\ifblank{#1}{\:\cdot\:}{#1}} % Specialized Norms
+\DeclarePairedDelimiterStarX\inprod[2]{\langle}{\rangle}{\ifblank{#1}{\:\cdot\:}{#1},\ifblank{#2}{\:\cdot\:}{#2}} % Inner product
+
+% Copied from mathtools documentation
+% We define another local function called given which places this symbol whenever needed.
+\providecommand\st{}
+\newcommand\stSymbol[1][]{%
+	\nonscript\:#1\vert
+	\allowbreak
+	\nonscript\:
+	\mathopen{}
+}
+% Sets
+\DeclarePairedDelimiterStarX\set[1]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+\DeclarePairedDelimiterStarX\setof[2]{\{}{\}}{\renewcommand\st{\stSymbol[\delimsize]}#1 \st #2}
+% Probability 
+\DeclarePairedDelimiterStarXPP\pr[1]{\mathbb{P}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+\DeclarePairedDelimiterStarXPP\prwith[2]{\mathbb{P}_{#1}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+% Expectation
+\DeclarePairedDelimiterStarXPP\ex[1]{\mathbb{E}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+%\DeclarePairedDelimiterStarXPP\expect[2]{\underset{#1}{\mathbb{E}}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+\DeclarePairedDelimiterStarXPP\exwith[2]{\mathbb{E}_{#1}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+% Variance
+\DeclarePairedDelimiterStarXPP\var[1]{\text{Var}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#1}
+\DeclarePairedDelimiterStarXPP\varwith[2]{\text{Var}_{#1}}{[}{]}{}{\renewcommand\st{\stSymbol[\delimsize]}#2}
+
+% Operators
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator{\sgn}{sgn} % sign function
+\DeclareMathOperator{\sign}{sign} % same thing as above
+\DeclareMathOperator{\img}{Im} % image
+\DeclareMathOperator{\rank}{rank} % rank
+\DeclareMathOperator{\Spec}{Spec} % spectrum
+\DeclareMathOperator{\Nil}{Nil} % nilradical
+\DeclareMathOperator{\Tr}{Tr} % Trace
+\DeclareMathOperator{\pred}{pred} % Predecessor
+\DeclareMathOperator{\dom}{dom} % domain
+\DeclareMathOperator{\range}{range} % range
+\DeclareMathOperator{\Aut}{Aut} % automophisms
+\DeclareMathOperator{\Hom}{Hom} % homomorphism
+\DeclareMathOperator{\End}{End} % endomorphism
+\DeclareMathOperator{\res}{res} % resultant
+\DeclareMathOperator{\Int}{Int} % interior
+\DeclareMathOperator{\Adj}{Adj} % Adjoint
+\DeclareMathOperator{\height}{\mathtt{ht}} % height (mainly for dimension theory of rings)
+\DeclareMathOperator{\wt}{\mathtt{wt}} %weight
+\DeclareMathOperator{\sing}{Sing} % Singularities
+\DeclareMathOperator{\nnz}{nnz} % Non zero entries
+\DeclareMathOperator{\poly}{poly} % Polynomial
+\DeclareMathOperator{\polylog}{polylog}
+\DeclareMathOperator{\conv}{Conv} % Convex Hulls
+\DeclareMathOperator{\proj}{proj} % Projections
+\DeclareMathOperator{\diam}{diam} % Diameter
+\DeclareMathOperator{\supp}{Supp} % Support
+\DeclareMathOperator{\spn}{span} % Span
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\opt}{Opt}
+\DeclareMathOperator{\lpopt}{LPOpt}
+\DeclareMathOperator{\spdopt}{SDPOpt}
+
+\DeclareMathOperator{\ber}{Ber}
+
+\DeclareMathOperator{\dist}{dist} % Distance
+\DeclareMathOperator{\KL}{KL}
+\DeclareMathOperator{\TV}{TV}
+
+\DeclareMathOperator{\sininv}{\sin^{-1}} % Better Trig Inverses
+\DeclareMathOperator{\cosinv}{\cos^{-1}}
+\DeclareMathOperator{\taninv}{\tan^{-1}}
+
+% Number systems
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\C}{\ensuremath{\mathbb{C}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\Z}{\ensuremath{\mathbb{Z}}}
+\newcommand{\F}{\ensuremath{\mathbb{F}}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+
+% mathbb shortcuts
+\newcommand{\E}{\ensuremath{\mathbb{E}}}
+
+% Matrices
+\newcommand{\id}{\ensuremath{\mathrm{I}}}
+
+% Paper specific micros
+\newcommand{\nce}{\mathtt{NCE}}
+
