@@ -48,7 +48,16 @@ local function __load_bash_completion(){
 local function __eval_argcomplete(){
 	# only need bashcompinit if using bash completions
 	# __load_bash_completion
-	eval "$(register-python-argcomplete pubs)"
+	# Python argcomplete command
+	local argcomplete_command=""
+	if _has register-python-argcomplete3 ; then
+		argcomplete_command=register-python-argcomplete3
+	    eval "$($argcomplete_command pubs)"
+	elif _has register-python-argcomplete ; then 
+		argcomplete_command=register-python-argcomplete
+	    eval "$($argcomplete_command pubs)"
+	fi
+	
 }
 
 # plugins
@@ -210,8 +219,6 @@ if _has fzf; then
   '
 fi
 
-# Python argcomplete
-(_has register-python-argcomplete || _has register-python-argcomplete3) && (alias register-python-argcomplete=register-python-argcomplete3)
 
 ################################################################################
 # Aliases ######################################################################
@@ -298,27 +305,22 @@ export PATH
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-
-if [[ -x "$HOME/.local/miniforge3/bin/clear" ]]; then
-	mv "$HOME/.local/miniforge3/bin/clear" "$HOME/.local/miniforge3/bin/clear_conda"
-fi
-__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed -E 's/\\([a-z]+)/\1/g')"
+__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed 's/\\//g')"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
-	if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
-		. "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	else
-		export PATH="$HOME/.local/miniforge3/bin:$PATH"
-	fi
+    if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="$PATH:$HOME/.local/miniforge3/bin"
+    fi
 fi
 unset __conda_setup
 
 if [ -f "$HOME/.local/miniforge3/etc/profile.d/mamba.sh" ]; then
     . "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
 fi
-
 # >>> conda initialize >>>
+# fixing clear for conda
+export TERMINFO="/usr/share/terminfo"
 # vim:ft=zsh
