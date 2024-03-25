@@ -48,7 +48,16 @@ local function __load_bash_completion(){
 local function __eval_argcomplete(){
 	# only need bashcompinit if using bash completions
 	# __load_bash_completion
-	eval "$(register-python-argcomplete pubs)"
+	# Python argcomplete command
+	local argcomplete_command=""
+	if _has register-python-argcomplete3 ; then
+		argcomplete_command=register-python-argcomplete3
+	    eval "$($argcomplete_command pubs)"
+	elif _has register-python-argcomplete ; then 
+		argcomplete_command=register-python-argcomplete
+	    eval "$($argcomplete_command pubs)"
+	fi
+	
 }
 
 # plugins
@@ -161,6 +170,92 @@ bindkey -r -M vicmd 'k'
 bindkey -r -M vicmd 'j'
 
 ################################################################################
+# Functions and Commands #######################################################
+################################################################################
+
+# Importing functions and commands
+for file in $ZSH_HOME/functions/*.zsh; do
+	source $file
+done
+
+local _has() {
+  return $( whence $1 >/dev/null )
+}
+local _color() {
+  return $( [ -z "$INSIDE_EMACS" ] )
+}
+
+# run neofetch at start of ssh session
+if [[ -n $SSH_CONNECTION ]]; then
+	if _has neofetch; then
+		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+		neofetch
+	fi
+fi
+
+# loading autojump
+# autojump is installed using nixos, and it needs to be imported from nix-store.
+if _has autojump; then
+	AUTOJUMP_BIN=$(readlink $(which autojump))
+	AUTOJUMP_DIR=$(dirname $(dirname $AUTOJUMP_BIN))
+	AUTOJUMP_SH=$AUTOJUMP_DIR/etc/profile.d/autojump.sh
+	[[ -s $AUTOJUMP_SH ]] && source $AUTOJUMP_SH
+fi
+
+
+
+# FZF config
+if [ $(command -v fzf>/dev/null) ]; then
+	echo "this works"
+fi
+if _has fzf; then
+	if _has ag; then
+		export FZF_DEFAULT_COMMAND='ag -g ""' # Use Ag if it exists
+		export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+		export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+	fi
+  export FZF_DEFAULT_OPTS='
+		--height 40% --reverse
+  '
+fi
+
+
+################################################################################
+# Aliases ######################################################################
+################################################################################
+
+# use colored versions of commands by default
+if check dircolors; then
+	if test -r $ZSH_HOME/dircolors; then
+		eval "$(dircolors -b $ZSH_HOME/dircolors)"
+	else
+		eval "$(dircolors -b)"
+	fi
+	alias ls='ls --color=auto'
+	alias dir='dir --color=auto'
+	alias vdir='vdir --color=auto'
+
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias alert='tput bel'
+
+# Importing Aliases
+for file in $ZSH_HOME/aliases/*.zsh; do
+	source $file
+done
+
+################################################################################
 # Definitions ##################################################################
 ################################################################################
 
@@ -208,121 +303,24 @@ path+=($HOME/bin)
 path+=($HOME/.local/bin)
 export PATH
 
-################################################################################
-# Functions and Commands #######################################################
-################################################################################
-
-# Importing functions and commands
-for file in $ZSH_HOME/functions/*.zsh; do
-	source $file
-done
-
-local _has() {
-  return $( whence $1 >/dev/null )
-}
-local _color() {
-  return $( [ -z "$INSIDE_EMACS" ] )
-}
-
-# run neofetch at start of ssh session
-if [[ -n $SSH_CONNECTION ]]; then
-	if _has neofetch; then
-		echo "I am here very clearly"
-		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-		echo $POWERLEVEL9K_INSTANT_PROMPT
-		neofetch
-	fi
-fi
-
-# loading autojump
-# autojump is installed using nixos, and it needs to be imported from nix-store.
-if _has autojump; then
-	AUTOJUMP_BIN=$(readlink $(which autojump))
-	AUTOJUMP_DIR=$(dirname $(dirname $AUTOJUMP_BIN))
-	AUTOJUMP_SH=$AUTOJUMP_DIR/etc/profile.d/autojump.sh
-	[[ -s $AUTOJUMP_SH ]] && source $AUTOJUMP_SH
-fi
-
-
-
-# FZF config
-if [ $(command -v fzf>/dev/null) ]; then
-	echo "this works"
-fi
-if _has fzf; then
-	if _has ag; then
-		export FZF_DEFAULT_COMMAND='ag -g ""' # Use Ag if it exists
-		export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-		export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-	fi
-  export FZF_DEFAULT_OPTS='
-		--height 40% --reverse
-  '
-fi
-
-# Python argcomplete
-(_has register-python-argcomplete || _has register-python-argcomplete3) && (alias register-python-argcomplete=register-python-argcomplete3)
-
-################################################################################
-# Aliases ######################################################################
-################################################################################
-
-# use colored versions of commands by default
-if check dircolors; then
-	if test -r $ZSH_HOME/dircolors; then
-		eval "$(dircolors -b $ZSH_HOME/dircolors)"
-	else
-		eval "$(dircolors -b)"
-	fi
-	alias ls='ls --color=auto'
-	alias dir='dir --color=auto'
-	alias vdir='vdir --color=auto'
-
-	alias grep='grep --color=auto'
-	alias fgrep='fgrep --color=auto'
-	alias egrep='egrep --color=auto'
-fi
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-alias alert='tput bel'
-
-# Importing Aliases
-for file in $ZSH_HOME/aliases/*.zsh; do
-	source $file
-done
-
-
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-
-if [[ -x "$HOME/.local/miniforge3/bin/clear" ]]; then
-	mv "$HOME/.local/miniforge3/bin/clear" "$HOME/.local/miniforge3/bin/clear_conda"
-fi
-__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed -E 's/\\([a-z]+)/\1/g')"
+__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed 's/\\//g')"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
-	if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
-		. "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	else
-		export PATH="$HOME/.local/miniforge3/bin:$PATH"
-	fi
+    if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="$PATH:$HOME/.local/miniforge3/bin"
+    fi
 fi
 unset __conda_setup
 
 if [ -f "$HOME/.local/miniforge3/etc/profile.d/mamba.sh" ]; then
     . "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
 fi
-
 # >>> conda initialize >>>
+# fixing clear for conda
+export TERMINFO="/usr/share/terminfo"
 # vim:ft=zsh

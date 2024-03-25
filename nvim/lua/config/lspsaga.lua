@@ -148,7 +148,7 @@ mappings.lsp_general = {
 	}
 }
 mappings.diagnostics = {
-	name = " diagnostics",
+	name = " Diagnostics",
 	prefix = "<leader>d",
 	n = {
 		["l"] = { "<cmd> Lspsaga show_line_diagnostics <CR>", " Line diagnostics" },
@@ -158,7 +158,7 @@ mappings.diagnostics = {
 }
 
 mappings.lists = {
-	name = " lists",
+	name = " Lists",
 	prefix = "<leader>o",
 	n = {
 		["e"] = { "<cmd> Lspsaga outline <CR>", "﬌ Code outline" },

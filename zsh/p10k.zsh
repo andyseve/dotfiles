@@ -107,7 +107,7 @@
     # =========================[ Line #2 ]=========================
     newline
     status                  # exit code of the last command
-    command_new_execution_time  # duration of the last command
+    command_execution_time  # duration of the last command
     time                    # current time
     # ip                    # ip address and bandwidth usage for a specified network interface
     public_ip             # public IP address
@@ -252,6 +252,7 @@
     package.json
     stack.yaml
 	shell.nix
+	default.nix
 	flake.lock
   )
   typeset -g POWERLEVEL9K_SHORTEN_FOLDER_MARKER="(${(j:|:)anchor_files})"
@@ -1584,10 +1585,10 @@
 
   # Custom transient prompt
   p10k-on-post-prompt() {
-	p10k display '1'=hide '2/right/time'=show '2/right/status'=show '2/right/command_execution_time'=show '2/right/public_ip'=hide '2/right_frame'=hide
+	p10k display '1'=hide '2/right/time'=show '2/right/public_ip'=hide '2/right_frame'=hide
   }
   p10k-on-pre-prompt()  {
-	p10k display '1'=show '2/right/time'=hide '2/right/status'=hide '2/right/command_execution_time'=hide '2/right/public_ip'=show '2/right_frame'=show
+	p10k display '1'=show '2/right/time'=hide '2/right/public_ip'=show '2/right_frame'=show
   }
 
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
@@ -1596,13 +1597,6 @@
   #
   # Type `p10k help segment` for documentation and a more sophisticated example.
   function prompt_example() {
-	p10k segment -f 208 -i '⭐' -t "hello world"
-  }
-  function prompt_command_new_execution_time() {
-	if [[ $_p9k__refresh_reason == precmd ]]; then
-	  local cur_exit_code=$?
-	  p10k segment -f 208 -i '⭐' -t "$_p9k__status"
-	fi
   }
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
@@ -1617,12 +1611,6 @@
   #
   # Usually, you should either not define instant_prompt_* or simply call prompt_* from it. If
   # instant_prompt_* is not defined for a segment, the segment won't be shown in instant prompt.
-  function instant_prompt_example() {
-    # Since prompt_example always makes the same `p10k segment` calls, we can call it from
-    # instant_prompt_example. This will give us the same `example` prompt segment in the instant
-    # and regular prompts.
-    prompt_example
-  }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
   # typeset -g POWERLEVEL9K_EXAMPLE_FOREGROUND=208
