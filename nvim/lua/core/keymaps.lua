@@ -102,7 +102,7 @@ if not plugins.telescope then
 end
 
 mappings.windows = {
-	name = " Windows",
+	name = " indows",
 	prefix = "<leader>w",
 	n = {
 		["t"] = { "<cmd> bnext <CR>", " Buffer" },
