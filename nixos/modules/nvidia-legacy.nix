@@ -3,50 +3,36 @@
 { config, lib, pkgs, ... }:
 
 {
-  #services.xserver.videoDrivers = [ "modesetting" "nvidia" ];
-  services.xserver.videoDrivers = [ "nvidia" ];
-  #services.xserver.videoDrivers = lib.mkDefault [ "nouveau" "modesetting" ];
-
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
-    prime = {
-      sync.enable = lib.mkDefault true;
-      offload.enable = lib.mkDefault false;
-      # Hardware should specify bus id for nvidia and intel
-      nvidiaBusId = "PCI:4:0:0";
-      intelBusId  = "PCI:0:2:0";
-    };
-    modesetting.enable = false;
-  };
-
   hardware.opengl = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    extraPackages = [ pkgs.vaapiIntel ];
   };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override {
-      enableHybridCodec = true;
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+    prime = {
+      sync.enable = lib.mkForce true;
+      offload.enable = lib.mkForce false;
+      # Hardware should specify bus id for nvidia and intel
+      # Bus Ids are specified in hardware-configuration
     };
+    nvidiaSettings = true;
+    modesetting.enable = true;
   };
 
-  boot.blacklistedKernelModules = lib.mkDefault [ "nouveau" ];
 
-  #services.xserver.serverLayoutSection = ''
-    #Identifier "Multihead"
-		#Screen      0  "Screen0" 0 0
-		#Screen      1  "Screen1" RightOf "Screen0"
-		#InputDevice    "Mouse0" "CorePointer"
-		#InputDevice    "Keyboard0" "CoreKeyboard"
-    #Option Xinerama "ON"
-  #'';
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   vaapiIntel = pkgs.vaapiIntel.override {
+  #     enableHybridCodec = true;
+  #   };
+  # };
 
-  # Intel driver settings
-  #services.xserver.videoDrivers = [ "intel" ];
-  #services.xserver.deviceSection = ''
-    #Option "DRI" "2"
-    #Option "TearFree" "true"
-  #'';
+  # services.xserver.videoDrivers = [ "nouveau" "modesetting" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
+  boot.initrd.kernelModules = [ "nvidia" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11_legacy390 ];
+
+
+  boot.kernelParams = [ "module_blacklist=i915" ];
 }
