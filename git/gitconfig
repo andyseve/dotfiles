@@ -2,13 +2,13 @@
 	email = anish.sevekari@gmail.com
 	name = Anish Sevekari
 
-; [credential "https://git.overleaf.com"]
-; 	username = anish.sevekari@gmail.com
-; 	helper = "!f() { test $1 = get && echo password=`getpass -p tools/overleaf`; }; f"
+[credential "https://git.overleaf.com"]
+	username = anish.sevekari@gmail.com
+	helper = "!f() { test $1 = get && echo password=`getpass -p tools/overleaf`; }; f"
 ;
-; [credential "https://github.com"]
-; 	username = andyseve
-; 	helper = "!f() { test $1 = get && echo password=`getpass -p tools/github/andyseve`; }; f"
+[credential "https://github.com"]
+	username = andyseve
+	helper = "!f() { test $1 = get && echo password=`getpass -p tools/github/andyseve`; }; f"
 ;
 [pull]
 	rebase = false
