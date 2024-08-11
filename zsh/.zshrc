@@ -185,14 +185,6 @@ local _color() {
   return $( [ -z "$INSIDE_EMACS" ] )
 }
 
-# run neofetch at start of ssh session
-if [[ -n $SSH_CONNECTION ]]; then
-	if _has neofetch; then
-		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-		neofetch
-	fi
-fi
-
 # loading autojump
 # autojump is installed using nixos, and it needs to be imported from nix-store.
 if _has autojump; then
@@ -247,8 +239,8 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-alias alert='tput bel'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# alias alert='tput bel'
 
 # Importing Aliases
 for file in $ZSH_HOME/aliases/*.zsh; do
@@ -323,4 +315,14 @@ fi
 # >>> conda initialize >>>
 # fixing clear for conda
 export TERMINFO="/usr/share/terminfo"
+
+# Commands to run at the start of each session
+# run neofetch at start of ssh session
+if [[ -n $SSH_CONNECTION ]]; then
+	if _has neofetch; then
+		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+		neofetch
+	fi
+fi
+
 # vim:ft=zsh

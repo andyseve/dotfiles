@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ./modules/defaults.nix
       ./modules/desktop.nix
-      ./modules/nvidia-legacy.nix
+      # ./modules/nvidia-legacy.nix
       ./modules/sound.nix
       ./modules/security.nix
       ./modules/ssh.nix
