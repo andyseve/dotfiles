@@ -1,0 +1,32 @@
+snippet mkOption "options template" w
+${1:option_name} = mkOption {
+	description = "${2:Small description of the option}";
+	type = types.${3:bool};
+	default = ${4:default};
+	example = ${5:example};
+};
+endsnippet
+snippet boolOption "bool options " w
+${1:enable} = mkOption {
+	description = "${2:Small description of the option}";
+	type = types.${3:bool};
+	default = ${4:false};
+	example = ${5:true};
+};
+endsnippet
+snippet module "module template" b
+{
+	config,
+	options,
+	lib,
+	pkgs,
+	${1:...}
+}:
+
+with lib;
+let
+	cfg = config.modules.${2:default};
+in {
+	$0
+}
+endsnippet

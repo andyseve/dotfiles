@@ -48,7 +48,16 @@ local function __load_bash_completion(){
 local function __eval_argcomplete(){
 	# only need bashcompinit if using bash completions
 	# __load_bash_completion
-	eval "$(register-python-argcomplete pubs)"
+	# Python argcomplete command
+	local argcomplete_command=""
+	if _has register-python-argcomplete3 ; then
+		argcomplete_command=register-python-argcomplete3
+	    eval "$($argcomplete_command pubs)"
+	elif _has register-python-argcomplete ; then 
+		argcomplete_command=register-python-argcomplete
+	    eval "$($argcomplete_command pubs)"
+	fi
+	
 }
 
 # plugins
@@ -176,14 +185,6 @@ local _color() {
   return $( [ -z "$INSIDE_EMACS" ] )
 }
 
-# run neofetch at start of ssh session
-if [[ -n $SSH_CONNECTION ]]; then
-	if _has neofetch; then
-		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-		neofetch
-	fi
-fi
-
 # loading autojump
 # autojump is installed using nixos, and it needs to be imported from nix-store.
 if _has autojump; then
@@ -210,8 +211,6 @@ if _has fzf; then
   '
 fi
 
-# Python argcomplete
-(_has register-python-argcomplete || _has register-python-argcomplete3) && (alias register-python-argcomplete=register-python-argcomplete3)
 
 ################################################################################
 # Aliases ######################################################################
@@ -240,8 +239,8 @@ alias l='ls -CF'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
-#alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-alias alert='tput bel'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(echo $history[$HISTCMD]|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+# alias alert='tput bel'
 
 # Importing Aliases
 for file in $ZSH_HOME/aliases/*.zsh; do
@@ -298,27 +297,32 @@ export PATH
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-
-if [[ -x "$HOME/.local/miniforge3/bin/clear" ]]; then
-	mv "$HOME/.local/miniforge3/bin/clear" "$HOME/.local/miniforge3/bin/clear_conda"
-fi
-__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed -E 's/\\([a-z]+)/\1/g')"
+__conda_setup="$("$HOME/.local/miniforge3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null | sed 's/\\//g')"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	sed -i -E 's/\\([a-z]+)/\1/g' "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
-	if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
-		. "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
-	else
-		export PATH="$HOME/.local/miniforge3/bin:$PATH"
-	fi
+    if [ -f "$HOME/.local/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/.local/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="$PATH:$HOME/.local/miniforge3/bin"
+    fi
 fi
 unset __conda_setup
 
 if [ -f "$HOME/.local/miniforge3/etc/profile.d/mamba.sh" ]; then
     . "$HOME/.local/miniforge3/etc/profile.d/mamba.sh"
 fi
-
 # >>> conda initialize >>>
+# fixing clear for conda
+export TERMINFO="/usr/share/terminfo"
+
+# Commands to run at the start of each session
+# run neofetch at start of ssh session
+if [[ -n $SSH_CONNECTION ]]; then
+	if _has neofetch; then
+		typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+		neofetch
+	fi
+fi
+
 # vim:ft=zsh

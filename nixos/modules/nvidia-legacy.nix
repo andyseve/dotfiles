@@ -1,41 +1,38 @@
 # Need nvidia-offload for laptop cards
 # info: nixos.wiki/wiki/Nvidia
+{ config, lib, pkgs, ... }:
 
 {
-  config,
-  lib,
-  pkgs ? import <nixos>,
-  ...
-}:
-
-{
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
-    modesetting.enable = true;
-    nvidiaSettings =  true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = false;
-    prime = {
-      sync.enable = lib.mkDefault true;
-      offload.enable = lib.mkDefault false;
-    };
-  };
-
   hardware.opengl = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
-    extraPackages = [ pkgs.vaapiIntel ];
   };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override {
-      enableHybridCodec = true;
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
+    prime = {
+      sync.enable = lib.mkForce true;
+      offload.enable = lib.mkForce false;
+      # Hardware should specify bus id for nvidia and intel
+      # Bus Ids are specified in hardware-configuration
     };
+    nvidiaSettings = true;
+    modesetting.enable = true;
   };
 
-  boot.blacklistedKernelModules = lib.mkDefault [ "nouveau" ];
+
+  # nixpkgs.config.packageOverrides = pkgs: {
+  #   vaapiIntel = pkgs.vaapiIntel.override {
+  #     enableHybridCodec = true;
+  #   };
+  # };
+
+  # services.xserver.videoDrivers = [ "nouveau" "modesetting" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
+  boot.initrd.kernelModules = [ "nvidia" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.nvidia_x11_legacy390 ];
+
+
+  boot.kernelParams = [ "module_blacklist=i915" ];
 }

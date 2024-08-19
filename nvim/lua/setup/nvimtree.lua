@@ -36,7 +36,7 @@ mappings.nvim_tree = {
 	}
 }
 mappings.windows = {
-	name = " windows",
+	name = " Windows",
 	prefix = "<leader>w",
 	n = {
 		["w"] = { open_nvimtree, "פּ Explorer" },

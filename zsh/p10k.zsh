@@ -107,7 +107,7 @@
     # =========================[ Line #2 ]=========================
     newline
     status                  # exit code of the last command
-    command_new_execution_time  # duration of the last command
+    command_execution_time  # duration of the last command
     time                    # current time
     # ip                    # ip address and bandwidth usage for a specified network interface
     public_ip             # public IP address
@@ -1597,7 +1597,6 @@
   #
   # Type `p10k help segment` for documentation and a more sophisticated example.
   function prompt_example() {
-	p10k segment -f 208 -i '⭐' -t "hello world"
   }
 
   # User-defined prompt segments may optionally provide an instant_prompt_* function. Its job
@@ -1612,12 +1611,6 @@
   #
   # Usually, you should either not define instant_prompt_* or simply call prompt_* from it. If
   # instant_prompt_* is not defined for a segment, the segment won't be shown in instant prompt.
-  function instant_prompt_example() {
-    # Since prompt_example always makes the same `p10k segment` calls, we can call it from
-    # instant_prompt_example. This will give us the same `example` prompt segment in the instant
-    # and regular prompts.
-    prompt_example
-  }
 
   # User-defined prompt segments can be customized the same way as built-in segments.
   # typeset -g POWERLEVEL9K_EXAMPLE_FOREGROUND=208

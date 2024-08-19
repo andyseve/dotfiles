@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
       ./modules/defaults.nix
       ./modules/desktop.nix
-      ./modules/nvidia-legacy.nix
+      # ./modules/nvidia-legacy.nix
       ./modules/sound.nix
       ./modules/security.nix
       ./modules/ssh.nix
@@ -76,12 +76,6 @@
     lidSwitch = "hibernate";
     lidSwitchExternalPower = "ignore";
     lidSwitchDocked = "ignore";
-  };
-
-  # Nvidia Prime Settings
-  hardware.nvidia.prime = {
-      nvidiaBusId = "PCI:4:0:0";
-      intelBusId  = "PCI:0:2:0";
   };
 
   # This value determines the NixOS release with which your system is to be

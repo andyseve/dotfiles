@@ -1,4 +1,4 @@
-#!/run/current-system/sw/bin/bash
+#/bin/bash
 
 ft=""
 baseurl="https://raw.githubusercontent.com/github/gitignore/master/"
